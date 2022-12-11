@@ -1,0 +1,13 @@
+hauteur=6,largeur=6,nbJoueurs=2
+  ,  ,  ,  ,  ,  
+P ,P ,P ,P ,F ,P
+  ,  ,  ,  ,  ,  
+P ,P ,V0,P ,F ,P
+  ,  ,  ,  ,  ,  
+Q1,M ,E ,P ,F  ,U2
+  ,  ,  ,  ,  ,  
+U1,F ,P ,E ,M ,Q2
+  ,  ,  ,  ,  ,  
+P ,F ,P ,V0,P ,P
+  ,  ,  ,  ,  ,  
+P ,F ,P ,P ,P ,P

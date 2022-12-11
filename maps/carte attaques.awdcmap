@@ -1,0 +1,21 @@
+hauteur=10,largeur=15,nbJoueurs=2
+  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,    
+P ,P ,P ,P ,P ,P ,P ,P ,P ,P ,P ,P ,P ,P ,P  
+  ,  ,  , h1,d2,  ,  ,  ,t1,d2,  ,  ,  ,  ,    
+P ,P ,P ,P ,P ,P ,P ,P ,P ,P ,P ,P ,P ,P ,P  
+  ,  ,  ,t1,t2,  ,  ,z2,t1,i2,  ,  ,  ,  ,    
+P ,P ,P ,P ,P ,P ,P ,P ,P ,P ,P ,P ,P ,P ,P  
+  ,  ,  ,  ,  ,  ,  ,  ,a2,  ,  ,  ,  ,  ,    
+P ,P ,P ,P ,P ,P ,P ,P ,P ,P ,P ,P ,P ,P ,P  
+  ,  ,  ,t1,c2,z2,  ,  ,t2,c1,  ,  ,  ,  ,    
+Q1 ,P ,P ,P ,P ,P ,P ,P ,P ,P ,P ,P ,P ,P ,Q2  
+  ,  ,  ,  ,  ,b1,  ,  ,  ,  ,  ,  ,  ,  ,    
+P ,P ,P ,P ,P ,P ,P ,P ,P ,P ,P ,P ,P ,P ,P  
+  ,  ,  ,a1,  ,t2, i1,b2,  ,  ,  ,  ,  ,  ,    
+P ,P ,P ,P ,P ,P ,P ,P ,P ,P ,P ,P ,P ,P ,P  
+  ,  ,  ,i2,  ,  ,i1,d1,h2,  ,  ,  ,  ,  ,    
+P ,P ,P ,P ,P ,P ,P ,P ,P ,P ,P ,P ,P ,P ,P  
+  ,  ,  ,z1,  ,  ,  ,h1,  ,  ,  ,  ,  ,  ,    
+P ,P ,P ,P ,P ,P ,P ,P ,P ,P ,P ,P ,P ,P ,P  
+  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,    
+P ,P ,P ,P ,P ,P ,P ,P ,P ,P ,P ,P ,P ,P ,P  

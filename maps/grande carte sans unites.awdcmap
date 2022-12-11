@@ -1,0 +1,21 @@
+hauteur=10,largeur=15,nbJoueurs=2
+  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,    
+F ,F ,P ,P ,P ,P ,P ,F ,P ,P ,P ,P ,P ,F ,F  
+  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,    
+P ,P ,P ,P ,P ,P ,V0,U0,V0,P ,P ,P ,P ,P ,P 
+  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  
+M ,M ,P ,M ,M ,M ,M ,M ,M ,M ,M ,M ,P ,M ,M
+  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  , 
+E ,E ,P ,E ,E ,E ,E ,E ,E ,E ,E ,E ,P ,E ,E
+  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  , 
+P ,P ,P ,P ,P ,P ,M ,M ,M ,P ,P ,P ,P ,P ,P
+  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  , 
+Q1,P ,P ,P ,P ,P ,P ,M ,P ,P ,P ,P ,P ,P ,Q2
+  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  
+U1,P ,P ,P ,P ,P ,P ,M ,P ,P ,P ,P ,P ,P ,U2
+  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  , 
+P ,P ,P ,P ,V1,V1,M ,M ,M ,V2,V2,P ,P ,P ,P
+  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  , 
+P ,P ,P ,P ,F ,M ,M ,M ,M ,M ,F ,P ,P ,P ,P
+  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  , 
+P ,V1,V1,F ,F ,F ,F ,F ,F ,F ,F ,F ,V2,V2,P
