@@ -1,4 +1,4 @@
-package main;
+package main.weapon;
 
 public abstract class Weapon {
 
