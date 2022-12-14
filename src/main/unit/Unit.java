@@ -23,6 +23,19 @@ public abstract class Unit {
     // Idem que pour les dégats, on utilise un tableau ? Une liste ?
     int[] movementTable;
 
+    public enum UnitType {
+
+        Infantry,
+        Bazooka,
+        Bombardier,
+        Convoy,
+        DCA,
+        Helicopter,
+        Tank,
+        Artillery;
+
+    }
+
     public Unit(Player owner) {
 
         this.owner = owner;
