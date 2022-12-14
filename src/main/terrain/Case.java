@@ -81,28 +81,28 @@ public class Case {
                 Unit unit = null;
                 switch (unitAndTerrain[1]) {
                     case "Convoit":
-                        unit = new Convoy();
+                        unit = new Convoy(p);
                         break;
                     case "Tank":
-                        unit = new Tank();
+                        unit = new Tank(p);
                         break;
                     case "Infanterie":
-                        unit = new Infantry();
+                        unit = new Infantry(p);
                         break;
                     case "Bazooka":
-                        unit = new Bazzoka();
+                        unit = new Bazooka(p);
                         break;
                     case "Artillerie":
-                        unit = new Artillery();
+                        unit = new Artillery(p);
                         break;
                     case "Bombardier":
-                        unit = new Bombardier();
+                        unit = new Bombardier(p);
                         break;
                     case "Helico":
-                        unit = new Helicopter();
+                        unit = new Helicopter(p);
                         break;
                     case "DCA":
-                        unit = new DCA();
+                        unit = new DCA(p);
                         break;
                 }
 

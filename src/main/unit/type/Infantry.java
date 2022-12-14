@@ -8,13 +8,14 @@ public class Infantry extends Unit {
 
     int maxPM = 3;
     int PM;
+    int unitMovementType = 1;
 
-    int maxHealth;
+    int maxHealth = 10;
     int health;
 
     Weapon[] weapons;
 
-    int price;
+    int price = 1500;
     int ammo;
     int fuel;
 
@@ -23,10 +24,8 @@ public class Infantry extends Unit {
     // Idem que pour les dégats, on utilise un tableau ? Une liste ?
     int[] movementTable;
 
-    public Infantry() {
-
-        this.PM = 3;
-
+    public Infantry(Player owner){
+            super(owner);
     }
 
 }

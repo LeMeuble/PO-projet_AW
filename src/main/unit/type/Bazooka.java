@@ -4,18 +4,19 @@ import main.Player;
 import main.unit.Unit;
 import main.weapon.Weapon;
 
-public class Bombardier extends Unit {
+public class Bazooka extends Unit {
 
-    int maxPM = 7;
+
+    int maxPM = 2;
     int PM;
-    int unitMovementType = 3;
 
     int maxHealth = 10;
     int health;
+    int unitMovementType = 1;
 
     Weapon[] weapons;
 
-    int price = 20000;
+    int price = 3500;
     int ammo;
     int fuel;
 
@@ -24,8 +25,7 @@ public class Bombardier extends Unit {
     // Idem que pour les dégats, on utilise un tableau ? Une liste ?
     int[] movementTable;
 
-    public Bombardier(Player owner){
+    public Bazooka(Player owner){
         super(owner);
     }
-
 }
