@@ -9,7 +9,6 @@ import java.util.HashMap;
 public class LightMachineGun extends Weapon {
 
     int maxAmmo = 9;
-    public static HashMap<Unit.UnitType, Double> damagesMultiplier; // C'est homologué ça ?
 
     static {
 

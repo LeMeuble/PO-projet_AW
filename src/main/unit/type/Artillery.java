@@ -1,10 +1,13 @@
 package main.unit.type;
 
 import main.Player;
+import main.unit.Motorized;
+import main.unit.OnFoot;
 import main.unit.Unit;
 import main.weapon.Weapon;
+import ressources.Chemins;
 
-public class Artillery extends Unit {
+public class Artillery extends Motorized {
 
     int maxPM = 5;
     int PM;
@@ -30,4 +33,26 @@ public class Artillery extends Unit {
 
     }
 
+    /**
+     * @return
+     */
+    @Override
+    public double calculateDamage() {
+        return 0;
+    }
+
+    /**
+     * @param amount
+     */
+    @Override
+    public void receiveDamage(int amount) {
+
+    }
+
+    @Override
+    public String getFile() {
+
+        return Chemins.getCheminUnite(this.owner.getValue(), !this.hasPlayed, Chemins.FICHIER_ARTILLERIE);
+
+    }
 }

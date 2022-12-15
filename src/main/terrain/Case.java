@@ -35,106 +35,42 @@ public class Case {
 
         final String[] terrainAndPlayer = s.split(":");
 
-        if(terrainAndPlayer.length == 1) {
+        if (terrainAndPlayer.length == 1) {
 
-            // Plain, Forest, Water, Mountain without units
-            switch (terrainAndPlayer[0]) {
-
-                case "Foret":
-                    parsed = new Case(new Forest());
-                    break;
-                case "Montagne":
-                    parsed = new Case(new Mountain());
-                    break;
-                case "Eau":
-                    parsed = new Case(new Water());
-                    break;
-                case "Plaine":
-                    parsed = new Case(new Plain());
-                    break;
-
-            }
+            final Terrain.Type terrainType = Terrain.Type.fromName(terrainAndPlayer[0]);
+            if (terrainType != null) parsed.setTerrain(terrainType.newInstance());
 
         } else {
 
             final String[] unitAndTerrain = terrainAndPlayer[0].split(";");
+
+            System.out.println(terrainAndPlayer[1]);
+
             final Player p = Player.fromValue(Integer.parseInt(terrainAndPlayer[1]));
 
-            if(unitAndTerrain.length == 1) {
+            System.out.println(p);
 
-                switch(unitAndTerrain[0]) {
 
-                    case "Ville":
-                        parsed = new Case(new City(p));
-                        break;
-                    case "QG":
-                        parsed = new Case(new HQ(p));
-                        break;
-                    case "Usine":
-                        parsed = new Case(new Factory(p));
-                        break;
+            final Terrain.Type terrainType = Terrain.Type.fromName(unitAndTerrain[0]);
 
+            if (terrainType != null) {
+
+                final Terrain terrain = terrainType.newInstance(p);
+                parsed.setTerrain(terrain);
+
+                System.out.println(terrain);
+
+                if (unitAndTerrain.length == 2) {
+
+                    final Unit.Type unitType = Unit.Type.fromName(unitAndTerrain[1]);
+                    System.out.println(unitType);
+
+
+                    if (unitType != null) {
+                        parsed.setUnit(unitType.newInstance(p));
+                        System.out.println("changing unit");
+                    }
                 }
-
-            } else {
-
-                Unit unit = null;
-                switch (unitAndTerrain[1]) {
-                    case "Convoit":
-                        unit = new Convoy(p);
-                        break;
-                    case "Tank":
-                        unit = new Tank(p);
-                        break;
-                    case "Infanterie":
-                        unit = new Infantry(p);
-                        break;
-                    case "Bazooka":
-                        unit = new Bazooka(p);
-                        break;
-                    case "Artillerie":
-                        unit = new Artillery(p);
-                        break;
-                    case "Bombardier":
-                        unit = new Bombardier(p);
-                        break;
-                    case "Helico":
-                        unit = new Helicopter(p);
-                        break;
-                    case "DCA":
-                        unit = new DCA(p);
-                        break;
-                }
-
-
-//                ajouterVariationsDEntitesAuDictionnaire(dicoTroupes,"a","Artillerie",nbJoueurs,false);
-//                ajouterVariationsDEntitesAuDictionnaire(dicoTroupes,"b","Bombardier",nbJoueurs,false);
-//                ajouterVariationsDEntitesAuDictionnaire(dicoTroupes,"z","Bazooka",nbJoueurs,false);
-//                ajouterVariationsDEntitesAuDictionnaire(dicoTroupes,"c","Convoit",nbJoueurs,false);
-//                ajouterVariationsDEntitesAuDictionnaire(dicoTroupes,"d","DCA",nbJoueurs,false);
-//                ajouterVariationsDEntitesAuDictionnaire(dicoTroupes,"h","Helico",nbJoueurs,false);
-//                ajouterVariationsDEntitesAuDictionnaire(dicoTroupes,"i","Infanterie",nbJoueurs,false);
-//                ajouterVariationsDEntitesAuDictionnaire(dicoTroupes,"t","Tank",nbJoueurs,false);
-
-                switch(unitAndTerrain[0]) {
-
-                    case "Foret":
-                        parsed = new Case(new Forest());
-                        parsed.setUnit();
-                        break;
-                    case "Montagne":
-                        parsed = new Case(new Mountain());
-                        break;
-                    case "Eau":
-                        parsed = new Case(new Water());
-                        break;
-                    case "Plaine":
-                        parsed = new Case(new Plain());
-                        break;
-
-
-                }
-
             }
 
         }

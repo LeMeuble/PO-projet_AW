@@ -8,8 +8,7 @@ public abstract class Unit {
 
     int maxPM;
     int PM;
-    int unitMovementType; // Utiliser des enums ?
-    int maxHealth;
+
     int health;
 
     Weapon[] weapons;
@@ -53,16 +52,18 @@ public abstract class Unit {
 
     public double calculateDamage() {
 
-        return 1;
+    /**
+     * Calcule des degats infliges par cette unite
+     * @return
+     */
+    public abstract double calculateDamage();
 
-    }
+    /**
+     * Retire un certain nombre de points de vie a cette unite
+     * @param amount Le nombre de points de vies a enlever
+     */
+    public abstract void receiveDamage(int amount);
 
-    public void receiveDamage(int amount) {
-        // Dégats reçus en int ou en double ? Conversion avant ?
-        this.health -= amount;
-
-    }
-
-
+    public abstract String getFile();
 
 }

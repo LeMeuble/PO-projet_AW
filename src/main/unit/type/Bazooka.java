@@ -1,10 +1,12 @@
 package main.unit.type;
 
 import main.Player;
+import main.unit.OnFoot;
 import main.unit.Unit;
 import main.weapon.Weapon;
+import ressources.Chemins;
 
-public class Bazooka extends Unit {
+public class Bazooka extends OnFoot {
 
 
     int maxPM = 2;
