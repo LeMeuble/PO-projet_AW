@@ -3,12 +3,13 @@ package main.terrain;
 import main.Player;
 import main.terrain.type.*;
 import main.unit.Unit;
-import main.unit.type.*;
 
 public class Case {
 
-    Terrain terrain;
-    Unit unit;
+    private Terrain terrain;
+    private Unit unit;
+
+    public Case() {}
 
     public Case(Terrain terrain) {
 
@@ -20,7 +21,7 @@ public class Case {
         this.unit = unit;
     }
 
-    public Unit getUnit(Unit unit) {
+    public Unit getUnit() {
         return this.unit;
     }
 
@@ -28,10 +29,19 @@ public class Case {
         return this.unit != null;
     }
 
+    public void setTerrain(Terrain terrain) {
+        this.terrain = terrain;
+    }
+
+    public Terrain getTerrain() {
+        return this.terrain;
+    }
 
     public static Case parse(String s) {
 
-        Case parsed = null;
+        System.out.println("---");
+
+        Case parsed = new Case();
 
         final String[] terrainAndPlayer = s.split(":");
 
@@ -74,6 +84,7 @@ public class Case {
             }
 
         }
+        System.out.println("---");
 
         return parsed;
 

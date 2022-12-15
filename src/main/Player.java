@@ -14,6 +14,10 @@ public enum Player {
 
     }
 
+    public int getValue() {
+        return this.value;
+    }
+
     public static Player fromValue(int value) {
 
         for(Player p : Player.values()) {

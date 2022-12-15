@@ -2,35 +2,42 @@
 package main;
 import librairies.AssociationTouches;
 import librairies.StdDraw;
+import main.terrain.Case;
+import main.terrain.Grid;
 import ressources.Config;
 import ressources.ParseurCartes;
 import ressources.Affichage;
 import ressources.Chemins;
 
 public class Jeu {
+
 	private int indexJoueurActif; //l'indice du joueur actif:  1 = rouge, 2 = bleu
+	private Grid grid;
+
+	private int casesX;
+	private int casesY;
+
 	// l'indice 0 est reserve au neutre, qui ne joue pas mais peut posseder des proprietes
 	public Jeu(String fileName) throws Exception {
+
 		//appel au parseur, qui renvoie un tableau de String 
 		String[][] carteString = ParseurCartes.parseCarte(fileName);
-		for (int i = 0; i<carteString.length; i++) {
-			for (int j=0; j < carteString[0].length; j++){
-				System.out.print(carteString[i][j]);
-				if (j != carteString[0].length) {
-						System.out.print(" | ");
-					}
-				else {
-					System.out.println();
-				}
+
+		for(int y = 0; y < carteString.length; y++) {
+			for(int x = 0; x < carteString[0].length; x++) {
+				System.out.print(carteString[y][x] + " | ");
 			}
 			System.out.println();
-		}	
-		// a vous de manipuler ce tableau de String pour le transformer en une carte avec vos propres classes, a l'aide de la methode split de la classe String
 
+		}
 
-		Config.setDimension(carteString[0].length, carteString.length);
-		// initialise la configuration avec la longueur de la carte
-		
+		this.casesX = carteString[0].length;
+		this.casesY = carteString.length;
+
+		this.grid = new Grid(carteString);
+
+		Config.setDimension(casesX, casesY);
+
 		indexJoueurActif = 1; // rouge commence
 	}
 
@@ -41,22 +48,38 @@ public class Jeu {
 	public void afficheStatutJeu() {
 		Affichage.videZoneTexte();
 		Affichage.afficheTexteDescriptif("Status du jeu");
-		}
+	}
 
 
 	public void display() {
+
 		StdDraw.clear();
 		afficheStatutJeu();
-		Affichage.dessineImageDansCase(1, 1, Chemins.getCheminTerrain(Chemins.FICHIER_FORET)); //exemple d'affichage d'une image de forêt dans la case (1,1)
 
-		Affichage.dessineImageDansCase(1, 1, Chemins.getCheminFleche(Chemins.DIRECTION_DROITE,Chemins.DIRECTION_DEBUT));
-		Affichage.dessineImageDansCase(2, 1, Chemins.getCheminFleche(Chemins.DIRECTION_GAUCHE,Chemins.DIRECTION_HAUT));
-		Affichage.dessineImageDansCase(2, 2, Chemins.getCheminFleche(Chemins.DIRECTION_BAS,Chemins.DIRECTION_HAUT));
-		Affichage.dessineImageDansCase(2, 3, Chemins.getCheminFleche(Chemins.DIRECTION_BAS,Chemins.DIRECTION_FIN));
-		
-		Affichage.dessineImageDansCase(4, 4, Chemins.getCheminFleche(Chemins.DIRECTION_DEBUT,Chemins.DIRECTION_FIN));
-		
-		Affichage.dessineGrille(); //affiche une grille, mais n'affiche rien dans les cases		
+		for (int y = 0; y < casesY; y++) {
+
+			for (int x = 0; x < casesX; x++) {
+
+				Case c = this.grid.getCase(y, x);
+
+				Affichage.dessineImageDansCase(x, y, c.getTerrain().getFile());
+				System.out.println("x:" + x + " y:" + y);
+				System.out.println("is this null ?" + c.getUnit());
+				if(c.hasUnit()) Affichage.dessineImageDansCase(x, y, c.getUnit().getFile());
+
+			}
+		}
+
+//		Affichage.dessineImageDansCase(1, 1, Chemins.getCheminTerrain(Chemins.FICHIER_FORET)); //exemple d'affichage d'une image de forêt dans la case (1,1)
+//
+//		Affichage.dessineImageDansCase(1, 1, Chemins.getCheminFleche(Chemins.DIRECTION_DROITE,Chemins.DIRECTION_DEBUT));
+//		Affichage.dessineImageDansCase(2, 1, Chemins.getCheminFleche(Chemins.DIRECTION_GAUCHE,Chemins.DIRECTION_HAUT));
+//		Affichage.dessineImageDansCase(2, 2, Chemins.getCheminFleche(Chemins.DIRECTION_BAS,Chemins.DIRECTION_HAUT));
+//		Affichage.dessineImageDansCase(2, 3, Chemins.getCheminFleche(Chemins.DIRECTION_BAS,Chemins.DIRECTION_FIN));
+//
+//		Affichage.dessineImageDansCase(4, 4, Chemins.getCheminFleche(Chemins.DIRECTION_DEBUT,Chemins.DIRECTION_FIN));
+//
+//		Affichage.dessineGrille(); //affiche une grille, mais n'affiche rien dans les cases
 		drawGameCursor();
 		StdDraw.show(); //montre a l'ecran les changement demandes
 	}

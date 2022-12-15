@@ -1,10 +1,12 @@
 package main.unit.type;
 
 import main.Player;
+import main.unit.OnFoot;
 import main.unit.Unit;
 import main.weapon.Weapon;
+import ressources.Chemins;
 
-public class Infantry extends Unit {
+public class Infantry extends OnFoot {
 
     int maxPM = 3;
     int PM;
@@ -20,7 +22,6 @@ public class Infantry extends Unit {
     int fuel;
 
     boolean hasPlayed;
-    Player owner;
     // Idem que pour les dégats, on utilise un tableau ? Une liste ?
     int[] movementTable;
 

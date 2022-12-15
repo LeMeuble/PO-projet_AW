@@ -1,10 +1,12 @@
 package main.unit.type;
 
 import main.Player;
+import main.unit.Motorized;
 import main.unit.Unit;
 import main.weapon.Weapon;
+import ressources.Chemins;
 
-public class DCA extends Unit {
+public class DCA extends Motorized {
 
     int maxPM = 6;
     int PM;
@@ -20,7 +22,6 @@ public class DCA extends Unit {
     int fuel;
 
     boolean hasPlayed;
-    Player owner;
     // Idem que pour les dégats, on utilise un tableau ? Une liste ?
     int[] movementTable;
 

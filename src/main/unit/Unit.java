@@ -2,9 +2,67 @@ package main.unit;
 
 import main.Player;
 import main.terrain.Case;
+import main.unit.type.*;
 import main.weapon.Weapon;
 
 public abstract class Unit {
+
+    public enum Type {
+
+        Infantry("Infanterie"),
+        Bazooka("Bazooka"),
+        Bombardier("Bombardier"),
+        Convoy("Convoit"),
+        DCA("DCA"),
+        Helicopter("Helico"),
+        Tank("Tank"),
+        Artillery("Artillerie");
+
+        private final String name;
+
+        Type(String name) {
+            this.name = name;
+        }
+
+        public static Type fromName(String name) {
+
+            for(Type type : Type.values()) {
+
+                if(type.name.equals(name)) {
+                    return type;
+                }
+
+            }
+            return null;
+
+        }
+
+        public Unit newInstance(Player p) {
+
+            switch (this) {
+                case Infantry:
+                    return new Infantry(p);
+                case Bazooka:
+                    return new Bazooka(p);
+                case Bombardier:
+                    return new Bombardier(p);
+                case Convoy:
+                    return new Convoy(p);
+                case DCA:
+                    return new DCA(p);
+                case Helicopter:
+                    return new Helicopter(p);
+                case Tank:
+                    return new Tank(p);
+                case Artillery:
+                    return new Artillery(p);
+            }
+
+            return null;
+
+        }
+
+    }
 
     int maxPM;
     int PM;
@@ -12,30 +70,19 @@ public abstract class Unit {
     int health;
 
     Weapon[] weapons;
-
-    int price;
+    int price; // statique / dans l'enum
     int ammo;
-    int fuel;
 
+    int fuel;
     boolean hasPlayed;
-    Player owner;
+    protected Player owner;
     // Idem que pour les dégats, on utilise un tableau ? Une liste ?
+
     int[] movementTable;
 
-    public enum UnitType {
-
-        Infantry,
-        Bazooka,
-        Bombardier,
-        Convoy,
-        DCA,
-        Helicopter,
-        Tank,
-        Artillery;
-
-    }
-
     public Unit(Player owner) {
+
+        System.out.println("New instance of " + this.getClass().getSimpleName() + " with owner " + owner);
 
         this.owner = owner;
         this.PM = this.maxPM;
@@ -50,7 +97,6 @@ public abstract class Unit {
 
     }
 
-    public double calculateDamage() {
 
     /**
      * Calcule des degats infliges par cette unite

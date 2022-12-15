@@ -6,7 +6,7 @@ import main.unit.Unit;
 import main.weapon.Weapon;
 import ressources.Chemins;
 
-public class Bombardier extends Unit {
+public class Bombardier extends Flying {
 
     int maxPM = 7;
     int PM;
@@ -22,7 +22,6 @@ public class Bombardier extends Unit {
     int fuel;
 
     boolean hasPlayed;
-    Player owner;
     // Idem que pour les dégats, on utilise un tableau ? Une liste ?
     int[] movementTable;
 

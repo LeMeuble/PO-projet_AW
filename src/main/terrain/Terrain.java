@@ -1,41 +1,87 @@
 package main.terrain;
 
+import main.Player;
+import main.terrain.type.*;
+
+/**
+ * Classe abstraite representant un terrain
+ *
+ * @author Tristan LECONTE--DENIS
+ * @author GRAVOT Lucien
+ */
 public abstract class Terrain {
 
-    String file;
-    boolean isOwnable;
 
+    /**
+     * Enumeration de tous les types de terrains existants
+     */
+    public enum Type {
 
-    public static Terrain parse(String s) {
+        Plain("Plaine"),
+        Forest("Foret"),
+        Mountain("Montagne"),
+        Water("Eau"),
+        Factory("Usine"),
+        City("Ville"),
+        HQ("QG");
 
-        String[] terrainAndPlayer = s.split(":");
+        private String name;
 
-        if(terrainAndPlayer.length == 1) {
+        Type(String name) {
+            this.name = name;
+        }
 
-            // Plain, Forest, Water, Mountain sans unité
+        public static Type fromName(String name) {
 
-            System.out.println(terrainAndPlayer[0]);
+            for(Type type : Type.values()) {
 
-
-        } else {
-
-            String[] unit = terrainAndPlayer[0].split(";");
-
-            if(unit.length == 1) {
-
-                System.out.println(unit[0] + " owned by " + terrainAndPlayer[1]);
-
-            } else {
-
-                System.out.println("Unit " + unit[1] + " with " + unit[0] + " owned by " + terrainAndPlayer[1]);
+                if(type.name.equals(name)) {
+                    return type;
+                }
 
             }
+            return null;
 
         }
 
-        return null;
+        public Terrain newInstance() {
+
+            switch (this) {
+                case Plain:
+                    return new Plain();
+                case Forest:
+                    return new Forest();
+                case Mountain:
+                    return new Mountain();
+                case Water:
+                    return new Water();
+            }
+
+            return null;
+
+        }
+
+        public Terrain newInstance(Player p) {
+
+            switch (this) {
+                case Factory:
+                    return new Factory(p);
+                case City:
+                    return new City(p);
+                case HQ:
+                    return new HQ(p);
+            }
+
+            return newInstance();
+
+        }
 
     }
 
+    /**
+     * Retourne le chemin vers le fichier associe au terrain
+     * @return Chemin du fichier
+     */
+    public abstract String getFile();
 
 }

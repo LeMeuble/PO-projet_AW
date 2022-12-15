@@ -23,11 +23,36 @@ public class Bazooka extends OnFoot {
     int fuel;
 
     boolean hasPlayed;
-    Player owner;
     // Idem que pour les dégats, on utilise un tableau ? Une liste ?
     int[] movementTable;
 
     public Bazooka(Player owner){
         super(owner);
     }
+
+    /**
+     * Calcule des degats infliges par cette unite
+     * @return
+     */
+    @Override
+    public double calculateDamage() {
+        return 0;
+    }
+
+    /**
+     * Retire un certain nombre de points de vie a cette unite
+     * @param amount Le nombre de points de vies a enlever
+     */
+    @Override
+    public void receiveDamage(int amount) {
+
+    }
+
+    @Override
+    public String getFile() {
+
+        return Chemins.getCheminUnite(this.owner.getValue(), !this.hasPlayed, Chemins.FICHIER_BAZOOKA);
+
+    }
+
 }

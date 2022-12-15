@@ -5,6 +5,11 @@ import main.terrain.Property;
 import ressources.Chemins;
 
 public class Factory extends Property {
+
+    public static final String redFactoryFilePath = Chemins.getCheminPropriete(Chemins.FICHIER_USINE, Player.RED.getValue());
+    public static final String neutralFactoryFilePath = Chemins.getCheminPropriete(Chemins.FICHIER_USINE, Player.NEUTRAL.getValue());
+    public static final String blueFactoryFilePath = Chemins.getCheminPropriete(Chemins.FICHIER_USINE, Player.BLUE.getValue());
+
     public Factory(Player owner) {
         super(owner);
     }
@@ -12,12 +17,6 @@ public class Factory extends Property {
     public void income() {
 
         // Faire gagner 1000 coins au joueur propriétaire
-
-    }
-
-    public void produceUnit() {
-
-        // Fait spawn une unité
 
     }
 

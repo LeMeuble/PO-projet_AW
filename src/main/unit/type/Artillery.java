@@ -23,7 +23,6 @@ public class Artillery extends Motorized {
     int fuel;
 
     boolean hasPlayed;
-    Player owner;
     // Idem que pour les dégats, on utilise un tableau ? Une liste ?
     int[] movementTable;
 
