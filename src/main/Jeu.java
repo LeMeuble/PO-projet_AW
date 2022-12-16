@@ -43,7 +43,6 @@ public class Jeu {
         movement.update(this.grid.getCase(0, 2));
         movement.update(this.grid.getCase(1, 2));
         movement.update(this.grid.getCase(1, 1));
-        movement.update(this.grid.getCase(0, 1));
 
     }
 
@@ -77,7 +76,6 @@ public class Jeu {
         if (this.movement != null) {
 
             this.movement.render();
-
 
         }
 

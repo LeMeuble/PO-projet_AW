@@ -4,22 +4,65 @@ import main.terrain.Case;
 import ressources.Affichage;
 import ressources.Chemins;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 public class Movement {
 
-    private Case startingPoint;
+    enum DirectionType {
+        UP,
+        DOWN,
+        LEFT,
+        RIGHT;
+
+
+        public DirectionType opposite() {
+
+            switch (this) {
+                case UP:
+                    return DOWN;
+                case DOWN:
+                    return UP;
+                case LEFT:
+                    return RIGHT;
+                case RIGHT:
+                    return LEFT;
+            }
+
+            return null;
+        }
+    }
+
+    private class Direction {
+
+
+        private DirectionType previous;
+        private Case aCase;
+        private DirectionType next;
+
+        public Direction(DirectionType previous, Case aCase, DirectionType next) {
+
+            this.previous = previous;
+            this.aCase = aCase;
+            this.next = next;
+
+        }
+
+    }
+
+
+    private final Case startingPoint;
     private List<Case> cases;
 
     public Movement(Case startingPoint) {
 
         this.startingPoint = startingPoint;
-        this.cases = new LinkedList<>();
+        this.cases = new ArrayList<>(); // preferable a linked list pour les acces aleatoire
 
     }
 
-    public void update(Case newCase) {
+     public void update(Case newCase) {
 
         if (newCase.equals(this.startingPoint)) {
             this.cases.clear();
@@ -45,30 +88,45 @@ public class Movement {
 
     public void render() {
 
-        Case previous = startingPoint;
+        LinkedList<Case> cases = new LinkedList<>(this.cases);
 
-        if (this.cases.size() == 0) {
+        Case previous = null;
+        Case current = startingPoint;
+        Case next = null;
+        while(cases.peek() != null) {
 
-            String chemin = Chemins.getCheminFleche(Chemins.DIRECTION_DEBUT, Chemins.DIRECTION_FIN);
-            Affichage.dessineImageDansCase(startingPoint.getX(), startingPoint.getY(), chemin);
+            next = cases.poll();
 
-        } else {
+            System.out.println("previous: " + previous);
+            System.out.println("current: " + current);
+            System.out.println("next: " + next);
 
-            for (Case c : this.cases) {
+            Direction dir = calculateDirection(previous, current, next);
 
-                int dx = compareX(previous, c);
-                int dy = compareY(previous, c);
-
-                if (dx < 0 && dy == 0) {
-                    String chemin = Chemins.getCheminFleche(Chemins.DIRECTION_HAUT, Chemins.DIRECTION_BAS);
-                    Affichage.dessineImageDansCase(startingPoint.getX(), startingPoint.getY(), chemin);
-                }
-
-                previous = c;
-
-            }
+            previous = current;
+            current = next;
 
         }
+
+
+
+    }
+
+    public Direction calculateDirection(Case previous, Case current, Case next) {
+
+        String previousDirection = null;
+        String nextDirection = null;
+
+        if (previous == null) previousDirection = Chemins.DIRECTION_DEBUT;
+        
+
+        if (next == null) {
+
+
+
+        }
+
+
 
     }
 
