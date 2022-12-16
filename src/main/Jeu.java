@@ -1,133 +1,136 @@
-/** package principal */
+/**
+ * package principal
+ */
 package main;
+
 import librairies.AssociationTouches;
 import librairies.StdDraw;
 import main.terrain.Case;
 import main.terrain.Grid;
-import ressources.Config;
-import ressources.ParseurCartes;
 import ressources.Affichage;
 import ressources.Chemins;
+import ressources.Config;
+import ressources.ParseurCartes;
 
 public class Jeu {
 
-	private int indexJoueurActif; //l'indice du joueur actif:  1 = rouge, 2 = bleu
-	private Grid grid;
+    private Player currentPlayer; //l'indice du joueur actif:  1 = rouge, 2 = bleu
+    private Grid grid;
 
-	private int casesX;
-	private int casesY;
+    public static int borderX;
+    public static int borderY;
 
-	// l'indice 0 est reserve au neutre, qui ne joue pas mais peut posseder des proprietes
-	public Jeu(String fileName) throws Exception {
+    private Cursor cursor;
+    private Movement movement;
 
-		//appel au parseur, qui renvoie un tableau de String 
-		String[][] carteString = ParseurCartes.parseCarte(fileName);
+    // l'indice 0 est reserve au neutre, qui ne joue pas mais peut posseder des proprietes
+    public Jeu(String fileName) throws Exception {
 
-		for(int y = 0; y < carteString.length; y++) {
-			for(int x = 0; x < carteString[0].length; x++) {
-				System.out.print(carteString[y][x] + " | ");
-			}
-			System.out.println();
+        //appel au parseur, qui renvoie un tableau de String
+        String[][] parsed = ParseurCartes.parseCarte(fileName);
 
-		}
+        borderX = parsed[0].length;
+        borderY = parsed.length;
 
-		this.casesX = carteString[0].length;
-		this.casesY = carteString.length;
+        this.grid = new Grid(parsed);
+        this.currentPlayer = Player.RED; // rouge commence
+        this.cursor = new Cursor();
 
-		this.grid = new Grid(carteString);
+        Config.setDimension(borderX, borderY);
 
-		Config.setDimension(casesX, casesY);
+        movement = new Movement(this.grid.getCase(0, 0));
+        movement.update(this.grid.getCase(0, 1));
+        movement.update(this.grid.getCase(0, 2));
+        movement.update(this.grid.getCase(1, 2));
+        movement.update(this.grid.getCase(1, 1));
+        movement.update(this.grid.getCase(0, 1));
 
-		indexJoueurActif = 1; // rouge commence
-	}
+    }
 
-	public boolean isOver() {
-		return false;
-	}
+    public boolean isOver() {
+        return false;
+    }
 
-	public void afficheStatutJeu() {
-		Affichage.videZoneTexte();
-		Affichage.afficheTexteDescriptif("Status du jeu");
-	}
+    public void afficheStatutJeu() {
+        Affichage.videZoneTexte();
+        Affichage.afficheTexteDescriptif("Status du jeu");
+    }
 
 
-	public void display() {
+    public void display() {
 
-		StdDraw.clear();
-		afficheStatutJeu();
+        StdDraw.clear();
+        afficheStatutJeu();
 
-		for (int y = 0; y < casesY; y++) {
+        for (int y = 0; y < borderY; y++) {
 
-			for (int x = 0; x < casesX; x++) {
+            for (int x = 0; x < borderX; x++) {
 
-				Case c = this.grid.getCase(y, x);
+                Case c = this.grid.getCase(y, x);
 
-				Affichage.dessineImageDansCase(x, y, c.getTerrain().getFile());
-				System.out.println("x:" + x + " y:" + y);
-				System.out.println("is this null ?" + c.getUnit());
-				if(c.hasUnit()) Affichage.dessineImageDansCase(x, y, c.getUnit().getFile());
+                Affichage.dessineImageDansCase(x, y, c.getTerrain().getFile());
+                if (c.hasUnit()) Affichage.dessineImageDansCase(x, y, c.getUnit().getFile());
 
-			}
-		}
+            }
+        }
 
-//		Affichage.dessineImageDansCase(1, 1, Chemins.getCheminTerrain(Chemins.FICHIER_FORET)); //exemple d'affichage d'une image de forêt dans la case (1,1)
-//
-//		Affichage.dessineImageDansCase(1, 1, Chemins.getCheminFleche(Chemins.DIRECTION_DROITE,Chemins.DIRECTION_DEBUT));
-//		Affichage.dessineImageDansCase(2, 1, Chemins.getCheminFleche(Chemins.DIRECTION_GAUCHE,Chemins.DIRECTION_HAUT));
-//		Affichage.dessineImageDansCase(2, 2, Chemins.getCheminFleche(Chemins.DIRECTION_BAS,Chemins.DIRECTION_HAUT));
-//		Affichage.dessineImageDansCase(2, 3, Chemins.getCheminFleche(Chemins.DIRECTION_BAS,Chemins.DIRECTION_FIN));
-//
-//		Affichage.dessineImageDansCase(4, 4, Chemins.getCheminFleche(Chemins.DIRECTION_DEBUT,Chemins.DIRECTION_FIN));
-//
-//		Affichage.dessineGrille(); //affiche une grille, mais n'affiche rien dans les cases
-		drawGameCursor();
-		StdDraw.show(); //montre a l'ecran les changement demandes
-	}
+        if (this.movement != null) {
 
-	public void initialDisplay() {
-		StdDraw.enableDoubleBuffering(); // rend l'affichage plus fluide: tout draw est mis en buffer et ne s'affiche qu'au prochain StdDraw.show();
-		display();
-	}
+            this.movement.render();
 
-	public void drawGameCursor() {
-		Affichage.dessineCurseur(0, 0); //affiche le curseau en (0,0), a modifier
-	}
 
-	public void update() {
-		AssociationTouches toucheSuivante = AssociationTouches.trouveProchaineEntree(); //cette fonction boucle jusqu'a la prochaine entree de l'utilisateur
-		if (toucheSuivante.isHaut()) { 
-			//TODO: deplacer le curseur vers le haut
-			System.out.println("Touche HAUT");
-			display();
-			}
-		if (toucheSuivante.isBas()){ 
-			//TODO: deplacer le curseur vers le bas	
-			System.out.println("Touche BAS");
-			display();
-		}
-		if (toucheSuivante.isGauche()) { 
-			//TODO: deplacer le curseur vers la gauche
-			System.out.println("Touche GAUCHE");
-			display();
-		}
-		if 	(toucheSuivante.isDroite()) { 
-				//TODO: deplacer le curseur vers la droite
-			System.out.println("Touche DROITE");
-			 	display();
-		}
-		
-		//  ATTENTION ! si vous voulez detecter d'autres touches que 't',
-		//  vous devez les ajouter au tableau Config.TOUCHES_PERTINENTES_CARACTERES
-		if (toucheSuivante.isCaractere('t')) {
-			String[] options = {"Oui", "Non"};
-			if (Affichage.popup("Finir le tour de XXX?", options, true, 1) == 0) {
-				//le choix 0, "Oui", a été selectionné
-				//TODO: passer au joueur suivant 
-				System.out.println("FIN DE TOUR");
-			}
-			
-			display();
-		}
-	}
+        }
+
+        Affichage.dessineCurseur(this.cursor.getCurrentX(), this.cursor.getCurrentY());
+        Affichage.dessineImageDansCase(1, 0, Chemins.getCheminFleche(Chemins.DIRECTION_FIN, Chemins.DIRECTION_DROITE));
+
+        StdDraw.show(); //montre a l'ecran les changements demandes
+    }
+
+    public void initialDisplay() {
+        StdDraw.enableDoubleBuffering(); // rend l'affichage plus fluide: tout draw est mis en buffer et ne s'affiche qu'au prochain StdDraw.show();
+        display();
+    }
+
+    public void update() {
+
+        boolean updateDisplay = false;
+        AssociationTouches toucheSuivante = AssociationTouches.trouveProchaineEntree(); //cette fonction boucle jusqu'a la prochaine entree de l'utilisateur
+
+        if (toucheSuivante.isHaut()) {
+            cursor.up();
+            updateDisplay = true;
+        }
+
+        if (toucheSuivante.isBas()) {
+            cursor.down();
+            updateDisplay = true;
+        }
+
+        if (toucheSuivante.isGauche()) {
+            cursor.left();
+            updateDisplay = true;
+        }
+
+        if (toucheSuivante.isDroite()) {
+            cursor.right();
+            updateDisplay = true;
+        }
+
+        //  ATTENTION ! si vous voulez detecter d'autres touches que 't',
+        //  vous devez les ajouter au tableau Config.TOUCHES_PERTINENTES_CARACTERES
+        if (toucheSuivante.isCaractere('t')) {
+            String[] options = {"Oui", "Non"};
+            if (Affichage.popup("Finir le tour de XXX?", options, true, 1) == 0) {
+                //le choix 0, "Oui", a été selectionné
+                //TODO: passer au joueur suivant
+                System.out.println("FIN DE TOUR");
+            }
+
+            updateDisplay = true;
+        }
+
+        if (updateDisplay) display();
+    }
 }
 

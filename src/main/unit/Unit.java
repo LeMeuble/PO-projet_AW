@@ -67,7 +67,7 @@ public abstract class Unit {
     int maxPM;
     int PM;
 
-    int health;
+    double health;
 
     Weapon[] weapons;
     int price; // statique / dans l'enum
@@ -81,8 +81,6 @@ public abstract class Unit {
     int[] movementTable;
 
     public Unit(Player owner) {
-
-        System.out.println("New instance of " + this.getClass().getSimpleName() + " with owner " + owner);
 
         this.owner = owner;
         this.PM = this.maxPM;

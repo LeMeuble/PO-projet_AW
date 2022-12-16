@@ -1,4 +1,5 @@
 package main;
+import main.terrain.Case;
 import ressources.Affichage;
 import ressources.Chemins;
 
@@ -14,6 +15,7 @@ public class Main {
 	final static boolean SAUTER_SELECTION_CARTE = false; // mettre a false pour avoir l'outil de selection de carte
 	
 	public static void main(String[] args) throws IOException {
+
 		try{
 			String cheminCarte = selectionCarte();
 			Jeu jeu= new Jeu(cheminCarte);
@@ -27,6 +29,7 @@ public class Main {
 			System.out.println("Erreur lors de l'execution du jeu : " + e.getMessage());
 			e.printStackTrace();
 		}
+
 	}
 
 	private static String selectionCarte() throws IOException {
@@ -35,7 +38,7 @@ public class Main {
 			SelecteurDeFichier selecteur = new SelecteurDeFichier(Chemins.getDossierCartes());
 			return selecteur.selectFile();
 		}
-		catch (InterruptedIOException excep)
+		catch (InterruptedIOException exception)
 		{
 			throw new IOException("Selection annulée, jeu non lancé.");
 		}

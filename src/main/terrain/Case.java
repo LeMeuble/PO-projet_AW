@@ -6,10 +6,32 @@ import main.unit.Unit;
 
 public class Case {
 
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    private int x;
+    private int y;
+
     private Terrain terrain;
     private Unit unit;
 
-    public Case() {}
+    public Case(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
 
     public Case(Terrain terrain) {
 
@@ -37,11 +59,9 @@ public class Case {
         return this.terrain;
     }
 
-    public static Case parse(String s) {
+    public static Case parse(int x, int y, String s) {
 
-        System.out.println("---");
-
-        Case parsed = new Case();
+        Case parsed = new Case(x, y);
 
         final String[] terrainAndPlayer = s.split(":");
 
@@ -54,12 +74,7 @@ public class Case {
 
             final String[] unitAndTerrain = terrainAndPlayer[0].split(";");
 
-            System.out.println(terrainAndPlayer[1]);
-
             final Player p = Player.fromValue(Integer.parseInt(terrainAndPlayer[1]));
-
-            System.out.println(p);
-
 
             final Terrain.Type terrainType = Terrain.Type.fromName(unitAndTerrain[0]);
 
@@ -68,24 +83,17 @@ public class Case {
                 final Terrain terrain = terrainType.newInstance(p);
                 parsed.setTerrain(terrain);
 
-                System.out.println(terrain);
-
                 if (unitAndTerrain.length == 2) {
 
                     final Unit.Type unitType = Unit.Type.fromName(unitAndTerrain[1]);
-                    System.out.println(unitType);
-
 
                     if (unitType != null) {
                         parsed.setUnit(unitType.newInstance(p));
-                        System.out.println("changing unit");
                     }
                 }
             }
 
         }
-        System.out.println("---");
-
         return parsed;
 
     }

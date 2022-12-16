@@ -24,7 +24,7 @@ public class Grid {
 
         for (int i = 0; i < grid.length; i++) {
             for (int j=0; j < grid[i].length; j++){
-                this.grid[i][j] = Case.parse(grid[i][j]);
+                this.grid[i][j] = Case.parse(j, i, grid[i][j]);
 
             }
         }

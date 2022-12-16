@@ -10,7 +10,10 @@ import main.Player;
  */
 public abstract class Property extends Terrain {
 
+    public static double DEFAULT_DEFENSE = 20d;
+
     protected Player owner;
+    private double defense;
 
     /**
      * Constructeur de la propriete
