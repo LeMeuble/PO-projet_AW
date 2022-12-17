@@ -1,7 +1,5 @@
 package main.terrain;
 
-import java.util.stream.Stream;
-
 /**
  * Classe representant la grille du plateau de jeu sous forme d'un
  * tableau 2D de cases
@@ -32,7 +30,7 @@ public class Grid {
 
     public Case getCase(int x, int y) {
 
-        return grid[x][y];
+        return grid[y][x];
 
     }
 

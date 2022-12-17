@@ -8,7 +8,6 @@ import librairies.StdDraw;
 import main.terrain.Case;
 import main.terrain.Grid;
 import ressources.Affichage;
-import ressources.Chemins;
 import ressources.Config;
 import ressources.ParseurCartes;
 
@@ -23,11 +22,10 @@ public class Jeu {
     private Cursor cursor;
     private Movement movement;
 
-    // l'indice 0 est reserve au neutre, qui ne joue pas mais peut posseder des proprietes
-    public Jeu(String fileName) throws Exception {
+    public Jeu(String file) throws Exception {
 
         //appel au parseur, qui renvoie un tableau de String
-        String[][] parsed = ParseurCartes.parseCarte(fileName);
+        String[][] parsed = ParseurCartes.parseCarte(file);
 
         borderX = parsed[0].length;
         borderY = parsed.length;
@@ -41,8 +39,6 @@ public class Jeu {
         movement = new Movement(this.grid.getCase(0, 0));
         movement.update(this.grid.getCase(0, 1));
         movement.update(this.grid.getCase(0, 2));
-        movement.update(this.grid.getCase(1, 2));
-        movement.update(this.grid.getCase(1, 1));
 
     }
 
@@ -55,17 +51,17 @@ public class Jeu {
         Affichage.afficheTexteDescriptif("Status du jeu");
     }
 
-
     public void display() {
 
         StdDraw.clear();
         afficheStatutJeu();
 
+        // Rendu de la grille (cases, terrains et unites)
         for (int y = 0; y < borderY; y++) {
 
             for (int x = 0; x < borderX; x++) {
 
-                Case c = this.grid.getCase(y, x);
+                Case c = this.grid.getCase(x, y);
 
                 Affichage.dessineImageDansCase(x, y, c.getTerrain().getFile());
                 if (c.hasUnit()) Affichage.dessineImageDansCase(x, y, c.getUnit().getFile());
@@ -73,14 +69,19 @@ public class Jeu {
             }
         }
 
+        // Rendu d'une potentielle fleche de deplacement
         if (this.movement != null) {
 
-            this.movement.render();
+            for(Movement.Arrow arrow : this.movement.toDirectionalArrows()) {
+
+                Affichage.dessineImageDansCase(arrow.getCase().getX(), arrow.getCase().getY(), arrow.getPath());
+
+            }
 
         }
 
+        // Rendu du curseur
         Affichage.dessineCurseur(this.cursor.getCurrentX(), this.cursor.getCurrentY());
-        Affichage.dessineImageDansCase(1, 0, Chemins.getCheminFleche(Chemins.DIRECTION_FIN, Chemins.DIRECTION_DROITE));
 
         StdDraw.show(); //montre a l'ecran les changements demandes
     }
@@ -98,21 +99,26 @@ public class Jeu {
         if (toucheSuivante.isHaut()) {
             cursor.up();
             updateDisplay = true;
+            this.movement.update(this.grid.getCase(cursor.getCurrentX(), cursor.getCurrentY()));
+
         }
 
         if (toucheSuivante.isBas()) {
             cursor.down();
             updateDisplay = true;
+            this.movement.update(this.grid.getCase(cursor.getCurrentX(), cursor.getCurrentY()));
         }
 
         if (toucheSuivante.isGauche()) {
             cursor.left();
             updateDisplay = true;
+            this.movement.update(this.grid.getCase(cursor.getCurrentX(), cursor.getCurrentY()));
         }
 
         if (toucheSuivante.isDroite()) {
             cursor.right();
             updateDisplay = true;
+            this.movement.update(this.grid.getCase(cursor.getCurrentX(), cursor.getCurrentY()));
         }
 
         //  ATTENTION ! si vous voulez detecter d'autres touches que 't',

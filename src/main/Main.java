@@ -1,13 +1,11 @@
 package main;
-import main.terrain.Case;
-import ressources.Affichage;
+
+import librairies.SelecteurDeFichier;
+import librairies.StdDraw;
 import ressources.Chemins;
 
 import java.io.IOException;
 import java.io.InterruptedIOException;
-
-import librairies.SelecteurDeFichier;
-import librairies.StdDraw;
 
 
 public class Main {

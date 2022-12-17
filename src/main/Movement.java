@@ -1,25 +1,60 @@
 package main;
 
 import main.terrain.Case;
-import ressources.Affichage;
 import ressources.Chemins;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 
 public class Movement {
 
-    enum DirectionType {
-        UP,
-        DOWN,
-        LEFT,
-        RIGHT;
+    enum Direction {
 
+        BEGIN(Chemins.DIRECTION_DEBUT,Integer.MAX_VALUE, Integer.MAX_VALUE),
+        END(Chemins.DIRECTION_FIN, Integer.MIN_VALUE, Integer.MIN_VALUE),
+        UP(Chemins.DIRECTION_HAUT, 0, 1),
+        DOWN(Chemins.DIRECTION_BAS, 0, -1),
+        LEFT(Chemins.DIRECTION_GAUCHE, -1, 0),
+        RIGHT(Chemins.DIRECTION_DROITE, 1, 0);
 
-        public DirectionType opposite() {
+        private final String path;
+        private final int dx;
+        private final int dy;
+
+        Direction(String path, int dx, int dy) {
+            this.path = path;
+            this.dx = dx;
+            this.dy = dy;
+        }
+
+        /**
+         * Retourne une direction a partir des deltas x et y
+         * @param dx Delta x
+         * @param dy Delta y
+         * @return Direction correspondante
+         */
+        public static Direction fromDelta(int dx, int dy) {
+            for (Direction direction : Direction.values()) {
+                if (direction.dx == dx && direction.dy == dy) {
+                    return direction;
+                }
+            }
+            return null;
+        }
+
+        /**
+         * Opposite direction
+         * @return Opposite direction
+         */
+        public Direction opposite() {
 
             switch (this) {
+                case BEGIN:
+                    return END;
+                case END:
+                    return BEGIN;
                 case UP:
                     return DOWN;
                 case DOWN:
@@ -34,23 +69,27 @@ public class Movement {
         }
     }
 
-    private class Direction {
+    protected class Arrow {
 
+        private Case c;
+        private Direction from;
+        private Direction to;
 
-        private DirectionType previous;
-        private Case aCase;
-        private DirectionType next;
+        public Arrow(Case c, Direction from, Direction to) {
+            this.c = c;
+            this.from = from;
+            this.to = to;
+        }
 
-        public Direction(DirectionType previous, Case aCase, DirectionType next) {
+        public Case getCase() {
+            return c;
+        }
 
-            this.previous = previous;
-            this.aCase = aCase;
-            this.next = next;
-
+        public String getPath() {
+            return Chemins.getCheminFleche(from.path, to.path);
         }
 
     }
-
 
     private final Case startingPoint;
     private List<Case> cases;
@@ -58,11 +97,11 @@ public class Movement {
     public Movement(Case startingPoint) {
 
         this.startingPoint = startingPoint;
-        this.cases = new ArrayList<>(); // preferable a linked list pour les acces aleatoire
+        this.cases = new ArrayList<>();
 
     }
 
-     public void update(Case newCase) {
+    public void update(Case newCase) {
 
         if (newCase.equals(this.startingPoint)) {
             this.cases.clear();
@@ -74,62 +113,60 @@ public class Movement {
 
     }
 
-    public int compareX(Case a, Case b) {
 
-        return Integer.compare(a.getX(), b.getX());
+    public List<Arrow> toDirectionalArrows() {
 
-    }
-
-    public int compareY(Case a, Case b) {
-
-        return Integer.compare(a.getY(), b.getY());
-
-    }
-
-    public void render() {
-
-        LinkedList<Case> cases = new LinkedList<>(this.cases);
+        ListIterator<Case> cases = this.cases.listIterator();
+        List<Arrow> directionnalArrows = new LinkedList<>();
 
         Case previous = null;
         Case current = startingPoint;
-        Case next = null;
-        while(cases.peek() != null) {
+        Case next;
+        while (cases.hasNext()) {
 
-            next = cases.poll();
+            next = cases.next();
 
-            System.out.println("previous: " + previous);
-            System.out.println("current: " + current);
-            System.out.println("next: " + next);
-
-            Direction dir = calculateDirection(previous, current, next);
+            directionnalArrows.add(calculateDirection(previous, current, next));
 
             previous = current;
             current = next;
 
         }
 
+        directionnalArrows.add(calculateDirection(previous, current, null)); // Cas ou le mouvement est vide
 
-
-    }
-
-    public Direction calculateDirection(Case previous, Case current, Case next) {
-
-        String previousDirection = null;
-        String nextDirection = null;
-
-        if (previous == null) previousDirection = Chemins.DIRECTION_DEBUT;
-        
-
-        if (next == null) {
-
-
-
-        }
-
-
+        return directionnalArrows;
 
     }
 
+    /**
+     * Calculer la direction de la fleche a afficher selon les cases precedente et suivante
+     * @param previous Case precedente
+     * @param current Case actuelle
+     * @param next Case suivante
+     * @return Retourne une direction selon les cases adjacentes
+     */
+    public Arrow calculateDirection(Case previous, Case current, Case next) {
+
+        if(current == null) return null;
+
+        Direction from;
+        Direction to;
+
+        if(previous == null) from = Direction.BEGIN;
+        else from = Direction.fromDelta(current.getX() - previous.getX(), current.getY() - previous.getY()).opposite();
+
+        if(next == null) to = Direction.END;
+        else to = Direction.fromDelta(next.getX() - current.getX(), next.getY() - current.getY());
+
+        return new Arrow(current, from, to);
+
+    }
+
+    /**
+     * Reprensation textuelle du mouvement
+     * @return Representer le mouvement sous forme de chaine de caractere
+     */
     public String toString() {
 
         String result = "";
