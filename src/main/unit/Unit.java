@@ -110,4 +110,16 @@ public abstract class Unit {
 
     public abstract String getFile();
 
+    public String toString() {
+
+        return this.getClass().getSimpleName();
+
+    }
+
+    public Player.Type getOwner() {
+
+        return this.owner;
+
+    }
+
 }
