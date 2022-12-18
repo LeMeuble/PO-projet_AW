@@ -6,22 +6,6 @@ import main.unit.Unit;
 
 public class Case {
 
-    public int getX() {
-        return x;
-    }
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public void setY(int y) {
-        this.y = y;
-    }
-
     private int x;
     private int y;
 
@@ -37,6 +21,22 @@ public class Case {
 
         this.terrain = terrain;
 
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
     }
 
     public void setUnit(Unit unit) {
@@ -74,7 +74,7 @@ public class Case {
 
             final String[] unitAndTerrain = terrainAndPlayer[0].split(";");
 
-            final Player p = Player.fromValue(Integer.parseInt(terrainAndPlayer[1]));
+            final Player.Type p = Player.Type.fromValue(Integer.parseInt(terrainAndPlayer[1]));
 
             final Terrain.Type terrainType = Terrain.Type.fromName(unitAndTerrain[0]);
 

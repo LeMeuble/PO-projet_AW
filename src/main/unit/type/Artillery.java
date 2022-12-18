@@ -26,7 +26,7 @@ public class Artillery extends Motorized {
     // Idem que pour les dégats, on utilise un tableau ? Une liste ?
     int[] movementTable;
 
-    public Artillery(Player owner) {
+    public Artillery(Player.Type owner) {
 
         super(owner);
 

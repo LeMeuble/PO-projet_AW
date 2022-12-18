@@ -26,7 +26,7 @@ public class Bazooka extends OnFoot {
     // Idem que pour les dégats, on utilise un tableau ? Une liste ?
     int[] movementTable;
 
-    public Bazooka(Player owner){
+    public Bazooka(Player.Type owner){
         super(owner);
     }
 

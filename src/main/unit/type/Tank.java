@@ -25,7 +25,7 @@ public class Tank extends Motorized {
     // Idem que pour les dégats, on utilise un tableau ? Une liste ?
     int[] movementTable;
 
-    public Tank(Player owner){
+    public Tank(Player.Type owner){
         super(owner);
     }
 

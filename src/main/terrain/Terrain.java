@@ -11,7 +11,6 @@ import main.terrain.type.*;
  */
 public abstract class Terrain {
 
-
     /**
      * Enumeration de tous les types de terrains existants
      */
@@ -61,7 +60,7 @@ public abstract class Terrain {
 
         }
 
-        public Terrain newInstance(Player p) {
+        public Terrain newInstance(Player.Type p) {
 
             switch (this) {
                 case Factory:

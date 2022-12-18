@@ -4,7 +4,7 @@ import main.Player;
 
 public abstract class Motorized extends Unit {
 
-    public Motorized(Player owner) {
+    public Motorized(Player.Type owner) {
 
         super(owner);
 

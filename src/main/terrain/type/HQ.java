@@ -6,17 +6,17 @@ import ressources.Chemins;
 
 public class HQ extends Property {
 
-    public static final String redHQfilePath = Chemins.getCheminPropriete(Chemins.FICHIER_QG, Player.RED.getValue());
-    public static final String blueHQfilePath = Chemins.getCheminPropriete(Chemins.FICHIER_QG, Player.BLUE.getValue());
+    public static final String redHQfilePath = Chemins.getCheminPropriete(Chemins.FICHIER_QG, Player.Type.RED.getValue());
+    public static final String blueHQfilePath = Chemins.getCheminPropriete(Chemins.FICHIER_QG, Player.Type.BLUE.getValue());
 
-    public HQ(Player owner) {
+    public HQ(Player.Type owner) {
         super(owner);
     }
 
 
     public String getFile() {
 
-        if(this.owner == Player.RED) return redHQfilePath;
+        if(super.getOwner() == Player.Type.RED) return redHQfilePath;
         else return blueHQfilePath;
 
     }

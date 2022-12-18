@@ -25,7 +25,7 @@ public class DCA extends Motorized {
     // Idem que pour les dégats, on utilise un tableau ? Une liste ?
     int[] movementTable;
 
-    public DCA(Player owner){
+    public DCA(Player.Type owner){
         super(owner);
     }
 

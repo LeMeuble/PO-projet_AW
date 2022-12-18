@@ -25,7 +25,7 @@ public class Convoy extends Motorized {
     // Idem que pour les dégats, on utilise un tableau ? Une liste ?
     int[] movementTable;
 
-    public Convoy(Player owner){
+    public Convoy(Player.Type owner){
         super(owner);
     }
 

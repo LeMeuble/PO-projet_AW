@@ -25,7 +25,7 @@ public class Bombardier extends Flying {
     // Idem que pour les dégats, on utilise un tableau ? Une liste ?
     int[] movementTable;
 
-    public Bombardier(Player owner){
+    public Bombardier(Player.Type owner){
         super(owner);
     }
 

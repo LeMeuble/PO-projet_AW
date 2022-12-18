@@ -12,14 +12,14 @@ public abstract class Property extends Terrain {
 
     public static double DEFAULT_DEFENSE = 20d;
 
-    protected Player owner;
+    private Player.Type owner;
     private double defense;
 
     /**
      * Constructeur de la propriete
      * @param owner Le joueur proprietaire du terrain
      */
-    public Property(Player owner) {
+    public Property(Player.Type owner) {
         this.owner = owner;
     }
 
@@ -27,7 +27,7 @@ public abstract class Property extends Terrain {
      * Definir le proprietaire du terrain
      * @param owner Nouveau proprietaire du terrain
      */
-    public void setOwner(Player owner) {
+    public void setOwner(Player.Type owner) {
         this.owner = owner;
     }
 
@@ -35,8 +35,14 @@ public abstract class Property extends Terrain {
      * Recuperer le propietaire du terrain
      * @return Proprietaire du terrain
      */
-    public Player getOwner() {
+    public Player.Type getOwner() {
         return this.owner;
+    }
+
+    public void income(Player p) {
+
+
+
     }
 
 }

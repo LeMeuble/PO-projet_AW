@@ -25,7 +25,7 @@ public class Infantry extends OnFoot {
     // Idem que pour les dégats, on utilise un tableau ? Une liste ?
     int[] movementTable;
 
-    public Infantry(Player owner){
+    public Infantry(Player.Type owner){
             super(owner);
     }
 

@@ -4,7 +4,7 @@ import main.Player;
 
 public abstract class OnFoot extends Unit {
 
-    public OnFoot(Player owner) {
+    public OnFoot(Player.Type owner) {
 
         super(owner);
 

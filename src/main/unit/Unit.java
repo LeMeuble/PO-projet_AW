@@ -37,7 +37,7 @@ public abstract class Unit {
 
         }
 
-        public Unit newInstance(Player p) {
+        public Unit newInstance(Player.Type p) {
 
             switch (this) {
                 case Infantry:
@@ -75,12 +75,12 @@ public abstract class Unit {
 
     int fuel;
     boolean hasPlayed;
-    protected Player owner;
+    protected Player.Type owner;
     // Idem que pour les dégats, on utilise un tableau ? Une liste ?
 
     int[] movementTable;
 
-    public Unit(Player owner) {
+    public Unit(Player.Type owner) {
 
         this.owner = owner;
         this.PM = this.maxPM;

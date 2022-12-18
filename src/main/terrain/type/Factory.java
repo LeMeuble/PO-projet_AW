@@ -6,18 +6,12 @@ import ressources.Chemins;
 
 public class Factory extends Property {
 
-    public static final String redFactoryFilePath = Chemins.getCheminPropriete(Chemins.FICHIER_USINE, Player.RED.getValue());
-    public static final String neutralFactoryFilePath = Chemins.getCheminPropriete(Chemins.FICHIER_USINE, Player.NEUTRAL.getValue());
-    public static final String blueFactoryFilePath = Chemins.getCheminPropriete(Chemins.FICHIER_USINE, Player.BLUE.getValue());
+    public static final String redFactoryFilePath = Chemins.getCheminPropriete(Chemins.FICHIER_USINE, Player.Type.RED.getValue());
+    public static final String neutralFactoryFilePath = Chemins.getCheminPropriete(Chemins.FICHIER_USINE, Player.Type.NEUTRAL.getValue());
+    public static final String blueFactoryFilePath = Chemins.getCheminPropriete(Chemins.FICHIER_USINE, Player.Type.BLUE.getValue());
 
-    public Factory(Player owner) {
+    public Factory(Player.Type owner) {
         super(owner);
-    }
-
-    public void income() {
-
-        // Faire gagner 1000 coins au joueur propriétaire
-
     }
 
     public void produceUnit() {
@@ -28,8 +22,8 @@ public class Factory extends Property {
 
     public String getFile() {
 
-        if(this.owner == Player.RED) return redFactoryFilePath;
-        else if(this.owner == Player.BLUE) return blueFactoryFilePath;
+        if(super.getOwner() == Player.Type.RED) return redFactoryFilePath;
+        else if(super.getOwner() == Player.Type.BLUE) return blueFactoryFilePath;
         else return neutralFactoryFilePath;
 
     }

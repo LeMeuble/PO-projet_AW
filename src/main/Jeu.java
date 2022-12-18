@@ -11,44 +11,53 @@ import ressources.Affichage;
 import ressources.Config;
 import ressources.ParseurCartes;
 
-public class Jeu {
+import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
 
-    private Player currentPlayer; //l'indice du joueur actif:  1 = rouge, 2 = bleu
-    private Grid grid;
+public class Jeu {
 
     public static int borderX;
     public static int borderY;
 
-    private Cursor cursor;
+    private final Grid grid;
+    private Player.Type currentPlayer;
+
+    private final Map<Player.Type, Player> players;
+
+    private final Cursor cursor;
+    private final KeystrokeHandler keystrokeHandler;
     private Movement movement;
+    private GameState gameState;
+    private PlayerState playerState;
 
     public Jeu(String file) throws Exception {
 
-        //appel au parseur, qui renvoie un tableau de String
         String[][] parsed = ParseurCartes.parseCarte(file);
 
         borderX = parsed[0].length;
         borderY = parsed.length;
 
-        this.grid = new Grid(parsed);
-        this.currentPlayer = Player.RED; // rouge commence
+        this.players = new HashMap<>();
+
+        this.players.put(Player.Type.RED, new Player(Player.Type.RED));
+        this.players.put(Player.Type.BLUE, new Player(Player.Type.BLUE));
+
+        this.currentPlayer = Player.Type.RED; // rouge commence
         this.cursor = new Cursor();
+        this.keystrokeHandler = new KeystrokeHandler(this);
+
+        this.grid = new Grid(parsed);
+
+        this.gameState = GameState.PLAYING;
+        this.playerState = PlayerState.SELECTING;
 
         Config.setDimension(borderX, borderY);
-
-        movement = new Movement(this.grid.getCase(0, 0));
-        movement.update(this.grid.getCase(0, 1));
-        movement.update(this.grid.getCase(0, 2));
 
     }
 
     public boolean isOver() {
-        return false;
-    }
-
-    public void afficheStatutJeu() {
-        Affichage.videZoneTexte();
-        Affichage.afficheTexteDescriptif("Status du jeu");
+        return this.gameState == GameState.ENDED;
     }
 
     public void display() {
@@ -72,7 +81,7 @@ public class Jeu {
         // Rendu d'une potentielle fleche de deplacement
         if (this.movement != null) {
 
-            for(Movement.Arrow arrow : this.movement.toDirectionalArrows()) {
+            for (Movement.Arrow arrow : this.movement.toDirectionalArrows()) {
 
                 Affichage.dessineImageDansCase(arrow.getCase().getX(), arrow.getCase().getY(), arrow.getPath());
 
@@ -81,9 +90,15 @@ public class Jeu {
         }
 
         // Rendu du curseur
-        Affichage.dessineCurseur(this.cursor.getCurrentX(), this.cursor.getCurrentY());
+        Color color = this.currentPlayer == Player.Type.RED ? Color.RED : Color.BLUE;
+        Affichage.dessineCurseur(this.cursor.getCurrentX(), this.cursor.getCurrentY(), color);
 
         StdDraw.show(); //montre a l'ecran les changements demandes
+    }
+
+    public void afficheStatutJeu() {
+        Affichage.videZoneTexte();
+        Affichage.afficheTexteDescriptif("Status du jeu");
     }
 
     public void initialDisplay() {
@@ -93,48 +108,34 @@ public class Jeu {
 
     public void update() {
 
-        boolean updateDisplay = false;
         AssociationTouches toucheSuivante = AssociationTouches.trouveProchaineEntree(); //cette fonction boucle jusqu'a la prochaine entree de l'utilisateur
 
-        if (toucheSuivante.isHaut()) {
-            cursor.up();
-            updateDisplay = true;
-            this.movement.update(this.grid.getCase(cursor.getCurrentX(), cursor.getCurrentY()));
+        boolean updateDisplay = this.keystrokeHandler.handle(toucheSuivante, this.playerState);
 
-        }
 
-        if (toucheSuivante.isBas()) {
-            cursor.down();
-            updateDisplay = true;
-            this.movement.update(this.grid.getCase(cursor.getCurrentX(), cursor.getCurrentY()));
-        }
-
-        if (toucheSuivante.isGauche()) {
-            cursor.left();
-            updateDisplay = true;
-            this.movement.update(this.grid.getCase(cursor.getCurrentX(), cursor.getCurrentY()));
-        }
-
-        if (toucheSuivante.isDroite()) {
-            cursor.right();
-            updateDisplay = true;
-            this.movement.update(this.grid.getCase(cursor.getCurrentX(), cursor.getCurrentY()));
-        }
-
-        //  ATTENTION ! si vous voulez detecter d'autres touches que 't',
-        //  vous devez les ajouter au tableau Config.TOUCHES_PERTINENTES_CARACTERES
-        if (toucheSuivante.isCaractere('t')) {
-            String[] options = {"Oui", "Non"};
-            if (Affichage.popup("Finir le tour de XXX?", options, true, 1) == 0) {
-                //le choix 0, "Oui", a été selectionné
-                //TODO: passer au joueur suivant
-                System.out.println("FIN DE TOUR");
-            }
-
-            updateDisplay = true;
-        }
+//        //  ATTENTION ! si vous voulez detecter d'autres touches que 't',
+//        //  vous devez les ajouter au tableau Config.TOUCHES_PERTINENTES_CARACTERES
+//        if (toucheSuivante.isCaractere('t')) {
+//            String[] options = {"Oui", "Non", "Peut-etre", "Cancel"};
+//            if (Affichage.popup("Finir le tour de XXX?", options, true, 1) == 0) {
+//                //le choix 0, "Oui", a été selectionné
+//                //TODO: passer au joueur suivant
+//                System.out.println("FIN DE TOUR");
+//            }
+//
+//            updateDisplay = true;
+//        }
 
         if (updateDisplay) display();
+
+    }
+
+    public Cursor getCursor() {
+        return this.cursor;
+    }
+
+    public Grid getGrid() {
+        return this.grid;
     }
 }
 

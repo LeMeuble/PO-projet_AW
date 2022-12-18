@@ -161,7 +161,7 @@ public class Affichage {
  * @param x L'indice en abscisse de la case
  * @param y L'indice en ordonnee de la case
  */
-    public static void dessineCurseur(int x, int y) {
+    public static void dessineCurseur(int x, int y, Color couleur) {
         double margeX = 0.1* Config.largeurCaseX; //distance entre curseur et bord de la case
         double margeY = 0.1* Config.largeurCaseY;
         double longueurX = 0.1 * Config.largeurCaseX; // longueur de chaque petite ligne du curseur
@@ -178,7 +178,7 @@ public class Affichage {
                     double debutY = coordYCentreCase(y) + decalageY * (haut - bas);
                     double finX = debutX + longueurX * (horizontal * gauche -droite * horizontal);
                     double finY = debutY + longueurY * (bas * vertical - haut * vertical);
-                    dessineLigne(debutX, debutY, finX, finY, Color.black);
+                    dessineLigne(debutX, debutY, finX, finY, couleur);
                 }
             }
         }

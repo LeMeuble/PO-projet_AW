@@ -25,7 +25,7 @@ public class Helicopter extends Flying {
     // Idem que pour les dégats, on utilise un tableau ? Une liste ?
     int[] movementTable;
 
-    public Helicopter(Player owner){
+    public Helicopter(Player.Type owner){
         super(owner);
     }
 
