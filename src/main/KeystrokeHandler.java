@@ -1,6 +1,7 @@
 package main;
 
 import librairies.AssociationTouches;
+import main.terrain.Grid;
 
 public class KeystrokeHandler {
 
@@ -40,10 +41,18 @@ public class KeystrokeHandler {
      */
     private boolean up(PlayerState playerState) {
 
+        int x = game.getCursor().getCurrentX();
+        int y = game.getCursor().getCurrentY();
+
         switch (playerState) {
 
             case SELECTING:
                 game.getCursor().up();
+                return true;
+
+            case MOVING_UNIT:
+                game.updateMovement(game.getGrid().getCase(x, y));
+                System.out.println("Going up");
                 return true;
 
         }
@@ -60,10 +69,17 @@ public class KeystrokeHandler {
      */
     private boolean down(PlayerState playerState) {
 
+        int x = game.getCursor().getCurrentX();
+        int y = game.getCursor().getCurrentY();
+
         switch (playerState) {
 
             case SELECTING:
                 game.getCursor().down();
+                return true;
+
+            case MOVING_UNIT:
+                game.updateMovement(game.getGrid().getCase(x, y));
                 return true;
 
         }
@@ -81,10 +97,17 @@ public class KeystrokeHandler {
      */
     private boolean left(PlayerState playerState) {
 
+        int x = game.getCursor().getCurrentX();
+        int y = game.getCursor().getCurrentY();
+
         switch (playerState) {
 
             case SELECTING:
                 game.getCursor().left();
+                return true;
+
+            case MOVING_UNIT:
+                game.updateMovement(game.getGrid().getCase(x, y));
                 return true;
 
         }
@@ -101,10 +124,17 @@ public class KeystrokeHandler {
      */
     private boolean right(PlayerState playerState) {
 
+        int x = game.getCursor().getCurrentX();
+        int y = game.getCursor().getCurrentY();
+
         switch (playerState) {
 
             case SELECTING:
                 game.getCursor().right();
+                return true;
+
+            case MOVING_UNIT:
+                game.updateMovement(game.getGrid().getCase(x, y));
                 return true;
 
         }
@@ -121,6 +151,44 @@ public class KeystrokeHandler {
      */
     private boolean enter(PlayerState playerState) {
 
+        Grid grid = game.getGrid();
+
+        switch (playerState) {
+
+            case SELECTING:
+
+                int x = game.getCursor().getCurrentX();
+                int y = game.getCursor().getCurrentY();
+
+
+                if(grid.getCase(x, y).hasUnit() && grid.getCase(x, y).getUnit().getOwner() == game.getCurrentPlayer()) {
+
+                    System.out.print("There is a unit here : ");
+                    System.out.println(game.getGrid().getCase(x, y).getUnit());
+                    // game.setPlayerState(PlayerState.SELECTING_UNIT_ACTION);
+                    game.setPlayerState(PlayerState.MOVING_UNIT); // C'est la pour du debug
+                    return true;
+
+                }
+
+                // Detecter si la case est une propriete
+                //if(game.getGrid().getCase(x, y).getTerrain())
+
+            case SELECTING_UNIT_ACTION:
+                System.out.println("You are selecting an action");
+                game.setPlayerState(PlayerState.SELECTING_UNIT_ACTION);
+                return true;
+
+            case FACTORY_ACTION:
+                System.out.println("You are selecting a factory action");
+                game.setPlayerState(PlayerState.FACTORY_ACTION);
+                return true;
+
+            case MOVING_UNIT:
+                game.setPlayerState(PlayerState.MOVING_UNIT);
+                return true;
+        }
+
         return false;
 
     }
@@ -132,6 +200,26 @@ public class KeystrokeHandler {
      * @return true si le jeu doit actualiser l'ecran
      */
     private boolean escape(PlayerState playerState) {
+
+        switch (playerState) {
+
+            case SELECTING:
+                game.setPlayerState(PlayerState.SELECTING);
+                return true;
+
+            case SELECTING_UNIT_ACTION:
+                game.setPlayerState(PlayerState.SELECTING);
+                return true;
+
+            case FACTORY_ACTION:
+                game.setPlayerState(PlayerState.SELECTING);
+                return true;
+
+            case MOVING_UNIT:
+                game.setPlayerState(PlayerState.SELECTING);
+                return true;
+
+        }
 
         return false;
 

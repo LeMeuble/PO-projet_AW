@@ -21,6 +21,7 @@ public class Jeu {
     public static int borderY;
 
     private final Grid grid;
+
     private Player.Type currentPlayer;
 
     private final Map<Player.Type, Player> players;
@@ -28,6 +29,7 @@ public class Jeu {
     private final Cursor cursor;
     private final KeystrokeHandler keystrokeHandler;
     private Movement movement;
+
     private GameState gameState;
     private PlayerState playerState;
 
@@ -137,5 +139,36 @@ public class Jeu {
     public Grid getGrid() {
         return this.grid;
     }
+
+    public GameState getGameState() {
+        return gameState;
+    }
+
+    public void setGameState(GameState gameState) {
+        this.gameState = gameState;
+    }
+
+    public PlayerState getPlayerState() {
+        return playerState;
+    }
+
+    public void setPlayerState(PlayerState playerState) {
+        this.playerState = playerState;
+    }
+
+    public Player.Type getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public void setCurrentPlayer(Player.Type currentPlayer) {
+        this.currentPlayer = currentPlayer;
+    }
+
+    public void updateMovement(Case newCase) {
+
+        this.movement.update(newCase);
+
+    }
+
 }
 
