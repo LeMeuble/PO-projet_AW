@@ -50,7 +50,7 @@ public class KeystrokeHandler {
         switch (playerState) {
 
             case SELECTING:
-                game.getCursor().up();
+                this.game.getCursor().up();
                 return true;
 
             case MOVING_UNIT:
@@ -76,7 +76,7 @@ public class KeystrokeHandler {
         switch (playerState) {
 
             case SELECTING:
-                game.getCursor().down();
+                this.game.getCursor().down();
                 return true;
 
             case MOVING_UNIT:
@@ -101,7 +101,7 @@ public class KeystrokeHandler {
         switch (playerState) {
 
             case SELECTING:
-                game.getCursor().left();
+                this.game.getCursor().left();
                 return true;
 
             case MOVING_UNIT:
@@ -155,13 +155,17 @@ public class KeystrokeHandler {
                 int x = game.getCursor().getCurrentX();
                 int y = game.getCursor().getCurrentY();
 
+                Case c = grid.getCase(x, y);
 
-                if(grid.getCase(x, y).hasUnit() && grid.getCase(x, y).getUnit().getOwner() == game.getCurrentPlayer()) {
+                if(c.hasUnit() && c.getUnit().getOwner() == game.getCurrentPlayer()) {
 
                     System.out.print("There is a unit here : ");
                     System.out.println(game.getGrid().getCase(x, y).getUnit());
                     // game.setPlayerState(PlayerState.SELECTING_UNIT_ACTION);
                     game.setPlayerState(PlayerState.MOVING_UNIT); // C'est la pour du debug
+
+                    this.game.updateMovement(grid.getCase(x, y));
+
                     return true;
 
                 }

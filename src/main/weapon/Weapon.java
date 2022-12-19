@@ -14,8 +14,12 @@ public abstract class Weapon {
 
     }
 
-    // Reste à voir comment on fait la table des dégats : un tableau ? Une liste ?
-    int[] damages;
-    HashMap<Unit, Double> damagesMultiplier;
+    public int getAmmo() {
+        return ammo;
+    }
+
+    public void setAmmo(int ammo) {
+        this.ammo = ammo;
+    }
 
 }

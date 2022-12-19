@@ -5,11 +5,11 @@ import ressources.Chemins;
 
 public class Mountain extends Terrain {
 
-    public static final String filePath = Chemins.getCheminTerrain(Chemins.FICHIER_MONTAGNE);
+    public static final String FILE_PATH = Chemins.getCheminTerrain(Chemins.FICHIER_MONTAGNE);
 
     public String getFile() {
 
-        return filePath;
+        return Mountain.FILE_PATH;
 
     }
 

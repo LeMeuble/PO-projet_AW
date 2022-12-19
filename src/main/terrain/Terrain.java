@@ -16,15 +16,15 @@ public abstract class Terrain {
      */
     public enum Type {
 
-        Plain("Plaine"),
-        Forest("Foret"),
-        Mountain("Montagne"),
-        Water("Eau"),
-        Factory("Usine"),
-        City("Ville"),
+        PLAIN("Plaine"),
+        FOREST("Foret"),
+        MOUNTAIN("Montagne"),
+        WATER("Eau"),
+        FACTORY("Usine"),
+        CITY("Ville"),
         HQ("QG");
 
-        private String name;
+        private final String name;
 
         Type(String name) {
             this.name = name;
@@ -46,13 +46,13 @@ public abstract class Terrain {
         public Terrain newInstance() {
 
             switch (this) {
-                case Plain:
+                case PLAIN:
                     return new Plain();
-                case Forest:
+                case FOREST:
                     return new Forest();
-                case Mountain:
+                case MOUNTAIN:
                     return new Mountain();
-                case Water:
+                case WATER:
                     return new Water();
             }
 
@@ -63,9 +63,9 @@ public abstract class Terrain {
         public Terrain newInstance(Player.Type p) {
 
             switch (this) {
-                case Factory:
+                case FACTORY:
                     return new Factory(p);
-                case City:
+                case CITY:
                     return new City(p);
                 case HQ:
                     return new HQ(p);

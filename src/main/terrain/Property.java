@@ -39,10 +39,4 @@ public abstract class Property extends Terrain {
         return this.owner;
     }
 
-    public void income(Player p) {
-
-
-
-    }
-
 }

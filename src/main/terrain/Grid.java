@@ -11,7 +11,7 @@ import main.Jeu;
  */
 public class Grid {
 
-    private Case[][] grid;
+    private final Case[][] grid;
 
     /**
      * Constructeur de la grille
