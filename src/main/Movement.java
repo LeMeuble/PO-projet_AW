@@ -113,6 +113,23 @@ public class Movement {
 
     }
 
+    public boolean isEmpty() {
+
+        return cases.isEmpty();
+
+    }
+
+    public Case getHead() {
+
+        return this.startingPoint;
+
+    }
+
+    public Case getTail() {
+
+        return ((LinkedList<Case>) cases).peekLast();
+
+    }
 
     public List<Arrow> toDirectionalArrows() {
 

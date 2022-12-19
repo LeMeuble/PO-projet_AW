@@ -2,6 +2,12 @@ package main;
 
 import librairies.AssociationTouches;
 import main.terrain.Grid;
+import main.terrain.Case;
+import main.terrain.Property;
+import main.terrain.type.Factory;
+
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class KeystrokeHandler {
 
@@ -41,9 +47,6 @@ public class KeystrokeHandler {
      */
     private boolean up(PlayerState playerState) {
 
-        int x = game.getCursor().getCurrentX();
-        int y = game.getCursor().getCurrentY();
-
         switch (playerState) {
 
             case SELECTING:
@@ -51,8 +54,9 @@ public class KeystrokeHandler {
                 return true;
 
             case MOVING_UNIT:
-                game.updateMovement(game.getGrid().getCase(x, y));
-                System.out.println("Going up");
+
+                this.updateMovement(() -> game.getCursor().up());
+
                 return true;
 
         }
@@ -69,9 +73,6 @@ public class KeystrokeHandler {
      */
     private boolean down(PlayerState playerState) {
 
-        int x = game.getCursor().getCurrentX();
-        int y = game.getCursor().getCurrentY();
-
         switch (playerState) {
 
             case SELECTING:
@@ -79,7 +80,7 @@ public class KeystrokeHandler {
                 return true;
 
             case MOVING_UNIT:
-                game.updateMovement(game.getGrid().getCase(x, y));
+                this.updateMovement(() -> this.game.getCursor().down());
                 return true;
 
         }
@@ -97,9 +98,6 @@ public class KeystrokeHandler {
      */
     private boolean left(PlayerState playerState) {
 
-        int x = game.getCursor().getCurrentX();
-        int y = game.getCursor().getCurrentY();
-
         switch (playerState) {
 
             case SELECTING:
@@ -107,7 +105,7 @@ public class KeystrokeHandler {
                 return true;
 
             case MOVING_UNIT:
-                game.updateMovement(game.getGrid().getCase(x, y));
+                this.updateMovement(() -> this.game.getCursor().left());
                 return true;
 
         }
@@ -124,9 +122,6 @@ public class KeystrokeHandler {
      */
     private boolean right(PlayerState playerState) {
 
-        int x = game.getCursor().getCurrentX();
-        int y = game.getCursor().getCurrentY();
-
         switch (playerState) {
 
             case SELECTING:
@@ -134,7 +129,7 @@ public class KeystrokeHandler {
                 return true;
 
             case MOVING_UNIT:
-                game.updateMovement(game.getGrid().getCase(x, y));
+                this.updateMovement(() -> this.game.getCursor().right());
                 return true;
 
         }
@@ -171,8 +166,19 @@ public class KeystrokeHandler {
 
                 }
 
-                // Detecter si la case est une propriete
-                //if(game.getGrid().getCase(x, y).getTerrain())
+                if(c.getTerrain() instanceof Property && ((Property) c.getTerrain()).getOwner() == game.getCurrentPlayer()) {
+
+                    System.out.println("This is a propriety belonging to you");
+                    return true;
+
+                }
+
+                else {
+
+                    return true;
+
+                }
+
 
             case SELECTING_UNIT_ACTION:
                 System.out.println("You are selecting an action");
@@ -186,6 +192,14 @@ public class KeystrokeHandler {
 
             case MOVING_UNIT:
                 game.setPlayerState(PlayerState.MOVING_UNIT);
+
+                Case startingPoint = this.game.getMovementHead();
+                Case destination = this.game.getMovementTail();
+
+                destination.setUnit(startingPoint.getUnit());
+                startingPoint.setUnit(null);
+                this.game.setPlayerState(PlayerState.SELECTING);
+                this.game.resetMovement();
                 return true;
         }
 
@@ -204,7 +218,6 @@ public class KeystrokeHandler {
         switch (playerState) {
 
             case SELECTING:
-                game.setPlayerState(PlayerState.SELECTING);
                 return true;
 
             case SELECTING_UNIT_ACTION:
@@ -217,6 +230,7 @@ public class KeystrokeHandler {
 
             case MOVING_UNIT:
                 game.setPlayerState(PlayerState.SELECTING);
+                game.resetMovement();
                 return true;
 
         }
@@ -235,6 +249,37 @@ public class KeystrokeHandler {
 
         return false;
 
+    }
+
+    private void updateMovement(Runnable movement) {
+
+        int x = game.getCursor().getCurrentX();
+        int y = game.getCursor().getCurrentY();
+
+        // System.out.println("Moving from x=" + x + ", y=" + y);
+
+        movement.run();
+
+        int newX = game.getCursor().getCurrentX();
+        int newY = game.getCursor().getCurrentY();
+
+        // System.out.println("Moving to x=" + newX + ", y=" + newY);
+
+        game.updateMovement(game.getGrid().getCase(newX, newY));
+
+//        if(game.isMovementEmpty()) {
+//
+//            game.updateMovement(game.getGrid().getCase(x, y));
+//
+//        }
+//        else {
+//
+//            int newX = game.getCursor().getCurrentX();
+//            int newY = game.getCursor().getCurrentY();
+//
+//            game.updateMovement(game.getGrid().getCase(newX, newY));
+//
+//        }
     }
 
 }
