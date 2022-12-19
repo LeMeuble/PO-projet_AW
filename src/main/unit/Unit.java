@@ -9,14 +9,14 @@ public abstract class Unit {
 
     public enum Type {
 
-        Infantry("Infanterie"),
-        Bazooka("Bazooka"),
-        Bombardier("Bombardier"),
-        Convoy("Convoit"),
+        INFANTRY("Infanterie"),
+        BAZOOKA("Bazooka"),
+        BOMBARDIER("Bombardier"),
+        CONVOY("Convoit"),
         DCA("DCA"),
-        Helicopter("Helico"),
-        Tank("Tank"),
-        Artillery("Artillerie");
+        HELICOPTER("Helico"),
+        TANK("Tank"),
+        ARTILLERY("Artillerie");
 
         private final String name;
 
@@ -40,21 +40,21 @@ public abstract class Unit {
         public Unit newInstance(Player.Type p) {
 
             switch (this) {
-                case Infantry:
+                case INFANTRY:
                     return new Infantry(p);
-                case Bazooka:
+                case BAZOOKA:
                     return new Bazooka(p);
-                case Bombardier:
+                case BOMBARDIER:
                     return new Bombardier(p);
-                case Convoy:
+                case CONVOY:
                     return new Convoy(p);
                 case DCA:
                     return new DCA(p);
-                case Helicopter:
+                case HELICOPTER:
                     return new Helicopter(p);
-                case Tank:
+                case TANK:
                     return new Tank(p);
-                case Artillery:
+                case ARTILLERY:
                     return new Artillery(p);
             }
 
@@ -75,7 +75,7 @@ public abstract class Unit {
 
     int fuel;
     boolean hasPlayed;
-    protected Player.Type owner;
+    final protected Player.Type owner;
     // Idem que pour les dégats, on utilise un tableau ? Une liste ?
 
     int[] movementTable;

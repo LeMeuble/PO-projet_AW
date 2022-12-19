@@ -33,6 +33,7 @@ public class Jeu {
     private GameState gameState;
     private PlayerState playerState;
 
+
     public Jeu(String file) throws Exception {
 
         String[][] parsed = ParseurCartes.parseCarte(file);
@@ -166,7 +167,42 @@ public class Jeu {
 
     public void updateMovement(Case newCase) {
 
-        this.movement.update(newCase);
+        if(this.movement == null) {
+
+            this.movement = new Movement(newCase);
+
+        }
+        else {
+            this.movement.update(newCase);
+        }
+
+    }
+
+    public void resetMovement() {
+
+        this.movement = null;
+
+    }
+
+    public boolean isMovementEmpty() {
+        if(this.movement == null) {
+            return true;
+        }
+        else {
+            return this.movement.isEmpty();
+        }
+
+    }
+
+    public Case getMovementHead() {
+
+        return this.movement.getHead();
+
+    }
+
+    public Case getMovementTail() {
+
+        return this.movement.getTail();
 
     }
 

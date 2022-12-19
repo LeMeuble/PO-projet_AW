@@ -97,7 +97,7 @@ public class Movement {
     public Movement(Case startingPoint) {
 
         this.startingPoint = startingPoint;
-        this.cases = new ArrayList<>();
+        this.cases = new LinkedList<>();
 
     }
 
@@ -106,13 +106,30 @@ public class Movement {
         if (newCase.equals(this.startingPoint)) {
             this.cases.clear();
         } else if (this.cases.contains(newCase)) {
-
-            this.cases = this.cases.subList(0, this.cases.indexOf(newCase) + 1);
+            // TODO: Improve this code cause it's a shitty code
+            this.cases = new LinkedList<>(this.cases.subList(0, this.cases.indexOf(newCase) + 1));
 
         } else this.cases.add(newCase);
 
     }
 
+    public boolean isEmpty() {
+
+        return cases.isEmpty();
+
+    }
+
+    public Case getHead() {
+
+        return this.startingPoint;
+
+    }
+
+    public Case getTail() {
+
+        return ((LinkedList<Case>) cases).peekLast();
+
+    }
 
     public List<Arrow> toDirectionalArrows() {
 

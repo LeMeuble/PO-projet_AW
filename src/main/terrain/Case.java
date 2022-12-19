@@ -6,8 +6,8 @@ import main.unit.Unit;
 
 public class Case {
 
-    private int x;
-    private int y;
+    private final int x;
+    private final int y;
 
     private Terrain terrain;
     private Unit unit;
@@ -15,48 +15,8 @@ public class Case {
     public Case(int x, int y) {
         this.x = x;
         this.y = y;
-    }
-
-    public Case(Terrain terrain) {
-
-        this.terrain = terrain;
-
-    }
-
-    public int getX() {
-        return x;
-    }
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public void setY(int y) {
-        this.y = y;
-    }
-
-    public void setUnit(Unit unit) {
-        this.unit = unit;
-    }
-
-    public Unit getUnit() {
-        return this.unit;
-    }
-
-    public boolean hasUnit() {
-        return this.unit != null;
-    }
-
-    public void setTerrain(Terrain terrain) {
-        this.terrain = terrain;
-    }
-
-    public Terrain getTerrain() {
-        return this.terrain;
+        this.terrain = null;
+        this.unit = null;
     }
 
     public static Case parse(int x, int y, String s) {
@@ -97,6 +57,37 @@ public class Case {
         return parsed;
 
     }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+
+    public void setUnit(Unit unit) {
+        this.unit = unit;
+    }
+
+    public Unit getUnit() {
+        return this.unit;
+    }
+
+    public boolean hasUnit() {
+        return this.unit != null;
+    }
+
+
+    public void setTerrain(Terrain terrain) {
+        this.terrain = terrain;
+    }
+
+    public Terrain getTerrain() {
+        return this.terrain;
+    }
+
 
     public String toString() {
         return "(" + this.x + ", " + this.y + ")";

@@ -6,21 +6,19 @@ import ressources.Chemins;
 
 public class City extends Property {
 
+    public static final String FILE_PATH_RED = Chemins.getCheminPropriete(Chemins.FICHIER_VILLE, Player.Type.RED.getValue());
+    public static final String FILE_PATH_NEUTRAL = Chemins.getCheminPropriete(Chemins.FICHIER_VILLE, Player.Type.NEUTRAL.getValue());
+    public static final String FILE_PATH_BLUE = Chemins.getCheminPropriete(Chemins.FICHIER_VILLE, Player.Type.BLUE.getValue());
+
     public City(Player.Type owner) {
         super(owner);
     }
 
-    public static final String neutralCityPath = Chemins.getCheminPropriete(Chemins.FICHIER_VILLE, Player.Type.NEUTRAL.getValue());
-
-    public static final String redCityfilePath = Chemins.getCheminPropriete(Chemins.FICHIER_VILLE, Player.Type.RED.getValue());
-    public static final String blueCityfilePath = Chemins.getCheminPropriete(Chemins.FICHIER_VILLE, Player.Type.BLUE.getValue());
-
-
     public String getFile() {
 
-        if(super.getOwner() == Player.Type.RED) return redCityfilePath;
-        if(super.getOwner() == Player.Type.BLUE) return blueCityfilePath;
-        else return neutralCityPath;
+        if(super.getOwner() == Player.Type.RED) return City.FILE_PATH_RED;
+        if(super.getOwner() == Player.Type.BLUE) return City.FILE_PATH_BLUE;
+        else return City.FILE_PATH_NEUTRAL;
     }
 
 }

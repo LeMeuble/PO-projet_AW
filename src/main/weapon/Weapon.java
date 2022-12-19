@@ -6,10 +6,20 @@ import java.util.HashMap;
 
 public abstract class Weapon {
 
-    int MaxAmmo;
+    private int ammo;
 
-    // Reste à voir comment on fait la table des dégats : un tableau ? Une liste ?
-    int[] damages;
-    HashMap<Unit, Double> damagesMultiplier;
+    public Weapon(int ammo) {
+
+        this.ammo = ammo;
+
+    }
+
+    public int getAmmo() {
+        return ammo;
+    }
+
+    public void setAmmo(int ammo) {
+        this.ammo = ammo;
+    }
 
 }

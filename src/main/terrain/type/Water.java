@@ -5,11 +5,11 @@ import ressources.Chemins;
 
 public class Water extends Terrain {
 
-    public static final String filePath = Chemins.getCheminTerrain(Chemins.FICHIER_EAU);
+    public static final String FILE_PATH = Chemins.getCheminTerrain(Chemins.FICHIER_EAU);
 
     public String getFile() {
 
-        return filePath;
+        return Water.FILE_PATH;
 
     }
 

@@ -6,25 +6,19 @@ import ressources.Chemins;
 
 public class Factory extends Property {
 
-    public static final String redFactoryFilePath = Chemins.getCheminPropriete(Chemins.FICHIER_USINE, Player.Type.RED.getValue());
-    public static final String neutralFactoryFilePath = Chemins.getCheminPropriete(Chemins.FICHIER_USINE, Player.Type.NEUTRAL.getValue());
-    public static final String blueFactoryFilePath = Chemins.getCheminPropriete(Chemins.FICHIER_USINE, Player.Type.BLUE.getValue());
+    public static final String FILE_PATH_RED = Chemins.getCheminPropriete(Chemins.FICHIER_USINE, Player.Type.RED.getValue());
+    public static final String FILE_PATH_NEUTRAL = Chemins.getCheminPropriete(Chemins.FICHIER_USINE, Player.Type.NEUTRAL.getValue());
+    public static final String FILE_PATH_BLUE = Chemins.getCheminPropriete(Chemins.FICHIER_USINE, Player.Type.BLUE.getValue());
 
     public Factory(Player.Type owner) {
         super(owner);
     }
 
-    public void produceUnit() {
-
-        // Fait spawn une unité
-
-    }
-
     public String getFile() {
 
-        if(super.getOwner() == Player.Type.RED) return redFactoryFilePath;
-        else if(super.getOwner() == Player.Type.BLUE) return blueFactoryFilePath;
-        else return neutralFactoryFilePath;
+        if(super.getOwner() == Player.Type.RED) return Factory.FILE_PATH_RED;
+        else if(super.getOwner() == Player.Type.BLUE) return  Factory.FILE_PATH_BLUE;
+        else return Factory.FILE_PATH_NEUTRAL;
 
     }
 
