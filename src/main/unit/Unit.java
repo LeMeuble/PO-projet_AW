@@ -1,7 +1,7 @@
 package main.unit;
 
 import main.Player;
-import main.terrain.Case;
+import main.map.Case;
 import main.unit.type.*;
 import main.weapon.Weapon;
 

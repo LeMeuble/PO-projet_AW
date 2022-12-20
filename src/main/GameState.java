@@ -10,9 +10,8 @@ public enum GameState {
     PLAYING_SELECTING_UNIT_ACTION,
     PLAYING_SELECTING_FACTORY_ACTION,
 
-
-    OPTIONS,
-    IN_GAME,
+//    OPTIONS,
+//    IN_GAME,
     ENDIND_SCREEN
 
 }

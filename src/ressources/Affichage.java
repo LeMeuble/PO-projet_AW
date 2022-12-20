@@ -1,10 +1,10 @@
 package ressources;
 
-import java.awt.Color;
 
 import librairies.AssociationTouches;
 import librairies.StdDraw;
 
+import java.awt.Color;
 import java.awt.Font;
 /**
 Classe qui gere l'affichage; vous pouvez la modifier si vous souhaiter changer l'affichage. 
@@ -30,7 +30,7 @@ public class Affichage {
      * @param droite Abscisse droite du rectangle
      * @param haut Ordonnee superieure du rectangle
      * @param bas Ordonnee inferieure du rectangle
-     * @param x
+     * @param y
      * @return L'ordonnee correspondant a <code>y</code> dans le referentiel du rectangle
      */
     private static double positionInterneRectangleY(double gauche, double droite, double haut, double bas, double y) {
@@ -43,7 +43,7 @@ public class Affichage {
      * @return L'abscisse correspondant a <code>x</code> dans le referentiel de la carte
      */
     private static double positionInterneCarteX(double x) {
-        return (positionInterneRectangleX(Config.limiteGaucheCarte, Config.limiteDroiteCarte, Config.limiteHautCarte, Config.limiteBasCarte, x));
+        return (positionInterneRectangleX(ConfigLegacy.limiteGaucheCarte, ConfigLegacy.limiteDroiteCarte, ConfigLegacy.limiteHautCarte, ConfigLegacy.limiteBasCarte, x));
     }
 
     /**
@@ -52,25 +52,25 @@ public class Affichage {
      * @return L'ordonnee correspondant a <code>y</code> dans le referentiel du rectangle
      */
     private static double positionInterneCarteY(double y) {
-        return (positionInterneRectangleY(Config.limiteGaucheCarte, Config.limiteDroiteCarte, Config.limiteHautCarte, Config.limiteBasCarte, y));
+        return (positionInterneRectangleY(ConfigLegacy.limiteGaucheCarte, ConfigLegacy.limiteDroiteCarte, ConfigLegacy.limiteHautCarte, ConfigLegacy.limiteBasCarte, y));
     }
 
     /**
      * Donne l'abscisse du centre d'une case situee sur la colonne <code>x</code>
-     * @param x Indice d'une colonne, entre <code>0</code> et <code>Config.mapXLengthSquares-1</code>
+     * @param x Indice d'une colonne, entre <code>0</code> et <code>ConfigLegacy.mapXLengthSquares-1</code>
      * @return l'abscisse du centre
      */
     public static double coordXCentreCase(int x) {
-		return (positionInterneCarteX(((double) x+0.5)/(double) Config.longueurCarteXCases));
+		return (positionInterneCarteX(((double) x+0.5)/(double) ConfigLegacy.longueurCarteXCases));
 	}
 
     /**
     * Donne l'ordonnee du centre d'une case situee sur la ligne <code>y</code>
-    * @param y Indice d'une ligne entre  <code>0</code> et <code>Config.mapYLengthSquares</code> 
+    * @param y Indice d'une ligne entre  <code>0</code> et <code>ConfigLegacy.mapYLengthSquares</code>
     * @return l'ordonnee du centre
     */
 	public static double coordYCentreCase(int y) { 
-    	return (positionInterneCarteY(((double) y +0.5) / (double) Config.longueurCarteYCases));
+    	return (positionInterneCarteY(((double) y +0.5) / (double) ConfigLegacy.longueurCarteYCases));
     }
 
     /**
@@ -79,7 +79,7 @@ public class Affichage {
     * @return L'abscisse du point qui est a <code>x</code> dans le referentiel de la zone de texte
     */
         public static double coordXZoneTexte(double x) {
-        return(Config.limiteGaucheTexte + x * Config.zoneTexteXTaille);
+        return(ConfigLegacy.limiteGaucheTexte + x * ConfigLegacy.zoneTexteXTaille);
     }
 
     /**
@@ -88,7 +88,7 @@ public class Affichage {
     * @return L'abscisse du point qui est a <code>y</code> dans le referentiel de la zone de texte
     */
     public static double coordYZoneTexte(double y) {
-        return (Config.limiteBasTexte + y * Config.zoneTexteYTaille);
+        return (ConfigLegacy.limiteBasTexte + y * ConfigLegacy.zoneTexteYTaille);
     }
 
     /**
@@ -130,7 +130,7 @@ public class Affichage {
    public static void afficheTexteDansCase(int xCase, int yCase, String texte, Color couleur, double xInterne, double yInterne, Font f) {
         StdDraw.setPenColor(couleur);
         StdDraw.setFont(f);
-        StdDraw.text(coordXCentreCase(xCase)+ (xInterne-0.5)*Config.largeurCaseX, coordYCentreCase(yCase)+ (yInterne-0.5)*Config.largeurCaseY, texte);
+        StdDraw.text(coordXCentreCase(xCase)+ (xInterne-0.5)* ConfigLegacy.largeurCaseX, coordYCentreCase(yCase)+ (yInterne-0.5)* ConfigLegacy.largeurCaseY, texte);
     } 
 
 /**
@@ -140,7 +140,7 @@ public class Affichage {
  * @param cheminImage Le chemin vers l'image
  */
     public static void dessineImageDansCase(int x, int y, String cheminImage) {
-        StdDraw.picture(coordXCentreCase(x), coordYCentreCase(y), cheminImage, Config.largeurCaseX, Config.largeurCaseY);
+        StdDraw.picture(coordXCentreCase(x), coordYCentreCase(y), cheminImage, ConfigLegacy.largeurCaseX, ConfigLegacy.largeurCaseY);
     } 
 
 /**
@@ -162,12 +162,12 @@ public class Affichage {
  * @param y L'indice en ordonnee de la case
  */
     public static void dessineCurseur(int x, int y, Color couleur) {
-        double margeX = 0.1* Config.largeurCaseX; //distance entre curseur et bord de la case
-        double margeY = 0.1* Config.largeurCaseY;
-        double longueurX = 0.1 * Config.largeurCaseX; // longueur de chaque petite ligne du curseur
-        double longueurY = 0.1 * Config.largeurCaseY;
-        double decalageX =  Config.largeurCaseX/2.0 - margeX; //distance entre l'abscisse du centre de la case et le trait du curseur qui en est le plus loin 
-        double decalageY =  Config.largeurCaseY/2.0 - margeY;
+        double margeX = 0.1* ConfigLegacy.largeurCaseX; //distance entre curseur et bord de la case
+        double margeY = 0.1* ConfigLegacy.largeurCaseY;
+        double longueurX = 0.1 * ConfigLegacy.largeurCaseX; // longueur de chaque petite ligne du curseur
+        double longueurY = 0.1 * ConfigLegacy.largeurCaseY;
+        double decalageX =  ConfigLegacy.largeurCaseX/2.0 - margeX; //distance entre l'abscisse du centre de la case et le trait du curseur qui en est le plus loin
+        double decalageY =  ConfigLegacy.largeurCaseY/2.0 - margeY;
         for (int vertical = 0; vertical <= 1; vertical++) {
             for (int gauche = 0; gauche <= 1; gauche++) {
                 for (int haut = 0; haut <= 1; haut++) {
@@ -190,15 +190,15 @@ public class Affichage {
  * @param y L'indice en ordonnee de la case
  */
     public static void videCase(int x, int y) {  
-        StdDraw.setPenColor(Config.COULEUR_ARRIERE_PLAN);
-        StdDraw.filledRectangle(coordXCentreCase(x), coordYCentreCase(y), 0.95*Config.demiLargeurCaseX, 0.95*Config.demiLargeurCaseY); 
+        StdDraw.setPenColor(ConfigLegacy.COULEUR_ARRIERE_PLAN);
+        StdDraw.filledRectangle(coordXCentreCase(x), coordYCentreCase(y), 0.95* ConfigLegacy.demiLargeurCaseX, 0.95* ConfigLegacy.demiLargeurCaseY);
     }
 
 /** 
 Vide la zone de texte en affichant la couleur de l'arriere-plan a la place.
  */
     public static void videZoneTexte() {
-        dessineRectanglePlein(Config.limiteGaucheTexte, Config.limiteDroiteTexte, Config.limiteHautTexte, Config.limiteBasTexte, Config.COULEUR_ARRIERE_PLAN);       
+        dessineRectanglePlein(ConfigLegacy.limiteGaucheTexte, ConfigLegacy.limiteDroiteTexte, ConfigLegacy.limiteHautTexte, ConfigLegacy.limiteBasTexte, ConfigLegacy.COULEUR_ARRIERE_PLAN);
 }
 
 /**
@@ -207,8 +207,8 @@ Vide la zone de texte en affichant la couleur de l'arriere-plan a la place.
  */
     public static void afficheTexteDescriptif(String message) {
         videZoneTexte();
-        StdDraw.setPenColor(Config.COULEUR_TEXTE_DESCRIPTIF);
-        StdDraw.setFont(Config.POLICE_PAR_DEFAUT);
+        StdDraw.setPenColor(ConfigLegacy.COULEUR_TEXTE_DESCRIPTIF);
+        StdDraw.setFont(ConfigLegacy.POLICE_PAR_DEFAUT);
         StdDraw.text(coordXZoneTexte(0.5), coordYZoneTexte(0.2), message);
     }
 
@@ -219,11 +219,11 @@ Vide la zone de texte en affichant la couleur de l'arriere-plan a la place.
 Affiche la grille.
  */
     public static void dessineGrille() {
-    for (int i=0;i<= Config.longueurCarteXCases; i++) {
-            dessineLigne(positionInterneCarteX((double) i / (double) Config.longueurCarteXCases), positionInterneCarteY(0), positionInterneCarteX((double) i / (double) Config.longueurCarteXCases), positionInterneCarteY(1), Color.black);
+    for (int i = 0; i<= ConfigLegacy.longueurCarteXCases; i++) {
+            dessineLigne(positionInterneCarteX((double) i / (double) ConfigLegacy.longueurCarteXCases), positionInterneCarteY(0), positionInterneCarteX((double) i / (double) ConfigLegacy.longueurCarteXCases), positionInterneCarteY(1), Color.black);
         }
-    for (int i=0;i<= Config.longueurCarteYCases; i++) {
-            dessineLigne(positionInterneCarteX(0),positionInterneCarteY(((double) i) / (double) Config.longueurCarteYCases), positionInterneCarteX(1), positionInterneCarteY(((double) i) / (double) Config.longueurCarteYCases), Color.black);
+    for (int i = 0; i<= ConfigLegacy.longueurCarteYCases; i++) {
+            dessineLigne(positionInterneCarteX(0),positionInterneCarteY(((double) i) / (double) ConfigLegacy.longueurCarteYCases), positionInterneCarteX(1), positionInterneCarteY(((double) i) / (double) ConfigLegacy.longueurCarteYCases), Color.black);
         }
     }
 
@@ -238,16 +238,16 @@ Affiche la grille.
  */
     public static int popup(String messageExplicatif, String[] options, boolean echapAutorise, int curseurDefaut) {
         int nbOptions = options.length;
-        double shareForOption = Config.PIXELS_PAR_ITEM_POPUP / (double) Config.nbPixelsY;
+        double shareForOption = ConfigLegacy.PIXELS_PAR_ITEM_POPUP / (double) ConfigLegacy.nbPixelsY;
         double height  = shareForOption * (nbOptions + 2); //vertical height of the popup window
         int nombreMaxDOptionsAffichees = nbOptions;
         //S'il y a trop d'options a afficher comparer a la taille de la fenetre, il faut faire un popup avec defilement
-        if (height>Config.carteTailleY) {
-        	height = Config.carteTailleY;
+        if (height> ConfigLegacy.carteTailleY) {
+        	height = ConfigLegacy.carteTailleY;
         	nombreMaxDOptionsAffichees = (int) Math.floor(height / shareForOption - 2.0);
         }
-        double left = positionInterneCarteX(0.5) - Config.taillePopupX/2.0; //abscisse de la gauche de la fenetre de popup
-        double right = positionInterneCarteX(0.5) + Config.taillePopupX/2.; //abscisse de la droite de la fenetre de popup
+        double left = positionInterneCarteX(0.5) - ConfigLegacy.taillePopupX/2.0; //abscisse de la gauche de la fenetre de popup
+        double right = positionInterneCarteX(0.5) + ConfigLegacy.taillePopupX/2.; //abscisse de la droite de la fenetre de popup
         double top = positionInterneCarteY(0.5) + height/2.0; //ordonne du haut de la fenetre de popup
         double bottom  = positionInterneCarteY(0.5) - height/2.0; //ordonnee du bas de la fenetre de popup
         double explainationY = bottom + (nombreMaxDOptionsAffichees+1.0)*shareForOption; //ordonne du texte explicatif
@@ -264,19 +264,19 @@ Affiche la grille.
         AssociationTouches key;
         double centerX, centerY, widthX, widthY, pixelsCursor;
         do {
-            dessineRectanglePlein(left, right, top, bottom, Config.POPUP_COULEUR_ARRIERE_PLAN);
-            dessineContourRectangle(left, right, top, bottom, Config.POPUP_COULEUR_CADRE);
-            StdDraw.setFont(Config.POLICE_POPUP);
-            StdDraw.setPenColor(Config.POPUP_COULEUR_TEXTE); // couleur du texte de popup
+            dessineRectanglePlein(left, right, top, bottom, ConfigLegacy.POPUP_COULEUR_ARRIERE_PLAN);
+            dessineContourRectangle(left, right, top, bottom, ConfigLegacy.POPUP_COULEUR_CADRE);
+            StdDraw.setFont(ConfigLegacy.POLICE_POPUP);
+            StdDraw.setPenColor(ConfigLegacy.POPUP_COULEUR_TEXTE); // couleur du texte de popup
             StdDraw.textLeft(0.95*left + 0.05*right, explainationY, messageExplicatif);
             for (int i = 0; i< nombreMaxDOptionsAffichees; i++)
             StdDraw.textLeft(XOption, topPosOptions[i], options[i+offsetOptions]);
             StdDraw.show();
             centerX = XOption-0.1*(right-left);
             centerY = topPosOptions[popupCursor];
-            pixelsCursor = Math.min(0.1 * (right-left)/Config.largeurCaseX, shareForOption / Config.largeurCaseY); //pour s'assurer que l'image n'est pas deformee
-            widthX = pixelsCursor * Config.largeurCaseX;
-            widthY = pixelsCursor * Config.largeurCaseY;
+            pixelsCursor = Math.min(0.1 * (right-left)/ ConfigLegacy.largeurCaseX, shareForOption / ConfigLegacy.largeurCaseY); //pour s'assurer que l'image n'est pas deformee
+            widthX = pixelsCursor * ConfigLegacy.largeurCaseX;
+            widthY = pixelsCursor * ConfigLegacy.largeurCaseY;
             StdDraw.picture(centerX,centerY, Chemins.CHEMIN_CURSEUR_POPUP, widthX, widthY);
             StdDraw.show();
             key = AssociationTouches.trouveProchaineEntree();
@@ -285,7 +285,7 @@ Affiche la grille.
             		offsetOptions --;
             	}
             	else if (popupCursor> 0) { 
-	                dessineRectanglePlein(centerX-widthX/2.0, centerX+widthX/2.0, centerY+widthY/2.0, centerY-widthY/2.0, Config.POPUP_COULEUR_ARRIERE_PLAN);
+	                dessineRectanglePlein(centerX-widthX/2.0, centerX+widthX/2.0, centerY+widthY/2.0, centerY-widthY/2.0, ConfigLegacy.POPUP_COULEUR_ARRIERE_PLAN);
 	                popupCursor--;
             	}
             	
@@ -297,17 +297,17 @@ Affiche la grille.
             		offsetOptions ++;
                 }	
             	else if (popupCursor < nombreMaxDOptionsAffichees -1) {
-	                dessineRectanglePlein(centerX-widthX/2.0, centerX+widthX/2.0, centerY+widthY/2.0, centerY-widthY/2.0, Config.POPUP_COULEUR_ARRIERE_PLAN);
+	                dessineRectanglePlein(centerX-widthX/2.0, centerX+widthX/2.0, centerY+widthY/2.0, centerY-widthY/2.0, ConfigLegacy.POPUP_COULEUR_ARRIERE_PLAN);
 	                popupCursor++;
                 }
             }
             if (key.isEchap() && echapAutorise) {
-                StdDraw.setFont(Config.POLICE_PAR_DEFAUT);
+                StdDraw.setFont(ConfigLegacy.POLICE_PAR_DEFAUT);
                 return -1;
             }
         }
         while(!key.isEntree());  //boucle jusqu'a qu'une cle pertinente soit relachee
-        StdDraw.setFont(Config.POLICE_PAR_DEFAUT);
+        StdDraw.setFont(ConfigLegacy.POLICE_PAR_DEFAUT);
         return popupCursor+offsetOptions;
     }
 }

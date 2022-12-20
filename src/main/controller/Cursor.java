@@ -1,6 +1,7 @@
 package main.controller;
 
 import main.Jeu;
+import ressources.Config;
 
 public class Cursor {
 
@@ -9,8 +10,8 @@ public class Cursor {
 
     public Cursor() {
 
-        currentX = 0;
-        currentY = 0;
+        this.currentX = 0;
+        this.currentY = 0;
 
     }
 
@@ -32,10 +33,8 @@ public class Cursor {
 
     public void up() {
 
-        if(this.currentY < Jeu.borderY - 1) {
-
-            this.currentY ++;
-
+        if(this.currentY < Config.MAP_ROW_COUNT - 1) {
+            this.currentY++;
         }
 
     }
@@ -43,9 +42,15 @@ public class Cursor {
     public void down() {
 
         if(this.currentY > 0) {
-
             this.currentY--;
+        }
 
+    }
+
+    public void right() {
+
+        if(this.currentX < Config.MAP_COLUMN_COUNT - 1) {
+            this.currentX ++;
         }
 
     }
@@ -53,19 +58,7 @@ public class Cursor {
     public void left() {
 
         if(this.currentX > 0) {
-
             this.currentX--;
-
-        }
-
-    }
-
-    public void right() {
-
-        if(this.currentX < Jeu.borderX - 1) {
-
-            this.currentX ++;
-
         }
 
     }

@@ -1,8 +1,9 @@
 package ressources;
 
 import main.Player;
-import main.terrain.Case;
-import main.terrain.Grid;
+import main.map.Case;
+import main.map.Grid;
+import main.map.MapMetadata;
 import main.terrain.Terrain;
 import main.terrain.type.HQ;
 import main.unit.Unit;
@@ -10,27 +11,15 @@ import main.unit.Unit;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.*;
 
 public class MapParsing {
 
-    public enum TilesCharacter {
 
-        PLAIN("P", Terrain.TypeLegacy.PLAIN);
+    public static List<MapMetadata> listAvailableMaps() {
 
-        private final Terrain.TypeLegacy clazz;
-
-        TilesCharacter(String p, Terrain.TypeLegacy t) {
-
-            this.clazz = t;
-
-        }
-
-    }
-
-    public static List<GameMap> listAvailableMaps() {
-
-        final List<GameMap> maps = new LinkedList<>();
+        final List<MapMetadata> maps = new ArrayList<>();
         final File[] files = new File(Chemins.DOSSIER_CARTES).listFiles();
 
         for (File file : files) {
@@ -42,7 +31,11 @@ public class MapParsing {
                 Map<String, String> metadata = parseMetadata(file);
                 if(validateMetadata(metadata)) {
 
-                    maps.add(new GameMap(file.getAbsolutePath().replace(".meta", ".awdcmap"), metadata));
+                    maps.add(new MapMetadata(file.getAbsolutePath().replace(".meta", ".awdcmap"), metadata));
+
+                } else {
+
+                    System.out.println("Invalid metadata for map: " + file.getName());
 
                 }
 
@@ -95,11 +88,16 @@ public class MapParsing {
         if(!metadata.containsKey("players")) return false;
         if(!metadata.containsKey("width")) return false;
         if(!metadata.containsKey("height")) return false;
+        if(!metadata.containsKey("icon")) return false;
+
+        final File file = new File(metadata.get("icon"));
+        if(!file.exists()) return false;
 
         try {
             Integer.parseInt(metadata.get("players"));
             Integer.parseInt(metadata.get("width"));
             Integer.parseInt(metadata.get("height"));
+
         } catch (NumberFormatException e) {
             return false;
         }
@@ -168,7 +166,7 @@ public class MapParsing {
 
     }
 
-    public static Grid parseMap(GameMap map) {
+    public static Grid parseMap(MapMetadata map) {
 
         final String path = map.getPath();
         final File file = new File(path);

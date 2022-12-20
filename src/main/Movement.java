@@ -1,9 +1,8 @@
 package main;
 
-import main.terrain.Case;
+import main.map.Case;
 import ressources.Chemins;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;

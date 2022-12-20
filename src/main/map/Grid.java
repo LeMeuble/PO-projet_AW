@@ -1,6 +1,6 @@
-package main.terrain;
+package main.map;
 
-import main.Jeu;
+import main.map.Case;
 
 /**
  * Classe representant la grille du plateau de jeu sous forme d'un
@@ -23,7 +23,6 @@ public class Grid {
         this.grid = grid;
 
     }
-
 
     public Case getCase(int x, int y) {
 

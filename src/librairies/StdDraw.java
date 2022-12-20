@@ -708,10 +708,30 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 		// frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // closes only
 		// current window
 		frame.setTitle("Standard Draw");
-		frame.setJMenuBar(createMenuBar());
+//		frame.setJMenuBar(createMenuBar());
 		frame.pack();
 		frame.requestFocusInWindow();
 		frame.setVisible(true);
+	}
+
+	/**
+	 * Sets the title of the drawing window.
+	 *
+	 * @param title the new title for the drawing window
+	 */
+	public static void setTitle(String title)
+	{
+		frame.setTitle(title);
+	}
+
+	/**
+	 * Sets the icon of the drawing window.
+	 *
+	 * @param path the new icon path for the drawing window
+	 */
+	public static void setIcon(String path)
+	{
+		frame.setIconImage(new ImageIcon(path).getImage());
 	}
 
 	// create the menu bar (changed to private)

@@ -1,13 +1,18 @@
-package ressources;
+package main.map;
+
+import main.map.Grid;
 
 import java.util.Map;
 
-public class GameMap {
+public class MapMetadata {
 
     private final String path;
     private final Map<String, String> metadata;
 
-    public GameMap(String path, Map<String, String> metadata) {
+    private Grid grid;
+    private boolean isLoaded;
+
+    public MapMetadata(String path, Map<String, String> metadata) {
 
         this.path = path;
         this.metadata = metadata;
@@ -28,6 +33,10 @@ public class GameMap {
 
     public int getPlayerCount() {
         return Integer.parseInt(metadata.get("players"));
+    }
+
+    public String getName() {
+        return metadata.get("name");
     }
 
 }

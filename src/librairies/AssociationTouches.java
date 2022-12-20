@@ -1,6 +1,6 @@
 package librairies;
 
-import ressources.Config;
+import ressources.ConfigLegacy;
 
 /** Gere les valeurs numeriques des touches. */
 public class AssociationTouches
@@ -48,10 +48,10 @@ public class AssociationTouches
                     return TOUCHES_PERTINENTES_SPECIALES[i];
                 }
             }
-            for (i=0; i<Config.TOUCHES_PERTINENTES_CARACTERES.length; i++) {
-                if (testTouche(controleCaractereMinuscule(Config.TOUCHES_PERTINENTES_CARACTERES[i])) || 
-                testTouche(controleCaractereMajuscule(Config.TOUCHES_PERTINENTES_CARACTERES[i]))) {
-                    return controleCaractereMinuscule(Config.TOUCHES_PERTINENTES_CARACTERES[i]);
+            for (i=0; i< ConfigLegacy.TOUCHES_PERTINENTES_CARACTERES.length; i++) {
+                if (testTouche(controleCaractereMinuscule(ConfigLegacy.TOUCHES_PERTINENTES_CARACTERES[i])) ||
+                testTouche(controleCaractereMajuscule(ConfigLegacy.TOUCHES_PERTINENTES_CARACTERES[i]))) {
+                    return controleCaractereMinuscule(ConfigLegacy.TOUCHES_PERTINENTES_CARACTERES[i]);
                 }
             }
         }

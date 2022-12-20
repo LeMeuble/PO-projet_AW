@@ -12,7 +12,10 @@ public class Player {
 
         NEUTRAL(0),
         RED(1),
-        BLUE(2);
+        BLUE(2),
+        YELLOW(4),
+        GREEN(3),
+        BLACK(5);
 
         private final int value;
 
