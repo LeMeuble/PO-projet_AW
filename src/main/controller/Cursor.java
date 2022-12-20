@@ -1,4 +1,6 @@
-package main;
+package main.controller;
+
+import main.Jeu;
 
 public class Cursor {
 

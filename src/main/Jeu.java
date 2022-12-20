@@ -5,11 +5,12 @@ package main;
 
 import librairies.AssociationTouches;
 import librairies.StdDraw;
+import main.controller.Cursor;
+import main.controller.KeystrokeHandler;
+import main.controller.KeystrokeListener;
 import main.terrain.Case;
 import main.terrain.Grid;
-import ressources.Affichage;
-import ressources.Config;
-import ressources.ParseurCartes;
+import ressources.*;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -20,26 +21,26 @@ public class Jeu {
     public static int borderX;
     public static int borderY;
 
-    private final Grid grid;
-
+    private Movement movement;
+    private GameState gameState;
     private Player.Type currentPlayer;
 
-    private final Map<Player.Type, Player> players;
-
-    private final Cursor cursor;
+    private final Grid grid;
+    private final main.controller.Cursor cursor;
+    private final KeystrokeListener keystrokeListener;
     private final KeystrokeHandler keystrokeHandler;
-    private Movement movement;
-
-    private GameState gameState;
-    private PlayerState playerState;
-
+    private final Map<Player.Type, Player> players;
 
     public Jeu(String file) throws Exception {
 
         String[][] parsed = ParseurCartes.parseCarte(file);
 
-        borderX = parsed[0].length;
-        borderY = parsed.length;
+        GameMap map = MapParsing.listAvailableMaps().get(0);
+
+        this.grid = MapParsing.parseMap(map);
+
+        borderX = map.getWidth(); //parsed[0].length;
+        borderY = map.getHeight(); //parsed.length;
 
         this.players = new HashMap<>();
 
@@ -47,20 +48,24 @@ public class Jeu {
         this.players.put(Player.Type.BLUE, new Player(Player.Type.BLUE));
 
         this.currentPlayer = Player.Type.RED; // rouge commence
-        this.cursor = new Cursor();
+        this.cursor = new main.controller.Cursor();
+        this.keystrokeListener = new KeystrokeListener();
         this.keystrokeHandler = new KeystrokeHandler(this);
 
-        this.grid = new Grid(parsed);
 
-        this.gameState = GameState.PLAYING;
-        this.playerState = PlayerState.SELECTING;
+        this.gameState = GameState.PLAYING_SELECTING;
 
         Config.setDimension(borderX, borderY);
+
+        this.bindKeystrokes();
+
+        StdDraw.enableDoubleBuffering();
+        this.display();
 
     }
 
     public boolean isOver() {
-        return this.gameState == GameState.ENDED;
+        return this.gameState == GameState.ENDIND_SCREEN;
     }
 
     public void display() {
@@ -96,7 +101,8 @@ public class Jeu {
         Color color = this.currentPlayer == Player.Type.RED ? Color.RED : Color.BLUE;
         Affichage.dessineCurseur(this.cursor.getCurrentX(), this.cursor.getCurrentY(), color);
 
-        StdDraw.show(); //montre a l'ecran les changements demandes
+        StdDraw.show();
+
     }
 
     public void afficheStatutJeu() {
@@ -104,32 +110,35 @@ public class Jeu {
         Affichage.afficheTexteDescriptif("Status du jeu");
     }
 
-    public void initialDisplay() {
-        StdDraw.enableDoubleBuffering(); // rend l'affichage plus fluide: tout draw est mis en buffer et ne s'affiche qu'au prochain StdDraw.show();
-        display();
+    public void bindKeystrokes() {
+        this.keystrokeListener.setHandler((code) -> {
+            boolean updateDisplay = this.keystrokeHandler.handle(code);
+            if(updateDisplay) this.display();
+        });
+        this.keystrokeListener.start();
     }
 
     public void update() {
 
         AssociationTouches toucheSuivante = AssociationTouches.trouveProchaineEntree(); //cette fonction boucle jusqu'a la prochaine entree de l'utilisateur
-
-        boolean updateDisplay = this.keystrokeHandler.handle(toucheSuivante, this.playerState);
-
-
-//        //  ATTENTION ! si vous voulez detecter d'autres touches que 't',
-//        //  vous devez les ajouter au tableau Config.TOUCHES_PERTINENTES_CARACTERES
-//        if (toucheSuivante.isCaractere('t')) {
-//            String[] options = {"Oui", "Non", "Peut-etre", "Cancel"};
-//            if (Affichage.popup("Finir le tour de XXX?", options, true, 1) == 0) {
-//                //le choix 0, "Oui", a été selectionné
-//                //TODO: passer au joueur suivant
-//                System.out.println("FIN DE TOUR");
-//            }
 //
-//            updateDisplay = true;
-//        }
-
-        if (updateDisplay) display();
+//        boolean updateDisplay = this.keystrokeHandler.handle(toucheSuivante, this.playerState);
+//
+//
+////        //  ATTENTION ! si vous voulez detecter d'autres touches que 't',
+////        //  vous devez les ajouter au tableau Config.TOUCHES_PERTINENTES_CARACTERES
+////        if (toucheSuivante.isCaractere('t')) {
+////            String[] options = {"Oui", "Non", "Peut-etre", "Cancel"};
+////            if (Affichage.popup("Finir le tour de XXX?", options, true, 1) == 0) {
+////                //le choix 0, "Oui", a été selectionné
+////                //TODO: passer au joueur suivant
+////                System.out.println("FIN DE TOUR");
+////            }
+////
+////            updateDisplay = true;
+////        }
+//
+//        if (updateDisplay) display();
 
     }
 
@@ -149,16 +158,8 @@ public class Jeu {
         this.gameState = gameState;
     }
 
-    public PlayerState getPlayerState() {
-        return playerState;
-    }
-
-    public void setPlayerState(PlayerState playerState) {
-        this.playerState = playerState;
-    }
-
-    public Player.Type getCurrentPlayer() {
-        return currentPlayer;
+    public Player getCurrentPlayer() {
+        return this.players.get(this.currentPlayer);
     }
 
     public void setCurrentPlayer(Player.Type currentPlayer) {
@@ -206,5 +207,10 @@ public class Jeu {
 
     }
 
+    public void end() {
+
+        this.keystrokeListener.stop();
+
+    }
 }
 

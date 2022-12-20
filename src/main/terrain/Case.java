@@ -1,7 +1,6 @@
 package main.terrain;
 
 import main.Player;
-import main.terrain.type.*;
 import main.unit.Unit;
 
 public class Case {
@@ -9,53 +8,14 @@ public class Case {
     private final int x;
     private final int y;
 
-    private Terrain terrain;
+    private final Terrain terrain;
     private Unit unit;
 
-    public Case(int x, int y) {
+    public Case(int x, int y, Terrain terrain) {
         this.x = x;
         this.y = y;
-        this.terrain = null;
+        this.terrain = terrain;
         this.unit = null;
-    }
-
-    public static Case parse(int x, int y, String s) {
-
-        Case parsed = new Case(x, y);
-
-        final String[] terrainAndPlayer = s.split(":");
-
-        if (terrainAndPlayer.length == 1) {
-
-            final Terrain.Type terrainType = Terrain.Type.fromName(terrainAndPlayer[0]);
-            if (terrainType != null) parsed.setTerrain(terrainType.newInstance());
-
-        } else {
-
-            final String[] unitAndTerrain = terrainAndPlayer[0].split(";");
-
-            final Player.Type p = Player.Type.fromValue(Integer.parseInt(terrainAndPlayer[1]));
-
-            final Terrain.Type terrainType = Terrain.Type.fromName(unitAndTerrain[0]);
-
-            if (terrainType != null) {
-
-                final Terrain terrain = terrainType.newInstance(p);
-                parsed.setTerrain(terrain);
-
-                if (unitAndTerrain.length == 2) {
-
-                    final Unit.Type unitType = Unit.Type.fromName(unitAndTerrain[1]);
-
-                    if (unitType != null) {
-                        parsed.setUnit(unitType.newInstance(p));
-                    }
-                }
-            }
-
-        }
-        return parsed;
-
     }
 
     public int getX() {
@@ -77,11 +37,6 @@ public class Case {
 
     public boolean hasUnit() {
         return this.unit != null;
-    }
-
-
-    public void setTerrain(Terrain terrain) {
-        this.terrain = terrain;
     }
 
     public Terrain getTerrain() {

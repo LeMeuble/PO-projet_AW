@@ -9,20 +9,20 @@ public class Missile extends Weapon {
 
     public enum DamageMultiplier {
 
-        ON_INFANTRY(Unit.Type.INFANTRY, 0.5f),
-        ON_BAZOOKA(Unit.Type.BAZOOKA, 0.5f),
-        ON_TANK(Unit.Type.TANK, 0.7f),
-        ON_DCA(Unit.Type.DCA, 0.4f),
-        ON_HELICOPTER(Unit.Type.HELICOPTER, 0.7f),
-        ON_BOMBARDIER(Unit.Type.BOMBARDIER, 0.7f),
-        ON_CONVOY(Unit.Type.CONVOY, 0.7f);
+        ON_INFANTRY(Unit.TypeLegacy.INFANTRY, 0.5f),
+        ON_BAZOOKA(Unit.TypeLegacy.BAZOOKA, 0.5f),
+        ON_TANK(Unit.TypeLegacy.TANK, 0.7f),
+        ON_DCA(Unit.TypeLegacy.DCA, 0.4f),
+        ON_HELICOPTER(Unit.TypeLegacy.HELICOPTER, 0.7f),
+        ON_BOMBARDIER(Unit.TypeLegacy.BOMBARDIER, 0.7f),
+        ON_CONVOY(Unit.TypeLegacy.CONVOY, 0.7f);
 
 
 
-        private final Unit.Type unit;
+        private final Unit.TypeLegacy unit;
         private final float multiplier;
 
-        DamageMultiplier(Unit.Type unit, float multiplier) {
+        DamageMultiplier(Unit.TypeLegacy unit, float multiplier) {
 
             this.unit = unit;
             this.multiplier = multiplier;

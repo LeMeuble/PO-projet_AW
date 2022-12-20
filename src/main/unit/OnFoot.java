@@ -8,7 +8,7 @@ public abstract class OnFoot extends Unit {
 
 //    public enum MovementCost {
 //
-//        ON_WATER(Terrain.Type.WATER, Integer.MAX_VALUE),
+//        ON_WATER(Terrain.TypeLegacy.WATER, Integer.MAX_VALUE),
 //        HQ(1),
 //        FACTORY(1),
 //        CITY(1),
@@ -16,7 +16,7 @@ public abstract class OnFoot extends Unit {
 //        MOUNTAIN(2),
 //        PLAIN(1);
 //
-//        MovementCost(Terrain.Type t , int i) {
+//        MovementCost(Terrain.TypeLegacy t , int i) {
 //
 //        }
 //

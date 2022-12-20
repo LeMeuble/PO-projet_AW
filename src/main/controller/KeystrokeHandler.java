@@ -1,13 +1,12 @@
-package main;
+package main.controller;
 
-import librairies.AssociationTouches;
-import main.terrain.Grid;
+import main.GameState;
+import main.Jeu;
+import main.PlayerState;
 import main.terrain.Case;
+import main.terrain.Grid;
 import main.terrain.Property;
-import main.terrain.type.Factory;
 
-import java.util.function.Consumer;
-import java.util.function.Function;
 
 public class KeystrokeHandler {
 
@@ -22,22 +21,33 @@ public class KeystrokeHandler {
     /**
      * Gere les touches appuyees et indique si le jeu actualiser l'ecran
      *
-     * @param association la touche appuyee
-     * @param playerState l'etat du joueur
+     * @param code la touche appuyee
      * @return true si le jeu doit actualiser l'ecran
      */
-    public boolean handle(AssociationTouches association, PlayerState playerState) {
+    public boolean handle(KeystrokeListener.KeyCodes code) {
 
-        if (association.isHaut()) return up(playerState);
-        if (association.isBas()) return down(playerState);
-        if (association.isGauche()) return left(playerState);
-        if (association.isDroite()) return right(playerState);
-        if (association.isEntree()) return enter(playerState);
-        if (association.isEchap()) return escape(playerState);
+        final GameState gameState = this.game.getGameState();
 
+        switch (code) {
+
+            case UP:
+                return this.up(gameState);
+            case DOWN:
+                return this.down(gameState);
+            case LEFT:
+                return this.left(gameState);
+            case RIGHT:
+                return this.right(gameState);
+            case ENTER:
+                return this.enter(gameState);
+            case ESCAPE:
+                return this.escape(gameState);
+
+        }
         return false;
 
     }
+
 
     /**
      * Gere la touche haut
@@ -45,15 +55,15 @@ public class KeystrokeHandler {
      * @param playerState l'etat du joueur
      * @return true si le jeu doit actualiser l'ecran
      */
-    private boolean up(PlayerState playerState) {
+    public boolean up(GameState playerState) {
 
         switch (playerState) {
 
-            case SELECTING:
+            case PLAYING_SELECTING:
                 this.game.getCursor().up();
                 return true;
 
-            case MOVING_UNIT:
+            case PLAYING_MOVING_UNIT:
 
                 this.updateMovement(() -> game.getCursor().up());
 
@@ -71,15 +81,15 @@ public class KeystrokeHandler {
      * @param playerState l'etat du joueur
      * @return true si le jeu doit actualiser l'ecran
      */
-    private boolean down(PlayerState playerState) {
+    private boolean down(GameState playerState) {
 
         switch (playerState) {
 
-            case SELECTING:
+            case PLAYING_SELECTING:
                 this.game.getCursor().down();
                 return true;
 
-            case MOVING_UNIT:
+            case PLAYING_MOVING_UNIT:
                 this.updateMovement(() -> this.game.getCursor().down());
                 return true;
 
@@ -96,15 +106,15 @@ public class KeystrokeHandler {
      * @param playerState l'etat du joueur
      * @return true si le jeu doit actualiser l'ecran
      */
-    private boolean left(PlayerState playerState) {
+    private boolean left(GameState playerState) {
 
         switch (playerState) {
 
-            case SELECTING:
+            case PLAYING_SELECTING:
                 this.game.getCursor().left();
                 return true;
 
-            case MOVING_UNIT:
+            case PLAYING_MOVING_UNIT:
                 this.updateMovement(() -> this.game.getCursor().left());
                 return true;
 
@@ -120,15 +130,15 @@ public class KeystrokeHandler {
      * @param playerState l'etat du joueur
      * @return true si le jeu doit actualiser l'ecran
      */
-    private boolean right(PlayerState playerState) {
+    private boolean right(GameState playerState) {
 
         switch (playerState) {
 
-            case SELECTING:
+            case PLAYING_SELECTING:
                 game.getCursor().right();
                 return true;
 
-            case MOVING_UNIT:
+            case PLAYING_MOVING_UNIT:
                 this.updateMovement(() -> this.game.getCursor().right());
                 return true;
 
@@ -144,25 +154,25 @@ public class KeystrokeHandler {
      * @param playerState l'etat du joueur
      * @return true si le jeu doit actualiser l'ecran
      */
-    private boolean enter(PlayerState playerState) {
+    private boolean enter(GameState playerState) {
 
         Grid grid = game.getGrid();
 
         switch (playerState) {
 
-            case SELECTING:
+            case PLAYING_SELECTING:
 
                 int x = game.getCursor().getCurrentX();
                 int y = game.getCursor().getCurrentY();
 
                 Case c = grid.getCase(x, y);
 
-                if(c.hasUnit() && c.getUnit().getOwner() == game.getCurrentPlayer()) {
+                if (c.hasUnit() && c.getUnit().getOwner() == game.getCurrentPlayer().getType()) {
 
                     System.out.print("There is a unit here : ");
                     System.out.println(game.getGrid().getCase(x, y).getUnit());
                     // game.setPlayerState(PlayerState.SELECTING_UNIT_ACTION);
-                    game.setPlayerState(PlayerState.MOVING_UNIT); // C'est la pour du debug
+                    game.setGameState(GameState.PLAYING_MOVING_UNIT); // C'est la pour du debug
 
                     this.game.updateMovement(grid.getCase(x, y));
 
@@ -170,39 +180,37 @@ public class KeystrokeHandler {
 
                 }
 
-                if(c.getTerrain() instanceof Property && ((Property) c.getTerrain()).getOwner() == game.getCurrentPlayer()) {
+                if (c.getTerrain() instanceof Property && ((Property) c.getTerrain()).getOwner() == game.getCurrentPlayer().getType()) {
 
                     System.out.println("This is a propriety belonging to you");
                     return true;
 
-                }
-
-                else {
+                } else {
 
                     return true;
 
                 }
 
 
-            case SELECTING_UNIT_ACTION:
+            case PLAYING_SELECTING_UNIT_ACTION:
                 System.out.println("You are selecting an action");
-                game.setPlayerState(PlayerState.SELECTING_UNIT_ACTION);
+                game.setGameState(GameState.PLAYING_SELECTING_UNIT_ACTION);
                 return true;
 
-            case FACTORY_ACTION:
+            case PLAYING_SELECTING_FACTORY_ACTION:
                 System.out.println("You are selecting a factory action");
-                game.setPlayerState(PlayerState.FACTORY_ACTION);
+                game.setGameState(GameState.PLAYING_SELECTING_FACTORY_ACTION);
                 return true;
 
-            case MOVING_UNIT:
-                game.setPlayerState(PlayerState.MOVING_UNIT);
+            case PLAYING_MOVING_UNIT:
+                game.setGameState(GameState.PLAYING_MOVING_UNIT);
 
                 Case startingPoint = this.game.getMovementHead();
                 Case destination = this.game.getMovementTail();
 
                 destination.setUnit(startingPoint.getUnit());
                 startingPoint.setUnit(null);
-                this.game.setPlayerState(PlayerState.SELECTING);
+                this.game.setGameState(GameState.PLAYING_SELECTING);
                 this.game.resetMovement();
                 return true;
         }
@@ -217,23 +225,23 @@ public class KeystrokeHandler {
      * @param playerState l'etat du joueur
      * @return true si le jeu doit actualiser l'ecran
      */
-    private boolean escape(PlayerState playerState) {
+    private boolean escape(GameState playerState) {
 
         switch (playerState) {
 
-            case SELECTING:
+            case PLAYING_SELECTING:
                 return true;
 
-            case SELECTING_UNIT_ACTION:
-                game.setPlayerState(PlayerState.SELECTING);
+            case PLAYING_SELECTING_UNIT_ACTION:
+                game.setGameState(GameState.PLAYING_SELECTING);
                 return true;
 
-            case FACTORY_ACTION:
-                game.setPlayerState(PlayerState.SELECTING);
+            case PLAYING_SELECTING_FACTORY_ACTION:
+                game.setGameState(GameState.PLAYING_SELECTING);
                 return true;
 
-            case MOVING_UNIT:
-                game.setPlayerState(PlayerState.SELECTING);
+            case PLAYING_MOVING_UNIT:
+                game.setGameState(GameState.PLAYING_SELECTING);
                 game.resetMovement();
                 return true;
 
@@ -249,7 +257,7 @@ public class KeystrokeHandler {
      * @param playerState l'etat du joueur
      * @return true si le jeu doit actualiser l'ecran
      */
-    private boolean space(PlayerState playerState) {
+    private boolean space(GameState playerState) {
 
         return false;
 

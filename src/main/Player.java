@@ -42,13 +42,13 @@ public class Player {
 
     }
 
-    private final Type type;
     private int money;
+    private final Type type;
 
     public Player(Player.Type type) {
 
-        this.type = type;
         this.money = 0;
+        this.type = type;
 
     }
 

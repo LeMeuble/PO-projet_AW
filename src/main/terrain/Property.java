@@ -20,6 +20,7 @@ public abstract class Property extends Terrain {
      * @param owner Le joueur proprietaire du terrain
      */
     public Property(Player.Type owner) {
+        super();
         this.owner = owner;
     }
 

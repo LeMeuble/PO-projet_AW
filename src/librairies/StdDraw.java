@@ -378,7 +378,7 @@ import javax.swing.KeyStroke;
  * }
  * </pre>
  * <p>
- * <b>Keyboard and mouse inputs.</b> Standard drawing has very basic support for
+ * <b>Keyboard and mouse getInputs.</b> Standard drawing has very basic support for
  * keyboard and mouse input. It is much less powerful than most user interface
  * libraries provide, but also much simpler. You can use the following methods
  * to intercept mouse events:
