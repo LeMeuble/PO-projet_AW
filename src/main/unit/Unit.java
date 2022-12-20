@@ -108,6 +108,8 @@ public abstract class Unit {
      */
     public abstract void receiveDamage(int amount);
 
+    public abstract void inflictDamage(Unit target);
+
     public abstract String getFile();
 
     public String toString() {

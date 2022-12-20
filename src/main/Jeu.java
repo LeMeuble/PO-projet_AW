@@ -206,5 +206,16 @@ public class Jeu {
 
     }
 
+    public void endTurn() {
+
+        if(this.currentPlayer == Player.Type.RED) {
+            this.currentPlayer = Player.Type.BLUE;
+        }
+        else {
+            this.currentPlayer = Player.Type.RED;
+        }
+
+    }
+
 }
 

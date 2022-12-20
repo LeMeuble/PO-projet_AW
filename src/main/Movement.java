@@ -1,6 +1,8 @@
 package main;
 
 import main.terrain.Case;
+import main.unit.Unit;
+import main.weather.Weather;
 import ressources.Chemins;
 
 import java.util.ArrayList;
