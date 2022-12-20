@@ -30,7 +30,6 @@ public class Affichage {
      * @param droite Abscisse droite du rectangle
      * @param haut Ordonnee superieure du rectangle
      * @param bas Ordonnee inferieure du rectangle
-     * @param x
      * @return L'ordonnee correspondant a <code>y</code> dans le referentiel du rectangle
      */
     private static double positionInterneRectangleY(double gauche, double droite, double haut, double bas, double y) {

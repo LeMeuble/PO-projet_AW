@@ -43,6 +43,18 @@ public abstract class Terrain {
 
         }
 
+        public static Type fromTerrain(Terrain terrain) {
+
+            if(terrain instanceof City) return Type.CITY;
+            if(terrain instanceof HQ) return Type.HQ;
+            if(terrain instanceof Factory) return Type.FACTORY;
+            if(terrain instanceof Plain) return Type.PLAIN;
+            if(terrain instanceof Water) return Type.WATER;
+            if(terrain instanceof Mountain) return Type.MOUNTAIN;
+            if(terrain instanceof Forest) return Type.FOREST;
+            return null;
+        }
+
         public Terrain newInstance() {
 
             switch (this) {

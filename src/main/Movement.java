@@ -1,6 +1,8 @@
 package main;
 
 import main.terrain.Case;
+import main.unit.Unit;
+import main.weather.Weather;
 import ressources.Chemins;
 
 import java.util.ArrayList;
@@ -20,9 +22,9 @@ public class Movement {
         RIGHT(Chemins.DIRECTION_DROITE, 1, 0);
 
         private final String path;
+
         private final int dx;
         private final int dy;
-
         Direction(String path, int dx, int dy) {
             this.path = path;
             this.dx = dx;
@@ -67,14 +69,14 @@ public class Movement {
 
             return null;
         }
-    }
 
+    }
     protected class Arrow {
 
         private Case c;
+
         private Direction from;
         private Direction to;
-
         public Arrow(Case c, Direction from, Direction to) {
             this.c = c;
             this.from = from;
@@ -89,11 +91,11 @@ public class Movement {
             return Chemins.getCheminFleche(from.path, to.path);
         }
 
+
     }
-
     private final Case startingPoint;
-    private List<Case> cases;
 
+    private List<Case> cases;
     public Movement(Case startingPoint) {
 
         this.startingPoint = startingPoint;
@@ -103,13 +105,31 @@ public class Movement {
 
     public void update(Case newCase) {
 
-        if (newCase.equals(this.startingPoint)) {
-            this.cases.clear();
-        } else if (this.cases.contains(newCase)) {
+        if (newCase.equals(this.startingPoint)) this.cases.clear();
+        else if (this.cases.contains(newCase)) {
             // TODO: Improve this code cause it's a shitty code
             this.cases = new LinkedList<>(this.cases.subList(0, this.cases.indexOf(newCase) + 1));
 
         } else this.cases.add(newCase);
+
+    }
+
+    public int getCost(Unit unit, Weather weather) {
+
+        int cost = 0;
+
+        for(Case c : this.cases) {
+
+            cost += unit.getMovementCostTo(c.getTerrain(), weather);
+
+        }
+
+        return cost;
+    }
+
+    public void popLast() {
+
+        ((LinkedList<Case>) cases).pollLast();
 
     }
 

@@ -50,6 +50,11 @@ public class Convoy extends Motorized {
     }
 
     @Override
+    public void inflictDamage(Unit target) {
+
+    }
+
+    @Override
     public String getFile() {
 
         return Chemins.getCheminUnite(this.owner.getValue(), !this.hasPlayed, Chemins.FICHIER_GENIE);

@@ -2,8 +2,10 @@ package main.unit;
 
 import main.Player;
 import main.terrain.Case;
+import main.terrain.Terrain;
 import main.unit.type.*;
 import main.weapon.Weapon;
+import main.weather.Weather;
 
 public abstract class Unit {
 
@@ -83,18 +85,16 @@ public abstract class Unit {
     public Unit(Player.Type owner) {
 
         this.owner = owner;
-        this.PM = this.maxPM;
+        this.PM = 10;
         this.health = 10;
         this.hasPlayed = false;
 
     }
 
-    public boolean canMoveTo(Case destination) {
+    public abstract boolean canMoveTo(Case destination, Weather weather);
 
-        return true;
 
-    }
-
+    public abstract int getMovementCostTo(Terrain terrain, Weather weather);
 
     /**
      * Calcule des degats infliges par cette unite
@@ -108,6 +108,8 @@ public abstract class Unit {
      */
     public abstract void receiveDamage(int amount);
 
+    public abstract void inflictDamage(Unit target);
+
     public abstract String getFile();
 
     public String toString() {
@@ -120,6 +122,10 @@ public abstract class Unit {
 
         return this.owner;
 
+    }
+
+    public int getPM() {
+        return this.PM;
     }
 
 }

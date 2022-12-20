@@ -1,10 +1,13 @@
 package main.unit.type;
 
 import main.Player;
+import main.terrain.Case;
+import main.terrain.Terrain;
 import main.unit.Motorized;
 import main.unit.OnFoot;
 import main.unit.Unit;
 import main.weapon.Weapon;
+import main.weather.Weather;
 import ressources.Chemins;
 
 public class Artillery extends Motorized {
@@ -45,6 +48,20 @@ public class Artillery extends Motorized {
      */
     @Override
     public void receiveDamage(int amount) {
+
+    }
+
+    @Override
+    public void inflictDamage(Unit target) {
+
+    }
+
+    @Override
+    public int getMovementCostTo(Terrain terrain, Weather weather) {
+
+        OnFoot.MovementCost cost = OnFoot.MovementCost.fromTerrainAndWeather(Terrain.Type.fromTerrain(terrain), weather);
+
+        return cost == null ? Integer.MAX_VALUE : cost.getCost();
 
     }
 

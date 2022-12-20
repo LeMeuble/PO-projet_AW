@@ -1,30 +1,81 @@
 package main.unit;
 
-import main.Movement;
 import main.Player;
+import main.terrain.Case;
 import main.terrain.Terrain;
+import main.weather.Weather;
 
 public abstract class OnFoot extends Unit {
 
-//    public enum MovementCost {
-//
-//        ON_WATER(Terrain.Type.WATER, Integer.MAX_VALUE),
-//        HQ(1),
-//        FACTORY(1),
-//        CITY(1),
-//        FOREST(1),
-//        MOUNTAIN(2),
-//        PLAIN(1);
-//
-//        MovementCost(Terrain.Type t , int i) {
-//
-//        }
-//
-//    }
+    public enum MovementCost {
+
+        ON_PLAIN_CLEAR(Terrain.Type.PLAIN, Weather.CLEAR, 1),
+        ON_FOREST_CLEAR(Terrain.Type.PLAIN, Weather.CLEAR, 1),
+        ON_MOUNTAIN_CLEAR(Terrain.Type.PLAIN, Weather.CLEAR, 2),
+        ON_WATER_CLEAR(Terrain.Type.PLAIN, Weather.CLEAR, Integer.MAX_VALUE),
+        ON_HQ_CLEAR(Terrain.Type.HQ, Weather.CLEAR, 1),
+        ON_CITY_CLEAR(Terrain.Type.CITY, Weather.CLEAR, 1),
+        ON_FACTORY_CLEAR(Terrain.Type.FACTORY, Weather.CLEAR, 1);
+
+        private final Terrain.Type terrainType;
+        private final Weather weather;
+        private final int cost;
+
+        MovementCost(Terrain.Type terrainType, Weather weather, int cost) {
+
+            this.terrainType = terrainType;
+            this.weather = weather;
+            this.cost = cost;
+
+        }
+
+        public static MovementCost fromTerrainAndWeather(Terrain.Type terrainType, Weather weather){
+
+            for (MovementCost cost : MovementCost.values()) {
+                if (cost.terrainType == terrainType && cost.weather == weather) {
+                    return cost;
+                }
+            }
+            return null;
+
+        }
+
+        public int getCost() {
+            return this.cost;
+
+        }
+
+        public boolean canMoveTo() {
+
+            return this.cost != Integer.MAX_VALUE;
+
+        }
+
+    }
+
 
     public OnFoot(Player.Type owner) {
 
         super(owner);
+
+    }
+
+    @Override
+    public boolean canMoveTo(Case c, Weather weather) {
+
+        Terrain terrain = c.getTerrain();
+
+        MovementCost cost = MovementCost.fromTerrainAndWeather(Terrain.Type.fromTerrain(terrain), weather);
+
+        return cost != null && cost.canMoveTo();
+
+    }
+
+    public int getMovementCostTo(Terrain terrain, Weather weather) {
+
+        MovementCost cost = MovementCost.fromTerrainAndWeather(Terrain.Type.fromTerrain(terrain), weather);
+
+        return cost == null ? Integer.MAX_VALUE : cost.getCost();
 
     }
 

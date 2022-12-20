@@ -194,6 +194,12 @@ public class Jeu {
 
     }
 
+    public Movement getMovement() {
+
+        return this.movement;
+
+    }
+
     public Case getMovementHead() {
 
         return this.movement.getHead();
@@ -203,6 +209,17 @@ public class Jeu {
     public Case getMovementTail() {
 
         return this.movement.getTail();
+
+    }
+
+    public void endTurn() {
+
+        if(this.currentPlayer == Player.Type.RED) {
+            this.currentPlayer = Player.Type.BLUE;
+        }
+        else {
+            this.currentPlayer = Player.Type.RED;
+        }
 
     }
 

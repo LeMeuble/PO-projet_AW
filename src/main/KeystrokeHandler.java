@@ -1,13 +1,15 @@
 package main;
 
 import librairies.AssociationTouches;
-import main.terrain.Grid;
 import main.terrain.Case;
+import main.terrain.Grid;
 import main.terrain.Property;
+import main.terrain.Terrain;
 import main.terrain.type.Factory;
-
-import java.util.function.Consumer;
-import java.util.function.Function;
+import main.unit.OnFoot;
+import main.unit.Unit;
+import main.weather.Weather;
+import ressources.Affichage;
 
 public class KeystrokeHandler {
 
@@ -159,27 +161,37 @@ public class KeystrokeHandler {
 
                 if(c.hasUnit() && c.getUnit().getOwner() == game.getCurrentPlayer()) {
 
-                    System.out.print("There is a unit here : ");
-                    System.out.println(game.getGrid().getCase(x, y).getUnit());
-                    // game.setPlayerState(PlayerState.SELECTING_UNIT_ACTION);
-                    game.setPlayerState(PlayerState.MOVING_UNIT); // C'est la pour du debug
+                    int result = Affichage.popup("Quelle action voulez faire?", new String[]{"Déplacement", "Attaque"}, true, 0);
 
-                    this.game.updateMovement(grid.getCase(x, y));
+                    if(result == 0) {
+
+                        System.out.print("There is a unit here : ");
+                        System.out.println(game.getGrid().getCase(x, y).getUnit());
+                        // game.setPlayerState(PlayerState.SELECTING_UNIT_ACTION);
+                        game.setPlayerState(PlayerState.MOVING_UNIT); // C'est la pour du debug
+
+                        this.game.updateMovement(grid.getCase(x, y));
+                        
+                    } else if (result == 1) {
+
+                    }
+
 
                     return true;
 
                 }
 
-                if(c.getTerrain() instanceof Property && ((Property) c.getTerrain()).getOwner() == game.getCurrentPlayer()) {
+                if(c.getTerrain() instanceof Factory && ((Factory) c.getTerrain()).getOwner() == game.getCurrentPlayer()) {
 
-                    System.out.println("This is a propriety belonging to you");
+                    System.out.println("This is a factory belonging to you");
+                    this.game.setPlayerState(PlayerState.FACTORY_ACTION);
                     return true;
 
                 }
 
                 else {
 
-                    return true;
+                    return false;
 
                 }
 
@@ -195,16 +207,25 @@ public class KeystrokeHandler {
                 return true;
 
             case MOVING_UNIT:
-                game.setPlayerState(PlayerState.MOVING_UNIT);
 
                 Case startingPoint = this.game.getMovementHead();
                 Case destination = this.game.getMovementTail();
 
-                destination.setUnit(startingPoint.getUnit());
-                startingPoint.setUnit(null);
-                this.game.setPlayerState(PlayerState.SELECTING);
-                this.game.resetMovement();
-                return true;
+                if(destination != null) {
+
+                    if(!(destination.getTerrain() instanceof Property) && !destination.hasUnit()) {
+
+                        destination.setUnit(startingPoint.getUnit());
+                        startingPoint.setUnit(null);
+
+                        this.game.setPlayerState(PlayerState.SELECTING);
+                        this.game.resetMovement();
+                        return true;
+
+                    }
+
+                }
+
         }
 
         return false;
@@ -260,30 +281,31 @@ public class KeystrokeHandler {
         int x = game.getCursor().getCurrentX();
         int y = game.getCursor().getCurrentY();
 
-        // System.out.println("Moving from x=" + x + ", y=" + y);
+        movement.run(); // Move the cursor in the direction
 
-        movement.run();
-
-        int newX = game.getCursor().getCurrentX();
         int newY = game.getCursor().getCurrentY();
+        int newX = game.getCursor().getCurrentX();
 
-        // System.out.println("Moving to x=" + newX + ", y=" + newY);
+        this.game.updateMovement(game.getGrid().getCase(newX, newY));
 
-        game.updateMovement(game.getGrid().getCase(newX, newY));
+        Case c = this.game.getMovementTail();
+        Unit currentUnit = this.game.getMovementHead().getUnit();
 
-//        if(game.isMovementEmpty()) {
-//
-//            game.updateMovement(game.getGrid().getCase(x, y));
-//
-//        }
-//        else {
-//
-//            int newX = game.getCursor().getCurrentX();
-//            int newY = game.getCursor().getCurrentY();
-//
-//            game.updateMovement(game.getGrid().getCase(newX, newY));
-//
-//        }
+        if(this.game.isMovementEmpty()) return;
+        if(!c.hasUnit() && currentUnit.canMoveTo(c, Weather.CLEAR)) {
+
+            Movement move = this.game.getMovement();
+
+            System.out.println(move.getCost(currentUnit, Weather.CLEAR) + "   " + currentUnit.getPM());
+
+            if(move.getCost(currentUnit, Weather.CLEAR) <= currentUnit.getPM()) return;
+
+        }
+
+        this.game.getCursor().setCurrentX(x);
+        this.game.getCursor().setCurrentY(y);
+        this.game.getMovement().popLast();
+
     }
 
 }
