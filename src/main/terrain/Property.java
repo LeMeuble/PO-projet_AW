@@ -11,7 +11,6 @@ import main.Player;
 public abstract class Property extends Terrain {
 
     public static double DEFAULT_DEFENSE = 20d;
-
     private Player.Type owner;
     private double defense;
 
@@ -20,7 +19,9 @@ public abstract class Property extends Terrain {
      * @param owner Le joueur proprietaire du terrain
      */
     public Property(Player.Type owner) {
+        super();
         this.owner = owner;
+        this.defense = Property.DEFAULT_DEFENSE;
     }
 
     /**

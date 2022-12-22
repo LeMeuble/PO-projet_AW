@@ -1,10 +1,9 @@
 package main.unit.type;
 
 import main.Player;
+import main.unit.Animation;
 import main.unit.Motorized;
-import main.weapon.type.Canon;
-import main.weapon.type.LightMachineGun;
-import ressources.Chemins;
+import ressources.PathUtil;
 
 public class Tank extends Motorized {
 
@@ -12,15 +11,12 @@ public class Tank extends Motorized {
     public static final int MAX_REACH = 1;
 
     public Tank(Player.Type owner){
-        super(Type.TANK, owner);
-        this.addWeapon(new Canon());
-        this.addWeapon(new LightMachineGun());
+        super(owner, 2, 100);
     }
 
-
     @Override
-    public String getFile() {
-        return Chemins.getCheminUnite(this.getOwner().getValue(), !this.hasPlayed(), Chemins.FICHIER_TANK);
+    public Type getType() {
+        return Type.TANK;
     }
 
     @Override
@@ -31,6 +27,11 @@ public class Tank extends Motorized {
     @Override
     public int getMaxReach() {
         return MAX_REACH;
+    }
+
+    @Override
+    public String getFile() {
+        return PathUtil.getUnitPath(this.getOwner(), Type.TANK, Animation.IDLE, !this.hasPlayed(), this.getFrame());
     }
 
 }

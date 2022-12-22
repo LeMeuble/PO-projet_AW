@@ -1,7 +1,6 @@
 package main.unit;
 
 import main.Player;
-import main.terrain.Case;
 import main.terrain.Terrain;
 import main.unit.type.*;
 import main.weapon.Weapon;
@@ -14,30 +13,30 @@ public abstract class Unit {
 
     public enum Type {
 
-        INFANTRY("Infanterie", 1500, 3),
-        BAZOOKA("Bazooka", 3500, 2),
-        BOMBARDIER("Bombardier", 20000, 7),
-        CONVOY("Convoit", 5000, 6),
-        DCA("DCA", 6000, 6),
-        HELICOPTER("Helico", 12000, 6),
-        TANK("Tank", 7000, 6),
-        ARTILLERY("Artillerie", 6000, 5);
+        INFANTRY('i', 1500, 3),
+        BAZOOKA('z', 3500, 2),
+        BOMBER('b', 20000, 7),
+        CONVOY('c', 5000, 6),
+        ANTIAIR('d', 6000, 6),
+        HELICOPTER('h', 12000, 6),
+        TANK('t', 7000, 6),
+        ARTILLERY('a', 6000, 5);
 
-        private final String name;
+        private final char character;
         private final int price;
-        private final int PM;
+        private final int movementPoint;
 
-        Type(String name, int price, int PM) {
-            this.name = name;
+        Type(char character, int price, int movementPoint) {
+            this.character = character;
             this.price = price;
-            this.PM = PM;
+            this.movementPoint = movementPoint;
         }
 
-        public static Type fromName(String name) {
+        public static Type fromCharacter(char character) {
 
-            for(Type type : Type.values()) {
+            for (Type type : Type.values()) {
 
-                if(type.name.equals(name)) {
+                if (type.character == character) {
                     return type;
                 }
 
@@ -50,6 +49,14 @@ public abstract class Unit {
             return this.price;
         }
 
+        public String getName() {
+            return this.name().toLowerCase();
+        }
+
+        public int getMovementPoint() {
+            return this.movementPoint;
+        }
+
         public Unit newInstance(Player.Type p) {
 
             switch (this) {
@@ -57,12 +64,12 @@ public abstract class Unit {
                     return new Infantry(p);
                 case BAZOOKA:
                     return new Bazooka(p);
-                case BOMBARDIER:
-                    return new Bombardier(p);
+                case BOMBER:
+                    return new Bomber(p);
                 case CONVOY:
                     return new Convoy(p);
-                case DCA:
-                    return new DCA(p);
+                case ANTIAIR:
+                    return new AntiAir(p);
                 case HELICOPTER:
                     return new Helicopter(p);
                 case TANK:
@@ -75,128 +82,57 @@ public abstract class Unit {
 
         }
 
-        public int getDefaultPM() {
-            return this.PM;
-        }
     }
 
-    private int maxPM;
-    private int PM;
 
+    protected final Player.Type owner;
     private double health;
-
     private List<Weapon> weapons;
-
     private int fuel;
     private boolean hasPlayed;
     private boolean hasMoved;
     private boolean isAlive;
-    final private Player.Type owner;
-    final private Type type;
 
-    public Unit(Type type, Player.Type owner) {
+
+    public Unit(Player.Type owner) {
 
         this.owner = owner;
-        this.PM = type.getDefaultPM();
         this.health = 10;
+        this.weapons = new ArrayList<>();
+        this.fuel = 100;
         this.hasPlayed = false;
         this.hasMoved = false;
-        this.type = type;
-        this.weapons = new ArrayList<>();
         this.isAlive = true;
 
     }
 
-    public abstract boolean canMoveTo(Case destination, Weather weather);
-
-
-    public abstract int getMovementCostTo(Terrain terrain, Weather weather);
-
-
-    public abstract String getFile();
-
-    public String toString() {
-        return this.type.name.toLowerCase();
-    }
-
     public Player.Type getOwner() {
-
         return this.owner;
-
-    }
-
-    public int getPM() {
-        return this.PM;
-    }
-
-    public void addWeapon(Weapon w) {
-        this.weapons.add(w);
-    }
-
-    /**
-     * Retire un certain nombre de points de vie a cette unite
-     * @param amount Le nombre de points de vies a enlever
-     */
-    public void receiveDamage(double amount) {
-        this.health -= amount;
-        if(this.health <= 0) {
-            this.isAlive = false;
-            System.out.println("ded");
-        }
-    }
-
-    /**
-     * Calcule des degats infliges par cette unite
-     * @return
-     */
-    public double calculateDamage(float multiplier) {
-        return multiplier * Math.ceil(this.health);
-    }
-
-    public void attack(Unit target) {
-
-        Type targetType = target.getType();
-        Weapon bestWeapon = this.bestWeaponAgainst(targetType);
-
-        target.receiveDamage(calculateDamage(bestWeapon.getMultiplierOn(targetType)));
-
-    }
-
-    public Weapon bestWeaponAgainst(Unit.Type unitType) {
-
-        Weapon bestWeapon = null;
-
-        for(Weapon w : this.weapons) {
-
-            if(bestWeapon == null && w.canBeUsedOn(unitType)) {
-                bestWeapon = w;
-            }
-            if(w.canBeUsedOn(unitType) && w.getMultiplierOn(unitType) > bestWeapon.getMultiplierOn(unitType)) {
-                bestWeapon = w;
-            }
-
-        }
-        return bestWeapon;
-    }
-
-    public Type getType() {
-        return this.type;
-    }
-
-    public boolean hasPlayed() {
-        return this.hasPlayed;
-    }
-
-    public boolean hasMoved() {
-        return this.hasMoved;
     }
 
     public double getHealth() {
         return this.health;
     }
 
-    public void setHealth(int health) {
+    public void setHealth(double health) {
         this.health = health;
+    }
+
+    public void damageBy(double damage) {
+        this.health -= damage;
+
+        if (this.health <= 0.0d) {
+            this.isAlive = false;
+            this.health = 0.0d;
+        }
+    }
+
+    public int getMovementPoint() { // movement could be static because never change
+        return this.getType().getMovementPoint();
+    }
+
+    public void addWeapon(Weapon weapon) {
+        this.weapons.add(weapon);
     }
 
     public int getFuel() {
@@ -207,26 +143,80 @@ public abstract class Unit {
         this.fuel = fuel;
     }
 
-    public abstract int getMinReach();
-    public abstract int getMaxReach();
+    public boolean hasPlayed() {
+        return this.hasPlayed;
+    }
+
+    public void setHasPlayed(boolean hasPlayed) {
+        this.hasPlayed = hasPlayed;
+    }
+
+    public boolean hasMoved() {
+        return this.hasMoved;
+    }
+
+    public void setHasMoved(boolean hasMoved) {
+        this.hasMoved = hasMoved;
+    }
 
     public boolean isAlive() {
         return this.isAlive;
     }
 
-    public void setPlayed(boolean state) {
-        this.hasPlayed = state;
-    }
-    public void setMoved(boolean state) {
-        this.hasMoved = state;
+    public void setAlive(boolean alive) {
+        this.isAlive = alive;
     }
 
-    public void reset() {
-
-        this.hasMoved = false;
+    public void prepareForNextTurn() {
         this.hasPlayed = false;
-        this.PM = this.type.getDefaultPM();
+        this.hasMoved = false;
+    }
+
+    public void attack(Unit target) {
+
+        Type targetType = target.getType();
+        Weapon bestWeapon = this.bestWeaponAgainst(targetType);
+
+        target.damageBy(calculateDamage(bestWeapon.getMultiplierOn(targetType)));
 
     }
+
+    public double calculateDamage(float multiplier) {
+        return multiplier * Math.ceil(this.health);
+    }
+
+    public Weapon bestWeaponAgainst(Unit.Type unitType) {
+
+        Weapon bestWeapon = null;
+        for (Weapon w : this.weapons) {
+
+            if (bestWeapon == null && w.canBeUsedOn(unitType)) {
+                bestWeapon = w;
+            }
+            if (w.canBeUsedOn(unitType) && w.getMultiplierOn(unitType) > bestWeapon.getMultiplierOn(unitType)) {
+                bestWeapon = w;
+            }
+
+        }
+        return bestWeapon;
+    }
+
+
+    public String toString() {
+
+        return this.getClass().getSimpleName();
+
+    }
+
+    public abstract Type getType();
+
+    public abstract int getMinReach();
+    public abstract int getMaxReach();
+
+    public abstract String getFile();
+
+    public abstract boolean canMoveTo(Terrain destination, Weather weather);
+
+    public abstract int getMovementCostTo(Terrain destination, Weather weather);
 
 }

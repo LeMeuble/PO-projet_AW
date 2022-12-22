@@ -2,23 +2,22 @@ package main.terrain.type;
 
 import main.Player;
 import main.terrain.Property;
-import ressources.Chemins;
+import main.weather.Weather;
+import ressources.PathUtil;
 
 public class HQ extends Property {
-
-    public static final String FILE_PATH_RED = Chemins.getCheminPropriete(Chemins.FICHIER_QG, Player.Type.RED.getValue());
-    public static final String FILE_PATH_BLUE = Chemins.getCheminPropriete(Chemins.FICHIER_QG, Player.Type.BLUE.getValue());
 
     public HQ(Player.Type owner) {
         super(owner);
     }
 
-    public String getFile() {
-
-        if(super.getOwner() == Player.Type.RED) return HQ.FILE_PATH_RED;
-        else return HQ.FILE_PATH_BLUE;
-
+    public String getFile(Weather weather, boolean isFoggy) {
+        return PathUtil.getBuildingPath(weather, this.getOwner(), this.getType(), isFoggy);
     }
 
+    @Override
+    public Type getType() {
+        return Type.HQ;
+    }
 
 }

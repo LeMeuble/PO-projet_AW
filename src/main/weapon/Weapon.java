@@ -23,4 +23,5 @@ public abstract class Weapon {
     public abstract boolean canBeUsedOn(Unit.Type unitType);
     public abstract float getMultiplierOn(Unit.Type unitType);
 
+
 }

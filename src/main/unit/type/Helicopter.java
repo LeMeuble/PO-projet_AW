@@ -2,9 +2,9 @@ package main.unit.type;
 
 import main.Player;
 import main.unit.Flying;
-import main.weapon.type.HeavyMachineGun;
-import main.weapon.type.Missile;
-import ressources.Chemins;
+import main.unit.Animation;
+import ressources.Config;
+import ressources.PathUtil;
 
 public class Helicopter extends Flying {
 
@@ -12,14 +12,12 @@ public class Helicopter extends Flying {
     public static final int MAX_REACH = 1;
 
     public Helicopter(Player.Type owner){
-        super(Type.HELICOPTER, owner);
-        this.addWeapon(new Missile());
-        this.addWeapon(new HeavyMachineGun());
+        super(owner, 0, 0);
     }
 
     @Override
-    public String getFile() {
-        return Chemins.getCheminUnite(this.getOwner().getValue(), !this.hasPlayed(), Chemins.FICHIER_HELICOPTERE);
+    public Type getType() {
+        return Type.HELICOPTER;
     }
 
     @Override
@@ -32,4 +30,18 @@ public class Helicopter extends Flying {
         return MAX_REACH;
     }
 
+    @Override
+    public String getFile() {
+        return PathUtil.getUnitPath(this.getOwner(), Type.TANK, Animation.IDLE, !this.hasPlayed(), this.getFrame());
+    }
+
+    @Override
+    public void switchAnimation(Animation animation) {
+
+        int frameCount = animation == Animation.IDLE ? Config.UNIT_LONG_ANIMATION_FRAME_COUNT : Config.UNIT_SHORT_ANIMATION_FRAME_COUNT;
+
+        this.setAnimation(animation);
+        this.newAnimationClock(frameCount, Config.UNIT_ANIMATION_FRAME_DURATION);
+
+    }
 }

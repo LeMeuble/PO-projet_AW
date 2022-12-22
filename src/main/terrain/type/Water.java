@@ -1,16 +1,17 @@
 package main.terrain.type;
 
-import main.terrain.Terrain;
-import ressources.Chemins;
+import main.terrain.AnimatedTerrain;
+import main.weather.Weather;
+import ressources.PathUtil;
 
-public class Water extends Terrain {
+public class Water extends AnimatedTerrain {
 
-    public static final String FILE_PATH = Chemins.getCheminTerrain(Chemins.FICHIER_EAU);
-
-    public String getFile() {
-
-        return Water.FILE_PATH;
-
+    public String getFile(Weather weather, boolean isFoggy, int frame) {
+        return PathUtil.getAnimatedTerrainPath(weather, this.getType(), frame, this.getTextureVariation(), isFoggy);
     }
 
+    @Override
+    public Type getType() {
+        return Type.WATER;
+    }
 }

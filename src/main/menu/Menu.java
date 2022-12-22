@@ -1,11 +1,15 @@
 package main.menu;
 
+
 public abstract class Menu {
 
-    private int x;
-    private int y;
-    private int width;
-    private int height;
+
+    private boolean isVisible;
+
+    private final int x;
+    private final int y;
+    private final int width;
+    private final int height;
 
     public Menu(int x, int y, int width, int height) {
 
@@ -13,6 +17,8 @@ public abstract class Menu {
         this.y = y;
         this.width = width;
         this.height = height;
+
+        this.isVisible = true;
 
     }
 
@@ -25,13 +31,21 @@ public abstract class Menu {
     }
 
     public int getWidth() {
-        return width;
+        return this.width;
     }
 
     public int getHeight() {
-        return height;
+        return this.height;
     }
 
-    public abstract String getBackground();
+    public boolean isVisible() {
+        return this.isVisible;
+    }
+
+    public void setVisible(boolean isVisible) {
+        this.isVisible = isVisible;
+    }
+
+    public abstract void render();
 
 }

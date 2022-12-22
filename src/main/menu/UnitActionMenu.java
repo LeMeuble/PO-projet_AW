@@ -2,17 +2,14 @@ package main.menu;
 
 public class UnitActionMenu extends Menu {
 
-    public static final String BACKGROUND = ".";
+    public UnitActionMenu() {
 
-    public UnitActionMenu(int x, int y, int width, int height) {
-
-        super(x, y, width, height);
+        super(0, 0, 0, 0);
 
     }
 
-    public String getBackground() {
-
-        return UnitActionMenu.BACKGROUND;
+    @Override
+    public void render() {
 
     }
 

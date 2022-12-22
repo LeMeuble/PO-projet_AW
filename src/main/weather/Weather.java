@@ -4,6 +4,14 @@ public enum Weather {
 
     CLEAR,
     RAINY,
-    SNOWY
+    SNOWY;
+
+    public String getName() {
+        return this.name().toLowerCase();
+    }
+
+    public static Weather random() {
+        return Weather.values()[(int) (Math.random() * Weather.values().length)];
+    }
 
 }

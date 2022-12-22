@@ -12,18 +12,22 @@ public class Player {
 
         NEUTRAL(0),
         RED(1),
-        BLUE(2);
+        BLUE(2),
+        YELLOW(3),
+        GREEN(4),
+        BLACK(5);
 
         private final int value;
 
         Type(int value) {
-
             this.value = value;
-
         }
 
         public int getValue() {
             return this.value;
+        }
+        public String getName() {
+            return this.name().toLowerCase();
         }
 
         public static Type fromValue(int value) {
@@ -42,13 +46,13 @@ public class Player {
 
     }
 
-    private final Type type;
     private int money;
+    private final Type type;
 
     public Player(Player.Type type) {
 
-        this.type = type;
         this.money = 0;
+        this.type = type;
 
     }
 

@@ -3,145 +3,65 @@
  */
 package main;
 
-import librairies.AssociationTouches;
-import librairies.StdDraw;
-import main.terrain.Case;
-import main.terrain.Grid;
-import main.unit.Unit;
-import ressources.Affichage;
-import ressources.Config;
-import ressources.ParseurCartes;
-
-import java.awt.*;
-import java.util.HashMap;
-import java.util.Map;
+import main.controller.KeystrokeHandler;
+import main.controller.KeystrokeListener;
+import main.map.GameMap;
+import main.map.MapMetadata;
+import main.map.MapSelector;
+import main.render.Renderer;
 
 public class Jeu {
 
-    public static int borderX;
-    public static int borderY;
-
-    private final Grid grid;
-
-    private Player.Type currentPlayer;
-
-    private Unit currentUnit;
-
-    private final Map<Player.Type, Player> players;
-
-    private final Cursor cursor;
-    private final KeystrokeHandler keystrokeHandler;
-    private Movement movement;
-
     private GameState gameState;
-    private PlayerState playerState;
+    private GameMap gameMap;
 
+    private final MapSelector mapSelector;
+    private final Renderer renderer;
+    private final KeystrokeListener keystrokeListener;
+    private final KeystrokeHandler keystrokeHandler;
 
-    public Jeu(String file) throws Exception {
+    public Jeu() throws Exception {
 
-        String[][] parsed = ParseurCartes.parseCarte(file);
+        this.gameState = GameState.MENU_TITLE_SCREEN;
+        this.gameMap = null;
 
-        borderX = parsed[0].length;
-        borderY = parsed.length;
-
-        this.players = new HashMap<>();
-
-        this.players.put(Player.Type.RED, new Player(Player.Type.RED));
-        this.players.put(Player.Type.BLUE, new Player(Player.Type.BLUE));
-
-        this.currentPlayer = Player.Type.RED; // rouge commence
-        this.cursor = new Cursor();
+        this.mapSelector = new MapSelector();
+        this.keystrokeListener = new KeystrokeListener();
         this.keystrokeHandler = new KeystrokeHandler(this);
 
-        this.grid = new Grid(parsed);
+        this.keystrokeListener.setHandler((keycode) -> {
+            boolean updateDisplay = this.keystrokeHandler.handle(keycode);
+            if(updateDisplay) this.update();
+        });
+        this.keystrokeListener.start();
 
-        this.gameState = GameState.PLAYING;
-        this.playerState = PlayerState.SELECTING;
-
-        Config.setDimension(borderX, borderY);
+        this.renderer = new Renderer();
+        this.update();
 
     }
 
     public boolean isOver() {
-        return this.gameState == GameState.ENDED;
+        return this.gameState == GameState.ENDIND_SCREEN;
     }
 
-    public void display() {
-
-        StdDraw.clear();
-        afficheStatutJeu();
-
-        // Rendu de la grille (cases, terrains et unites)
-        for (int y = 0; y < borderY; y++) {
-
-            for (int x = 0; x < borderX; x++) {
-
-                Case c = this.grid.getCase(x, y);
-
-                Affichage.dessineImageDansCase(x, y, c.getTerrain().getFile());
-                if (c.hasUnit()) Affichage.dessineImageDansCase(x, y, c.getUnit().getFile());
-
-            }
-        }
-
-        // Rendu d'une potentielle fleche de deplacement
-        if (this.movement != null) {
-
-            for (Movement.Arrow arrow : this.movement.toDirectionalArrows()) {
-
-                Affichage.dessineImageDansCase(arrow.getCase().getX(), arrow.getCase().getY(), arrow.getPath());
-
-            }
-
-        }
-
-        // Rendu du curseur
-        Color color = this.currentPlayer == Player.Type.RED ? Color.RED : Color.BLUE;
-        Affichage.dessineCurseur(this.cursor.getCurrentX(), this.cursor.getCurrentY(), color);
-
-        StdDraw.show(); //montre a l'ecran les changements demandes
-    }
-
-    public void afficheStatutJeu() {
-        Affichage.videZoneTexte();
-        Affichage.afficheTexteDescriptif("Status du jeu");
-    }
-
-    public void initialDisplay() {
-        StdDraw.enableDoubleBuffering(); // rend l'affichage plus fluide: tout draw est mis en buffer et ne s'affiche qu'au prochain StdDraw.show();
-        display();
-    }
 
     public void update() {
 
-        AssociationTouches toucheSuivante = AssociationTouches.trouveProchaineEntree(); //cette fonction boucle jusqu'a la prochaine entree de l'utilisateur
-
-        boolean updateDisplay = this.keystrokeHandler.handle(toucheSuivante, this.playerState);
-
-
-//        //  ATTENTION ! si vous voulez detecter d'autres touches que 't',
-//        //  vous devez les ajouter au tableau Config.TOUCHES_PERTINENTES_CARACTERES
-//        if (toucheSuivante.isCaractere('t')) {
-//            String[] options = {"Oui", "Non", "Peut-etre", "Cancel"};
-//            if (Affichage.popup("Finir le tour de XXX?", options, true, 1) == 0) {
-//                //le choix 0, "Oui", a été selectionné
-//                //TODO: passer au joueur suivant
-//                System.out.println("FIN DE TOUR");
-//            }
-//
-//            updateDisplay = true;
-//        }
-
-        if (updateDisplay) display();
+        this.renderer.render(this.gameState, this.gameMap, this.mapSelector);
 
     }
 
-    public Cursor getCursor() {
-        return this.cursor;
+    public boolean isPlaying() {
+        return this.gameMap != null;
     }
 
-    public Grid getGrid() {
-        return this.grid;
+    public GameMap getGameMap() {
+        return this.gameMap;
+    }
+
+    public void newGame(MapMetadata mapMetadata) {
+        this.gameMap = new GameMap(this.mapSelector.getSelectedMap());
+        this.gameState = GameState.PLAYING_SELECTING;
     }
 
     public GameState getGameState() {
@@ -152,84 +72,17 @@ public class Jeu {
         this.gameState = gameState;
     }
 
-    public PlayerState getPlayerState() {
-        return playerState;
+    public Renderer getRenderer() {
+        return this.renderer;
     }
 
-    public void setPlayerState(PlayerState playerState) {
-        this.playerState = playerState;
+    public MapSelector getMapSelector() {
+        return this.mapSelector;
     }
 
-    public Player.Type getCurrentPlayer() {
-        return currentPlayer;
+    public void end() {
+        this.keystrokeListener.stop();
     }
 
-    public void setCurrentPlayer(Player.Type currentPlayer) {
-        this.currentPlayer = currentPlayer;
-    }
-
-    public void updateMovement(Case newCase) {
-
-        if (this.movement == null) {
-
-            this.movement = new Movement(newCase);
-
-        } else {
-            this.movement.update(newCase);
-        }
-
-    }
-
-    public void resetMovement() {
-
-        this.movement = null;
-
-    }
-
-    public boolean isMovementEmpty() {
-        if (this.movement == null) {
-            return true;
-        } else {
-            return this.movement.isEmpty();
-        }
-
-    }
-
-    public Movement getMovement() {
-
-        return this.movement;
-
-    }
-
-    public Case getMovementHead() {
-
-        return this.movement.getHead();
-
-    }
-
-    public Case getMovementTail() {
-
-        return this.movement.getTail();
-
-    }
-
-    public void endTurn() {
-
-        if (this.currentPlayer == Player.Type.RED) {
-            this.currentPlayer = Player.Type.BLUE;
-        } else {
-            this.currentPlayer = Player.Type.RED;
-        }
-
-    }
-
-    public Unit getCurrentUnit() {
-        return currentUnit;
-    }
-
-    public void setCurrentUnit(Unit currentUnit) {
-        this.currentUnit = currentUnit;
-
-    }
 }
 

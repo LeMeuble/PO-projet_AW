@@ -1,9 +1,8 @@
 package main;
 
-import main.terrain.Case;
-import main.unit.Unit;
-import main.weather.Weather;
-import ressources.Chemins;
+
+import main.map.Case;
+import ressources.PathUtil;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -13,19 +12,17 @@ public class Movement {
 
     enum Direction {
 
-        BEGIN(Chemins.DIRECTION_DEBUT,Integer.MAX_VALUE, Integer.MAX_VALUE),
-        END(Chemins.DIRECTION_FIN, Integer.MIN_VALUE, Integer.MIN_VALUE),
-        UP(Chemins.DIRECTION_HAUT, 0, 1),
-        DOWN(Chemins.DIRECTION_BAS, 0, -1),
-        LEFT(Chemins.DIRECTION_GAUCHE, -1, 0),
-        RIGHT(Chemins.DIRECTION_DROITE, 1, 0);
-
-        private final String path;
+        BEGIN(Integer.MAX_VALUE, Integer.MAX_VALUE),
+        END(Integer.MIN_VALUE, Integer.MIN_VALUE),
+        UP(0, 1),
+        DOWN(0, -1),
+        LEFT(-1, 0),
+        RIGHT(1, 0);
 
         private final int dx;
         private final int dy;
-        Direction(String path, int dx, int dy) {
-            this.path = path;
+
+        Direction(int dx, int dy) {
             this.dx = dx;
             this.dy = dy;
         }
@@ -43,6 +40,10 @@ public class Movement {
                 }
             }
             return null;
+        }
+
+        public String getName() {
+            return this.name().toLowerCase();
         }
 
         /**
@@ -68,14 +69,14 @@ public class Movement {
 
             return null;
         }
-
     }
-    protected class Arrow {
 
-        private Case c;
+    protected static class Arrow {
 
-        private Direction from;
-        private Direction to;
+        private final Case c;
+        private final Direction from;
+        private final Direction to;
+
         public Arrow(Case c, Direction from, Direction to) {
             this.c = c;
             this.from = from;
@@ -86,15 +87,15 @@ public class Movement {
             return c;
         }
 
-        public String getPath() {
-            return Chemins.getCheminFleche(from.path, to.path);
+        public String getPath(Player.Type owner) {
+            return PathUtil.getArrowPath(owner, from.getName(), to.getName());
         }
 
-
     }
-    private final Case startingPoint;
 
+    private final Case startingPoint;
     private List<Case> cases;
+
     public Movement(Case startingPoint) {
 
         this.startingPoint = startingPoint;
@@ -104,31 +105,13 @@ public class Movement {
 
     public void update(Case newCase) {
 
-        if (newCase.equals(this.startingPoint)) this.cases.clear();
-        else if (this.cases.contains(newCase)) {
+        if (newCase.equals(this.startingPoint)) {
+            this.cases.clear();
+        } else if (this.cases.contains(newCase)) {
             // TODO: Improve this code cause it's a shitty code
             this.cases = new LinkedList<>(this.cases.subList(0, this.cases.indexOf(newCase) + 1));
 
         } else this.cases.add(newCase);
-
-    }
-
-    public int getCost(Unit unit, Weather weather) {
-
-        int cost = 0;
-
-        for(Case c : this.cases) {
-
-            cost += unit.getMovementCostTo(c.getTerrain(), weather);
-
-        }
-
-        return cost;
-    }
-
-    public void popLast() {
-
-        ((LinkedList<Case>) cases).pollLast();
 
     }
 
@@ -153,7 +136,7 @@ public class Movement {
     public List<Arrow> toDirectionalArrows() {
 
         ListIterator<Case> cases = this.cases.listIterator();
-        List<Arrow> directionnalArrows = new LinkedList<>();
+        List<Arrow> directionalArrows = new LinkedList<>();
 
         Case previous = null;
         Case current = startingPoint;
@@ -162,16 +145,16 @@ public class Movement {
 
             next = cases.next();
 
-            directionnalArrows.add(calculateDirection(previous, current, next));
+            directionalArrows.add(calculateDirection(previous, current, next));
 
             previous = current;
             current = next;
 
         }
 
-        directionnalArrows.add(calculateDirection(previous, current, null)); // Cas ou le mouvement est vide
+        directionalArrows.add(calculateDirection(previous, current, null)); // Cas ou le mouvement est vide
 
-        return directionnalArrows;
+        return directionalArrows;
 
     }
 

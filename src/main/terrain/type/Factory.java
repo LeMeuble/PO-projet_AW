@@ -2,24 +2,22 @@ package main.terrain.type;
 
 import main.Player;
 import main.terrain.Property;
-import ressources.Chemins;
+import main.weather.Weather;
+import ressources.PathUtil;
 
 public class Factory extends Property {
-
-    public static final String FILE_PATH_RED = Chemins.getCheminPropriete(Chemins.FICHIER_USINE, Player.Type.RED.getValue());
-    public static final String FILE_PATH_NEUTRAL = Chemins.getCheminPropriete(Chemins.FICHIER_USINE, Player.Type.NEUTRAL.getValue());
-    public static final String FILE_PATH_BLUE = Chemins.getCheminPropriete(Chemins.FICHIER_USINE, Player.Type.BLUE.getValue());
 
     public Factory(Player.Type owner) {
         super(owner);
     }
 
-    public String getFile() {
+    public String getFile(Weather weather, boolean isFoggy) {
+        return PathUtil.getBuildingPath(weather, this.getOwner(), this.getType(), isFoggy);
+    }
 
-        if(super.getOwner() == Player.Type.RED) return Factory.FILE_PATH_RED;
-        else if(super.getOwner() == Player.Type.BLUE) return  Factory.FILE_PATH_BLUE;
-        else return Factory.FILE_PATH_NEUTRAL;
-
+    @Override
+    public Type getType() {
+        return Type.FACTORY;
     }
 
 }

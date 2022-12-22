@@ -1,18 +1,43 @@
 package main.menu;
 
-public class MainMenu extends Menu {
+import main.weather.Weather;
+import ressources.Config;
+import ressources.DisplayUtil;
+import ressources.PathUtil;
 
-    public static final String BACKGROUND = ".";
+public class MainMenu extends AnimatedMenu {
 
-    public MainMenu(int x, int y, int width, int height) {
+    private final int id;
+    private final Weather weather;
 
-        super(x, y, width, height);
+
+    public MainMenu(int id, Weather weather) {
+        super(
+                Config.WIDTH / 2,
+                Config.HEIGHT / 2,
+                Config.WIDTH,
+                Config.HEIGHT
+        );
+        this.id = id;
+        this.weather = Weather.CLEAR;
+    }
+
+
+    @Override
+    public void render() {
+
+        this.render(0);
 
     }
 
-    public String getBackground() {
+    @Override
+    public void render(int frame) {
 
-        return MainMenu.BACKGROUND;
+        final String backgroundPath = PathUtil.getBackgroundPath(this.weather, this.id);
+        final String title = PathUtil.getUiComponentPath("title_screen_" + frame);
+
+        DisplayUtil.drawPicture(super.getX(), super.getY(), backgroundPath, super.getWidth(), super.getHeight());
+        DisplayUtil.drawPicture(super.getX(), 170d, title);
 
     }
 

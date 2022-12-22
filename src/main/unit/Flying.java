@@ -1,11 +1,10 @@
 package main.unit;
 
 import main.Player;
-import main.terrain.Case;
 import main.terrain.Terrain;
 import main.weather.Weather;
 
-public abstract class Flying extends Unit {
+public abstract class Flying extends AnimatedUnit {
 
     public enum MovementCost {
 
@@ -29,7 +28,7 @@ public abstract class Flying extends Unit {
 
         }
 
-        public static MovementCost fromTerrainAndWeather(Terrain.Type terrainType, Weather weather){
+        public static MovementCost fromTerrainAndWeather(Terrain.Type terrainType, Weather weather) {
 
             for (MovementCost cost : MovementCost.values()) {
                 if (cost.terrainType == terrainType && cost.weather == weather) {
@@ -53,31 +52,25 @@ public abstract class Flying extends Unit {
 
     }
 
-    public Flying(Unit.Type unitType, Player.Type owner) {
+    public Flying(Player.Type owner, int frameCount, int frameDuration) {
 
-        super(unitType, owner);
+        super(owner, frameCount, frameDuration);
 
     }
 
     @Override
-    public boolean canMoveTo(Case c, Weather weather) {
+    public boolean canMoveTo(Terrain destination, Weather weather) {
 
-        Terrain terrain = c.getTerrain();
-
-        MovementCost cost = MovementCost.fromTerrainAndWeather(Terrain.Type.fromTerrain(terrain), weather);
-
+        MovementCost cost = MovementCost.fromTerrainAndWeather(destination.getType(), weather);
         return cost != null && cost.canMoveTo();
 
     }
 
-    @Override
-    public int getMovementCostTo(Terrain terrain, Weather weather) {
+    public int getMovementCostTo(Terrain destination, Weather weather) {
 
-        MovementCost cost = MovementCost.fromTerrainAndWeather(Terrain.Type.fromTerrain(terrain), weather);
-
+        MovementCost cost = MovementCost.fromTerrainAndWeather(destination.getType(), weather);
         return cost == null ? Integer.MAX_VALUE : cost.getCost();
 
     }
-
 
 }

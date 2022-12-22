@@ -2,18 +2,16 @@ package main.menu;
 
 public class FactoryActionMenu extends Menu {
 
-    public static final String BACKGROUND = "";
+    public FactoryActionMenu() {
 
-    public FactoryActionMenu(int x, int y, int width, int height) {
-
-        super(x, y, width, height);
+        super(0, 0, 0, 0);
 
     }
 
-    public String getBackground() {
-
-        return FactoryActionMenu.BACKGROUND;
+    @Override
+    public void render() {
 
     }
+
 
 }

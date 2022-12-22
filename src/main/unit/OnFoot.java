@@ -1,14 +1,11 @@
 package main.unit;
 
 import main.Player;
-import main.terrain.Case;
 import main.terrain.Terrain;
 import main.weather.Weather;
+import ressources.Config;
 
-public abstract class OnFoot extends Unit {
-
-    public static final int MIN_REACH = 1;
-    public static final int MAX_REACH = 1;
+public abstract class OnFoot extends AnimatedUnit {
 
     public enum MovementCost {
 
@@ -56,41 +53,25 @@ public abstract class OnFoot extends Unit {
 
     }
 
+    public OnFoot(Player.Type owner, int frameCount, int frameDuration) {
 
-    public OnFoot(Unit.Type unitType, Player.Type owner) {
-
-        super(unitType, owner);
+        super(owner, frameCount, frameDuration);
 
     }
 
     @Override
-    public boolean canMoveTo(Case c, Weather weather) {
+    public boolean canMoveTo(Terrain destination, Weather weather) {
 
-        Terrain terrain = c.getTerrain();
-
-        MovementCost cost = MovementCost.fromTerrainAndWeather(Terrain.Type.fromTerrain(terrain), weather);
-
+        MovementCost cost = MovementCost.fromTerrainAndWeather(destination.getType(), weather);
         return cost != null && cost.canMoveTo();
 
     }
 
-    public int getMovementCostTo(Terrain terrain, Weather weather) {
+    public int getMovementCostTo(Terrain destination, Weather weather) {
 
-        MovementCost cost = MovementCost.fromTerrainAndWeather(Terrain.Type.fromTerrain(terrain), weather);
-
+        MovementCost cost = MovementCost.fromTerrainAndWeather(destination.getType(), weather);
         return cost == null ? Integer.MAX_VALUE : cost.getCost();
 
     }
-
-    @Override
-    public int getMinReach() {
-        return MIN_REACH;
-    }
-
-    @Override
-    public int getMaxReach() {
-        return MAX_REACH;
-    }
-
 
 }
