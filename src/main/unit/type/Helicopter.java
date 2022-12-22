@@ -32,14 +32,4 @@ public class Helicopter extends Flying {
         return MAX_REACH;
     }
 
-    @Override
-    public int getMinReach() {
-        return MIN_REACH;
-    }
-
-    @Override
-    public int getMaxReach() {
-        return MAX_REACH;
-    }
-
 }
