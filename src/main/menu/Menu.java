@@ -48,6 +48,4 @@ public abstract class Menu {
 
     public abstract void render();
 
-    public abstract boolean needsRefresh();
-
 }

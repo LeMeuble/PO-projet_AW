@@ -1,15 +1,15 @@
 package main.terrain.type;
 
 import main.terrain.Terrain;
-import ressources.Chemins;
+import main.weather.Weather;
+import ressources.PathUtil;
 
 public class Mountain extends Terrain {
 
-    public static final String FILE_PATH = Chemins.getCheminTerrain(Chemins.FICHIER_MONTAGNE);
 
-    public String getFile() {
+    public String getFile(Weather weather, boolean isFoggy) {
 
-        return Mountain.FILE_PATH;
+        return PathUtil.getTerrainPath(weather, Terrain.Type.MOUNTAIN, this.getTextureVariation(), isFoggy);
 
     }
 

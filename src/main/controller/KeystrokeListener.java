@@ -1,9 +1,10 @@
 package main.controller;
 
-import jdk.nashorn.internal.ir.annotations.Ignore;
 import librairies.StdDraw;
+import main.menu.AnimatedMenu;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.Consumer;
 
 public class KeystrokeListener {
@@ -17,7 +18,8 @@ public class KeystrokeListener {
         DOWN(40),
         SHIFT(16),
         ESCAPE(27),
-        KEY_T('t');
+        KEY_T('t'),
+        KEY_D('d');
 
         private final int code;
 

@@ -1,6 +1,5 @@
 package main.map;
 
-import main.menu.MapSelectionMenu;
 import ressources.MapParsing;
 
 import java.util.List;

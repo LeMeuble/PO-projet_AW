@@ -1,8 +1,10 @@
 package main;
 
 import librairies.SelecteurDeFichier;
-import librairies.StdDraw;
+import main.terrain.Terrain;
+import main.weather.Weather;
 import ressources.Chemins;
+import ressources.PathUtil;
 
 import java.io.IOException;
 import java.io.InterruptedIOException;
@@ -10,8 +12,6 @@ import java.io.InterruptedIOException;
 
 public class Main {
 
-	final static boolean SAUTER_SELECTION_CARTE = false; // mettre a false pour avoir l'outil de selection de carte
-	
 	public static void main(String[] args) throws IOException, InterruptedException {
 
 		try {
@@ -20,7 +20,7 @@ public class Main {
 
 			while (!jeu.isOver()) {
 				jeu.update();
-				Thread.sleep(100);
+				Thread.sleep(25);
 			}
 
 			jeu.end();
@@ -95,15 +95,4 @@ public class Main {
 
 	}
 
-	private static String selectionCarte() throws IOException {
-		try
-		{
-			SelecteurDeFichier selecteur = new SelecteurDeFichier(Chemins.getDossierCartes());
-			return selecteur.selectFile();
-		}
-		catch (InterruptedIOException exception)
-		{
-			throw new IOException("Selection annulée, jeu non lancé.");
-		}
-	}
-} 
+}

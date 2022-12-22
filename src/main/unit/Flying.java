@@ -2,11 +2,11 @@ package main.unit;
 
 import main.Player;
 
-public abstract class Flying extends Unit {
+public abstract class Flying extends AnimatedUnit {
 
-    public Flying(Player.Type owner) {
+    public Flying(Player.Type owner, int frameCount, int frameDuration) {
 
-        super(owner);
+        super(owner, frameCount, frameDuration);
 
     }
 

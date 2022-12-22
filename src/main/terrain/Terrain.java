@@ -2,6 +2,7 @@ package main.terrain;
 
 import main.Player;
 import main.terrain.type.*;
+import main.weather.Weather;
 
 /**
  * Classe abstraite representant un terrain
@@ -11,89 +12,27 @@ import main.terrain.type.*;
  */
 public abstract class Terrain {
 
-    /**
-     * Enumeration de tous les types de terrains existants
-     */
-    public enum TypeLegacy {
-
-        PLAIN("Plaine"),
-        FOREST("Foret"),
-        MOUNTAIN("Montagne"),
-        WATER("Eau"),
-        FACTORY("Usine"),
-        CITY("Ville"),
-        HQ("QG");
-
-        private final String name;
-
-        TypeLegacy(String name) {
-            this.name = name;
-        }
-
-        public static TypeLegacy fromName(String name) {
-
-            for(TypeLegacy type : TypeLegacy.values()) {
-
-                if(type.name.equals(name)) {
-                    return type;
-                }
-
-            }
-            return null;
-
-        }
-
-        public Terrain newInstance() {
-
-            switch (this) {
-                case PLAIN:
-                    return new Plain();
-                case FOREST:
-                    return new Forest();
-                case MOUNTAIN:
-                    return new Mountain();
-                case WATER:
-                    return new Water();
-            }
-
-            return null;
-
-        }
-
-        public Terrain newInstance(Player.Type p) {
-
-            switch (this) {
-                case FACTORY:
-                    return new Factory(p);
-                case CITY:
-                    return new City(p);
-                case HQ:
-                    return new HQ(p);
-            }
-
-            return newInstance();
-
-        }
-
-    }
-
     public enum Type {
 
-        PLAIN('P', false),
-        FOREST('F', false),
-        MOUNTAIN('M', false),
-        WATER('W', false),
-        OSBSTACLE('O', false),
-        FACTORY('f', true),
-        CITY('c', true),
-        HQ('h', true);
+        PLAIN('P', false, "plain", true),
+        FOREST('F', false, "forest", true),
+        MOUNTAIN('M', false, "mountain", true),
+        WATER('W', false, "water", true),
+        OBSTACLE('O', false, "obstacle", true),
+        FACTORY('f', true, "factory.png", false),
+        CITY('c', true, "city.png", false),
+        HQ('h', true, "hq.png", false);
 
         private final char character;
         private final boolean isProperty;
+        private final String fileName;
+        private final boolean isDirectory;
 
-        Type(char character, boolean isProperty) {
+        Type(char character, boolean isProperty, String fileName, boolean isDirectory) {
             this.character = character;
             this.isProperty = isProperty;
+            this.fileName = fileName;
+            this.isDirectory = isDirectory;
         }
 
         public static Type fromCharacter(char character) {
@@ -113,7 +52,11 @@ public abstract class Terrain {
             return this.isProperty;
         }
 
-        public Terrain newInstance() {
+        public String getFileName() {
+            return this.fileName;
+        }
+
+        public Terrain newInstance(Player.Type p) {
 
             switch (this) {
                 case PLAIN:
@@ -124,24 +67,18 @@ public abstract class Terrain {
                     return new Mountain();
                 case WATER:
                     return new Water();
+                case OBSTACLE:
+                    return new Obstacle();
+                case FACTORY:
+                    return p != null ? new Factory(p) : null;
+                case CITY:
+                    return p != null ? new City(p) : null;
+                case HQ:
+                    return p != null ? new HQ(p) : null;
+
             }
 
             return null;
-
-        }
-
-        public Terrain newInstance(Player.Type p) {
-
-            switch (this) {
-                case FACTORY:
-                    return new Factory(p);
-                case CITY:
-                    return new City(p);
-                case HQ:
-                    return new HQ(p);
-            }
-
-            return newInstance();
 
         }
 
@@ -157,7 +94,7 @@ public abstract class Terrain {
 
     public Terrain(int textureVariation) {
 
-        this.textureVariation = 0;
+        this.textureVariation = textureVariation;
 
     }
 
@@ -165,7 +102,8 @@ public abstract class Terrain {
      * Retourne le chemin vers le fichier associe au terrain
      * @return Chemin du fichier
      */
-    public abstract String getFile();
+    public abstract String getFile(Weather weather, boolean isFoggy);
+
 
     public int getTextureVariation() {
 

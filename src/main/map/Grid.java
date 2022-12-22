@@ -1,7 +1,5 @@
 package main.map;
 
-import main.map.Case;
-
 /**
  * Classe representant la grille du plateau de jeu sous forme d'un
  * tableau 2D de cases

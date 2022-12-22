@@ -1,7 +1,5 @@
 package main.map;
 
-import main.map.Grid;
-
 import java.util.Map;
 
 public class MapMetadata {

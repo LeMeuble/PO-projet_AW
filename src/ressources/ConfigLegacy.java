@@ -1,9 +1,9 @@
 
 package ressources;
+
 import librairies.StdDraw;
 
-import java.awt.Color;
-import java.awt.Font;
+import java.awt.*;
 /**
 Classe de configuration, qui contient des constantes utiles notamment a l'affichage, et qui initialise les variables d'affichage en fonction de la dimension de la carte
  */

@@ -1,7 +1,7 @@
 package librairies;
 
+import javax.swing.filechooser.FileFilter;
 import java.io.File;
-import javax.swing.filechooser.*;
 
 /** Permet le filtre des fichiers du selecteur de carte */
 public class FiltreDeFichier extends FileFilter {

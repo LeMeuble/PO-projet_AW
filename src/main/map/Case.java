@@ -1,6 +1,5 @@
 package main.map;
 
-import main.Player;
 import main.terrain.Terrain;
 import main.unit.Unit;
 

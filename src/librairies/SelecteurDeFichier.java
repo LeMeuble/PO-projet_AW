@@ -1,8 +1,8 @@
 package librairies;
 
-import java.io.*;
-import java.awt.*;
 import javax.swing.*;
+import java.awt.*;
+import java.io.InterruptedIOException;
 
 /**Cette classe gere le selecteur de fichier qui se lance en debut de jeu. */
 public class SelecteurDeFichier extends JPanel{

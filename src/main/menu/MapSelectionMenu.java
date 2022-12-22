@@ -1,10 +1,8 @@
 package main.menu;
 
 import librairies.StdDraw;
-import main.map.MapMetadata;
 import main.map.MapSelector;
 import ressources.Config;
-import ressources.MapParsing;
 
 public class MapSelectionMenu extends Menu {
 
@@ -24,11 +22,6 @@ public class MapSelectionMenu extends Menu {
             StdDraw.text(Config.WIDTH / 2, Config.HEIGHT / 2, "No map found");
         }
 
-    }
-
-    @Override
-    public boolean needsRefresh() {
-        return false;
     }
 
 }

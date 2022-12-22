@@ -1,6 +1,5 @@
 package main.controller;
 
-import main.Jeu;
 import ressources.Config;
 
 public class Cursor {

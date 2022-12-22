@@ -7,70 +7,13 @@ import main.weapon.Weapon;
 
 public abstract class Unit {
 
-    public enum TypeLegacy {
-
-        INFANTRY("Infanterie"),
-        BAZOOKA("Bazooka"),
-        BOMBARDIER("Bombardier"),
-        CONVOY("Convoit"),
-        DCA("DCA"),
-        HELICOPTER("Helico"),
-        TANK("Tank"),
-        ARTILLERY("Artillerie");
-
-        private final String name;
-
-        TypeLegacy(String name) {
-            this.name = name;
-        }
-
-        public static TypeLegacy fromName(String name) {
-
-            for(TypeLegacy typeLegacy : TypeLegacy.values()) {
-
-                if(typeLegacy.name.equals(name)) {
-                    return typeLegacy;
-                }
-
-            }
-            return null;
-
-        }
-
-        public Unit newInstance(Player.Type p) {
-
-            switch (this) {
-                case INFANTRY:
-                    return new Infantry(p);
-                case BAZOOKA:
-                    return new Bazooka(p);
-                case BOMBARDIER:
-                    return new Bombardier(p);
-                case CONVOY:
-                    return new Convoy(p);
-                case DCA:
-                    return new DCA(p);
-                case HELICOPTER:
-                    return new Helicopter(p);
-                case TANK:
-                    return new Tank(p);
-                case ARTILLERY:
-                    return new Artillery(p);
-            }
-
-            return null;
-
-        }
-
-    }
-
     public enum Type {
 
         INFANTRY('i'),
         BAZOOKA('z'),
-        BOMBARDIER('b'),
+        BOMBER('b'),
         CONVOY('c'),
-        DCA('d'),
+        ANTIAIR('d'),
         HELICOPTER('h'),
         TANK('t'),
         ARTILLERY('a');
@@ -94,6 +37,10 @@ public abstract class Unit {
 
         }
 
+        public String getName() {
+            return this.name().toLowerCase();
+        }
+
         public Unit newInstance(Player.Type p) {
 
             switch (this) {
@@ -101,12 +48,12 @@ public abstract class Unit {
                     return new Infantry(p);
                 case BAZOOKA:
                     return new Bazooka(p);
-                case BOMBARDIER:
-                    return new Bombardier(p);
+                case BOMBER:
+                    return new Bomber(p);
                 case CONVOY:
                     return new Convoy(p);
-                case DCA:
-                    return new DCA(p);
+                case ANTIAIR:
+                    return new AntiAir(p);
                 case HELICOPTER:
                     return new Helicopter(p);
                 case TANK:

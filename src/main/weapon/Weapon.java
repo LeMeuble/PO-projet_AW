@@ -1,9 +1,5 @@
 package main.weapon;
 
-import main.unit.Unit;
-
-import java.util.HashMap;
-
 public abstract class Weapon {
 
     private int ammo;

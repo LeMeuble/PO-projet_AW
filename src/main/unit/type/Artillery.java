@@ -2,8 +2,6 @@ package main.unit.type;
 
 import main.Player;
 import main.unit.Motorized;
-import main.unit.OnFoot;
-import main.unit.Unit;
 import main.weapon.Weapon;
 import ressources.Chemins;
 

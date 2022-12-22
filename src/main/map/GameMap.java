@@ -3,6 +3,7 @@ package main.map;
 import main.Movement;
 import main.Player;
 import main.controller.Cursor;
+import main.weather.Weather;
 import ressources.MapParsing;
 
 import java.util.HashMap;
@@ -14,6 +15,7 @@ public class GameMap {
     private Cursor cursor;
     private Movement movement;
     private Player.Type currentPlayer;
+    private Weather weather;
 
     private final MapMetadata metadata;
     private final Grid grid;
@@ -27,6 +29,7 @@ public class GameMap {
         this.metadata = metadata;
         this.grid = MapParsing.parseMap(metadata);
         this.players = new HashMap<>();
+        this.weather = Weather.random();
 
         for (int i = 1; i <= metadata.getPlayerCount(); i++) {
             players.put(Player.Type.fromValue(i), new Player(Player.Type.values()[i]));
@@ -67,6 +70,13 @@ public class GameMap {
 
     public Cursor getCursor() {
         return this.cursor;
+    }
+
+    public Weather getWeather() {
+        return this.weather;
+    }
+    public void setWeather(Weather weather) {
+        this.weather = weather;
     }
 
 }

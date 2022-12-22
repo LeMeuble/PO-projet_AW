@@ -9,18 +9,18 @@ public class HeavyMachineGun extends Weapon {
 
     public enum DamageMultiplier {
 
-        ON_INFANTRY(Unit.TypeLegacy.INFANTRY, 1f),
-        ON_BAZOOKA(Unit.TypeLegacy.BAZOOKA, 0.8f),
-        ON_TANK(Unit.TypeLegacy.TANK, 0.3f),
-        ON_DCA(Unit.TypeLegacy.DCA, 0.3f),
-        ON_HELICOPTER(Unit.TypeLegacy.HELICOPTER, 1.1f),
-        ON_BOMBARDIER(Unit.TypeLegacy.BOMBARDIER, 0.7f),
-        ON_CONVOY(Unit.TypeLegacy.CONVOY, 0.5f);
+        ON_INFANTRY(Unit.Type.INFANTRY, 1f),
+        ON_BAZOOKA(Unit.Type.BAZOOKA, 0.8f),
+        ON_TANK(Unit.Type.TANK, 0.3f),
+        ON_ANTIAIR(Unit.Type.ANTIAIR, 0.3f),
+        ON_HELICOPTER(Unit.Type.HELICOPTER, 1.1f),
+        ON_BOMBER(Unit.Type.BOMBER, 0.7f),
+        ON_CONVOY(Unit.Type.CONVOY, 0.5f);
 
-        private final Unit.TypeLegacy unit;
+        private final Unit.Type unit;
         private final float multiplier;
 
-        DamageMultiplier(Unit.TypeLegacy unit, float multiplier) {
+        DamageMultiplier(Unit.Type unit, float multiplier) {
 
             this.unit = unit;
             this.multiplier = multiplier;

@@ -2,11 +2,8 @@ package main.controller;
 
 import main.GameState;
 import main.Jeu;
-import main.map.Case;
 import main.map.GameMap;
-import main.map.Grid;
-import main.render.Renderer;
-import main.terrain.Property;
+import main.weather.Weather;
 
 
 public class KeystrokeHandler {
@@ -43,9 +40,18 @@ public class KeystrokeHandler {
                 return this.enter(gameState);
             case ESCAPE:
                 return this.escape(gameState);
+            case KEY_D:
+                return this.keyD(gameState);
 
         }
         return false;
+
+    }
+
+    public boolean keyD(GameState playerState) {
+
+        this.game.getGameMap().setWeather(Weather.random());
+        return true;
 
     }
 
@@ -170,9 +176,11 @@ public class KeystrokeHandler {
         switch (playerState) {
 
             case MENU_TITLE_SCREEN:
+                this.game.getRenderer().clearBuffer();
                 this.game.setGameState(GameState.MENU_MAP_SELECTION);
                 return true;
             case MENU_MAP_SELECTION:
+                this.game.getRenderer().clearBuffer();
                 if(this.game.getMapSelector().getSelectedMap() != null) {
                     this.game.newGame(this.game.getMapSelector().getSelectedMap());
                 }

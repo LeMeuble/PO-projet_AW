@@ -1,14 +1,15 @@
 package main.terrain.type;
 
+import main.terrain.AnimatedTerrain;
 import main.terrain.Terrain;
+import main.weather.Weather;
+import ressources.PathUtil;
 
-public class Obstacle extends Terrain {
+public class Obstacle extends AnimatedTerrain {
 
-    public static final String FILE_PATH = "src\\ressources\\images\\obstacle.png";
+    public String getFile(Weather weather, boolean isFoggy, int frame) {
 
-    public String getFile() {
-
-        return Obstacle.FILE_PATH;
+        return PathUtil.getAnimatedTerrainPath(weather, Terrain.Type.OBSTACLE, frame, this.getTextureVariation(), isFoggy);
 
     }
 

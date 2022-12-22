@@ -8,18 +8,13 @@ import main.controller.KeystrokeListener;
 import main.map.GameMap;
 import main.map.MapMetadata;
 import main.map.MapSelector;
-import main.menu.Menu;
 import main.render.Renderer;
-
-import java.util.LinkedList;
-import java.util.List;
 
 public class Jeu {
 
     private GameState gameState;
     private GameMap gameMap;
 
-    private final List<Menu> menusAndHuds;
     private final MapSelector mapSelector;
     private final Renderer renderer;
     private final KeystrokeListener keystrokeListener;
@@ -30,7 +25,6 @@ public class Jeu {
         this.gameState = GameState.MENU_TITLE_SCREEN;
         this.gameMap = null;
 
-        this.menusAndHuds = new LinkedList<>();
         this.mapSelector = new MapSelector();
         this.keystrokeListener = new KeystrokeListener();
         this.keystrokeHandler = new KeystrokeHandler(this);

@@ -11,7 +11,6 @@ import main.unit.Unit;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.*;
 
 public class MapParsing {
@@ -20,13 +19,11 @@ public class MapParsing {
     public static List<MapMetadata> listAvailableMaps() {
 
         final List<MapMetadata> maps = new ArrayList<>();
-        final File[] files = new File(Chemins.DOSSIER_CARTES).listFiles();
+        final File[] files = new File(PathUtil.MAPS_FOLDER).listFiles();
 
         for (File file : files) {
 
             if (file.isFile() && file.getName().endsWith(".meta")) {
-
-                System.out.println("Found map: " + file.getName());
 
                 Map<String, String> metadata = parseMetadata(file);
                 if(validateMetadata(metadata)) {
@@ -106,23 +103,27 @@ public class MapParsing {
 
     }
 
-    private static Terrain parseTerrain(String unit) {
+    private static Terrain parseTerrain(String t) {
 
-        if(unit == null) return null;
+        if(t == null) return null;
 
-        String format = unit.trim();
+        String format = t.trim();
         if(format.startsWith("{") && format.endsWith("}")) {
 
-            String[] split = format.substring(1, format.length() - 1).split(";");
+            String[] split = format.substring(1, format.length() - 1).trim().split(";");
 
             if(split.length == 3) {
+
+                for (int i = 0; i < split.length; i++) {
+                    split[i] = split[i].trim();
+                }
 
                 Terrain.Type type = Terrain.Type.fromCharacter(split[0].charAt(0));
 
                 if(type != null) {
 
-                    Player.Type owner = type.isProperty() ? Player.Type.fromValue(Integer.parseInt(split[2])) : null;
-                    Terrain terrain = owner != null ? type.newInstance(owner) : type.newInstance();
+                    Player.Type owner = !split[2].equals(".") ? Player.Type.fromValue(Integer.parseInt(split[2])) : null;
+                    Terrain terrain = type.newInstance(owner);
 
                     if(terrain != null) {
 
@@ -143,11 +144,11 @@ public class MapParsing {
 
     }
 
-    private static Unit parseUnit(String unit) {
+    private static Unit parseUnit(String u) {
 
-        if(unit == null) return null;
+        if(u == null) return null;
 
-        String format = unit.trim();
+        String format = u.trim();
         if(format.startsWith("[") && format.endsWith("]")) {
 
             String[] split = format.substring(1, format.length() - 1).split(";");
@@ -216,7 +217,7 @@ public class MapParsing {
                     }
 
                     grid[i][j] = new Case(j, i, terrain);
-                    grid[i][j].setUnit(unit);
+//                    grid[i][j].setUnit(unit);
 
                 }
 

@@ -1,11 +1,12 @@
 package ressources;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Scanner;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
 /** Cette classe gere le parseur de cartes. Nous vous conseillons de ne pas la modifier, sauf eventuellement si vous voulez ajouter une unite qui n'est pas dans la liste de l'enonce. Dans ce cas faites attention que le parseur reste compatible avec le format original.  */
 public class ParseurCartes {
@@ -61,10 +62,10 @@ public class ParseurCartes {
 	private static Map<String, String> genereDictionnaireTroupes(int nbJoueurs) {
 		Map<String, String> dicoTroupes = new HashMap<String, String>();
 		ajouterVariationsDEntitesAuDictionnaire(dicoTroupes,"a","Artillerie",nbJoueurs,false);
-		ajouterVariationsDEntitesAuDictionnaire(dicoTroupes,"b","Bombardier",nbJoueurs,false);
+		ajouterVariationsDEntitesAuDictionnaire(dicoTroupes,"b","Bomber",nbJoueurs,false);
 		ajouterVariationsDEntitesAuDictionnaire(dicoTroupes,"z","Bazooka",nbJoueurs,false);
 		ajouterVariationsDEntitesAuDictionnaire(dicoTroupes,"c","Convoit",nbJoueurs,false);
-		ajouterVariationsDEntitesAuDictionnaire(dicoTroupes,"d","DCA",nbJoueurs,false);
+		ajouterVariationsDEntitesAuDictionnaire(dicoTroupes,"d","AntiAir",nbJoueurs,false);
 		ajouterVariationsDEntitesAuDictionnaire(dicoTroupes,"h","Helico",nbJoueurs,false);
 		ajouterVariationsDEntitesAuDictionnaire(dicoTroupes,"i","Infanterie",nbJoueurs,false);
 		ajouterVariationsDEntitesAuDictionnaire(dicoTroupes,"t","Tank",nbJoueurs,false);

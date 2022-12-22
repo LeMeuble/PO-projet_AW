@@ -2,11 +2,11 @@ package main.unit;
 
 import main.Player;
 
-public abstract class Motorized extends Unit {
+public abstract class Motorized extends AnimatedUnit {
 
-    public Motorized(Player.Type owner) {
+    public Motorized(Player.Type owner, int frameCount, int frameDuration) {
 
-        super(owner);
+        super(owner, frameCount, frameDuration);
 
     }
 
