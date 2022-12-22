@@ -2,8 +2,8 @@ package main.unit.type;
 
 import main.Player;
 import main.unit.Flying;
-import main.unit.Unit;
-import main.weapon.Weapon;
+import main.weapon.type.HeavyMachineGun;
+import main.weapon.type.Missile;
 import ressources.Chemins;
 
 public class Helicopter extends Flying {
@@ -26,7 +26,9 @@ public class Helicopter extends Flying {
     int[] movementTable;
 
     public Helicopter(Player.Type owner){
-        super(owner);
+        super(Type.HELICOPTER, owner);
+        this.addWeapon(new Missile());
+        this.addWeapon(new HeavyMachineGun());
     }
 
     /**
@@ -57,6 +59,16 @@ public class Helicopter extends Flying {
     @Override
     public String getFile() {
         return Chemins.getCheminUnite(this.owner.getValue(), !this.hasPlayed, Chemins.FICHIER_HELICOPTERE);
+    }
+
+    @Override
+    public int getMinReach() {
+        return MIN_REACH;
+    }
+
+    @Override
+    public int getMaxReach() {
+        return MAX_REACH;
     }
 
 }

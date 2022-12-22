@@ -8,25 +8,12 @@ import ressources.Chemins;
 
 public class Bombardier extends Flying {
 
-    int maxPM = 7;
-    int PM;
-    int unitMovementType = 3;
-
-    int maxHealth = 10;
-    int health;
-
-    Weapon[] weapons;
-
-    int price = 20000;
-    int ammo;
-    int fuel;
-
-    boolean hasPlayed;
-    // Idem que pour les dégats, on utilise un tableau ? Une liste ?
-    int[] movementTable;
+    public static final int MIN_REACH = 0;
+    public static final int MAX_REACH = 0;
 
     public Bombardier(Player.Type owner){
-        super(owner);
+        super(Type.BOMBARDIER, owner);
+        this.addWeapon(new Bombs());
     }
 
     /**
@@ -59,6 +46,16 @@ public class Bombardier extends Flying {
 
         return Chemins.getCheminUnite(this.owner.getValue(), !this.hasPlayed, Chemins.FICHIER_BOMBARDIER);
 
+    }
+
+    @Override
+    public int getMinReach() {
+        return MIN_REACH;
+    }
+
+    @Override
+    public int getMaxReach() {
+        return MAX_REACH;
     }
 
 }

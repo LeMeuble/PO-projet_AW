@@ -3,8 +3,6 @@ package main.weapon.type;
 import main.unit.Unit;
 import main.weapon.Weapon;
 
-import java.util.HashMap;
-
 public class LightMachineGun extends Weapon {
 
     public static int DEFAULT_AMMO = Integer.MAX_VALUE;

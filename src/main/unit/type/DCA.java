@@ -2,8 +2,7 @@ package main.unit.type;
 
 import main.Player;
 import main.unit.Motorized;
-import main.unit.Unit;
-import main.weapon.Weapon;
+import main.weapon.type.HeavyMachineGun;
 import ressources.Chemins;
 
 public class DCA extends Motorized {
@@ -26,7 +25,8 @@ public class DCA extends Motorized {
     int[] movementTable;
 
     public DCA(Player.Type owner){
-        super(owner);
+        super(Type.DCA, owner);
+        this.addWeapon(new HeavyMachineGun());
     }
 
     /**
@@ -59,6 +59,16 @@ public class DCA extends Motorized {
 
         return Chemins.getCheminUnite(this.owner.getValue(), !this.hasPlayed, Chemins.FICHIER_ANTIAIR);
 
+    }
+
+    @Override
+    public int getMinReach() {
+        return MIN_REACH;
+    }
+
+    @Override
+    public int getMaxReach() {
+        return MAX_REACH;
     }
 
 }

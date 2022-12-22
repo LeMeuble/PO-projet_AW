@@ -27,7 +27,9 @@ public class Bazooka extends OnFoot {
     int[] movementTable;
 
     public Bazooka(Player.Type owner){
-        super(owner);
+        super(Type.BAZOOKA, owner);
+        this.addWeapon(new Canon());
+        this.addWeapon(new LightMachineGun());
     }
 
     /**

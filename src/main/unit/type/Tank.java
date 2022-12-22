@@ -2,8 +2,8 @@ package main.unit.type;
 
 import main.Player;
 import main.unit.Motorized;
-import main.unit.Unit;
-import main.weapon.Weapon;
+import main.weapon.type.Canon;
+import main.weapon.type.LightMachineGun;
 import ressources.Chemins;
 
 public class Tank extends Motorized {
@@ -26,7 +26,9 @@ public class Tank extends Motorized {
     int[] movementTable;
 
     public Tank(Player.Type owner){
-        super(owner);
+        super(Type.TANK, owner);
+        this.addWeapon(new Canon());
+        this.addWeapon(new LightMachineGun());
     }
 
     /**
@@ -57,6 +59,16 @@ public class Tank extends Motorized {
     @Override
     public String getFile() {
         return Chemins.getCheminUnite(this.owner.getValue(), !this.hasPlayed, Chemins.FICHIER_TANK);
+    }
+
+    @Override
+    public int getMinReach() {
+        return MIN_REACH;
+    }
+
+    @Override
+    public int getMaxReach() {
+        return MAX_REACH;
     }
 
 }

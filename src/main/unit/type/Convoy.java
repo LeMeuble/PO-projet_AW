@@ -26,7 +26,7 @@ public class Convoy extends Motorized {
     int[] movementTable;
 
     public Convoy(Player.Type owner){
-        super(owner);
+        super(Type.CONVOY, owner);
     }
 
     /**
@@ -59,6 +59,16 @@ public class Convoy extends Motorized {
 
         return Chemins.getCheminUnite(this.owner.getValue(), !this.hasPlayed, Chemins.FICHIER_GENIE);
 
+    }
+
+    @Override
+    public int getMinReach() {
+        return 0;
+    }
+
+    @Override
+    public int getMaxReach() {
+        return 0;
     }
 
 }

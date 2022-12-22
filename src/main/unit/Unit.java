@@ -7,6 +7,9 @@ import main.unit.type.*;
 import main.weapon.Weapon;
 import main.weather.Weather;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public abstract class Unit {
 
     public enum Type {
@@ -71,23 +74,25 @@ public abstract class Unit {
 
     double health;
 
-    Weapon[] weapons;
-    int price; // statique / dans l'enum
-    int ammo;
+    private List<Weapon> weapons;
 
-    int fuel;
-    boolean hasPlayed;
-    final protected Player.Type owner;
-    // Idem que pour les dégats, on utilise un tableau ? Une liste ?
+    private int fuel;
+    private boolean hasPlayed;
+    private boolean hasMoved;
+    private boolean isAlive;
+    final private Player.Type owner;
+    final private Type type;
 
-    int[] movementTable;
-
-    public Unit(Player.Type owner) {
+    public Unit(Type type, Player.Type owner) {
 
         this.owner = owner;
         this.PM = 10;
         this.health = 10;
         this.hasPlayed = false;
+        this.hasMoved = false;
+        this.type = type;
+        this.weapons = new ArrayList<>();
+        this.isAlive = true;
 
     }
 

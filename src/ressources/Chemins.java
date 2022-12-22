@@ -1,7 +1,6 @@
 package ressources;
 
 import java.io.File;
-import java.util.ArrayList;
 
 /**
  * Classe qui gere les chemins d'acces des fichiers.

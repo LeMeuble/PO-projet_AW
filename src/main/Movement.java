@@ -5,7 +5,6 @@ import main.unit.Unit;
 import main.weather.Weather;
 import ressources.Chemins;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;

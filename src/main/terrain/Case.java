@@ -1,7 +1,6 @@
 package main.terrain;
 
 import main.Player;
-import main.terrain.type.*;
 import main.unit.Unit;
 
 public class Case {

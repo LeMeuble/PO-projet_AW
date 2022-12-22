@@ -1,12 +1,9 @@
 package main.unit.type;
 
 import main.Player;
-import main.terrain.Case;
 import main.terrain.Terrain;
 import main.unit.Motorized;
 import main.unit.OnFoot;
-import main.unit.Unit;
-import main.weapon.Weapon;
 import main.weather.Weather;
 import ressources.Chemins;
 
@@ -29,9 +26,10 @@ public class Artillery extends Motorized {
     // Idem que pour les dégats, on utilise un tableau ? Une liste ?
     int[] movementTable;
 
+
     public Artillery(Player.Type owner) {
 
-        super(owner);
+        super(Type.ARTILLERY, owner);
 
     }
 
@@ -66,9 +64,20 @@ public class Artillery extends Motorized {
     }
 
     @Override
-    public String getFile() {
+    public int getMovementCostTo(Terrain terrain, Weather weather) {
 
-        return Chemins.getCheminUnite(this.owner.getValue(), !this.hasPlayed, Chemins.FICHIER_ARTILLERIE);
+        OnFoot.MovementCost cost = OnFoot.MovementCost.fromTerrainAndWeather(Terrain.Type.fromTerrain(terrain), weather);
 
+        return cost == null ? Integer.MAX_VALUE : cost.getCost();
+
+    }
+
+    @Override
+    public int getMinReach() {
+        return MIN_REACH;
+    }
+    @Override
+    public int getMaxReach() {
+        return MAX_REACH;
     }
 }

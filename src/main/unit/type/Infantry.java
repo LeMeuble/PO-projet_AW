@@ -2,8 +2,7 @@ package main.unit.type;
 
 import main.Player;
 import main.unit.OnFoot;
-import main.unit.Unit;
-import main.weapon.Weapon;
+import main.weapon.type.LightMachineGun;
 import ressources.Chemins;
 
 public class Infantry extends OnFoot {
@@ -26,7 +25,8 @@ public class Infantry extends OnFoot {
     int[] movementTable;
 
     public Infantry(Player.Type owner){
-            super(owner);
+            super(Type.INFANTRY, owner);
+            this.addWeapon(new LightMachineGun());
     }
 
     /**
