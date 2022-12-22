@@ -28,4 +28,14 @@ public class Convoy extends Motorized {
         return 0;
     }
 
+    @Override
+    public int getMinReach() {
+        return 0;
+    }
+
+    @Override
+    public int getMaxReach() {
+        return 0;
+    }
+
 }
