@@ -1,11 +1,12 @@
 package ressources;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Scanner;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
 /** Cette classe gere le parseur de cartes. Nous vous conseillons de ne pas la modifier, sauf eventuellement si vous voulez ajouter une unite qui n'est pas dans la liste de l'enonce. Dans ce cas faites attention que le parseur reste compatible avec le format original.  */
 public class ParseurCartes {

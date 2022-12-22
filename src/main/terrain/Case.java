@@ -1,7 +1,6 @@
 package main.terrain;
 
 import main.Player;
-import main.terrain.type.*;
 import main.unit.Unit;
 
 public class Case {
@@ -91,6 +90,14 @@ public class Case {
 
     public String toString() {
         return "(" + this.x + ", " + this.y + ")";
+    }
+
+    public void garbageUnit() {
+
+        System.out.println(this.getUnit().isAlive());
+
+        if(this.hasUnit() && !this.getUnit().isAlive()) this.unit = null;
+
     }
 
 }

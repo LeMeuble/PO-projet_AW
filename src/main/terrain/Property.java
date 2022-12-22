@@ -39,4 +39,12 @@ public abstract class Property extends Terrain {
         return this.owner;
     }
 
+    public double getDefense() {
+        return this.defense;
+    }
+
+    public void setDefense(double defense) {
+        this.defense = defense;
+    }
+
 }

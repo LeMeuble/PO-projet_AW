@@ -2,63 +2,30 @@ package main.unit.type;
 
 import main.Player;
 import main.unit.Motorized;
-import main.unit.Unit;
-import main.weapon.Weapon;
 import ressources.Chemins;
 
 public class Convoy extends Motorized {
 
-    int maxPM = 6;
-    int PM;
-    int unitMovementType = 2;
-
-    int maxHealth = 10;
-    int health;
-
-    Weapon[] weapons;
-
-    int price = 5000;
-    int ammo;
-    int fuel;
-
-    boolean hasPlayed;
-    // Idem que pour les dégats, on utilise un tableau ? Une liste ?
-    int[] movementTable;
-
     public Convoy(Player.Type owner){
-        super(owner);
+        super(Type.CONVOY, owner);
     }
 
-    /**
-     * Calcule des degats infliges par cette unite
-     *
-     * @return
-     */
-    @Override
-    public double calculateDamage() {
-        return 0;
-    }
-
-    /**
-     * Retire un certain nombre de points de vie a cette unite
-     *
-     * @param amount Le nombre de points de vies a enlever
-     */
-    @Override
-    public void receiveDamage(int amount) {
-
-    }
-
-    @Override
-    public void inflictDamage(Unit target) {
-
-    }
 
     @Override
     public String getFile() {
 
-        return Chemins.getCheminUnite(this.owner.getValue(), !this.hasPlayed, Chemins.FICHIER_GENIE);
+        return Chemins.getCheminUnite(this.getOwner().getValue(), !this.hasPlayed(), Chemins.FICHIER_GENIE);
 
+    }
+
+    @Override
+    public int getMinReach() {
+        return 0;
+    }
+
+    @Override
+    public int getMaxReach() {
+        return 0;
     }
 
 }

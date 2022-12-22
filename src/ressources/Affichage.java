@@ -1,11 +1,9 @@
 package ressources;
 
-import java.awt.Color;
-
 import librairies.AssociationTouches;
 import librairies.StdDraw;
 
-import java.awt.Font;
+import java.awt.*;
 /**
 Classe qui gere l'affichage; vous pouvez la modifier si vous souhaiter changer l'affichage. 
  */

@@ -7,23 +7,30 @@ import main.unit.type.*;
 import main.weapon.Weapon;
 import main.weather.Weather;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public abstract class Unit {
 
     public enum Type {
 
-        INFANTRY("Infanterie"),
-        BAZOOKA("Bazooka"),
-        BOMBARDIER("Bombardier"),
-        CONVOY("Convoit"),
-        DCA("DCA"),
-        HELICOPTER("Helico"),
-        TANK("Tank"),
-        ARTILLERY("Artillerie");
+        INFANTRY("Infanterie", 1500, 3),
+        BAZOOKA("Bazooka", 3500, 2),
+        BOMBARDIER("Bombardier", 20000, 7),
+        CONVOY("Convoit", 5000, 6),
+        DCA("DCA", 6000, 6),
+        HELICOPTER("Helico", 12000, 6),
+        TANK("Tank", 7000, 6),
+        ARTILLERY("Artillerie", 6000, 5);
 
         private final String name;
+        private final int price;
+        private final int PM;
 
-        Type(String name) {
+        Type(String name, int price, int PM) {
             this.name = name;
+            this.price = price;
+            this.PM = PM;
         }
 
         public static Type fromName(String name) {
@@ -37,6 +44,10 @@ public abstract class Unit {
             }
             return null;
 
+        }
+
+        public int getPrice() {
+            return this.price;
         }
 
         public Unit newInstance(Player.Type p) {
@@ -64,30 +75,35 @@ public abstract class Unit {
 
         }
 
+        public int getDefaultPM() {
+            return this.PM;
+        }
     }
 
-    int maxPM;
-    int PM;
+    private int maxPM;
+    private int PM;
 
-    double health;
+    private double health;
 
-    Weapon[] weapons;
-    int price; // statique / dans l'enum
-    int ammo;
+    private List<Weapon> weapons;
 
-    int fuel;
-    boolean hasPlayed;
-    final protected Player.Type owner;
-    // Idem que pour les dégats, on utilise un tableau ? Une liste ?
+    private int fuel;
+    private boolean hasPlayed;
+    private boolean hasMoved;
+    private boolean isAlive;
+    final private Player.Type owner;
+    final private Type type;
 
-    int[] movementTable;
-
-    public Unit(Player.Type owner) {
+    public Unit(Type type, Player.Type owner) {
 
         this.owner = owner;
-        this.PM = 10;
+        this.PM = type.getDefaultPM();
         this.health = 10;
         this.hasPlayed = false;
+        this.hasMoved = false;
+        this.type = type;
+        this.weapons = new ArrayList<>();
+        this.isAlive = true;
 
     }
 
@@ -96,26 +112,11 @@ public abstract class Unit {
 
     public abstract int getMovementCostTo(Terrain terrain, Weather weather);
 
-    /**
-     * Calcule des degats infliges par cette unite
-     * @return
-     */
-    public abstract double calculateDamage();
-
-    /**
-     * Retire un certain nombre de points de vie a cette unite
-     * @param amount Le nombre de points de vies a enlever
-     */
-    public abstract void receiveDamage(int amount);
-
-    public abstract void inflictDamage(Unit target);
 
     public abstract String getFile();
 
     public String toString() {
-
-        return this.getClass().getSimpleName();
-
+        return this.type.name.toLowerCase();
     }
 
     public Player.Type getOwner() {
@@ -126,6 +127,106 @@ public abstract class Unit {
 
     public int getPM() {
         return this.PM;
+    }
+
+    public void addWeapon(Weapon w) {
+        this.weapons.add(w);
+    }
+
+    /**
+     * Retire un certain nombre de points de vie a cette unite
+     * @param amount Le nombre de points de vies a enlever
+     */
+    public void receiveDamage(double amount) {
+        this.health -= amount;
+        if(this.health <= 0) {
+            this.isAlive = false;
+            System.out.println("ded");
+        }
+    }
+
+    /**
+     * Calcule des degats infliges par cette unite
+     * @return
+     */
+    public double calculateDamage(float multiplier) {
+        return multiplier * Math.ceil(this.health);
+    }
+
+    public void attack(Unit target) {
+
+        Type targetType = target.getType();
+        Weapon bestWeapon = this.bestWeaponAgainst(targetType);
+
+        target.receiveDamage(calculateDamage(bestWeapon.getMultiplierOn(targetType)));
+
+    }
+
+    public Weapon bestWeaponAgainst(Unit.Type unitType) {
+
+        Weapon bestWeapon = null;
+
+        for(Weapon w : this.weapons) {
+
+            if(bestWeapon == null && w.canBeUsedOn(unitType)) {
+                bestWeapon = w;
+            }
+            if(w.canBeUsedOn(unitType) && w.getMultiplierOn(unitType) > bestWeapon.getMultiplierOn(unitType)) {
+                bestWeapon = w;
+            }
+
+        }
+        return bestWeapon;
+    }
+
+    public Type getType() {
+        return this.type;
+    }
+
+    public boolean hasPlayed() {
+        return this.hasPlayed;
+    }
+
+    public boolean hasMoved() {
+        return this.hasMoved;
+    }
+
+    public double getHealth() {
+        return this.health;
+    }
+
+    public void setHealth(int health) {
+        this.health = health;
+    }
+
+    public int getFuel() {
+        return this.fuel;
+    }
+
+    public void setFuel(int fuel) {
+        this.fuel = fuel;
+    }
+
+    public abstract int getMinReach();
+    public abstract int getMaxReach();
+
+    public boolean isAlive() {
+        return this.isAlive;
+    }
+
+    public void setPlayed(boolean state) {
+        this.hasPlayed = state;
+    }
+    public void setMoved(boolean state) {
+        this.hasMoved = state;
+    }
+
+    public void reset() {
+
+        this.hasMoved = false;
+        this.hasPlayed = false;
+        this.PM = this.type.getDefaultPM();
+
     }
 
 }

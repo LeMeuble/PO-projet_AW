@@ -55,9 +55,9 @@ public abstract class Motorized extends Unit {
 
     }
 
-    public Motorized(Player.Type owner) {
+    public Motorized(Unit.Type unitType, Player.Type owner) {
 
-        super(owner);
+        super(unitType, owner);
 
     }
 

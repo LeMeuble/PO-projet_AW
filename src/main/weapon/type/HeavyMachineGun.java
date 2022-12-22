@@ -27,12 +27,42 @@ public class HeavyMachineGun extends Weapon {
 
         }
 
+        public static DamageMultiplier fromUnit(Unit.Type unit) {
+
+            for (DamageMultiplier d : DamageMultiplier.values()) {
+
+                if(d.unit == unit) {
+                    return d;
+                }
+
+            }
+            return null;
+
+        }
+
+        public float getMultiplier() {
+            return this.multiplier;
+        }
+
     }
 
     public HeavyMachineGun() {
 
         super(HeavyMachineGun.DEFAULT_AMMO);
 
+    }
+
+    @Override
+    public boolean canBeUsedOn(Unit.Type unitType) {
+
+        return this.getMultiplierOn(unitType) != 0.0f;
+
+    }
+
+    @Override
+    public float getMultiplierOn(Unit.Type unitType) {
+        DamageMultiplier damage = DamageMultiplier.fromUnit(unitType);
+        return damage != null ? damage.getMultiplier() : 0.0f;
     }
 
 }

@@ -7,6 +7,7 @@ import librairies.AssociationTouches;
 import librairies.StdDraw;
 import main.terrain.Case;
 import main.terrain.Grid;
+import main.unit.Unit;
 import ressources.Affichage;
 import ressources.Config;
 import ressources.ParseurCartes;
@@ -23,6 +24,8 @@ public class Jeu {
     private final Grid grid;
 
     private Player.Type currentPlayer;
+
+    private Unit currentUnit;
 
     private final Map<Player.Type, Player> players;
 
@@ -167,12 +170,11 @@ public class Jeu {
 
     public void updateMovement(Case newCase) {
 
-        if(this.movement == null) {
+        if (this.movement == null) {
 
             this.movement = new Movement(newCase);
 
-        }
-        else {
+        } else {
             this.movement.update(newCase);
         }
 
@@ -185,10 +187,9 @@ public class Jeu {
     }
 
     public boolean isMovementEmpty() {
-        if(this.movement == null) {
+        if (this.movement == null) {
             return true;
-        }
-        else {
+        } else {
             return this.movement.isEmpty();
         }
 
@@ -214,14 +215,21 @@ public class Jeu {
 
     public void endTurn() {
 
-        if(this.currentPlayer == Player.Type.RED) {
+        if (this.currentPlayer == Player.Type.RED) {
             this.currentPlayer = Player.Type.BLUE;
-        }
-        else {
+        } else {
             this.currentPlayer = Player.Type.RED;
         }
 
     }
 
+    public Unit getCurrentUnit() {
+        return currentUnit;
+    }
+
+    public void setCurrentUnit(Unit currentUnit) {
+        this.currentUnit = currentUnit;
+
+    }
 }
 

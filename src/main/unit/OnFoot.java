@@ -7,12 +7,15 @@ import main.weather.Weather;
 
 public abstract class OnFoot extends Unit {
 
+    public static final int MIN_REACH = 1;
+    public static final int MAX_REACH = 1;
+
     public enum MovementCost {
 
         ON_PLAIN_CLEAR(Terrain.Type.PLAIN, Weather.CLEAR, 1),
-        ON_FOREST_CLEAR(Terrain.Type.PLAIN, Weather.CLEAR, 1),
-        ON_MOUNTAIN_CLEAR(Terrain.Type.PLAIN, Weather.CLEAR, 2),
-        ON_WATER_CLEAR(Terrain.Type.PLAIN, Weather.CLEAR, Integer.MAX_VALUE),
+        ON_FOREST_CLEAR(Terrain.Type.FOREST, Weather.CLEAR, 1),
+        ON_MOUNTAIN_CLEAR(Terrain.Type.MOUNTAIN, Weather.CLEAR, 2),
+        ON_WATER_CLEAR(Terrain.Type.WATER, Weather.CLEAR, Integer.MAX_VALUE),
         ON_HQ_CLEAR(Terrain.Type.HQ, Weather.CLEAR, 1),
         ON_CITY_CLEAR(Terrain.Type.CITY, Weather.CLEAR, 1),
         ON_FACTORY_CLEAR(Terrain.Type.FACTORY, Weather.CLEAR, 1);
@@ -54,9 +57,9 @@ public abstract class OnFoot extends Unit {
     }
 
 
-    public OnFoot(Player.Type owner) {
+    public OnFoot(Unit.Type unitType, Player.Type owner) {
 
-        super(owner);
+        super(unitType, owner);
 
     }
 
@@ -78,5 +81,16 @@ public abstract class OnFoot extends Unit {
         return cost == null ? Integer.MAX_VALUE : cost.getCost();
 
     }
+
+    @Override
+    public int getMinReach() {
+        return MIN_REACH;
+    }
+
+    @Override
+    public int getMaxReach() {
+        return MAX_REACH;
+    }
+
 
 }

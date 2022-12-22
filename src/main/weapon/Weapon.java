@@ -2,8 +2,6 @@ package main.weapon;
 
 import main.unit.Unit;
 
-import java.util.HashMap;
-
 public abstract class Weapon {
 
     private int ammo;
@@ -21,5 +19,8 @@ public abstract class Weapon {
     public void setAmmo(int ammo) {
         this.ammo = ammo;
     }
+
+    public abstract boolean canBeUsedOn(Unit.Type unitType);
+    public abstract float getMultiplierOn(Unit.Type unitType);
 
 }

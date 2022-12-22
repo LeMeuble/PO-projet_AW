@@ -53,9 +53,9 @@ public abstract class Flying extends Unit {
 
     }
 
-    public Flying(Player.Type owner) {
+    public Flying(Unit.Type unitType, Player.Type owner) {
 
-        super(owner);
+        super(unitType, owner);
 
     }
 

@@ -4,12 +4,13 @@ import librairies.AssociationTouches;
 import main.terrain.Case;
 import main.terrain.Grid;
 import main.terrain.Property;
-import main.terrain.Terrain;
 import main.terrain.type.Factory;
-import main.unit.OnFoot;
+import main.unit.Flying;
 import main.unit.Unit;
 import main.weather.Weather;
 import ressources.Affichage;
+
+import java.util.List;
 
 public class KeystrokeHandler {
 
@@ -51,6 +52,7 @@ public class KeystrokeHandler {
 
         switch (playerState) {
 
+            case SELECTING_TARGET:
             case SELECTING:
                 this.game.getCursor().up();
                 return true;
@@ -77,6 +79,7 @@ public class KeystrokeHandler {
 
         switch (playerState) {
 
+            case SELECTING_TARGET:
             case SELECTING:
                 this.game.getCursor().down();
                 return true;
@@ -102,6 +105,7 @@ public class KeystrokeHandler {
 
         switch (playerState) {
 
+            case SELECTING_TARGET:
             case SELECTING:
                 this.game.getCursor().left();
                 return true;
@@ -126,6 +130,7 @@ public class KeystrokeHandler {
 
         switch (playerState) {
 
+            case SELECTING_TARGET:
             case SELECTING:
                 game.getCursor().right();
                 return true;
@@ -150,32 +155,47 @@ public class KeystrokeHandler {
 
         Grid grid = game.getGrid();
 
+        int x = game.getCursor().getCurrentX();
+        int y = game.getCursor().getCurrentY();
+
+        Case c = grid.getCase(x, y);
+
         switch (playerState) {
 
             case SELECTING:
 
-                int x = game.getCursor().getCurrentX();
-                int y = game.getCursor().getCurrentY();
+                if(c.hasUnit() && c.getUnit().getOwner() == game.getCurrentPlayer() && !c.getUnit().hasPlayed()) {
 
-                Case c = grid.getCase(x, y);
-
-                if(c.hasUnit() && c.getUnit().getOwner() == game.getCurrentPlayer()) {
-
+                    Unit unit = c.getUnit();
                     int result = Affichage.popup("Quelle action voulez faire?", new String[]{"Déplacement", "Attaque"}, true, 0);
 
-                    if(result == 0) {
-
-                        System.out.print("There is a unit here : ");
-                        System.out.println(game.getGrid().getCase(x, y).getUnit());
-                        // game.setPlayerState(PlayerState.SELECTING_UNIT_ACTION);
-                        game.setPlayerState(PlayerState.MOVING_UNIT); // C'est la pour du debug
-
+                    if(result == 0 && !c.getUnit().hasMoved()) {
+                        game.setPlayerState(PlayerState.MOVING_UNIT);
                         this.game.updateMovement(grid.getCase(x, y));
-                        
                     } else if (result == 1) {
 
-                    }
+                        List<Case> cases = this.game.getGrid().getCasesAround(x, y, unit.getMinReach(), unit.getMaxReach());
 
+                        boolean hasUnit = false;
+
+                        for(Case ca : cases) {
+                            if(ca.hasUnit() && ca.getUnit().getOwner() != game.getCurrentPlayer()) {
+                                hasUnit = true;
+                                break;
+                            }
+
+                        }
+
+                        if(!hasUnit) {
+                            System.out.println("no unit");
+                            return false;
+                        }
+
+                        this.game.setCurrentUnit(c.getUnit());
+                        this.game.setPlayerState(PlayerState.SELECTING_TARGET);
+                        System.out.println("selecting target unit");
+
+                    }
 
                     return true;
 
@@ -195,10 +215,26 @@ public class KeystrokeHandler {
 
                 }
 
+            case SELECTING_TARGET:
+
+               if(c.hasUnit() && c.getUnit().getOwner() != game.getCurrentPlayer()) {
+
+                   game.getCurrentUnit().attack(c.getUnit());
+                   game.getCurrentUnit().setPlayed(true);
+                   game.setPlayerState(PlayerState.SELECTING);
+                   c.garbageUnit();
+
+               }
+
+               return true;
 
             case SELECTING_UNIT_ACTION:
+
+                int result = Affichage.popup("Quelle action voulez faire?", new String[]{"Déplacement", "Attaque"}, true, 0);
+
                 System.out.println("You are selecting an action");
                 game.setPlayerState(PlayerState.SELECTING_UNIT_ACTION);
+
                 return true;
 
             case FACTORY_ACTION:
@@ -220,6 +256,7 @@ public class KeystrokeHandler {
 
                         this.game.setPlayerState(PlayerState.SELECTING);
                         this.game.resetMovement();
+                        destination.getUnit().setMoved(true);
                         return true;
 
                     }
@@ -243,6 +280,11 @@ public class KeystrokeHandler {
         switch (playerState) {
 
             case SELECTING:
+
+                System.out.println(this.game.getCurrentPlayer());
+                this.game.setCurrentPlayer(this.game.getCurrentPlayer() == Player.Type.RED ? Player.Type.BLUE : Player.Type.RED);
+                this.game.getGrid().newTurn();
+                System.out.println(this.game.getCurrentPlayer());
                 return true;
 
             case SELECTING_UNIT_ACTION:
@@ -281,7 +323,7 @@ public class KeystrokeHandler {
         int x = game.getCursor().getCurrentX();
         int y = game.getCursor().getCurrentY();
 
-        movement.run(); // Move the cursor in the direction
+        movement.run(); // Move the cursor in the direction (simulate)
 
         int newY = game.getCursor().getCurrentY();
         int newX = game.getCursor().getCurrentX();
@@ -292,13 +334,18 @@ public class KeystrokeHandler {
         Unit currentUnit = this.game.getMovementHead().getUnit();
 
         if(this.game.isMovementEmpty()) return;
-        if(!c.hasUnit() && currentUnit.canMoveTo(c, Weather.CLEAR)) {
 
-            Movement move = this.game.getMovement();
+        if(!c.hasUnit() || currentUnit instanceof Flying) {
 
-            System.out.println(move.getCost(currentUnit, Weather.CLEAR) + "   " + currentUnit.getPM());
+            if(currentUnit.canMoveTo(c, Weather.CLEAR)) {
 
-            if(move.getCost(currentUnit, Weather.CLEAR) <= currentUnit.getPM()) return;
+                Movement move = this.game.getMovement();
+
+                System.out.println(move.getCost(currentUnit, Weather.CLEAR) + "   " + currentUnit.getPM());
+
+                if(move.getCost(currentUnit, Weather.CLEAR) <= currentUnit.getPM()) return;
+
+            }
 
         }
 
