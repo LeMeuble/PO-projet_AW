@@ -25,6 +25,11 @@ public class Grid {
 
     }
 
+    /**
+     * Transforme un tableau 2D de String en un tableau 2D de Cases correspondantes
+     * @param grid Un tableau 2D de String, representant une carte de jeu
+     * @return Un tableau 2D de Cases, la grille
+     */
     public Case[][] parse(String[][] grid) {
 
         Case[][] parsed = new Case[grid.length][grid[0].length];
@@ -40,12 +45,26 @@ public class Grid {
 
     }
 
+    /**
+     * Renvoie la Case correspondante pour des coordonnees x et y
+     * @param x La coordonnee x sur la carte
+     * @param y La coordonnee y sur la carte
+     * @return La Case presente en x:y
+     */
     public Case getCase(int x, int y) {
 
         return grid[y][x];
 
     }
 
+    /**
+     * Renvoie les cases presentes dans un cercle autour d'une coordonnee
+     * @param x La coordonnee x sur la carte
+     * @param y La coordonnee y sur la carte
+     * @param minRadius Le rayon minimum du cercle
+     * @param maxRadius La rayon maximum du cercle
+     * @return Une liste doublement chainee de Cases
+     */
     public List<Case> getCasesAround(int x, int y, int minRadius, int maxRadius) {
 
         List<Case> cases = new LinkedList<>();
@@ -80,6 +99,9 @@ public class Grid {
 
     }
 
+    /**
+     * Reinitialise les valeurs de toutes les unitees presentes sur la carte
+     */
     public void newTurn() {
 
         for(int i=0;i<grid.length;i++) {
