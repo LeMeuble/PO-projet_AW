@@ -93,7 +93,11 @@ public abstract class Unit {
     private boolean hasMoved;
     private boolean isAlive;
 
-
+    /**
+     * Constructeur d'une unite
+     * Initialise toutes les valeurs par defaut,
+     * @param owner
+     */
     public Unit(Player.Type owner) {
 
         this.owner = owner;

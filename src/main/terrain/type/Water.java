@@ -4,6 +4,12 @@ import main.terrain.AnimatedTerrain;
 import main.weather.Weather;
 import ressources.PathUtil;
 
+/**
+ * Classe representant de l'eau
+ *
+ * @author Tristan LECONTE--DENIS
+ * @author GRAVOT Lucien
+ */
 public class Water extends AnimatedTerrain {
 
     public String getFile(Weather weather, boolean isFoggy, int frame) {
