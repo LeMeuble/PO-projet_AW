@@ -5,8 +5,18 @@ import main.terrain.Property;
 import main.weather.Weather;
 import ressources.PathUtil;
 
+/**
+ * Classe representant une ville
+ *
+ * @author Tristan LECONTE--DENIS
+ * @author GRAVOT Lucien
+ */
 public class City extends Property {
 
+    /**
+     * Constructeur de la ville
+     * @param owner Le joueur proprietaire de la ville
+     */
     public City(Player.Type owner) {
         super(owner);
     }

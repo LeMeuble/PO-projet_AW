@@ -34,5 +34,4 @@ public class Bomber extends Flying {
         return PathUtil.getUnitPath(this.getOwner(), Type.TANK, Animation.IDLE, !this.hasPlayed(), this.getFrame());
     }
 
-
 }

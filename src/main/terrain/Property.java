@@ -40,10 +40,18 @@ public abstract class Property extends Terrain {
         return this.owner;
     }
 
+    /**
+     * Recuperer la defense du terrain
+     * @return Defense du terrain
+     */
     public double getDefense() {
         return this.defense;
     }
 
+    /**
+     * Definit la defense du terrain
+     * @param defense La valeur de la defense
+     */
     public void setDefense(double defense) {
         this.defense = defense;
     }

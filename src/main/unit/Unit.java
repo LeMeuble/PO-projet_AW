@@ -9,8 +9,19 @@ import main.weather.Weather;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Classe abstraite representant une unite
+ *
+ * @author Tristan LECONTE--DENIS
+ * @author GRAVOT Lucien
+ */
 public abstract class Unit {
 
+
+    /**
+     * Unumeration de tous les types d'unites possibles
+     * Contient leur nom en String, leur prix et leurs points de mouvements
+     */
     public enum Type {
 
         INFANTRY('i', 1500, 3),
@@ -93,7 +104,11 @@ public abstract class Unit {
     private boolean hasMoved;
     private boolean isAlive;
 
-
+    /**
+     * Constructeur d'une unite
+     * Initialise toutes les valeurs par defaut,
+     * @param owner
+     */
     public Unit(Player.Type owner) {
 
         this.owner = owner;

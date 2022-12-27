@@ -5,8 +5,18 @@ import main.terrain.Property;
 import main.weather.Weather;
 import ressources.PathUtil;
 
+/**
+ * Classe representant un QG
+ *
+ * @author Tristan LECONTE--DENIS
+ * @author GRAVOT Lucien
+ */
 public class HQ extends Property {
 
+    /**
+     * Constructeur du QG
+     * @param owner Le joueur proprietaire du QG
+     */
     public HQ(Player.Type owner) {
         super(owner);
     }
