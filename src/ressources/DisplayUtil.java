@@ -8,18 +8,29 @@ import static ressources.Config.BOTTOM_MENU_MARGIN;
 
 public class DisplayUtil {
 
-
+    /**
+     * Get the x and y margin offsets in pixel depending on
+     * the current window size and the given width and height
+     * of the grid.
+     *
+     * @param gridWidth The width of the grid in case units
+     * @param gridHeight The height of the grid in case units
+     * @return The x and y margin offsets in pixel in an array
+     *         First element is the x offset, second is the y offset
+     *         x : offset if the grid is smaller than the window width otherwise 0
+     *         y : offset if the grid is smaller than the window height otherwise 0
+     */
     private static double[] getCenteringOffset(int gridWidth, int gridHeight) {
 
-        double xOffset = 0;
+        double xPixelOffset = 0;
         if (gridWidth < Config.MAP_COLUMN_COUNT)
-            xOffset += (Config.MAP_COLUMN_COUNT - gridWidth) * (double) Config.PIXEL_PER_CASE;
+            xPixelOffset += (Config.MAP_COLUMN_COUNT - gridWidth) * (double) Config.PIXEL_PER_CASE;
 
-        double yOffset = 0;
+        double yPixelOffset = 0;
         if (gridHeight < Config.MAP_COLUMN_COUNT)
-            yOffset += (Config.MAP_COLUMN_COUNT - gridHeight) * (double) Config.PIXEL_PER_CASE;
+            yPixelOffset += (Config.MAP_COLUMN_COUNT - gridHeight) * (double) Config.PIXEL_PER_CASE;
 
-        return new double[]{xOffset / 2, yOffset / 2};
+        return new double[]{xPixelOffset / 2, yPixelOffset / 2};
 
     }
 
@@ -65,31 +76,71 @@ public class DisplayUtil {
 
     }
 
+    /**
+     * Draw the game cursor in a case
+     * @param gridX The x position in the grid
+     * @param gridY The y position in the grid
+     * @param gridWidth The width of the grid
+     * @param gridHeight The height of the grid
+     */
     public static void drawCursor(int gridX, int gridY, int gridWidth, int gridHeight) {
 
         drawPictureInCase(gridX, gridY, gridWidth, gridHeight, 1, 1, PathUtil.getCursorPath());
 
     }
 
-    public static void drawDebugInCase(double x, double y, Color color) {
 
-        double centerX = x * Config.PIXEL_PER_CASE + (double) Config.PIXEL_PER_CASE / 2;
-        double centerY = y * Config.PIXEL_PER_CASE + (double) Config.PIXEL_PER_CASE / 2 + BOTTOM_MENU_MARGIN;
+    /**
+     * Get the center x of a case in pixel using the grid
+     * @param gridX The X position in the grid
+     * @param gridWidth The width of the grid
+     * @return The center X of the case in pixel on the screen
+     */
+    public static double getCenterX(int gridX, int gridWidth) {
 
-        StdDraw.setPenColor(color);
-        StdDraw.rectangle(centerX, centerY, 4, 4);
-
-    }
-
-    public static void drawPicture(double x, double y, String file) {
-
-        StdDraw.picture(x, y, file);
+        double[] offset = getCenteringOffset(gridWidth, 0);
+        return gridX * Config.PIXEL_PER_CASE + (double) Config.PIXEL_PER_CASE / 2 + offset[0];
 
     }
 
-    public static void drawPicture(double x, double y, String file, int scaledWidth, int scaledHeight) {
+    /**
+     * Get the center Y of a case in pixel using the grid
+     * @param gridY The y position in the grid
+     * @param gridHeight The height of the grid
+     * @return The center Y of the case in pixel on the screen
+     */
+    public static double getCenterY(int gridY, int gridHeight) {
 
-        StdDraw.picture(x, y, file, scaledWidth, scaledHeight);
+        double[] offset = getCenteringOffset(0, gridHeight);
+        return gridY * Config.PIXEL_PER_CASE + (double) Config.PIXEL_PER_CASE / 2 + BOTTOM_MENU_MARGIN + offset[1];
+
+    }
+
+    /**
+     * Draw a picture using pixel position and default size
+     *
+     * @param pixelX The x position in pixel
+     * @param pixelY The y position in pixel
+     * @param file The path to the picture file (relative to the project)
+     */
+    public static void drawPicture(double pixelX, double pixelY, String file) {
+
+        StdDraw.picture(pixelX, pixelY, file);
+
+    }
+
+    /**
+     * Draw a picture using pixel position and pixel size
+     *
+     * @param pixelX The x position in pixel
+     * @param pixelY The y position in pixel
+     * @param file The path to the picture file (relative to the project)
+     * @param scaledWidth The width of the picture in pixel
+     * @param scaledHeight The height of the picture in pixel
+     */
+    public static void drawPicture(double pixelX, double pixelY, String file, int scaledWidth, int scaledHeight) {
+
+        StdDraw.picture(pixelX, pixelY, file, scaledWidth, scaledHeight);
 
     }
 

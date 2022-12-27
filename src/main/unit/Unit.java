@@ -18,6 +18,8 @@ import java.util.List;
  */
 public abstract class Unit {
 
+    private static final double HELICOPTER_SNOWY_MOVEMENT_MULTIPLIER = 2/3d;
+
 
     /**
      * Unumeration de tous les types d'unites possibles
@@ -144,7 +146,12 @@ public abstract class Unit {
         }
     }
 
-    public int getMovementPoint() { // movement could be static because never change
+    public int getMovementPoint(Weather weather) {
+
+        if(this instanceof Flying && weather == Weather.SNOWY) {
+            return (int) (this.getType().getMovementPoint() * HELICOPTER_SNOWY_MOVEMENT_MULTIPLIER);
+        }
+
         return this.getType().getMovementPoint();
     }
 

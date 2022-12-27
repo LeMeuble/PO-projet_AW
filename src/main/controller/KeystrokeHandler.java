@@ -285,8 +285,8 @@ public class KeystrokeHandler {
                         this.instance.setGameState(GameState.PLAYING_SELECTING_UNIT_ACTION);
 
                         UnitActionMenu unitActionMenu = new UnitActionMenu();
-                        unitActionMenu.addOption("attack", "Attaquer", true);
                         unitActionMenu.addOption("move", "Déplacer", !currentCase.getUnit().hasMoved());
+                        unitActionMenu.addOption("attack", "Attaquer", true);
                         this.instance.getMenuManager().addMenu(Menu.Model.UNIT_ACTION_MENU, unitActionMenu);
 
                     } else System.out.println("Warn: Unit not owned by current player");
@@ -303,7 +303,7 @@ public class KeystrokeHandler {
 
                     } else System.out.println("Warn: This is not your factory");
 
-                }
+                } else System.out.println("Warn: There is nothing to do here");
 
                 return true;
 
@@ -364,30 +364,6 @@ public class KeystrokeHandler {
                 //Todo: check si on peut s'arreter ici
 
                 return true;
-
-//                if (c.getTerrain() instanceof Property && ((Property) c.getTerrain()).getOwner() == instance.getCurrentPlayer().getType()) {
-//
-//                    System.out.println("This is a propriety belonging to you");
-//                    return true;
-//
-//                } else {
-//
-//                    return true;
-//
-//                }
-//
-//
-//            case PLAYING_SELECTING_UNIT_ACTION:
-//                System.out.println("You are selecting an action");
-//                instance.setGameState(GameState.PLAYING_SELECTING_UNIT_ACTION);
-//                return true;
-//
-//            case PLAYING_SELECTING_FACTORY_ACTION:
-//                System.out.println("You are selecting a factory action");
-//                instance.setGameState(GameState.PLAYING_SELECTING_FACTORY_ACTION);
-//                return true;
-//
-
         }
 
         return false;
@@ -473,15 +449,16 @@ public class KeystrokeHandler {
         if (game.getMovement().isEmpty()) return;
 
         // Ne peut pas passer au-dessus d'une unite sauf s'il s'agit d'une unite volante
-        if (currentUnit.canMoveTo(destination.getTerrain(), Weather.CLEAR)) {
+        if (currentUnit.canMoveTo(destination.getTerrain(), game.getWeather())) {
+
             Terrain terrain = destination.getTerrain();
 
             if(!(terrain instanceof Property) || ((Property) terrain).getOwner() == game.getCurrentPlayer().getType()) {
 
-                if (move.getCost(currentUnit, Weather.CLEAR) <= currentUnit.getMovementPoint()) {
+                if (move.getCost(currentUnit, game.getWeather()) <= currentUnit.getMovementPoint(game.getWeather())) {
+
                     if (!destination.hasUnit() || currentUnit instanceof Flying) {
 
-                        // Si le cout est superieur au point de mouvement de l'unite on annule le mouvement
                         game.getView().adjustOffset();
                         return;
                     }
@@ -491,6 +468,8 @@ public class KeystrokeHandler {
             }
 
         }
+
+        // Annule le mouvement si une des conditions n'est pas respectee
         game.getCursor().setCurrentX(x);
         game.getCursor().setCurrentY(y);
         game.getMovement().goBack();

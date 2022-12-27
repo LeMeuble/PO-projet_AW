@@ -139,7 +139,8 @@ public class Movement {
 
     public Case getDestination() {
 
-        return ((LinkedList<Case>) cases).peekLast();
+        if (this.cases.isEmpty()) return this.startingPoint;
+        return this.cases.get(this.cases.size() - 1);
 
     }
 

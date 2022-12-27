@@ -24,6 +24,7 @@ public class PathUtil {
     public static final String PICTURE_TROOPS_FOLDER = PICTURES_FOLDER + SEP + "troops";
     public static final String PICTURE_UI_FOLDER = PICTURES_FOLDER + SEP + "ui";
     public static final String PICTURE_UI_BACKGROUND_FOLDER = PICTURE_UI_FOLDER + SEP + "backgrounds";
+    public static final String PICTURE_UI_OVERLAY_FOLDER = PICTURE_UI_FOLDER + SEP + "overlay";
 
 
 
@@ -74,6 +75,12 @@ public class PathUtil {
     public static String getCursorPath() {
 
         return PICTURE_UI_FOLDER + SEP + "cursor.png";
+
+    }
+
+    public static String getOverlayPath(Player.Type player) {
+
+        return PICTURE_UI_OVERLAY_FOLDER + SEP + player.getName() + ".png";
 
     }
 }

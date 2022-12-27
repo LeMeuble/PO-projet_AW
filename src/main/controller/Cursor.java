@@ -61,12 +61,9 @@ public class Cursor {
 
     public boolean right() {
 
-        System.out.println("Cursor before : " + this.currentX + " " + this.currentY);
-
         if(this.currentX < this.maxWidth - 1) {
             this.currentX++;
             this.needsRender = true;
-            System.out.println("Cursor after : " + this.currentX + " " + this.currentY);
             return true;
         }
         return false;

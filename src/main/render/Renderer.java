@@ -10,9 +10,9 @@ import main.menu.AnimatedMenu;
 import main.menu.Menu;
 import main.menu.MenuManager;
 import main.menu.model.MainMenu;
+import main.weather.Weather;
 import ressources.Config;
 import ressources.DisplayUtil;
-import sun.applet.Main;
 
 import java.awt.*;
 
@@ -51,11 +51,11 @@ public class Renderer {
             switch (gameState) {
                 case PLAYING_SELECTING_UNIT_ACTION:
                 case PLAYING_SELECTING:
-                    copyBuffer = this.renderMap(game, game.getCursor().needsRefresh());
+                    copyBuffer = this.renderMap(gameState, game, game.getCursor().needsRefresh());
                     copyBuffer |= this.renderCursor(game, copyBuffer);
                     break;
                 case PLAYING_MOVING_UNIT:
-                    copyBuffer = this.renderMap(game, game.getCursor().needsRefresh());
+                    copyBuffer = this.renderMap(gameState, game, game.getCursor().needsRefresh());
                     copyBuffer |= this.renderMovement(game, copyBuffer);
                     copyBuffer |= this.renderCursor(game, copyBuffer);
                     break;
@@ -81,7 +81,8 @@ public class Renderer {
 
             if (menu instanceof AnimatedMenu) {
 
-                if(menu instanceof MainMenu) System.out.println("Rendering main menu: " + menu.isVisible() + " " + menu.needsRefresh() + "" + menu.getClass());
+                if (menu instanceof MainMenu)
+                    System.out.println("Rendering main menu: " + menu.isVisible() + " " + menu.needsRefresh() + "" + menu.getClass());
 
                 AnimatedMenu animatedMenu = (AnimatedMenu) menu;
 
@@ -124,7 +125,7 @@ public class Renderer {
      * @param forceRender Forcer le rendu
      * @return True s'il est necessaire de mettre a jour l'ecran
      */
-    private boolean renderMap(Game game, boolean forceRender) {
+    private boolean renderMap(GameState gameState, Game game, boolean forceRender) {
 
         if (game == null) return false;
 
@@ -136,9 +137,18 @@ public class Renderer {
 
         if (terrainNeedsRefresh || unitNeedsRefresh || forceRender) {
 
-            for (int i = 0; i < Math.min(game.getWidth(), Config.MAP_COLUMN_COUNT); i++) {
-                for (int j = Math.min(game.getWidth(), Config.MAP_ROW_COUNT) - 1; j >= 0; j--) {
-                    game.getView().getCase(i, j).render(i, j, game, this.terrainClockSync, this.unitClockSync);
+            final int mapWidth = game.getWidth();
+            final int mapHeight = game.getHeight();
+            final Weather weather = game.getWeather();
+            final GameView gameView = game.getView();
+
+            final int maxIterationX = Math.min(mapWidth, Config.MAP_COLUMN_COUNT);
+            final int maxIterationY = Math.min(mapHeight, Config.MAP_ROW_COUNT) - 1;
+
+            for (int i = 0; i < maxIterationX; i++) {
+                for (int j = maxIterationY; j >= 0; j--) {
+                    gameView.getCase(i, j).renderTerrain(i, j, mapWidth, mapHeight, weather, this.terrainClockSync);
+                    gameView.getCase(i, j).renderUnit(i, j, mapWidth, mapHeight, this.unitClockSync);
                 }
             }
 
@@ -168,19 +178,20 @@ public class Renderer {
 
         if (game.getMovement().needsRefresh() || forceRender) {
 
-            Movement movement = game.getMovement();
+            final Movement movement = game.getMovement();
+            final GameView gameView = game.getView();
+            final int mapWidth = game.getWidth();
+            final int mapHeight = game.getHeight();
 
             // Rendre la fleche
             for (Movement.Arrow arrow : movement.toDirectionalArrows()) {
 
                 Case c = arrow.getCase();
 
-                if (game.getView().isVisible(c)) {
+                if (gameView.isVisible(c)) {
 
-                    int x = game.getView().offsetX(c.getX()); // Coordonnees reelles de la case -> Coordonnees de l'ecran
-                    int y = game.getView().offsetY(c.getY());
-
-                    DisplayUtil.drawPictureInCase(x, y, game.getWidth(), game.getHeight(), arrow.getPath(game.getCurrentPlayer().getType()));
+                    int x = gameView.offsetX(c.getX()); // Coordonnees reelles de la case -> Coordonnees de l'ecran
+                    int y = gameView.offsetY(c.getY());
 
                 }
 
@@ -189,10 +200,10 @@ public class Renderer {
             // Rendre l'unite selectionne au-dessus de la fleche
             if (game.getView().isVisible(movement.getSource())) {
 
-                int x = game.getView().offsetX(movement.getSource().getX());
-                int y = game.getView().offsetY(movement.getSource().getY());
+                int x = gameView.offsetX(movement.getSource().getX());
+                int y = gameView.offsetY(movement.getSource().getY());
 
-                game.getView().getCase(x, y).renderUnit(x, y, game, this.terrainClockSync, this.unitClockSync);
+                gameView.getCase(x, y).renderUnit(x, y, mapWidth, mapHeight, this.unitClockSync);
 
             }
 

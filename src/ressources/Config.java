@@ -17,16 +17,16 @@ public final class Config {
     /*
     Config lie aux animations
     */
-    // Menu principal
+    // Animation : Menu principal
     public static final int MAIN_MENU_ANIMATION_FRAME_COUNT = 2; // Nombre d'images par animation
     public static final int MAIN_MENU_ANIMATION_FRAME_DURATION = 500; // Nombre d'images par animation
     public static final int MAIN_MENU_BACKGROUND_VARIATION_COUNT = 29; // Nombre d'images possible
 
-    // Rendu de la carte
+    // Animation : Rendu de la carte
     public static final int MAP_ANIMATION_FRAME_COUNT = 4; // Nombre d'images par animation
     public static final int MAP_ANIMATION_FRAME_DURATION = 200; // En millisecondes
 
-    // Rendu des unites
+    // Animation : Rendu des unites
     public static final int UNIT_SHORT_ANIMATION_FRAME_COUNT = 2; // Nombre d'images par animation pour les unites avec une courte animation
     public static final int UNIT_LONG_ANIMATION_FRAME_COUNT = 3; // Nombre d'images par animation pour les unites avec une longue animation
     public static final int UNIT_ANIMATION_FRAME_DURATION = 175; // En millisecondes

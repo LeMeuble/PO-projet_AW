@@ -49,6 +49,10 @@ public class Case {
         return y;
     }
 
+    public double distance(Case other) {
+        return Math.sqrt(Math.pow(this.x - other.x, 2) + Math.pow(this.y - other.y, 2));
+    }
+
 
     /**
      * Definit l'unite presente sur la case
@@ -86,11 +90,9 @@ public class Case {
         return this.terrain;
     }
 
-    public void render(int x, int y, Game game, AnimationClock terrainClockSync, AnimationClock unitClockSync) {
 
-        final int width = game.getWidth();
-        final int height = game.getHeight();
-        final Weather weather = game.getWeather();
+    public void renderTerrain(int x, int y, int width, int height, Weather weather, AnimationClock terrainClockSync) {
+
         final boolean isFoggy = false;
 
         if (terrain instanceof AnimatedTerrain) {
@@ -101,14 +103,14 @@ public class Case {
             DisplayUtil.drawPictureInCase(x, y, width, height, terrain.getFile(weather, isFoggy));
         }
 
-        // TODO: Split this method in two, one for terrain and one for unit
-
-        this.renderUnit(x, y, game, terrainClockSync, unitClockSync);
-
     }
 
-    public void renderUnit(int x, int y, Game game, AnimationClock terrainClockSync, AnimationClock unitClockSync) {
-        if (this.hasUnit()) DisplayUtil.drawPictureInCase(x, y, game.getWidth(), game.getHeight(), this.getUnit().getFile(unitClockSync.getFrame()));
+    public void renderUnit(int x, int y, int width, int height, AnimationClock unitClockSync) {
+        if (this.hasUnit()) {
+
+            DisplayUtil.drawPictureInCase(x, y, width, height, this.getUnit().getFile(unitClockSync.getFrame()));
+
+        }
     }
 
     /**

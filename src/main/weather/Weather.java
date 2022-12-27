@@ -2,13 +2,18 @@ package main.weather;
 
 public enum Weather {
 
-    CLEAR,
-    RAINY,
-    SNOWY,
-    HEAVY_WIND;
+    CLEAR("clear"),
+    RAINY("rainy"),
+    SNOWY("snowy"),
+    HEAVY_WIND("rainy");
 
+    private final String textureName;
+
+    Weather(String textureName) {
+        this.textureName = textureName;
+    }
     public String getName() {
-        return this.name().toLowerCase();
+        return this.textureName;
     }
 
     public static Weather random() {
