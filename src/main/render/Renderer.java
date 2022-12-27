@@ -117,34 +117,6 @@ public class Renderer {
 
     }
 
-//    private boolean renderMenuTitleScreen() {
-//
-//        if (this.titleScreen == null) {
-//
-//            Weather randomThemeWeather = Weather.random();
-//            int randomThemeId = (int) (Math.random() * Config.MAIN_MENU_BACKGROUND_VARIATION_COUNT);
-//            this.titleScreen = new MainMenu(randomThemeId, randomThemeWeather);
-//
-//        }
-//
-//        if (this.mainMenuClockSync.needsRefresh()) {
-//            this.titleScreen.render(this.mainMenuClockSync.getFrame());
-//            this.mainMenuClockSync.nextFrame();
-//            return true;
-//        }
-//
-//        return false;
-//
-//    }
-
-//    private boolean renderMenuMapSelection(MapSelector mapSelector) {
-//
-//        if (this.mapSelectionMenu == null) this.mapSelectionMenu = new MapSelectionMenu(mapSelector);
-//        this.mapSelectionMenu.render();
-//        return true;
-//
-//    }
-
     /**
      * Rendre la carte sur l'ecran
      *

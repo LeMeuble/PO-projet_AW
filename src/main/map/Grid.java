@@ -1,5 +1,7 @@
 package main.map;
 
+import main.unit.Unit;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -51,19 +53,46 @@ public class Grid {
 
         int minX = Math.max(x - maxRadius, 0);
         int maxX = Math.min(x + maxRadius, grid[0].length - 1);
+
         int minY = Math.max(y - maxRadius, 0);
         int maxY = Math.min(y + maxRadius, grid.length - 1);
 
-        for(int i=minX; i<=maxX; i++) {
+        System.out.println("minX:" + minX);
+        System.out.println("maxX:" + maxX);
+        System.out.println("minY:" + minY);
+        System.out.println("maxY:" + maxY);
+
+        for(int i=minX; i <= maxX; i++) {
+
             for(int j=minY; j<=maxY; j++) {
+
                 double d = Math.sqrt( Math.pow(x - i, 2) + Math.pow(y - j, 2));
+
                 if(d >= minRadius && d <= maxRadius) {
+
                     cases.add(this.grid[j][i]);
+
                 }
+
             }
+
         }
         return cases;
 
+    }
+
+    public List<Unit> getUnitsAround(List<Case> casesAround) {
+
+        List<Unit> output = new LinkedList<>();
+
+        for(Case c : casesAround) {
+
+            if(c.hasUnit()) {
+                output.add(c.getUnit());
+            }
+
+        }
+        return output;
     }
 
 }

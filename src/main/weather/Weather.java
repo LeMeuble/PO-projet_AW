@@ -4,7 +4,8 @@ public enum Weather {
 
     CLEAR,
     RAINY,
-    SNOWY;
+    SNOWY,
+    HEAVY_WIND;
 
     public String getName() {
         return this.name().toLowerCase();

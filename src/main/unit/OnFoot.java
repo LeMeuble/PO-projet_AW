@@ -4,34 +4,45 @@ import main.Player;
 import main.terrain.Terrain;
 import main.weather.Weather;
 
+import java.util.Arrays;
+import java.util.List;
+
 public abstract class OnFoot extends AnimatedUnit {
 
     public enum MovementCost {
 
-        ON_PLAIN_CLEAR(Terrain.Type.PLAIN, Weather.CLEAR, 1),
-        ON_FOREST_CLEAR(Terrain.Type.FOREST, Weather.CLEAR, 1),
-        ON_MOUNTAIN_CLEAR(Terrain.Type.MOUNTAIN, Weather.CLEAR, 2),
-        ON_WATER_CLEAR(Terrain.Type.WATER, Weather.CLEAR, Integer.MAX_VALUE),
-        ON_HQ_CLEAR(Terrain.Type.HQ, Weather.CLEAR, 1),
-        ON_CITY_CLEAR(Terrain.Type.CITY, Weather.CLEAR, 1),
-        ON_FACTORY_CLEAR(Terrain.Type.FACTORY, Weather.CLEAR, 1);
+        ON_HQ_CLEAR(Terrain.Type.HQ, 1, Weather.CLEAR, Weather.RAINY, Weather.HEAVY_WIND),
+        ON_CITY_CLEAR(Terrain.Type.CITY, 1, Weather.CLEAR, Weather.RAINY, Weather.HEAVY_WIND),
+        ON_FACTORY_CLEAR(Terrain.Type.FACTORY, 1, Weather.CLEAR, Weather.RAINY, Weather.HEAVY_WIND),
+        ON_PLAIN_CLEAR(Terrain.Type.PLAIN, 1, Weather.CLEAR, Weather.RAINY, Weather.HEAVY_WIND),
+        ON_FOREST_CLEAR(Terrain.Type.FOREST, 1, Weather.CLEAR, Weather.RAINY, Weather.HEAVY_WIND),
+        ON_MOUNTAIN_CLEAR(Terrain.Type.MOUNTAIN, 2, Weather.CLEAR, Weather.RAINY, Weather.HEAVY_WIND),
+        ON_WATER_CLEAR(Terrain.Type.WATER, Integer.MAX_VALUE, Weather.CLEAR, Weather.RAINY, Weather.HEAVY_WIND),
+
+        ON_HQ_SNOWY(Terrain.Type.HQ, 1, Weather.SNOWY),
+        ON_CITY_SNOWY(Terrain.Type.CITY, 1, Weather.SNOWY),
+        ON_FACTORY_SNOWY(Terrain.Type.FACTORY, 1, Weather.SNOWY),
+        ON_PLAIN_SNOWY(Terrain.Type.PLAIN, 1, Weather.SNOWY),
+        ON_FOREST_SNOWY(Terrain.Type.FOREST, 2, Weather.SNOWY),
+        ON_MOUNTAIN_SNOWY(Terrain.Type.MOUNTAIN, Integer.MAX_VALUE, Weather.SNOWY),
+        ON_WATER_SNOWY(Terrain.Type.WATER, Integer.MAX_VALUE, Weather.SNOWY);
 
         private final Terrain.Type terrainType;
-        private final Weather weather;
+        private final List<Weather> weather;
         private final int cost;
 
-        MovementCost(Terrain.Type terrainType, Weather weather, int cost) {
+        MovementCost(Terrain.Type terrainType, int cost, Weather ...weather) {
 
             this.terrainType = terrainType;
-            this.weather = weather;
             this.cost = cost;
+            this.weather = Arrays.asList(weather);
 
         }
 
-        public static MovementCost fromTerrainAndWeather(Terrain.Type terrainType, Weather weather){
+        public static MovementCost fromTerrainAndWeather(Terrain.Type terrainType, Weather weather) {
 
             for (MovementCost cost : MovementCost.values()) {
-                if (cost.terrainType == terrainType && cost.weather == weather) {
+                if (cost.terrainType == terrainType && cost.weather.contains(weather)) {
                     return cost;
                 }
             }

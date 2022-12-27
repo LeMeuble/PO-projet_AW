@@ -90,6 +90,10 @@ public class Game {
     public Movement getMovement() {
         return this.movement;
     }
+    public void cancelMovement() {
+        this.movement = null;
+    }
+
     public void setMovement(Movement movement) {
         this.movement = movement;
     }

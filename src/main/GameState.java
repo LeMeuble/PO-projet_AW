@@ -10,7 +10,7 @@ public enum GameState {
     PLAYING_SELECTING_UNIT_ACTION, // Selection d'une action pour une unite
     PLAYING_MOVING_UNIT, // Deplacement d'une unite (fleche)
     PLAYING_SELECTING_TARGET, // Selection d'une cible
-    PLAYING_SELECTING_FACTORY_ACTION, // Selection d'une action pour une usine
+    PLAYING_SELECTING_FACTORY_UNIT, // Selection d'une action pour une usine
     ENDIND_SCREEN; // Ecran de fin
 
 

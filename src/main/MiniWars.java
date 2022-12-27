@@ -40,7 +40,6 @@ public class MiniWars {
             boolean updateDisplay = this.keystrokeHandler.handle(keycode);
             if (updateDisplay) {
                 this.update();
-                System.out.println("Update display");
             }
         });
         this.keystrokeListener.start();
