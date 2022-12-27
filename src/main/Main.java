@@ -9,14 +9,14 @@ public class Main {
 
 		try {
 
-			Jeu jeu = new Jeu();
+			MiniWars miniWars = new MiniWars();
 
-			while (!jeu.isOver()) {
-				jeu.update();
-				Thread.sleep(25);
+			while (!miniWars.isOver()) {
+				miniWars.update();
+				Thread.sleep(50);
 			}
 
-			jeu.end();
+			miniWars.end();
 
 		} catch (Exception e) {
 			System.out.println("Erreur lors de l'execution du jeu : " + e.getMessage());
@@ -72,7 +72,7 @@ public class Main {
 //		try {
 //
 //			String cheminCarte = selectionCarte();
-//			Jeu jeu = new Jeu(cheminCarte);
+//			MiniWars jeu = new MiniWars(cheminCarte);
 //			StdDraw.show();  //StdDraw est utilise en mode buffer pour fluidifier l'affichage: utiliser StdDraw.show() pour afficher ce qui est dans le buffer
 //
 //			while (!jeu.isOver()) {

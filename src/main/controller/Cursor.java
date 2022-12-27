@@ -4,10 +4,16 @@ import ressources.Config;
 
 public class Cursor {
 
+    private final int maxWidth;
+    private final int maxHeight;
     private int currentX;
     private int currentY;
+    private boolean needsRender;
 
-    public Cursor() {
+    public Cursor(int maxWidth, int maxHeight) {
+
+        this.maxWidth = maxWidth;
+        this.maxHeight = maxHeight;
 
         this.currentX = 0;
         this.currentY = 0;
@@ -15,7 +21,7 @@ public class Cursor {
     }
 
     public int getCurrentX() {
-        return currentX;
+        return this.currentX;
     }
 
     public void setCurrentX(int currentX) {
@@ -23,43 +29,64 @@ public class Cursor {
     }
 
     public int getCurrentY() {
-        return currentY;
+        return this.currentY;
     }
 
     public void setCurrentY(int currentY) {
         this.currentY = currentY;
     }
 
-    public void up() {
 
-        if(this.currentY < Config.MAP_ROW_COUNT - 1) {
+    public boolean up() {
+
+        if(this.currentY < this.maxHeight - 1) {
             this.currentY++;
+            this.needsRender = true;
+            return true;
         }
+        return false;
 
     }
 
-    public void down() {
+    public boolean down() {
 
         if(this.currentY > 0) {
             this.currentY--;
+            this.needsRender = true;
+            return true;
         }
+        return false;
 
     }
 
-    public void right() {
+    public boolean right() {
 
-        if(this.currentX < Config.MAP_COLUMN_COUNT - 1) {
-            this.currentX ++;
+        if(this.currentX < this.maxWidth - 1) {
+            this.currentX++;
+            this.needsRender = true;
+            return true;
         }
+        return false;
 
     }
 
-    public void left() {
+    public boolean left() {
 
         if(this.currentX > 0) {
             this.currentX--;
+            this.needsRender = true;
+            return true;
         }
+        return false;
 
+    }
+
+    public boolean needsRefresh() {
+        return this.needsRender;
+    }
+
+    public void refreshed() {
+        this.needsRender = false;
     }
 
 }

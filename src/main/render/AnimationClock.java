@@ -4,8 +4,8 @@ public class AnimationClock {
 
     private int frame;
     private boolean isForward;
-    private boolean isAlternating;
     private long previousFrameTime;
+    private final boolean isAlternating;
     private final int frameDuration; // in ms
     private final int frameCount;
 
@@ -22,8 +22,8 @@ public class AnimationClock {
     public AnimationClock(int frameCount, int frameDuration, boolean isAlternating) {
         this.frame = 0;
         this.isForward = true;
+        this.previousFrameTime = 0;
         this.isAlternating = isAlternating;
-        this.previousFrameTime = System.currentTimeMillis();
         this.frameDuration = frameDuration;
         this.frameCount = frameCount;
     }

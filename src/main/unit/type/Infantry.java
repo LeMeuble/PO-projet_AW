@@ -30,8 +30,8 @@ public class Infantry extends OnFoot {
     }
 
     @Override
-    public String getFile() {
-        return PathUtil.getUnitPath(this.getOwner(), Type.TANK, Animation.IDLE, !this.hasPlayed(), this.getFrame());
+    public String getFile(int frame) {
+        return PathUtil.getUnitPath(this.getOwner(), Type.INFANTRY, Animation.IDLE, !this.hasPlayed(), frame);
     }
 
 }

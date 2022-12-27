@@ -1,7 +1,12 @@
 package main.map;
 
+import main.render.AnimationClock;
+import main.terrain.AnimatedTerrain;
+import main.terrain.Property;
 import main.terrain.Terrain;
 import main.unit.Unit;
+import main.weather.Weather;
+import ressources.DisplayUtil;
 
 public class Case {
 
@@ -26,7 +31,6 @@ public class Case {
         return y;
     }
 
-
     public void setUnit(Unit unit) {
         this.unit = unit;
     }
@@ -43,6 +47,28 @@ public class Case {
         return this.terrain;
     }
 
+    public void render(int x, int y, Game game, AnimationClock terrainClockSync, AnimationClock unitClockSync) {
+
+        final int width = game.getWidth();
+        final int height = game.getHeight();
+        final Weather weather = game.getWeather();
+        final boolean isFoggy = false;
+
+        if (terrain instanceof AnimatedTerrain) {
+            DisplayUtil.drawPictureInCase(x, y, width, height, ((AnimatedTerrain) terrain).getFile(weather, isFoggy, terrainClockSync.getFrame()));
+        } else if (terrain instanceof Property) {
+            DisplayUtil.drawPictureInCase(x, y, width, height, 1, 2, terrain.getFile(weather, isFoggy));
+        } else {
+            DisplayUtil.drawPictureInCase(x, y, width, height, terrain.getFile(weather, isFoggy));
+        }
+
+        this.renderUnit(x, y, game, terrainClockSync, unitClockSync);
+
+    }
+
+    public void renderUnit(int x, int y, Game game, AnimationClock terrainClockSync, AnimationClock unitClockSync) {
+        if (this.hasUnit()) DisplayUtil.drawPictureInCase(x, y, game.getWidth(), game.getHeight(), this.getUnit().getFile(unitClockSync.getFrame()));
+    }
 
     public String toString() {
         return "(" + this.x + ", " + this.y + ")";

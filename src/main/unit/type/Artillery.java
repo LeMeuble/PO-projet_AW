@@ -3,7 +3,6 @@ package main.unit.type;
 import main.Player;
 import main.unit.Animation;
 import main.unit.Motorized;
-import main.weapon.Weapon;
 import ressources.PathUtil;
 
 public class Artillery extends Motorized {
@@ -32,7 +31,7 @@ public class Artillery extends Motorized {
     }
 
     @Override
-    public String getFile() {
+    public String getFile(int frame) {
         return PathUtil.getUnitPath(this.getOwner(), Type.TANK, Animation.IDLE, !this.hasPlayed(), this.getFrame());
     }
 }

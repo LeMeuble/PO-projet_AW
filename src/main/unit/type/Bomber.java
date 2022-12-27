@@ -3,7 +3,6 @@ package main.unit.type;
 import main.Player;
 import main.unit.Animation;
 import main.unit.Flying;
-import main.weapon.Weapon;
 import ressources.PathUtil;
 
 public class Bomber extends Flying {
@@ -31,7 +30,7 @@ public class Bomber extends Flying {
     }
 
     @Override
-    public String getFile() {
+    public String getFile(int frame) {
         return PathUtil.getUnitPath(this.getOwner(), Type.TANK, Animation.IDLE, !this.hasPlayed(), this.getFrame());
     }
 

@@ -3,7 +3,6 @@ package main.unit.type;
 import main.Player;
 import main.unit.Animation;
 import main.unit.OnFoot;
-import main.weapon.Weapon;
 import ressources.PathUtil;
 
 public class Bazooka extends OnFoot {
@@ -31,7 +30,7 @@ public class Bazooka extends OnFoot {
     }
 
     @Override
-    public String getFile() {
+    public String getFile(int frame) {
         return PathUtil.getUnitPath(this.getOwner(), Type.TANK, Animation.IDLE, !this.hasPlayed(), this.getFrame());
     }
 

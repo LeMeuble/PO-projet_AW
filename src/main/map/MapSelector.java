@@ -9,17 +9,13 @@ public class MapSelector {
     private List<MapMetadata> maps;
     private int selected;
 
-    public MapSelector() {
-        this.maps = MapParsing.listAvailableMaps();
-        this.selected = this.maps.size() == 0 ? -1 : 0;
-    }
-
-    public void update() {
-        this.maps = MapParsing.listAvailableMaps();
+    public MapSelector(List<MapMetadata> maps) {
+        this.maps = maps;
+        this.selected = this.maps.isEmpty() ? -1 : 0;
     }
 
     public List<MapMetadata> getMaps() {
-        return maps;
+        return this.maps;
     }
 
     public MapMetadata getSelectedMap() {

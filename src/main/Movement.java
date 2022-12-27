@@ -71,7 +71,7 @@ public class Movement {
         }
     }
 
-    protected static class Arrow {
+    public static class Arrow {
 
         private final Case c;
         private final Direction from;
@@ -95,6 +95,7 @@ public class Movement {
 
     private final Case startingPoint;
     private List<Case> cases;
+    private boolean needsRefresh;
 
     public Movement(Case startingPoint) {
 
@@ -113,6 +114,8 @@ public class Movement {
 
         } else this.cases.add(newCase);
 
+        this.needsRefresh = true;
+
     }
 
     public boolean isEmpty() {
@@ -121,13 +124,13 @@ public class Movement {
 
     }
 
-    public Case getHead() {
+    public Case getSource() {
 
         return this.startingPoint;
 
     }
 
-    public Case getTail() {
+    public Case getDestination() {
 
         return ((LinkedList<Case>) cases).peekLast();
 
@@ -180,6 +183,14 @@ public class Movement {
 
         return new Arrow(current, from, to);
 
+    }
+
+    public boolean needsRefresh() {
+        return this.needsRefresh;
+    }
+
+    public void refreshed() {
+        this.needsRefresh = false;
     }
 
     /**

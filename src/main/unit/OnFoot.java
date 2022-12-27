@@ -3,7 +3,6 @@ package main.unit;
 import main.Player;
 import main.terrain.Terrain;
 import main.weather.Weather;
-import ressources.Config;
 
 public abstract class OnFoot extends AnimatedUnit {
 

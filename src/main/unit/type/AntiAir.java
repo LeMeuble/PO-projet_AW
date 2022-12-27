@@ -30,7 +30,7 @@ public class AntiAir extends Motorized {
     }
 
     @Override
-    public String getFile() {
-        return PathUtil.getUnitPath(this.getOwner(), this.getType(), Animation.IDLE, !this.hasPlayed(), this.getFrame());
+    public String getFile(int frame) {
+        return PathUtil.getUnitPath(this.getOwner(), this.getType(), Animation.IDLE, !this.hasPlayed(), frame);
     }
 }

@@ -14,6 +14,7 @@ public class PathUtil {
     public static final String SEP = File.separator;
     public static final String ROOT_FOLDER = ".";
     public static final String MAPS_FOLDER = ROOT_FOLDER + SEP + "maps";
+    public static final String MAP_EXTENSION = ".awdcmap";
 
     // Dossier lie aux textures
     public static final String PICTURES_FOLDER = ROOT_FOLDER + SEP + "pictures";
@@ -70,4 +71,9 @@ public class PathUtil {
 
     }
 
+    public static String getCursorPath() {
+
+        return PICTURE_UI_FOLDER + SEP + "cursor.png";
+
+    }
 }

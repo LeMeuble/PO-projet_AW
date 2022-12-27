@@ -2,39 +2,32 @@ package main.render;
 
 import librairies.StdDraw;
 import main.GameState;
+import main.Movement;
+import main.controller.Cursor;
 import main.map.Case;
-import main.map.GameMap;
-import main.map.MapSelector;
+import main.map.Game;
 import main.menu.AnimatedMenu;
-import main.menu.MainMenu;
-import main.menu.MapSelectionMenu;
 import main.menu.Menu;
-import main.terrain.AnimatedTerrain;
-import main.terrain.Property;
-import main.terrain.Terrain;
-import main.weather.Weather;
+import main.menu.MenuManager;
+import main.menu.model.MainMenu;
 import ressources.Config;
 import ressources.DisplayUtil;
+import sun.applet.Main;
 
 import java.awt.*;
-import java.util.LinkedList;
-import java.util.List;
 
 public class Renderer {
 
-    private AnimatedMenu titleScreen;
-    private Menu mapSelectionMenu;
+    private final AnimationClock terrainClockSync;
+    private final AnimationClock unitClockSync;
+    private final MenuManager menuManager;
 
-    private AnimationClock mainMenuClockSync;
-    private AnimationClock terrainClockSync;
+    public Renderer(MenuManager menuManager) {
 
-    public Renderer() {
+        this.menuManager = menuManager;
 
-        this.titleScreen = null;
-        this.mapSelectionMenu = null;
-
-        this.mainMenuClockSync = new AnimationClock(Config.MAIN_MENU_ANIMATION_FRAME_COUNT, Config.MAIN_MENU_ANIMATION_FRAME_DURATION);
         this.terrainClockSync = new AnimationClock(Config.MAP_ANIMATION_FRAME_COUNT, Config.MAP_ANIMATION_FRAME_DURATION, true);
+        this.unitClockSync = new AnimationClock(Config.UNIT_LONG_ANIMATION_FRAME_COUNT, Config.UNIT_ANIMATION_FRAME_DURATION, true);
 
         StdDraw.enableDoubleBuffering();
         StdDraw.setCanvasSize(Config.WIDTH, Config.HEIGHT);
@@ -49,86 +42,196 @@ public class Renderer {
         StdDraw.clear(Color.BLACK);
     }
 
-    public void render(GameState gameState, GameMap gameMap, MapSelector mapSelector) {
+    public void render(GameState gameState, Game game) {
 
-        switch (gameState) {
-            case MENU_TITLE_SCREEN:
-                this.renderMenuTitleScreen();
-                break;
-            case MENU_MAP_SELECTION:
-                this.renderMenuMapSelection(mapSelector);
-                break;
-            case PLAYING_SELECTING:
-                this.renderMap(gameMap);
-                break;
+        synchronized (this) {
+
+            boolean copyBuffer = false;
+
+            switch (gameState) {
+                case PLAYING_SELECTING_UNIT_ACTION:
+                case PLAYING_SELECTING:
+                    copyBuffer = this.renderMap(game, game.getCursor().needsRefresh());
+                    copyBuffer |= this.renderCursor(game, copyBuffer);
+                    break;
+                case PLAYING_MOVING_UNIT:
+                    copyBuffer = this.renderMap(game, game.getCursor().needsRefresh());
+                    copyBuffer |= this.renderMovement(game, copyBuffer);
+                    copyBuffer |= this.renderCursor(game, copyBuffer);
+                    break;
+            }
+
+            for (Menu menu : this.menuManager.getMenus()) {
+                copyBuffer |= this.renderMenu(menu, copyBuffer);
+            }
+
+            if (copyBuffer) {
+                StdDraw.show();
+            }
+
         }
 
     }
 
-    private void renderMenuTitleScreen() {
+    private boolean renderMenu(Menu menu, boolean forceRender) {
 
-        if (this.titleScreen == null) {
+        if (!menu.isVisible()) return false;
 
-            Weather randomThemeWeather = Weather.random();
-            int randomThemeId = (int) (Math.random() * Config.MAIN_MENU_BACKGROUND_VARIATION_COUNT);
-            this.titleScreen = new MainMenu(randomThemeId, randomThemeWeather);
+        if (menu.needsRefresh() || forceRender) {
+
+            if (menu instanceof AnimatedMenu) {
+
+                if(menu instanceof MainMenu) System.out.println("Rendering main menu: " + menu.isVisible() + " " + menu.needsRefresh() + "" + menu.getClass());
+
+                AnimatedMenu animatedMenu = (AnimatedMenu) menu;
+
+                if (animatedMenu.needsRefresh() || forceRender) {
+                    animatedMenu.render();
+                    animatedMenu.nextFrame();
+                    animatedMenu.needsRefresh(false);
+                    return true;
+                }
+
+            } else {
+
+                if (menu.needsRefresh() || forceRender) {
+                    menu.render();
+                    menu.needsRefresh(false);
+                    return true;
+                }
+
+            }
 
         }
 
-        if (this.mainMenuClockSync.needsRefresh()) {
-            this.titleScreen.render(this.mainMenuClockSync.getFrame());
-            this.mainMenuClockSync.nextFrame();
-            StdDraw.show();
+        return false;
+
+    }
+
+    private boolean renderMenu(Menu.Model model, boolean forceRender) {
+
+        Menu menu = this.menuManager.getMenu(model);
+        if (menu == null) return false;
+
+        return this.renderMenu(menu, forceRender);
+
+    }
+
+//    private boolean renderMenuTitleScreen() {
+//
+//        if (this.titleScreen == null) {
+//
+//            Weather randomThemeWeather = Weather.random();
+//            int randomThemeId = (int) (Math.random() * Config.MAIN_MENU_BACKGROUND_VARIATION_COUNT);
+//            this.titleScreen = new MainMenu(randomThemeId, randomThemeWeather);
+//
+//        }
+//
+//        if (this.mainMenuClockSync.needsRefresh()) {
+//            this.titleScreen.render(this.mainMenuClockSync.getFrame());
+//            this.mainMenuClockSync.nextFrame();
+//            return true;
+//        }
+//
+//        return false;
+//
+//    }
+
+//    private boolean renderMenuMapSelection(MapSelector mapSelector) {
+//
+//        if (this.mapSelectionMenu == null) this.mapSelectionMenu = new MapSelectionMenu(mapSelector);
+//        this.mapSelectionMenu.render();
+//        return true;
+//
+//    }
+
+    /**
+     * Rendre la carte sur l'ecran
+     *
+     * @param game        La partie en cours
+     * @param forceRender Forcer le rendu
+     * @return True s'il est necessaire de mettre a jour l'ecran
+     */
+    private boolean renderMap(Game game, boolean forceRender) {
+
+        if (game == null) return false;
+
+        boolean terrainNeedsRefresh = this.terrainClockSync.needsRefresh();
+        boolean unitNeedsRefresh = this.unitClockSync.needsRefresh();
+
+        if (terrainNeedsRefresh) this.terrainClockSync.nextFrame();
+        if (unitNeedsRefresh) this.unitClockSync.nextFrame();
+
+        if (terrainNeedsRefresh || unitNeedsRefresh || forceRender) {
+
+            for (int i = 0; i < Math.min(game.getWidth(), Config.MAP_COLUMN_COUNT); i++) {
+                for (int j = Math.min(game.getWidth(), Config.MAP_ROW_COUNT) - 1; j >= 0; j--) {
+                    game.getView().getCase(i, j).render(i, j, game, this.terrainClockSync, this.unitClockSync);
+                }
+            }
+
+            return true;
+
         }
 
-    }
-
-    private void renderMenuMapSelection(MapSelector mapSelector) {
-
-        if (this.mapSelectionMenu == null) this.mapSelectionMenu = new MapSelectionMenu(mapSelector);
-        this.mapSelectionMenu.render();
-        StdDraw.show();
+        return false;
 
     }
 
-    private void renderMap(GameMap gameMap) {
+    private boolean renderCursor(Game game, boolean forceRender) {
 
-        if (gameMap == null) return;
+        Cursor cursor = game.getCursor();
 
-        boolean needsRefresh = false;
-        List<Case> unitRenderQueue = new LinkedList<>();
+        if (cursor.needsRefresh() || forceRender) {
+            DisplayUtil.drawCursor(game.getView().getCursorX(), game.getView().getCursorY(), game.getWidth(), game.getHeight());
+            game.getCursor().refreshed();
+            return true;
+        }
+        return false;
+    }
 
-        if (this.terrainClockSync.needsRefresh()) {
+    private boolean renderMovement(Game game, boolean forceRender) {
 
-            for (int i = 0; i < gameMap.getWidth(); i++) {
-                for (int j = gameMap.getHeight() - 1; j >= 0; j--) {
+        if (game == null) return false;
 
-                    Case c = gameMap.getGrid().getCase(i, j);
-                    Terrain terrain = c.getTerrain();
+        if (game.getMovement().needsRefresh() || forceRender) {
 
-                    if (terrain instanceof AnimatedTerrain) {
-                        DisplayUtil.drawTerrainInCase(i, j, ((AnimatedTerrain) terrain).getFile(gameMap.getWeather(), false, this.terrainClockSync.getFrame()));
-                    } else if (terrain instanceof Property) {
-                        DisplayUtil.drawPropertyInCase(i, j, terrain.getFile(gameMap.getWeather(), false));
-                    } else {
-                        DisplayUtil.drawTerrainInCase(i, j, terrain.getFile(gameMap.getWeather(), false));
-                    }
+            Movement movement = game.getMovement();
 
-                    if(c.hasUnit()) unitRenderQueue.add(c);
+            // Rendre la fleche
+            for (Movement.Arrow arrow : movement.toDirectionalArrows()) {
+
+                Case c = arrow.getCase();
+
+                if (game.getView().isVisible(c)) {
+
+                    int x = game.getView().offsetX(c.getX()); // Coordonnees reelles de la case -> Coordonnees de l'ecran
+                    int y = game.getView().offsetY(c.getY());
+
+                    DisplayUtil.drawPictureInCase(x, y, game.getWidth(), game.getHeight(), arrow.getPath(game.getCurrentPlayer().getType()));
 
                 }
 
             }
 
-            this.terrainClockSync.nextFrame();
-            needsRefresh = true;
+            // Rendre l'unite selectionne au-dessus de la fleche
+            if (game.getView().isVisible(movement.getSource())) {
+
+                int x = game.getView().offsetX(movement.getSource().getX());
+                int y = game.getView().offsetY(movement.getSource().getY());
+
+                game.getView().getCase(x, y).renderUnit(x, y, game, this.terrainClockSync, this.unitClockSync);
+
+            }
+
+            game.getMovement().refreshed();
+
+            return true;
 
         }
 
-        if (needsRefresh) {
-            System.out.println("Rendered!");
-            StdDraw.show();
-        }
+
+        return false;
 
     }
 

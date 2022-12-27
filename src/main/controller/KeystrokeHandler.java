@@ -1,18 +1,23 @@
 package main.controller;
 
 import main.GameState;
-import main.Jeu;
-import main.map.GameMap;
-import main.weather.Weather;
+import main.MiniWars;
+import main.Player;
+import main.map.Case;
+import main.map.Game;
+import main.map.Grid;
+import main.menu.Menu;
+import main.menu.MultiOptionMenu;
+import main.menu.model.UnitActionMenu;
 
 
 public class KeystrokeHandler {
 
-    private final Jeu game;
+    private final MiniWars instance;
 
-    public KeystrokeHandler(Jeu game) {
+    public KeystrokeHandler(MiniWars instance) {
 
-        this.game = game;
+        this.instance = instance;
 
     }
 
@@ -24,7 +29,7 @@ public class KeystrokeHandler {
      */
     public boolean handle(KeystrokeListener.KeyCodes code) {
 
-        final GameState gameState = this.game.getGameState();
+        final GameState gameState = this.instance.getGameState();
 
         switch (code) {
 
@@ -48,9 +53,9 @@ public class KeystrokeHandler {
 
     }
 
-    public boolean keyD(GameState playerState) {
+    public boolean keyD(GameState gameState) {
 
-        this.game.getGameMap().setWeather(Weather.random());
+        this.instance.getCurrentGame().nextPlayer();
         return true;
 
     }
@@ -59,56 +64,86 @@ public class KeystrokeHandler {
     /**
      * Gere la touche haut
      *
-     * @param playerState l'etat du joueur
+     * @param gameState l'etat du jeu
      * @return true si le jeu doit actualiser l'ecran
      */
-    public boolean up(GameState playerState) {
+    public boolean up(GameState gameState) {
 
-        final GameMap gameMap = this.game.getGameMap();
-        final Cursor cursor = this.game.isPlaying() ? gameMap.getCursor() : null;
+        final Game game = this.instance.getCurrentGame();
+        final Cursor cursor = this.instance.isPlaying() ? game.getCursor() : null;
 
-        switch (playerState) {
+        boolean updateDisplay = false;
 
+        switch (gameState) {
+
+            case PLAYING_SELECTING_TARGET:
             case PLAYING_SELECTING:
-                if(cursor != null) cursor.up();
-                return true;
+                if (cursor == null) break;
+                updateDisplay = cursor.up();
+                updateDisplay |= game.getView().adjustOffset();
+                break;
 
             case PLAYING_MOVING_UNIT:
+                if (cursor != null) this.updateMovement(cursor::up);
+                updateDisplay = true;
+                break;
+            case PLAYING_SELECTING_UNIT_ACTION:
+                Menu menu = this.instance.getMenuManager().getMenu(Menu.Model.UNIT_ACTION_MENU);
+                if (menu instanceof UnitActionMenu) {
+                    UnitActionMenu unitActionMenu = (UnitActionMenu) this.instance.getMenuManager().getMenu(Menu.Model.UNIT_ACTION_MENU);
+                    unitActionMenu.previous();
+                    System.out.println("Now selected: " + unitActionMenu.getSelectedOption().getName());
+                    updateDisplay = true;
 
-                if(cursor != null) this.updateMovement(cursor::up);
-                return true;
+                }
+                break;
 
         }
 
-        return false;
+        return updateDisplay;
 
     }
 
     /**
      * Gere la touche bas
      *
-     * @param playerState l'etat du joueur
+     * @param gameState l'etat du jeu
      * @return true si le jeu doit actualiser l'ecran
      */
-    private boolean down(GameState playerState) {
+    private boolean down(GameState gameState) {
 
-        final GameMap gameMap = this.game.getGameMap();
-        final Cursor cursor = this.game.isPlaying() ? gameMap.getCursor() : null;
+        final Game game = this.instance.getCurrentGame();
+        final Cursor cursor = this.instance.isPlaying() ? game.getCursor() : null;
 
-        switch (playerState) {
+        boolean updateDisplay = false;
 
+        switch (gameState) {
+
+            case PLAYING_SELECTING_TARGET:
             case PLAYING_SELECTING:
-                if(cursor != null) cursor.down();
-                return true;
+                if (cursor == null) break;
+                updateDisplay = cursor.down();
+                updateDisplay |= game.getView().adjustOffset();
+                break;
 
             case PLAYING_MOVING_UNIT:
+                if (cursor != null) this.updateMovement(cursor::down);
+                updateDisplay = true;
+                break;
+            case PLAYING_SELECTING_UNIT_ACTION:
+                Menu menu = this.instance.getMenuManager().getMenu(Menu.Model.UNIT_ACTION_MENU);
+                if (menu instanceof UnitActionMenu) {
+                    UnitActionMenu unitActionMenu = (UnitActionMenu) this.instance.getMenuManager().getMenu(Menu.Model.UNIT_ACTION_MENU);
+                    unitActionMenu.next();
+                    System.out.println("Now selected: " + unitActionMenu.getSelectedOption().getName());
+                    updateDisplay = true;
 
-                if(cursor != null) this.updateMovement(cursor::down);
-                return true;
+                }
+                break;
 
         }
 
-        return false;
+        return updateDisplay;
 
     }
 
@@ -116,158 +151,229 @@ public class KeystrokeHandler {
     /**
      * Gere la touche gauche
      *
-     * @param playerState l'etat du joueur
+     * @param gameState l'etat du jeu
      * @return true si le jeu doit actualiser l'ecran
      */
-    private boolean left(GameState playerState) {
+    private boolean left(GameState gameState) {
 
-        final GameMap gameMap = this.game.getGameMap();
-        final Cursor cursor = this.game.isPlaying() ? gameMap.getCursor() : null;
+        final Game game = this.instance.getCurrentGame();
+        final Cursor cursor = this.instance.isPlaying() ? game.getCursor() : null;
 
-        switch (playerState) {
+        boolean updateDisplay = false;
+
+        switch (gameState) {
 
             case MENU_MAP_SELECTION:
 
-                this.game.getRenderer().clearBuffer();
-                this.game.getMapSelector().previous();
-                return true;
+                this.instance.getRenderer().clearBuffer();
+                this.instance.getMapSelector().previous();
+                this.instance.getMenuManager()
+                        .getMenu(Menu.Model.MAP_SELECTION_MENU)
+                        .needsRefresh(true);
+                updateDisplay = true;
+                break;
+
+            case PLAYING_SELECTING_TARGET:
+            case PLAYING_SELECTING:
+                if (cursor == null) break;
+                updateDisplay = cursor.left();
+                updateDisplay |= game.getView().adjustOffset();
+                break;
+
+            case PLAYING_MOVING_UNIT:
+                if (cursor != null) this.updateMovement(cursor::left);
+                updateDisplay = true;
+                break;
 
         }
 
-
-        return false;
+        return updateDisplay;
 
     }
 
     /**
      * Gere la touche droite
      *
-     * @param playerState l'etat du joueur
+     * @param gameState l'etat du jeu
      * @return true si le jeu doit actualiser l'ecran
      */
-    private boolean right(GameState playerState) {
+    private boolean right(GameState gameState) {
 
-        final GameMap gameMap = this.game.getGameMap();
-        final Cursor cursor = this.game.isPlaying() ? gameMap.getCursor() : null;
+        final Game game = this.instance.getCurrentGame();
+        final Cursor cursor = this.instance.isPlaying() ? game.getCursor() : null;
 
-        switch (playerState) {
+        boolean updateDisplay = false;
+
+        switch (gameState) {
 
             case MENU_MAP_SELECTION:
 
-                this.game.getMapSelector().next();
-                return true;
+                this.instance.getRenderer().clearBuffer();
+                this.instance.getMapSelector().next();
+                this.instance.getMenuManager()
+                        .getMenu(Menu.Model.MAP_SELECTION_MENU)
+                        .needsRefresh(true);
+                updateDisplay = true;
+                break;
+
+            case PLAYING_SELECTING_TARGET:
+            case PLAYING_SELECTING:
+                if (cursor == null) break;
+                updateDisplay = cursor.right();
+                updateDisplay |= game.getView().adjustOffset();
+                break;
+
+            case PLAYING_MOVING_UNIT:
+                if (cursor != null) this.updateMovement(cursor::right);
+                updateDisplay = true;
+                break;
 
         }
 
-        return false;
+        return updateDisplay;
 
     }
 
     /**
      * Gere la touche entree
      *
-     * @param playerState l'etat du joueur
+     * @param gameState l'etat du jeu
      * @return true si le jeu doit actualiser l'ecran
      */
-    private boolean enter(GameState playerState) {
+    private boolean enter(GameState gameState) {
 
-        final GameMap gameMap = this.game.getGameMap();
-        final Cursor cursor = this.game.isPlaying() ? gameMap.getCursor() : null;
+        final Game game = this.instance.getCurrentGame();
+        final Grid grid = this.instance.isPlaying() ? game.getGrid() : null;
+        final Cursor cursor = this.instance.isPlaying() ? game.getCursor() : null;
 
-        switch (playerState) {
+        final Player.Type currentPlayer = this.instance.isPlaying() ? game.getCurrentPlayer().getType() : null;
+
+        final int x = cursor != null ? cursor.getCurrentX() : 0;
+        final int y = cursor != null ? cursor.getCurrentY() : 0;
+
+        boolean updateDisplay = false;
+
+        switch (gameState) {
 
             case MENU_TITLE_SCREEN:
-                this.game.getRenderer().clearBuffer();
-                this.game.setGameState(GameState.MENU_MAP_SELECTION);
-                return true;
+                this.instance.getRenderer().clearBuffer();
+                this.instance.setGameState(GameState.MENU_MAP_SELECTION);
+                this.instance.getMenuManager().getMenu(Menu.Model.MAIN_MENU).setVisible(false);
+                this.instance.getMenuManager().getMenu(Menu.Model.MAP_SELECTION_MENU).setVisible(true);
+                updateDisplay = true;
+                break;
+
             case MENU_MAP_SELECTION:
-                this.game.getRenderer().clearBuffer();
-                if(this.game.getMapSelector().getSelectedMap() != null) {
-                    this.game.newGame(this.game.getMapSelector().getSelectedMap());
+                this.instance.getRenderer().clearBuffer();
+                if (this.instance.getMapSelector().getSelectedMap() != null) {
+                    this.instance.newGame(this.instance.getMapSelector().getSelectedMap());
+                    this.instance.getMenuManager().getMenu(Menu.Model.MAP_SELECTION_MENU).setVisible(false);
+                    updateDisplay = true;
                 }
-//            case PLAYING_SELECTING:
+                break;
+
+            case PLAYING_SELECTING:
+
+                if (cursor == null) break;
+                if (grid == null) break;
+
+                final Case currentCase = grid.getCase(x, y);
+
+                if (currentCase.hasUnit()) {
+
+                    if (currentCase.getUnit().getOwner() == currentPlayer) {
+                        this.instance.setGameState(GameState.PLAYING_SELECTING_UNIT_ACTION);
+
+                        UnitActionMenu unitActionMenu = new UnitActionMenu();
+                        unitActionMenu.addOption("attack", "Attaquer", true);
+                        unitActionMenu.addOption("move", "Déplacer", !currentCase.getUnit().hasMoved());
+                        this.instance.getMenuManager().addMenu(Menu.Model.UNIT_ACTION_MENU, unitActionMenu);
+                    } else System.out.println("Warn: Unit not owned by current player");
+
+                }
+
+                break;
+
+//                if (c.getTerrain() instanceof Property && ((Property) c.getTerrain()).getOwner() == instance.getCurrentPlayer().getType()) {
 //
-////                int x = game.getCursor().getCurrentX();
-////                int y = game.getCursor().getCurrentY();
-////
-////                Case c = grid.getCase(x, y);
-////
-////                if (c.hasUnit() && c.getUnit().getOwner() == game.getCurrentPlayer().getType()) {
-////
-////                    System.out.print("There is a unit here : ");
-////                    System.out.println(game.getGrid().getCase(x, y).getUnit());
-////                    // game.setPlayerState(PlayerState.SELECTING_UNIT_ACTION);
-////                    game.setGameState(GameState.PLAYING_MOVING_UNIT); // C'est la pour du debug
-////
-////                    this.game.updateMovement(grid.getCase(x, y));
-////
-////                    return true;
-////
-////                }
-////
-////                if (c.getTerrain() instanceof Property && ((Property) c.getTerrain()).getOwner() == game.getCurrentPlayer().getType()) {
-////
-////                    System.out.println("This is a propriety belonging to you");
-////                    return true;
-////
-////                } else {
-////
-////                    return true;
-////
-////                }
+//                    System.out.println("This is a propriety belonging to you");
+//                    return true;
+//
+//                } else {
+//
+//                    return true;
+//
+//                }
 //
 //
 //            case PLAYING_SELECTING_UNIT_ACTION:
 //                System.out.println("You are selecting an action");
-//                game.setGameState(GameState.PLAYING_SELECTING_UNIT_ACTION);
+//                instance.setGameState(GameState.PLAYING_SELECTING_UNIT_ACTION);
 //                return true;
 //
 //            case PLAYING_SELECTING_FACTORY_ACTION:
 //                System.out.println("You are selecting a factory action");
-//                game.setGameState(GameState.PLAYING_SELECTING_FACTORY_ACTION);
+//                instance.setGameState(GameState.PLAYING_SELECTING_FACTORY_ACTION);
 //                return true;
 //
 //            case PLAYING_MOVING_UNIT:
-//                game.setGameState(GameState.PLAYING_MOVING_UNIT);
+//                instance.setGameState(GameState.PLAYING_MOVING_UNIT);
 //
-//                Case startingPoint = this.game.getMovementHead();
-//                Case destination = this.game.getMovementTail();
+//                Case startingPoint = this.instance.getMovementHead();
+//                Case destination = this.instance.getMovementTail();
 //
 //                destination.setUnit(startingPoint.getUnit());
 //                startingPoint.setUnit(null);
-//                this.game.setGameState(GameState.PLAYING_SELECTING);
-//                this.game.resetMovement();
+//                this.instance.setGameState(GameState.PLAYING_SELECTING);
+//                this.instance.resetMovement();
 //                return true;
+//            case PLAYING_SELECTING:
+//
+//                if (cursor == null) break;
+//
+//                int x = game.getCursor().getCurrentX();
+//                int y = game.getCursor().getCurrentY();
+//
+//                Case currentCase = game.getGrid().getCase(x, y);
+//
+//                if (currentCase.hasUnit()) {
+//
+//                    game.setMovement(new Movement(currentCase));
+//                    this.instance.setGameState(GameState.PLAYING_MOVING_UNIT);
+//
+//                }
+//
+//                break;
         }
 
-        return false;
+        return updateDisplay;
 
     }
 
     /**
      * Gere la touche echap
      *
-     * @param playerState l'etat du joueur
+     * @param gameState l'etat du jeu
      * @return true si le jeu doit actualiser l'ecran
      */
-    private boolean escape(GameState playerState) {
+    private boolean escape(GameState gameState) {
 
-//        switch (playerState) {
+//        switch (gameState) {
 //
 //            case PLAYING_SELECTING:
 //                return true;
 //
 //            case PLAYING_SELECTING_UNIT_ACTION:
-//                game.setGameState(GameState.PLAYING_SELECTING);
+//                instance.setGameState(GameState.PLAYING_SELECTING);
 //                return true;
 //
 //            case PLAYING_SELECTING_FACTORY_ACTION:
-//                game.setGameState(GameState.PLAYING_SELECTING);
+//                instance.setGameState(GameState.PLAYING_SELECTING);
 //                return true;
 //
 //            case PLAYING_MOVING_UNIT:
-//                game.setGameState(GameState.PLAYING_SELECTING);
-//                game.resetMovement();
+//                instance.setGameState(GameState.PLAYING_SELECTING);
+//                instance.resetMovement();
 //                return true;
 //
 //        }
@@ -279,10 +385,10 @@ public class KeystrokeHandler {
     /**
      * Gere la touche espace
      *
-     * @param playerState l'etat du joueur
+     * @param gameState l'etat du jeu
      * @return true si le jeu doit actualiser l'ecran
      */
-    private boolean space(GameState playerState) {
+    private boolean space(GameState gameState) {
 
         return false;
 
@@ -290,33 +396,42 @@ public class KeystrokeHandler {
 
     private void updateMovement(Runnable movement) {
 
-//        int x = game.getCursor().getCurrentX();
-//        int y = game.getCursor().getCurrentY();
-//
-//        // System.out.println("Moving from x=" + x + ", y=" + y);
-//
-//        movement.run();
-//
-//        int newX = game.getCursor().getCurrentX();
-//        int newY = game.getCursor().getCurrentY();
+        Game game = this.instance.getCurrentGame();
+
+        int x = game.getCursor().getCurrentX();
+        int y = game.getCursor().getCurrentX();
+
+        // System.out.println("Moving from x=" + x + ", y=" + y);
+
+        movement.run();
+
+        int newX = game.getCursor().getCurrentX();
+        int newY = game.getCursor().getCurrentY();
+
+        game.getMovement().update(game.getGrid().getCase(newX, newY));
+
+//        int newX = instance.getCursor().getCurrentX();
+//        int newY = instance.getCursor().getCurrentY();
 //
 //        // System.out.println("Moving to x=" + newX + ", y=" + newY);
 //
-//        game.updateMovement(game.getGrid().getCase(newX, newY));
-
-//        if(game.isMovementEmpty()) {
+//        instance.updateMovement(instance.getGrid().getCase(newX, newY));
 //
-//            game.updateMovement(game.getGrid().getCase(x, y));
+//        if(instance.isMovementEmpty()) {
+//
+//            instance.updateMovement(instance.getGrid().getCase(x, y));
 //
 //        }
 //        else {
 //
-//            int newX = game.getCursor().getCurrentX();
-//            int newY = game.getCursor().getCurrentY();
+//            int newX = instance.getCursor().getCurrentX();
+//            int newY = instance.getCursor().getCurrentY();
 //
-//            game.updateMovement(game.getGrid().getCase(newX, newY));
+//            instance.updateMovement(instance.getGrid().getCase(newX, newY));
 //
 //        }
+
+        game.getView().adjustOffset();
     }
 
 }

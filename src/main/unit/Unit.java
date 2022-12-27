@@ -213,7 +213,7 @@ public abstract class Unit {
     public abstract int getMinReach();
     public abstract int getMaxReach();
 
-    public abstract String getFile();
+    public abstract String getFile(int frame);
 
     public abstract boolean canMoveTo(Terrain destination, Weather weather);
 
