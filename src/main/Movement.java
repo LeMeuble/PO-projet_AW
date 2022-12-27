@@ -3,6 +3,8 @@ package main;
 
 import main.map.Case;
 import ressources.PathUtil;
+import main.unit.Unit;
+import main.weather.Weather;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -106,34 +108,50 @@ public class Movement {
 
     public void update(Case newCase) {
 
-        if (newCase.equals(this.startingPoint)) {
-            this.cases.clear();
-        } else if (this.cases.contains(newCase)) {
-            // TODO: Improve this code cause it's a shitty code
-            this.cases = new LinkedList<>(this.cases.subList(0, this.cases.indexOf(newCase) + 1));
+        System.out.println("Before:" + this.cases);
 
-        } else this.cases.add(newCase);
+        if(this.cases.contains(newCase)) {
+
+            int index = this.cases.indexOf(newCase);
+            this.cases.subList(index + 1, this.cases.size()).clear();
+
+        }
+        else if(newCase.equals(startingPoint)) this.cases.clear();
+        else this.cases.add(newCase);
+
+        System.out.println("After:" + this.cases);
 
         this.needsRefresh = true;
 
     }
 
+    public void goBack() {
+        ((LinkedList<Case>) cases).removeLast();
+    }
+
     public boolean isEmpty() {
-
         return cases.isEmpty();
-
     }
 
     public Case getSource() {
-
         return this.startingPoint;
-
     }
 
     public Case getDestination() {
 
         return ((LinkedList<Case>) cases).peekLast();
 
+    }
+
+    public int getCost(Unit unit, Weather weather) {
+
+        int cost = 0;
+
+        for(Case c : this.cases) {
+            cost += unit.getMovementCostTo(c.getTerrain(), weather);
+        }
+
+        return cost;
     }
 
     public List<Arrow> toDirectionalArrows() {

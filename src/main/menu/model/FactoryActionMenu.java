@@ -1,12 +1,16 @@
 package main.menu.model;
 
+import main.Player;
 import main.menu.Menu;
 
 public class FactoryActionMenu extends Menu {
 
-    public FactoryActionMenu() {
+    private Player.Type playerType;
+
+    public FactoryActionMenu(Player.Type playerType) {
 
         super(0, 0, 0, 0);
+        this.playerType = playerType;
 
     }
 

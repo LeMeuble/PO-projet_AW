@@ -2,6 +2,7 @@ package main.unit;
 
 import main.Player;
 import main.terrain.Terrain;
+import main.terrain.type.Factory;
 import main.unit.type.*;
 import main.weapon.Weapon;
 import main.weather.Weather;
@@ -109,6 +110,7 @@ public abstract class Unit {
         this.isAlive = true;
 
     }
+
 
     public Player.Type getOwner() {
         return this.owner;

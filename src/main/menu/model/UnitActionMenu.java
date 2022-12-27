@@ -2,6 +2,7 @@ package main.menu.model;
 
 import main.menu.Menu;
 import main.menu.MultiOptionMenu;
+import ressources.Config;
 
 public class UnitActionMenu extends MultiOptionMenu {
 
