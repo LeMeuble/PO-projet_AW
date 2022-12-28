@@ -1,6 +1,6 @@
 package ressources;
 
-import main.Player;
+import main.game.Player;
 import main.terrain.Terrain;
 import main.unit.Animation;
 import main.unit.Unit;
@@ -47,13 +47,13 @@ public class PathUtil {
     public static String getTerrainPath(Weather weather, Terrain.Type terrain, int textureVariation, boolean isFoggy) {
 
         String foggy = isFoggy ? "foggy" : "normal";
-        return PICTURE_TERRAINS_FOLDER + SEP + weather.getName() + SEP + foggy + SEP + terrain.getFileName() + SEP + textureVariation + ".png";
+        return PICTURE_TERRAINS_FOLDER + SEP + weather.getName() + SEP + foggy + SEP + terrain.getDirectoryName() + SEP + textureVariation + ".png";
     }
 
     public static String getAnimatedTerrainPath(Weather weather, Terrain.Type terrain, int frame, int textureVariation, boolean isFoggy) {
 
         String foggy = isFoggy ? "foggy" : "normal";
-        return PICTURE_TERRAINS_FOLDER + SEP + weather.getName() + SEP + foggy + SEP + terrain.getFileName() + SEP + "frame" + frame + SEP + textureVariation + ".png";
+        return PICTURE_TERRAINS_FOLDER + SEP + weather.getName() + SEP + foggy + SEP + terrain.getDirectoryName() + SEP + "frame" + frame + SEP + textureVariation + ".png";
     }
 
     public static String getBackgroundPath(Weather weather, int id) {

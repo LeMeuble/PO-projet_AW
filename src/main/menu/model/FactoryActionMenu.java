@@ -1,6 +1,6 @@
 package main.menu.model;
 
-import main.Player;
+import main.game.Player;
 import main.menu.Menu;
 
 public class FactoryActionMenu extends Menu {

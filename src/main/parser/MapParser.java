@@ -1,19 +1,19 @@
-package ressources;
+package main.parser;
 
-import main.Player;
 import main.map.Case;
 import main.map.Grid;
 import main.map.MapMetadata;
 import main.terrain.Terrain;
 import main.terrain.type.HQ;
 import main.unit.Unit;
+import ressources.PathUtil;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
 
-public class MapParsing {
+public class MapParser {
 
 
     public static List<MapMetadata> listAvailableMaps() {
@@ -47,9 +47,83 @@ public class MapParsing {
 
         }
 
-        // TODO: Path not found exception
+        // TODO: "Path not found" exception
 
         return maps;
+
+    }
+
+    public static Grid parseMap(MapMetadata mapMetadata) {
+
+        final File file = new File(mapMetadata.getMapPath());
+
+        final int playerCount = mapMetadata.getPlayerCount();
+        final int mapWidth = mapMetadata.getWidth();
+        final int mapHeight = mapMetadata.getHeight();
+
+        final Case[][] grid = new Case[mapHeight][mapWidth];
+        final boolean[] foundHQ = new boolean[playerCount];
+
+        try (Scanner sc = new Scanner(file)) {
+
+            for (int i = mapHeight - 1; i >= 0; i--) { // Inversed because the map is stored from top to bottom (starting for x=0, y=0 in the top left corner)
+
+                if (!sc.hasNextLine())
+                    throw new IOException("Invalid map file : Unit line " + i + " is missing");
+                String unitLine = sc.nextLine();
+
+                if (!sc.hasNextLine())
+                    throw new IOException("Invalid map file : Terrain line " + i + " is missing"); // If the file is not well formatted, we stop parsing
+                String terrainLine = sc.nextLine();
+
+                String[] unitSplit = unitLine.split(",");
+                String[] terrainSplit = terrainLine.split(",");
+
+                if (unitSplit.length != mapWidth || terrainSplit.length != mapWidth)
+                    throw new IOException("Invalid map file : Invalid element count in unit or terrain line " + (mapHeight - i));
+
+                // Loop through cases of the line
+                for (int j = 0; j < mapWidth; j++) {
+
+                    String unitCase = unitSplit[j];
+                    String terrainCase = terrainSplit[j];
+
+                    Unit unit = UnitParser.parse(unitCase); // Parse the unit. If the unit is null, it means that there is no unit on this case
+                    Terrain terrain = TerrainParser.parse(terrainCase);
+
+                    if (terrain == null)
+                        throw new IOException("Invalid map file : Invalid terrain at " + j + "c, " + (mapHeight - i) + "l");
+
+                    if (terrain instanceof HQ) {
+
+                        HQ hq = (HQ) terrain;
+
+                        // Check if an HQ has already been found for this player
+                        if (foundHQ[hq.getOwner().getValue() - 1])
+                            throw new IOException("Invalid map file : Multiple HQ for player #" + hq.getOwner().getValue());
+
+                        foundHQ[hq.getOwner().getValue() - 1] = true;
+
+                    }
+
+                    grid[i][j] = new Case(j, i, terrain);
+                    grid[i][j].setUnit(unit);
+
+                }
+
+            }
+
+            // Check if all HQ have been found
+            for (int j = 0; j < playerCount; j++) {
+                if (!foundHQ[j]) throw new IOException("Invalid map file : Missing HQ for player #" + (j + 1));
+            }
+
+        } catch (IOException ignored) {
+            System.out.println("Unable to parse map data from file: " + file.getAbsolutePath());
+            return null;
+        }
+
+        return new Grid(grid);
 
     }
 
@@ -78,146 +152,11 @@ public class MapParsing {
             }
 
         } catch (FileNotFoundException ignored) {
-            ignored.printStackTrace();
             System.out.println("Unable to parse metadata from file: " + file.getAbsolutePath());
             return null;
         }
 
         return MapMetadata.fromMap(metadataParsing, mapPath);
-
-    }
-
-    public static Grid parseMap(MapMetadata mapMetadata) {
-
-        final File file = new File(mapMetadata.getMapPath());
-
-        final int playerCount = mapMetadata.getPlayerCount();
-        final int mapWidth = mapMetadata.getWidth();
-        final int mapHeight = mapMetadata.getHeight();
-
-        final Case[][] grid = new Case[mapHeight][mapWidth];
-        final boolean[] foundHQ = new boolean[playerCount];
-
-        try (Scanner sc = new Scanner(file)) {
-
-            for (int i = mapHeight - 1; i >= 0; i--) { // Inversed because the map is stored from top to bottom
-
-                if (!sc.hasNextLine()) throw new IOException("Invalid map file : Unit line " + i + " is missing");
-                String unitLine = sc.nextLine();
-
-                if (!sc.hasNextLine())
-                    throw new IOException("Invalid map file : Terrain line " + i + " is missing"); // If the file is not well formatted, we stop parsing
-                String terrainLine = sc.nextLine();
-
-                String[] unitSplit = unitLine.split(",");
-                String[] terrainSplit = terrainLine.split(",");
-
-                if (unitSplit.length != mapWidth || terrainSplit.length != mapWidth)
-                    throw new IOException("Invalid map file : Invalid element count in unit or terrain line " + (mapHeight - i));
-
-                for (int j = 0; j < mapWidth; j++) {
-
-                    String unitCase = unitSplit[j];
-                    String terrainCase = terrainSplit[j];
-
-                    Unit unit = parseUnit(unitCase); // Parse the unit. If the unit is null, it means that there is no unit on this case
-                    Terrain terrain = parseTerrain(terrainCase);
-
-                    if (terrain == null)
-                        throw new IOException("Invalid map file : Invalid terrain at " + j + "c, " + (mapHeight - i) + "l");
-
-                    if (terrain instanceof HQ) {
-
-                        HQ hq = (HQ) terrain;
-
-                        if (foundHQ[hq.getOwner().getValue() - 1])
-                            throw new IOException("Invalid map file : Multiple HQ for player #" + hq.getOwner().getValue());
-                        foundHQ[hq.getOwner().getValue() - 1] = true;
-
-                    }
-
-                    grid[i][j] = new Case(j, i, terrain);
-                    grid[i][j].setUnit(unit);
-
-                }
-
-            }
-
-            for (int j = 0; j < playerCount; j++) {
-                if (!foundHQ[j]) throw new IOException("Invalid map file : Missing HQ for player #" + (j + 1));
-            }
-
-        } catch (IOException ignored) {
-            ignored.printStackTrace();
-            System.out.println("Unable to parse map data from file: " + file.getAbsolutePath());
-            return null;
-        }
-
-        return new Grid(grid);
-
-    }
-
-    private static Terrain parseTerrain(String t) {
-
-        if (t == null) return null;
-
-        String format = t.trim();
-        if (format.startsWith("{") && format.endsWith("}")) {
-
-            String[] split = format.substring(1, format.length() - 1).trim().split(";");
-
-            if (split.length == 3) {
-
-                for (int i = 0; i < split.length; i++) {
-                    split[i] = split[i].trim();
-                }
-
-                Terrain.Type type = Terrain.Type.fromCharacter(split[0].charAt(0));
-
-                if (type != null) {
-
-                    Player.Type owner = !split[2].equals(".") ? Player.Type.fromValue(Integer.parseInt(split[2])) : null;
-                    Terrain terrain = type.newInstance(owner);
-
-                    if (terrain != null) {
-
-                        int variation = split[1].contains(".") ? 0 : Integer.parseInt(split[1]);
-                        terrain.setTextureVariation(variation);
-
-                        return terrain;
-
-                    }
-
-                }
-
-            }
-
-        }
-
-        return null;
-
-    }
-
-    private static Unit parseUnit(String u) {
-
-        if (u == null) return null;
-
-        String format = u.trim();
-        if (format.startsWith("[") && format.endsWith("]")) {
-
-            String[] split = format.substring(1, format.length() - 1).split(";");
-
-            if (split.length == 2 && !split[0].equals(".")) {
-
-                Unit.Type type = Unit.Type.fromCharacter(split[0].charAt(0));
-                Player.Type player = Player.Type.fromValue(Integer.parseInt(split[1]));
-
-                if (type != null && player != null) return type.newInstance(player);
-
-            }
-
-        }
-        return null;
 
     }
 

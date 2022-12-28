@@ -1,7 +1,5 @@
 package main.map;
 
-import ressources.MapParsing;
-
 import java.util.List;
 
 public class MapSelector {

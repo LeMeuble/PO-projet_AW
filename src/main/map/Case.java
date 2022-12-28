@@ -18,14 +18,15 @@ public class Case {
 
     private final int x;
     private final int y;
-
     private final Terrain terrain;
+
     private Unit unit;
 
     /**
      * Constructeur d'une case
-     * @param x La coordonnee x de la case
-     * @param y La coordonnee y de la case
+     *
+     * @param x       La coordonnee x de la case
+     * @param y       La coordonnee y de la case
      * @param terrain Le terrain de la case
      */
     public Case(int x, int y, Terrain terrain) {
@@ -53,20 +54,20 @@ public class Case {
         return Math.sqrt(Math.pow(this.x - other.x, 2) + Math.pow(this.y - other.y, 2));
     }
 
-
-    /**
-     * Definit l'unite presente sur la case
-     * @param unit Une unite
-     */
-    public void setUnit(Unit unit) {
-        this.unit = unit;
-    }
-
     /**
      * @return L'unite presente sur la case
      */
     public Unit getUnit() {
         return this.unit;
+    }
+
+    /**
+     * Definit l'unite presente sur la case
+     *
+     * @param unit Une unite
+     */
+    public void setUnit(Unit unit) {
+        this.unit = unit;
     }
 
     /**
@@ -80,7 +81,7 @@ public class Case {
      * Verifie si l'unite presente sur la case est vivante, sinon la fait disparaitre
      */
     public void garbageUnit() {
-        if(this.hasUnit() && !this.getUnit().isAlive()) this.unit = null;
+        if (this.hasUnit() && !this.getUnit().isAlive()) this.unit = null;
     }
 
     /**

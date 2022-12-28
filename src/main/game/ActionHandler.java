@@ -1,11 +1,9 @@
-package main.controller;
+package main.game;
 
-import main.GameState;
 import main.MiniWars;
-import main.Movement;
-import main.Player;
+import main.control.Cursor;
+import main.control.KeystrokeListener;
 import main.map.Case;
-import main.map.Game;
 import main.map.Grid;
 import main.menu.Menu;
 import main.menu.MultiOptionMenu;
@@ -16,16 +14,15 @@ import main.terrain.Terrain;
 import main.terrain.type.Factory;
 import main.unit.Flying;
 import main.unit.Unit;
-import main.weather.Weather;
 
 import java.util.List;
 
 
-public class KeystrokeHandler {
+public class ActionHandler {
 
     private final MiniWars instance;
 
-    public KeystrokeHandler(MiniWars instance) {
+    public ActionHandler(MiniWars instance) {
 
         this.instance = instance;
 
@@ -359,7 +356,7 @@ public class KeystrokeHandler {
             case PLAYING_MOVING_UNIT:
 
                 Case source = game.getSelectedCase();
-                Case destination = game.getMovement().getDestination();
+                Case destination = game.getMovement().getMovementTail();
 
                 //Todo: check si on peut s'arreter ici
 
@@ -443,7 +440,7 @@ public class KeystrokeHandler {
         // Simulation du mouvement
         game.getMovement().update(game.getGrid().getCase(newX, newY));
 
-        Case destination = move.getDestination();
+        Case destination = move.getMovementTail();
         Unit currentUnit = game.getSelectedCase().getUnit();
 
         if (game.getMovement().isEmpty()) return;

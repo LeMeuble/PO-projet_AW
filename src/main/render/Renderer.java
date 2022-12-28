@@ -1,11 +1,12 @@
 package main.render;
 
 import librairies.StdDraw;
-import main.GameState;
-import main.Movement;
-import main.controller.Cursor;
+import main.game.GameState;
+import main.game.Movement;
+import main.control.Cursor;
+import main.game.Game;
+import main.game.GameView;
 import main.map.Case;
-import main.map.Game;
 import main.menu.AnimatedMenu;
 import main.menu.Menu;
 import main.menu.MenuManager;
@@ -166,7 +167,7 @@ public class Renderer {
 
         if (cursor.needsRefresh() || forceRender) {
             DisplayUtil.drawCursor(game.getView().getCursorX(), game.getView().getCursorY(), game.getWidth(), game.getHeight());
-            game.getCursor().refreshed();
+            game.getCursor().needsRefresh(false);
             return true;
         }
         return false;
@@ -193,15 +194,17 @@ public class Renderer {
                     int x = gameView.offsetX(c.getX()); // Coordonnees reelles de la case -> Coordonnees de l'ecran
                     int y = gameView.offsetY(c.getY());
 
+                    DisplayUtil.drawPictureInCase(x, y, mapWidth, mapHeight, arrow.getPath(game.getCurrentPlayer().getType()));
+
                 }
 
             }
 
             // Rendre l'unite selectionne au-dessus de la fleche
-            if (game.getView().isVisible(movement.getSource())) {
+            if (game.getView().isVisible(movement.getMovementHead())) {
 
-                int x = gameView.offsetX(movement.getSource().getX());
-                int y = gameView.offsetY(movement.getSource().getY());
+                int x = gameView.offsetX(movement.getMovementHead().getX());
+                int y = gameView.offsetY(movement.getMovementHead().getY());
 
                 gameView.getCase(x, y).renderUnit(x, y, mapWidth, mapHeight, this.unitClockSync);
 

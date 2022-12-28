@@ -1,8 +1,7 @@
 package main.unit;
 
-import main.Player;
+import main.game.Player;
 import main.terrain.Terrain;
-import main.terrain.type.Factory;
 import main.unit.type.*;
 import main.weapon.Weapon;
 import main.weather.Weather;

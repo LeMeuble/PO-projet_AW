@@ -1,10 +1,10 @@
-package main;
+package main.game;
 
 
 import main.map.Case;
-import ressources.PathUtil;
 import main.unit.Unit;
 import main.weather.Weather;
+import ressources.PathUtil;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -133,11 +133,11 @@ public class Movement {
         return cases.isEmpty();
     }
 
-    public Case getSource() {
+    public Case getMovementHead() {
         return this.startingPoint;
     }
 
-    public Case getDestination() {
+    public Case getMovementTail() {
 
         if (this.cases.isEmpty()) return this.startingPoint;
         return this.cases.get(this.cases.size() - 1);

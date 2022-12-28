@@ -10,21 +10,15 @@ public class Main {
 		try {
 
 			MiniWars miniWars = new MiniWars();
-
-			while (!miniWars.isOver()) {
-				miniWars.update();
-				Thread.sleep(50);
-			}
-
-			miniWars.end();
+			System.out.println("MiniWars started");
 
 		} catch (Exception e) {
 			System.out.println("Erreur lors de l'execution du jeu : " + e.getMessage());
 			e.printStackTrace();
 		}
 
-//		MapMetadata map = MapParsing.listAvailableMaps().get(0);
-//		Grid grid = MapParsing.parseMap(MapParsing.listAvailableMaps().get(0));
+//		MapMetadata map = MapParser.listAvailableMaps().get(0);
+//		Grid grid = MapParser.parseMap(MapParser.listAvailableMaps().get(0));
 //
 //		for (int i = 0; i < map.getHeight(); i++) {
 //			for (int j = 0; j < map.getWidth(); j++) {

@@ -1,6 +1,6 @@
 package main.unit;
 
-import main.Player;
+import main.game.Player;
 import main.terrain.Terrain;
 import main.weather.Weather;
 

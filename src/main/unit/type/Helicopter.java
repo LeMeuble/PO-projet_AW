@@ -1,6 +1,6 @@
 package main.unit.type;
 
-import main.Player;
+import main.game.Player;
 import main.unit.Animation;
 import main.unit.Flying;
 import ressources.Config;

@@ -1,11 +1,11 @@
-package main.map;
+package main.game;
 
-import main.Movement;
-import main.Player;
-import main.controller.Cursor;
-import main.render.GameView;
+import main.control.Cursor;
+import main.map.Case;
+import main.map.Grid;
+import main.map.MapMetadata;
+import main.parser.MapParser;
 import main.weather.Weather;
-import ressources.MapParsing;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,7 +30,7 @@ public class Game {
         this.movement = null;
         this.currentPlayer = Player.Type.RED;
         this.mapMetadata = mapMetadata;
-        this.grid = MapParsing.parseMap(mapMetadata);
+        this.grid = MapParser.parseMap(mapMetadata);
         this.view = new GameView(this.grid, this.cursor, mapMetadata.getWidth(), mapMetadata.getHeight());
         this.players = new HashMap<>();
         this.weather = Weather.random();

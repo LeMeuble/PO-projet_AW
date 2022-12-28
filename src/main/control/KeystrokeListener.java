@@ -1,4 +1,4 @@
-package main.controller;
+package main.control;
 
 import librairies.StdDraw;
 
@@ -46,6 +46,9 @@ public class KeystrokeListener {
 
         this.keyDowns = new HashSet<>();
         this.thread = null;
+        this.handler = (key) -> {
+            throw new UnsupportedOperationException("No handler defined");
+        };
         this.isRunning = false;
 
     }

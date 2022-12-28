@@ -2,8 +2,6 @@ package ressources;
 
 import librairies.StdDraw;
 
-import java.awt.*;
-
 import static ressources.Config.BOTTOM_MENU_MARGIN;
 
 public class DisplayUtil {

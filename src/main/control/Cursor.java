@@ -1,6 +1,5 @@
-package main.controller;
+package main.control;
 
-import ressources.Config;
 
 public class Cursor {
 
@@ -8,7 +7,7 @@ public class Cursor {
     private final int maxHeight;
     private int currentX;
     private int currentY;
-    private boolean needsRender;
+    private boolean needsRefresh;
 
     public Cursor(int maxWidth, int maxHeight) {
 
@@ -39,9 +38,9 @@ public class Cursor {
 
     public boolean up() {
 
-        if(this.currentY < this.maxHeight - 1) {
+        if (this.currentY < this.maxHeight - 1) {
             this.currentY++;
-            this.needsRender = true;
+            this.needsRefresh = true;
             return true;
         }
         return false;
@@ -50,9 +49,9 @@ public class Cursor {
 
     public boolean down() {
 
-        if(this.currentY > 0) {
+        if (this.currentY > 0) {
             this.currentY--;
-            this.needsRender = true;
+            this.needsRefresh = true;
             return true;
         }
         return false;
@@ -61,9 +60,9 @@ public class Cursor {
 
     public boolean right() {
 
-        if(this.currentX < this.maxWidth - 1) {
+        if (this.currentX < this.maxWidth - 1) {
             this.currentX++;
-            this.needsRender = true;
+            this.needsRefresh = true;
             return true;
         }
         return false;
@@ -72,9 +71,9 @@ public class Cursor {
 
     public boolean left() {
 
-        if(this.currentX > 0) {
+        if (this.currentX > 0) {
             this.currentX--;
-            this.needsRender = true;
+            this.needsRefresh = true;
             return true;
         }
         return false;
@@ -82,11 +81,11 @@ public class Cursor {
     }
 
     public boolean needsRefresh() {
-        return this.needsRender;
+        return this.needsRefresh;
     }
 
-    public void refreshed() {
-        this.needsRender = false;
+    public void needsRefresh(boolean needsRefresh) {
+        this.needsRefresh = needsRefresh;
     }
 
 }

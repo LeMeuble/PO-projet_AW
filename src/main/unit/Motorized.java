@@ -1,10 +1,9 @@
 package main.unit;
 
-import main.Player;
+import main.game.Player;
 import main.terrain.Terrain;
 import main.weather.Weather;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 

@@ -1,6 +1,6 @@
-package main.render;
+package main.game;
 
-import main.controller.Cursor;
+import main.control.Cursor;
 import main.map.Case;
 import main.map.Grid;
 import ressources.Config;
