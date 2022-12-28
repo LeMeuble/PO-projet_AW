@@ -1,11 +1,11 @@
 package main.render;
 
 import librairies.StdDraw;
-import main.game.GameState;
-import main.game.Movement;
 import main.control.Cursor;
 import main.game.Game;
+import main.game.GameState;
 import main.game.GameView;
+import main.game.Movement;
 import main.map.Case;
 import main.menu.AnimatedMenu;
 import main.menu.Menu;

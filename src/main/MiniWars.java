@@ -76,7 +76,7 @@ public class MiniWars {
     }
 
     public boolean isOver() {
-        return this.gameState == GameState.ENDIND_SCREEN;
+        return this.gameState == GameState.PLAYING_ENDIND_SCREEN;
     }
 
 

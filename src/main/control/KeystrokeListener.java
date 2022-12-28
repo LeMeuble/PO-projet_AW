@@ -6,8 +6,31 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Consumer;
 
+/**
+ * Classe permettant de detecter les touches appuyees.
+ * Declenchement lors de l'appui sur une touche et non lors du relachement.
+ * Pour ajouter une touche a detecter, il suffit de l'ajoute dans l'enumeration {@link KeyCodes}.
+ * <p>
+ * La methode {@link #setHandler(Consumer)} permet de definir une methode
+ * a appeler depuis la thread lors de l'appui.
+ * <p>
+ * Elle remplace la classe AssociationTouches et apporte quelques ameliorations :
+ * - Thread separee (pas de blocage de la thread principale)
+ * - Gestion des touches appuyees en meme temps
+ * - Definition des touches a ecouter dans une enum
+ *
+ * @author LECONTE--DENIS Tristan
+ * @author GRAVOT Lucien
+ * @see KeyCodes
+ */
 public class KeystrokeListener {
 
+    /**
+     * Enumeration des touches a ecouter.
+     * Les touches definies dans cette enumeration sont les touches
+     * qui seront ecoutees par le {@link KeystrokeListener}.
+     * Les codes sont ceux de la librairie {@link StdDraw}.
+     */
     public enum KeyCodes {
 
         ENTER(10),
@@ -30,18 +53,25 @@ public class KeystrokeListener {
             this.code = (int) c - 32;
         }
 
+        /**
+         * Obtient le code de la touche
+         *
+         * @return Le code de la touche
+         */
         public int getCode() {
             return this.code;
         }
 
     }
 
+    private final Set<KeyCodes> keyDowns;
     private Thread thread;
     private Consumer<KeyCodes> handler;
-    private final Set<KeyCodes> keyDowns;
-
     private volatile boolean isRunning;
 
+    /**
+     * Constructeur de KeystrokeListener
+     */
     public KeystrokeListener() {
 
         this.keyDowns = new HashSet<>();
@@ -53,15 +83,26 @@ public class KeystrokeListener {
 
     }
 
+    /**
+     * Definir la methode a appeler lors de l'appui sur une touche
+     *
+     * @param handler La methode a appeler
+     */
     public void setHandler(Consumer<KeyCodes> handler) {
         this.handler = handler;
     }
 
+    /**
+     * Demarre le thread d'ecoute des touches
+     * Si le thread est deja demarre, ne fait rien
+     */
     public void start() {
 
-        this.isRunning = true;
-        this.thread = new Thread(this::run);
-        this.thread.start();
+        if (this.isRunning) {
+            this.isRunning = true;
+            this.thread = new Thread(this::run);
+            this.thread.start();
+        }
 
     }
 
@@ -72,32 +113,38 @@ public class KeystrokeListener {
 
     }
 
+    /**
+     * Methode principale du thread
+     * Ecoute les touches appuyees et les ajoute dans la liste
+     * des touches appuyees.
+     */
     @SuppressWarnings("BusyWait")
     private void run() {
 
         try {
 
-            synchronized (this) {
+            while (this.isRunning) {
 
-                while (this.isRunning) {
+                // On parcourt toutes les touches definies
+                for (KeyCodes key : KeyCodes.values()) {
 
-                    for (KeyCodes key : KeyCodes.values()) {
+                    // Si la touche est appuyee
+                    if (StdDraw.isKeyPressed(key.getCode()) && !this.keyDowns.contains(key)) {
 
-                        if (StdDraw.isKeyPressed(key.getCode()) && !this.keyDowns.contains(key)) {
+                        this.keyDowns.add(key);
+                        this.handler.accept(key); // On appelle la methode definie
 
-                            this.keyDowns.add(key);
-                            this.handler.accept(key);
+                    // Si la touche est relachee
+                    } else if (!StdDraw.isKeyPressed(key.getCode())) {
 
-                        } else if (!StdDraw.isKeyPressed(key.getCode())) {
-
-                            this.keyDowns.remove(key);
-
-                        }
+                        this.keyDowns.remove(key);
 
                     }
 
-                    Thread.sleep(5);
                 }
+
+                // Optimisation : Eviter la jvm de tourner le plus vite possible
+                Thread.sleep(5);
             }
 
         } catch (Exception e) {

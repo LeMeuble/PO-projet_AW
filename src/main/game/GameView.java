@@ -8,7 +8,19 @@ import ressources.Config;
 /**
  * Cette classe offre la possibilite de rendre la partie visible a l'ecran
  * en permettant de dessiner une grille plus grande que l'ecran et de centrer
- * la grille sur le curseur. Il est donc possible de "scroller" sur la grille
+ * la grille sur le curseur. Il est donc possible de "scroller" sur la grille.
+ * Elle permet ainsi l'adaptation de la grille "reelle" avec la grille de la
+ * fenetre de jeu.
+ * <p>
+ * Les méthodes d'adaptations de cette classe se basent sur les configurations
+ * de la classe {@link Config} qui determinent la taille de la grille affichee
+ * sur l'ecran.
+ * - Config.MAP_ROW_COUNT
+ * - Config.MAP_COLUMN_COUNT
+ *
+ * @author Tristan LECONTE--DENIS
+ * @author Lucien GRAVOT
+ * @see Config
  */
 public class GameView {
 
@@ -20,6 +32,14 @@ public class GameView {
     private int offsetX;
     private int offsetY;
 
+    /**
+     * Constructeur de GameView
+     *
+     * @param grid   La grille reelle de jeu
+     * @param cursor Le curseur de selection reel
+     * @param width  La largeur de la grille reelle
+     * @param height La hauteur de la grille reelle
+     */
     public GameView(Grid grid, Cursor cursor, int width, int height) {
 
         this.grid = grid;
@@ -32,6 +52,16 @@ public class GameView {
 
     }
 
+    /**
+     * Permet de recuperer la case reelle a partir des coordonnees sur case
+     * de la grille affichee.
+     *
+     * @param x La coordonnee x de la case sur la grille affichee
+     * @param y La coordonnee y de la case sur la grille affichee
+     * @return La case reelle correspondante
+     *
+     * @see Case
+     */
     public Case getCase(int x, int y) {
         return this.grid.getCase(x + this.offsetX, y + this.offsetY);
     }
@@ -56,12 +86,12 @@ public class GameView {
         return this.offsetX;
     }
 
-    public int getOffsetY() {
-        return this.offsetY;
-    }
-
     public void setOffsetX(int offsetX) {
         this.offsetX = offsetX;
+    }
+
+    public int getOffsetY() {
+        return this.offsetY;
     }
 
     public void setOffsetY(int offsetY) {
@@ -95,6 +125,7 @@ public class GameView {
 
     /**
      * Permet de centrer la grille sur le curseur au maximum
+     *
      * @param c La case sur laquelle centrer la grille
      */
     public void focus(Case c) {
@@ -122,7 +153,7 @@ public class GameView {
 
     public boolean isVisible(Case c) {
         return c.getX() >= this.offsetX && c.getX() < this.offsetX + Config.MAP_COLUMN_COUNT
-               && c.getY() >= this.offsetY && c.getY() < this.offsetY + Config.MAP_ROW_COUNT;
+                && c.getY() >= this.offsetY && c.getY() < this.offsetY + Config.MAP_ROW_COUNT;
     }
 
 }

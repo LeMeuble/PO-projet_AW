@@ -47,11 +47,13 @@ public class Player {
     }
 
     private int money;
+    private boolean isAlive;
     private final Type type;
 
     public Player(Player.Type type) {
 
         this.money = 0;
+        this.isAlive = true;
         this.type = type;
 
     }
@@ -66,6 +68,14 @@ public class Player {
 
     public void setMoney(int money) {
         this.money = money;
+    }
+
+    public boolean isAlive() {
+        return this.isAlive;
+    }
+
+    public void setAlive(boolean isAlive) {
+        this.isAlive = isAlive;
     }
 
 }

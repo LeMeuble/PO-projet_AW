@@ -1,13 +1,20 @@
 package main.control;
 
+import main.render.Renderable;
+
 
 /**
  * Classe representant le curseur de selection
+ * Le curseur est represente par deux coordonnees
+ * (x et y) pouvant aller respectivement de :
+ * x : 0 a mapWidth - 1
+ * y : 0 a mapHeight - 1
  *
  * @author Tristan LECONTE--DENIS
  * @author Lucien GRAVOT
+ * @see Renderable
  */
-public class Cursor {
+public class Cursor implements Renderable {
 
     private final int maxWidth;
     private final int maxHeight;
@@ -17,8 +24,10 @@ public class Cursor {
 
     /**
      * Constructeur de Curseur
-     * @param maxWidth
-     * @param maxHeight
+     * Le curseur est initialise a la position (0, 0)
+     *
+     * @param maxWidth  Largeur de la carte (nombre de cases en largeur)
+     * @param maxHeight Hauteur de la carte (nombre de cases en hauteur)
      */
     public Cursor(int maxWidth, int maxHeight) {
 
@@ -31,6 +40,8 @@ public class Cursor {
     }
 
     /**
+     * Obtient la position en x du curseur
+     *
      * @return La coordonnee x du curseur
      */
     public int getCurrentX() {
@@ -38,7 +49,8 @@ public class Cursor {
     }
 
     /**
-     * Definit la coordonnee du curseur
+     * Definir la coordonnee du curseur
+     *
      * @param currentX La coordonnee x
      */
     public void setCurrentX(int currentX) {
@@ -46,6 +58,8 @@ public class Cursor {
     }
 
     /**
+     * Obtient la position en y du curseur
+     *
      * @return La coordonnee y du curseur
      */
     public int getCurrentY() {
@@ -54,6 +68,7 @@ public class Cursor {
 
     /**
      * Definit la coordonnee y du curseur
+     *
      * @param currentY La coordonnee y
      */
     public void setCurrentY(int currentY) {
@@ -62,7 +77,8 @@ public class Cursor {
 
     /**
      * Fait bouger le curseur d'une case vers le haut
-     * @return true si le curseur peut se déplacer, false sinon
+     *
+     * @return true si la position du curseur a ete modifiee, false sinon
      */
     public boolean up() {
 
@@ -77,7 +93,8 @@ public class Cursor {
 
     /**
      * Fait bouger le curseur d'une case vers le bas
-     * @return true si le curseur peut se déplacer, false sinon
+     *
+     * @return true si la position du curseur a ete modifiee, false sinon
      */
     public boolean down() {
 
@@ -92,7 +109,8 @@ public class Cursor {
 
     /**
      * Fait bouger le curseur d'une case vers la droite
-     * @return true si le curseur peut se déplacer, false sinon
+     *
+     * @return true si la position du curseur a ete modifiee, false sinon
      */
     public boolean right() {
 
@@ -107,7 +125,8 @@ public class Cursor {
 
     /**
      * Fait bouger le curseur d'une case vers la gauche
-     * @return true si le curseur peut se déplacer, false sinon
+     *
+     * @return true si la position du curseur a ete modifiee, false sinon
      */
     public boolean left() {
 
@@ -121,6 +140,9 @@ public class Cursor {
     }
 
     /**
+     * Determine si le curseur a besoin d'etre rafraichi
+     * a l'ecran
+     *
      * @return True si il faut rafraichir l'ecran, false sinon
      */
     public boolean needsRefresh() {
@@ -129,6 +151,9 @@ public class Cursor {
 
     /**
      * Stipule qu'on n'a plus besoin de rafraichir l'ecran
+     *
+     * @param needsRefresh true si on a besoin de rafraichir le curseur
+     *                     à l'ecran, false sinon
      */
     public void needsRefresh(boolean needsRefresh) {
         this.needsRefresh = needsRefresh;
