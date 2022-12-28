@@ -81,6 +81,11 @@ public class Grid {
 
     }
 
+    /**
+     * Renovie les unites presentes dans une liste de Cases
+     * @param casesAround Une liste de Cases
+     * @return Une Liste d'Unitees
+     */
     public List<Unit> getUnitsAround(List<Case> casesAround) {
 
         List<Unit> output = new LinkedList<>();

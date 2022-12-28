@@ -4,6 +4,11 @@ import main.terrain.AnimatedTerrain;
 import main.weather.Weather;
 import ressources.PathUtil;
 
+/**
+ * Class representant un obstacle quelconque
+ *
+ * @author Tristan LECONTE--DENIS
+ */
 public class Obstacle extends AnimatedTerrain {
 
     public String getFile(Weather weather, boolean isFoggy, int frame) {

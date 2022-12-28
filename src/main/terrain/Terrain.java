@@ -86,22 +86,37 @@ public abstract class Terrain {
 
     private int textureVariation;
 
+    /**
+     * Constructeur du Terrain sans variation de texture
+     * La valeur est definie a 0
+     */
     public Terrain() {
         this(0);
     }
 
+    /**
+     * Constructeur du Terrain avec une variation de texture
+     * @param textureVariation L'entier de la variation de texture
+     */
     public Terrain(int textureVariation) {
 
         this.textureVariation = textureVariation;
 
     }
 
+    /**
+     * @return Un entier representant une variation de la texture
+     */
     public int getTextureVariation() {
 
         return this.textureVariation;
 
     }
 
+    /**
+     * Definit la variation de la texture
+     * @param textureVariation Un entier
+     */
     public void setTextureVariation(int textureVariation) {
 
         this.textureVariation = textureVariation;
