@@ -3,6 +3,7 @@ package main.unit.type;
 import main.game.Player;
 import main.unit.Animation;
 import main.unit.OnFoot;
+import main.weapon.type.LightMachineGun;
 import ressources.PathUtil;
 
 public class Infantry extends OnFoot {
@@ -12,6 +13,7 @@ public class Infantry extends OnFoot {
 
     public Infantry(Player.Type owner){
             super(owner, 0, 0);
+        this.addWeapon(new LightMachineGun());
     }
 
     @Override

@@ -3,6 +3,8 @@ package main.unit.type;
 import main.game.Player;
 import main.unit.Animation;
 import main.unit.OnFoot;
+import main.weapon.type.Canon;
+import main.weapon.type.LightMachineGun;
 import ressources.PathUtil;
 
 public class Bazooka extends OnFoot {
@@ -12,6 +14,8 @@ public class Bazooka extends OnFoot {
 
     public Bazooka(Player.Type owner){
         super(owner, 0, 0);
+        this.addWeapon(new Canon());
+        this.addWeapon(new LightMachineGun());
     }
 
     @Override

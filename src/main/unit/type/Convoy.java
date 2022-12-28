@@ -12,6 +12,7 @@ public class Convoy extends Motorized {
 
     public Convoy(Player.Type owner){
         super(owner, 0, 0);
+
     }
 
     /**

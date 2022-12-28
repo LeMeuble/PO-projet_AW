@@ -1,0 +1,65 @@
+Prioritaire :
+
+- Riposte quand attaque de case adjacente
+- Capture possible seulement pour les unités à pied
+    - Res = Res - pv attaquant (arrondi sup)
+    - Il faut etre sur la case sinon annulation
+    - Capture => hasPlayed = true
+- Fin de jeu
+    - S'il ne reste qu'un playertype de type
+
+Non prioritaire :
+
+- Réorganiser le bordel du déplacement
+    - Lors du déplacement
+        - Impossible sur les cases avec unite ennemi
+        - Cout de la case
+    - Pour s'arrêter
+        - Pas d'unité sur la case
+    - Achat d'unité (unite apparu est indisponible pour ce tour)
+        - Pas d'unité sur l'usine
+        - Crédits
+
+- Surbrillance des cases possibles
+- Arrondi des PV lors de attaques ?
+
+Bonus :
+- Ajuster les PV ?
+- Touche pour lister les unités encore utilisables (espace) 6.1
+- Cases de déplacement/d'attaques possibles 6.2
+- Armes multiples 6.3
+- Attaques à distance (faire un mortier) (lance missile sol-air) 6.4
+    - Si unite ne s'est pas déplacé lors de ce tour
+
+- Ravitaillement et réparations 6.5
+    - Munitions
+        - Utilisation en attaque ou en riposte
+        - Mitrailleuse infinie ??? (9-10)
+    - Carburant
+        - pt de carburant = pt de déplacement
+        - aerienne (cout de deplacement + fixe par tour):
+            - helico = 2 pt de carburant/tour
+            - bombardier = 5 pt de carburant/tour
+        - si aérien sans fuel, détruit
+        - indicateur low ammo/low fuel
+
+- Transport d'unite 6.6
+    - Une seule unite
+    - Monter à bord (case adjacente)
+    - Depoter (//)
+- Fin de tour automatique 6.7
+    - Activable/desactivable (dans Player)
+    - Si plus d'action possible (tt unite en hasPlayed = true && factory occupés)
+- Converture de terrain 6.8
+    - -20% foret/usine
+    - -30% ville
+    - -40% montagne/qg
+    - aerien : pas de couverture
+- unite navale 6.9
+- brouillard
+    - choisir si on le veut
+    - 
+
+
+Readme :
+- UML

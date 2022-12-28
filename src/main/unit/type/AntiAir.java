@@ -3,6 +3,7 @@ package main.unit.type;
 import main.game.Player;
 import main.unit.Animation;
 import main.unit.Motorized;
+import main.weapon.type.HeavyMachineGun;
 import ressources.PathUtil;
 
 public class AntiAir extends Motorized {
@@ -12,6 +13,7 @@ public class AntiAir extends Motorized {
 
     public AntiAir(Player.Type owner){
         super(owner, 0, 0);
+        this.addWeapon(new HeavyMachineGun());
     }
 
     @Override

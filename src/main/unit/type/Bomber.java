@@ -3,6 +3,7 @@ package main.unit.type;
 import main.game.Player;
 import main.unit.Animation;
 import main.unit.Flying;
+import main.weapon.type.Bombs;
 import ressources.PathUtil;
 
 public class Bomber extends Flying {
@@ -12,6 +13,7 @@ public class Bomber extends Flying {
 
     public Bomber(Player.Type owner){
         super(owner, 0, 0);
+        this.addWeapon(new Bombs());
     }
 
     @Override

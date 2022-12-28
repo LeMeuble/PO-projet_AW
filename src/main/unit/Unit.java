@@ -160,7 +160,7 @@ public abstract class Unit {
         }
     }
 
-    // Todo : Commentaire de ça
+    // Todo : Commentaire de ça et ameliorer (shitty code v2)
     public int getMovementPoint(Weather weather) {
 
         if(this instanceof Flying && weather == Weather.SNOWY) {

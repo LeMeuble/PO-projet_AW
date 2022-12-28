@@ -3,6 +3,8 @@ package main.unit.type;
 import main.game.Player;
 import main.unit.Animation;
 import main.unit.Flying;
+import main.weapon.type.HeavyMachineGun;
+import main.weapon.type.Missile;
 import ressources.Config;
 import ressources.PathUtil;
 
@@ -13,6 +15,8 @@ public class Helicopter extends Flying {
 
     public Helicopter(Player.Type owner){
         super(owner, 0, 0);
+        this.addWeapon(new Missile());
+        this.addWeapon(new HeavyMachineGun());
     }
 
     @Override

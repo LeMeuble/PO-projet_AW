@@ -288,6 +288,8 @@ public class ActionHandler {
 
                     if (currentCase.getUnit().getOwner() == currentPlayer.getType()) {
 
+                        //TODO: Checker si l'unite a deja joue
+
                         this.instance.setGameState(GameState.PLAYING_SELECTING_UNIT_ACTION);
 
                         UnitActionMenu unitActionMenu = new UnitActionMenu();
