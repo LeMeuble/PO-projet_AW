@@ -70,6 +70,12 @@ public abstract class Motorized extends AnimatedUnit {
 
     }
 
+    /**
+     * Verifie si l'unite peut se deplacer sur un terrain en fonction de la meteo
+     * @param destination Le terrain de destination
+     * @param weather La meteo courante
+     * @return true si le deplacement est possible, false sinon
+     */
     @Override
     public boolean canMoveTo(Terrain destination, Weather weather) {
 
@@ -78,6 +84,12 @@ public abstract class Motorized extends AnimatedUnit {
 
     }
 
+    /**
+     * Renvoie le cout de deplacement de l'unite vers un terrain, en fonction de la meteo
+     * @param destination Le terrain de destination
+     * @param weather La meteo de destination
+     * @return Le cout de deplacement
+     */
     public int getMovementCostTo(Terrain destination, Weather weather) {
 
         MovementCost cost = MovementCost.fromTerrainAndWeather(destination.getType(), weather);

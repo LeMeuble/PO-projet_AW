@@ -8,7 +8,7 @@ import ressources.PathUtil;
  * Classe abstraite representant une proriete (un terrain pouvant avoir un proprietaire)
  *
  * @author Tristan LECONTE--DENIS
- * @author GRAVOT Lucien
+ * @author Lucien GRAVOT
  */
 public abstract class Property extends Terrain {
 

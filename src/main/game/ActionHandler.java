@@ -17,11 +17,20 @@ import main.unit.Unit;
 
 import java.util.List;
 
-
+/**
+ * Class prenant en charge les actions associees aux differentes touches pressees
+ *
+ * @author Tristan LECONTE--DENIS
+ * @author Lucien GRAVOT
+ */
 public class ActionHandler {
 
     private final MiniWars instance;
 
+    /**
+     * Constructeur de classe
+     * @param instance Une instance du Jeu en cours
+     */
     public ActionHandler(MiniWars instance) {
 
         this.instance = instance;
@@ -424,6 +433,10 @@ public class ActionHandler {
 
     }
 
+    /**
+     * Ajoute un mouvement (si ce dernier est possible) a la flèche de deplacement
+     * @param movement Le mouvement a ajouter
+     */
     private void updateMovement(Runnable movement) {
 
         Game game = this.instance.getCurrentGame();
@@ -450,10 +463,19 @@ public class ActionHandler {
 
             Terrain terrain = destination.getTerrain();
 
+            // Verifie si le terrain n'est pas une propriete
+            // Si la case en est une, verfie si le joueur courant en est proprietaire
+            // Sinon, pas possble de passer dessus sans attaquer la propriete
             if(!(terrain instanceof Property) || ((Property) terrain).getOwner() == game.getCurrentPlayer().getType()) {
 
+                // Verifie si l'unite a asser de points (en tenant en compte la meteo) pour se deplacer sur cette case
                 if (move.getCost(currentUnit, game.getWeather()) <= currentUnit.getMovementPoint(game.getWeather())) {
 
+                    // Verifie si la case n'a pas deja une unite
+                    // Si c'est le cas, on verifie si notre unite est une unite volante, auquel cas elle peut passer par dessus
+
+                    // Todo : Pouvoir passer sous une unite volante
+                    // Todo : Ne pas pouvoir s'arreter sur une unite
                     if (!destination.hasUnit() || currentUnit instanceof Flying) {
 
                         game.getView().adjustOffset();

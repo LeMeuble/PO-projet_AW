@@ -7,6 +7,12 @@ import main.weather.Weather;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Classe abstraite representant les unites a pied
+ *
+ * @author Tristan LECONTE--DENIS
+ * @author Lucien GRAVOT
+ */
 public abstract class OnFoot extends AnimatedUnit {
 
     public enum MovementCost {
@@ -69,6 +75,12 @@ public abstract class OnFoot extends AnimatedUnit {
 
     }
 
+    /**
+     * Verifie si l'unite peut se deplacer sur un terrain en fonction de la meteo
+     * @param destination Le terrain de destination
+     * @param weather La meteo courante
+     * @return true si le deplacement est possible, false sinon
+     */
     @Override
     public boolean canMoveTo(Terrain destination, Weather weather) {
 
@@ -77,6 +89,12 @@ public abstract class OnFoot extends AnimatedUnit {
 
     }
 
+    /**
+     * Renvoie le cout de deplacement de l'unite vers un terrain, en fonction de la meteo
+     * @param destination Le terrain de destination
+     * @param weather La meteo de destination
+     * @return Le cout de deplacement
+     */
     public int getMovementCostTo(Terrain destination, Weather weather) {
 
         MovementCost cost = MovementCost.fromTerrainAndWeather(destination.getType(), weather);
