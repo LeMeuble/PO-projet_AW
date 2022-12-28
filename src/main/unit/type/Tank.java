@@ -3,6 +3,7 @@ package main.unit.type;
 import main.game.Player;
 import main.unit.Animation;
 import main.unit.Motorized;
+import main.unit.UnitType;
 import main.weapon.type.Canon;
 import main.weapon.type.LightMachineGun;
 import ressources.PathUtil;
@@ -19,8 +20,8 @@ public class Tank extends Motorized {
     }
 
     @Override
-    public Type getType() {
-        return Type.TANK;
+    public UnitType getType() {
+        return UnitType.TANK;
     }
 
     @Override
@@ -35,7 +36,7 @@ public class Tank extends Motorized {
 
     @Override
     public String getFile(int frame) {
-        return PathUtil.getUnitPath(this.getOwner(), Type.TANK, Animation.IDLE, !this.hasPlayed(), frame);
+        return PathUtil.getUnitPath(this.getOwner(), UnitType.TANK, Animation.IDLE, !this.hasPlayed(), frame);
     }
 
 }

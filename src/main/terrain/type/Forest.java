@@ -1,6 +1,7 @@
 package main.terrain.type;
 
 import main.terrain.Terrain;
+import main.terrain.TerrainType;
 
 /**
  * Classe representant une foret
@@ -11,8 +12,8 @@ import main.terrain.Terrain;
 public class Forest extends Terrain {
 
     @Override
-    public Type getType() {
-        return Type.FOREST;
+    public TerrainType getType() {
+        return TerrainType.FOREST;
     }
 
 }

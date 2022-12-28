@@ -3,6 +3,7 @@ package main.unit.type;
 import main.game.Player;
 import main.unit.Animation;
 import main.unit.Flying;
+import main.unit.UnitType;
 import main.weapon.type.HeavyMachineGun;
 import main.weapon.type.Missile;
 import ressources.Config;
@@ -20,8 +21,8 @@ public class Helicopter extends Flying {
     }
 
     @Override
-    public Type getType() {
-        return Type.HELICOPTER;
+    public UnitType getType() {
+        return UnitType.HELICOPTER;
     }
 
     @Override
@@ -36,7 +37,7 @@ public class Helicopter extends Flying {
 
     @Override
     public String getFile(int frame) {
-        return PathUtil.getUnitPath(this.getOwner(), Type.TANK, Animation.IDLE, !this.hasPlayed(), this.getFrame());
+        return PathUtil.getUnitPath(this.getOwner(), UnitType.TANK, Animation.IDLE, !this.hasPlayed(), this.getFrame());
     }
 
     @Override

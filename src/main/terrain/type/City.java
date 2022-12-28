@@ -2,6 +2,7 @@ package main.terrain.type;
 
 import main.game.Player;
 import main.terrain.Property;
+import main.terrain.TerrainType;
 
 /**
  * Classe representant une ville
@@ -20,8 +21,8 @@ public class City extends Property {
     }
 
     @Override
-    public Type getType() {
-        return Type.CITY;
+    public TerrainType getType() {
+        return TerrainType.CITY;
     }
 
 }

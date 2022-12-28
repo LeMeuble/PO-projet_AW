@@ -2,7 +2,6 @@ package main.unit;
 
 import main.game.Player;
 import main.terrain.Terrain;
-import main.unit.type.*;
 import main.weapon.Weapon;
 import main.weather.Weather;
 
@@ -17,85 +16,7 @@ import java.util.List;
  */
 public abstract class Unit {
 
-    private static final double HELICOPTER_SNOWY_MOVEMENT_MULTIPLIER = 2/3d;
-
-
-    /**
-     * Unumeration de tous les types d'unites possibles
-     * Contient leur nom en String, leur prix et leurs points de mouvements
-     */
-    public enum Type {
-
-        INFANTRY('i', 1500, 3),
-        BAZOOKA('z', 3500, 2),
-        BOMBER('b', 20000, 7),
-        CONVOY('c', 5000, 6),
-        ANTIAIR('d', 6000, 6),
-        HELICOPTER('h', 12000, 6),
-        TANK('t', 7000, 6),
-        ARTILLERY('a', 6000, 5);
-
-        private final char character;
-        private final int price;
-        private final int movementPoint;
-
-        Type(char character, int price, int movementPoint) {
-            this.character = character;
-            this.price = price;
-            this.movementPoint = movementPoint;
-        }
-
-        public static Type fromCharacter(char character) {
-
-            for (Type type : Type.values()) {
-
-                if (type.character == character) {
-                    return type;
-                }
-
-            }
-            return null;
-
-        }
-
-        public int getPrice() {
-            return this.price;
-        }
-
-        public String getName() {
-            return this.name().toLowerCase();
-        }
-
-        public int getMovementPoint() {
-            return this.movementPoint;
-        }
-
-        public Unit newInstance(Player.Type p) {
-
-            switch (this) {
-                case INFANTRY:
-                    return new Infantry(p);
-                case BAZOOKA:
-                    return new Bazooka(p);
-                case BOMBER:
-                    return new Bomber(p);
-                case CONVOY:
-                    return new Convoy(p);
-                case ANTIAIR:
-                    return new AntiAir(p);
-                case HELICOPTER:
-                    return new Helicopter(p);
-                case TANK:
-                    return new Tank(p);
-                case ARTILLERY:
-                    return new Artillery(p);
-            }
-
-            return null;
-
-        }
-
-    }
+    private static final double HELICOPTER_SNOWY_MOVEMENT_MULTIPLIER = 2 / 3d;
 
 
     protected final Player.Type owner;
@@ -109,6 +30,7 @@ public abstract class Unit {
     /**
      * Constructeur d'une unite
      * Initialise toutes les valeurs par defaut,
+     *
      * @param owner
      */
     public Unit(Player.Type owner) {
@@ -120,6 +42,32 @@ public abstract class Unit {
         this.hasPlayed = false;
         this.hasMoved = false;
         this.isAlive = true;
+
+    }
+
+    public static Unit parse(String string) {
+
+        if (string == null) return null;
+
+        String format = string.replace(" ", "");
+        if (format.startsWith("[") && format.endsWith("]")) {
+
+            String[] split = format.substring(1, format.length() - 1).split(";");
+
+            if (split.length == 2 && !split[0].equals(".")) {
+
+                final String unitSpan = split[0].trim();
+                final String ownerSpan = split[1].trim();
+
+                UnitType type = UnitType.fromCharacter(unitSpan.charAt(0));
+                Player.Type owner = !ownerSpan.equals(".") ? Player.Type.fromValue(Integer.parseInt(ownerSpan)) : null;
+
+                if (type != null && owner != null) return type.newInstance(owner);
+
+            }
+
+        }
+        return null;
 
     }
 
@@ -140,6 +88,7 @@ public abstract class Unit {
 
     /**
      * Definit la vie de l'unite
+     *
      * @param health La nouvelle valeur de la vie
      */
     public void setHealth(double health) {
@@ -148,6 +97,7 @@ public abstract class Unit {
 
     /**
      * Inflige des degats à l'unite
+     *
      * @param damage Le nombre de degats a infliger
      */
     public void damageBy(double damage) {
@@ -163,7 +113,7 @@ public abstract class Unit {
     // Todo : Commentaire de ça et ameliorer (shitty code v2)
     public int getMovementPoint(Weather weather) {
 
-        if(this instanceof Flying && weather == Weather.SNOWY) {
+        if (this instanceof Flying && weather == Weather.SNOWY) {
             return (int) (this.getType().getMovementPoint() * HELICOPTER_SNOWY_MOVEMENT_MULTIPLIER);
         }
 
@@ -172,6 +122,7 @@ public abstract class Unit {
 
     /**
      * Ajoute une arme dans la liste des armes de l'unite
+     *
      * @param weapon L'arme a ajouter
      */
     public void addWeapon(Weapon weapon) {
@@ -187,6 +138,7 @@ public abstract class Unit {
 
     /**
      * Definit le fuel de l'unite
+     *
      * @param fuel La nouvelle valeur du fuel
      */
     public void setFuel(int fuel) {
@@ -202,6 +154,7 @@ public abstract class Unit {
 
     /**
      * Definit si l'unite a joue ou non
+     *
      * @param hasPlayed Un boolean
      */
     public void setHasPlayed(boolean hasPlayed) {
@@ -217,7 +170,8 @@ public abstract class Unit {
 
     /**
      * Definit si l'unite a bouge ou non
-     * @param hasMoved Un boolean 
+     *
+     * @param hasMoved Un boolean
      */
     public void setHasMoved(boolean hasMoved) {
         this.hasMoved = hasMoved;
@@ -232,6 +186,7 @@ public abstract class Unit {
 
     /**
      * Definit si l'unite est vivant ou non
+     *
      * @param alive Un boolean
      */
     public void setAlive(boolean alive) {
@@ -249,19 +204,21 @@ public abstract class Unit {
     /**
      * Permet a cette unite d'en attaquer une autre
      * Choisit automatiquement l'arme la plus efficace contre la cible
+     *
      * @param target La cible a attaquer
      */
     public void attack(Unit target) {
 
-        Type targetType = target.getType();
+        UnitType targetType = target.getType();
         Weapon bestWeapon = this.bestWeaponAgainst(targetType);
-         // Todo : Verifier si c'est les bonnes fonctions qui sont appelees
+        // Todo : Verifier si c'est les bonnes fonctions qui sont appelees
         target.damageBy(calculateDamage(bestWeapon.getMultiplierOn(targetType)));
 
     }
 
     /**
      * Calcule les degats infligees a la cible
+     *
      * @param multiplier Le multiplicateur de degats
      * @return Le nombre de degats infliges
      */
@@ -271,10 +228,11 @@ public abstract class Unit {
 
     /**
      * Choisit la meilleure arme de l'unite courante contre l'unite cible
+     *
      * @param unitType Le type de l'unite cible
      * @return La meilleure arme utilisable
      */
-    public Weapon bestWeaponAgainst(Unit.Type unitType) {
+    public Weapon bestWeaponAgainst(UnitType unitType) {
 
         Weapon bestWeapon = null;
         // Cherche parmi toutes les armes de l'unite courante
@@ -301,9 +259,10 @@ public abstract class Unit {
 
     }
 
-    public abstract Type getType();
+    public abstract UnitType getType();
 
     public abstract int getMinReach();
+
     public abstract int getMaxReach();
 
     public abstract String getFile(int frame);

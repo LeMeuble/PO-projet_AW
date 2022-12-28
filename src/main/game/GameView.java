@@ -66,40 +66,104 @@ public class GameView {
         return this.grid.getCase(x + this.offsetX, y + this.offsetY);
     }
 
+    /**
+     * Obtenir la valeur x sur l'ecran a partir de la coordonnee x reelle.
+     *
+     * @param x La coordonnee x reelle (0 <= x < width)
+     * @return La coordonnee x sur l'ecran (0 <= x <= Config.MAP_COLUMN_COUNT)
+     * @see Config
+     */
     public int offsetX(int x) {
         return x - this.offsetX;
     }
 
+    /**
+     * Obtenir la valeur y sur l'ecran a partir de la coordonnee y reelle.
+     *
+     * @param y La coordonnee y reelle (0 <= y < height)
+     * @return La coordonnee y sur l'ecran (0 <= y <= Config.MAP_ROW_COUNT)
+     * @see Config
+     */
     public int offsetY(int y) {
         return y - this.offsetY;
     }
 
+    /**
+     * Obtenir la coordonnee x du curseur sur l'ecran.
+     *
+     * @return La coordonnee x du curseur sur l'ecran.
+     */
     public int getCursorX() {
         return this.offsetX(this.cursor.getCurrentX());
     }
 
+    /**
+     * Obtenir la coordonnee y du curseur sur l'ecran.
+     *
+     * @return La coordonnee y du curseur sur l'ecran.
+     */
     public int getCursorY() {
         return this.offsetY(this.cursor.getCurrentY());
     }
 
+    /**
+     * Connaitre le decalage en x de la grille reelle par rapport a la grille affichee.
+     *
+     * @return Le decalage en x (0 <= x <= width - Config.MAP_COLUMN_COUNT)
+     *         si width > Config.MAP_COLUMN_COUNT et 0 sinon.
+     * @see Config
+     */
     public int getOffsetX() {
         return this.offsetX;
     }
 
+    /**
+     * Definir un nouveau decalage x arbitraire.
+     *
+     * @param offsetX Le nouveau decalage x (0 <= x <= width - Config.MAP_COLUMN_COUNT)
+     */
     public void setOffsetX(int offsetX) {
-        this.offsetX = offsetX;
+        this.offsetX = Math.max(0, Math.min(offsetX, this.width - Config.MAP_COLUMN_COUNT));
     }
 
+    /**
+     * Connaitre le decalage en y de la grille reelle par rapport a la grille affichee.
+     *
+     * @return Le decalage en y (0 <= y <= height - Config.MAP_ROW_COUNT)
+     *         si height > Config.MAP_ROW_COUNT et 0 sinon.
+     * @see Config
+     */
     public int getOffsetY() {
         return this.offsetY;
     }
 
+    /**
+     * Definir un nouveau decalage y arbitraire.
+     *
+     * @param offsetY Le nouveau decalage x (0 <= x <= width - Config.MAP_COLUMN_COUNT)
+     */
     public void setOffsetY(int offsetY) {
-        this.offsetY = offsetY;
+        this.offsetY = Math.max(0, Math.min(offsetY, this.height - Config.MAP_ROW_COUNT));;
     }
 
     /**
-     * Permet de centrer la grille sur le curseur
+     * Determiner si une case est visible a l'ecran
+     *
+     * @param c La case a tester
+     * @return true si la case est visible a l'ecran, false sinon
+     */
+    public boolean isVisible(Case c) {
+        return c.getX() >= this.offsetX && c.getX() < this.offsetX + Config.MAP_COLUMN_COUNT && c.getY() >= this.offsetY && c.getY() < this.offsetY + Config.MAP_ROW_COUNT;
+    }
+
+    /**
+     * Permet d'ajuster/recalculer le decalage
+     * Cette methode permet de faire en sorte que le
+     * curseur soit sur l'ecran. Le decalage est caracterise
+     * par le plus petit decalage possible pour que le curseur soit visible.
+     * Pour un decalage centre voir {@link #focus(Case)}
+     *
+     * @return true is le decalage a change false sinon
      */
     public boolean adjustOffset() {
 
@@ -125,6 +189,9 @@ public class GameView {
 
     /**
      * Permet de centrer la grille sur le curseur au maximum
+     * Cette methode permet de centre l'affichage (en ajustant le decalage)
+     * sur une case en particulier.
+     * Pour un decalage minimal voir {@link #adjustOffset()}
      *
      * @param c La case sur laquelle centrer la grille
      */
@@ -149,11 +216,6 @@ public class GameView {
             this.offsetY = y - Config.MAP_ROW_COUNT / 2;
         }
 
-    }
-
-    public boolean isVisible(Case c) {
-        return c.getX() >= this.offsetX && c.getX() < this.offsetX + Config.MAP_COLUMN_COUNT
-                && c.getY() >= this.offsetY && c.getY() < this.offsetY + Config.MAP_ROW_COUNT;
     }
 
 }

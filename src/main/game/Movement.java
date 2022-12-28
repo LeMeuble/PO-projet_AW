@@ -2,16 +2,31 @@ package main.game;
 
 
 import main.map.Case;
+import main.render.Renderable;
 import main.unit.Unit;
 import main.weather.Weather;
 import ressources.PathUtil;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
-public class Movement {
+/**
+ * Classe representant un mouvement d'une unite
+ * avec une liste de cases a parcourir et un point de depart.
+ *
+ * @author GRAVOT Lucien
+ * @author LECONTE--DENIS Tristan
+ *
+ * @see Renderable
+ */
+public class Movement implements Renderable {
 
+    /**
+     * Enumeration des directions possibles
+     * pour un mouvement
+     */
     enum Direction {
 
         BEGIN(Integer.MAX_VALUE, Integer.MAX_VALUE),
@@ -31,6 +46,7 @@ public class Movement {
 
         /**
          * Retourne une direction a partir des deltas x et y
+         *
          * @param dx Delta x
          * @param dy Delta y
          * @return Direction correspondante
@@ -96,7 +112,7 @@ public class Movement {
     }
 
     private final Case startingPoint;
-    private List<Case> cases;
+    private final List<Case> cases;
     private boolean needsRefresh;
 
     public Movement(Case startingPoint) {
@@ -108,8 +124,6 @@ public class Movement {
 
     public void update(Case newCase) {
 
-        System.out.println("Before:" + this.cases);
-
         if(this.cases.contains(newCase)) {
 
             int index = this.cases.indexOf(newCase);
@@ -118,8 +132,6 @@ public class Movement {
         }
         else if(newCase.equals(startingPoint)) this.cases.clear();
         else this.cases.add(newCase);
-
-        System.out.println("After:" + this.cases);
 
         this.needsRefresh = true;
 
@@ -204,16 +216,19 @@ public class Movement {
 
     }
 
+    @Override
     public boolean needsRefresh() {
         return this.needsRefresh;
     }
 
-    public void refreshed() {
-        this.needsRefresh = false;
+    @Override
+    public void needsRefresh(boolean needsRefresh) {
+        this.needsRefresh = needsRefresh;
     }
 
     /**
      * Reprensation textuelle du mouvement
+     *
      * @return Representer le mouvement sous forme de chaine de caractere
      */
     public String toString() {

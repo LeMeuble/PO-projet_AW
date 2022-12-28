@@ -1,5 +1,6 @@
 package main.terrain;
 
+import main.game.Player;
 import main.weather.Weather;
 import ressources.PathUtil;
 
@@ -10,33 +11,6 @@ import ressources.PathUtil;
  * @author GRAVOT Lucien
  */
 public abstract class Terrain {
-
-    /**
-     * Enumeration des types de terrain
-     *
-     * @author LECONTE--DENIS Tristan
-     * @author GRAVOT Lucien
-     */
-    public enum Type {
-
-        PLAIN,
-        FOREST,
-        MOUNTAIN,
-        WATER,
-        OBSTACLE,
-        FACTORY,
-        CITY,
-        HQ;
-
-        public String getDirectoryName() {
-            return this.name().toLowerCase();
-        }
-
-        public String getFileName() {
-            return this.name().toLowerCase() + ".png";
-        }
-
-    }
 
 
     private int textureVariation;
@@ -57,6 +31,51 @@ public abstract class Terrain {
     public Terrain(int textureVariation) {
 
         this.textureVariation = textureVariation;
+
+    }
+
+    public static Terrain parse(String t) {
+
+        if (t == null) return null;
+
+        String format = t.trim();
+        if (format.startsWith("{") && format.endsWith("}")) {
+
+            String[] split = format.substring(1, format.length() - 1).trim().split(";");
+
+            if (split.length == 3) {
+
+                final String terrainSpan = split[0].trim();
+                final String variationSpan = split[1].trim();
+                final String ownerSpan = split[2].trim();
+
+                for (int i = 0; i < split.length; i++) {
+                    split[i] = split[i].trim();
+                }
+
+                TerrainType parsed = TerrainType.fromCharacter(terrainSpan.charAt(0));
+
+                if (parsed != null) {
+
+                    Player.Type owner = !ownerSpan.equals(".") ? Player.Type.fromValue(Integer.parseInt(ownerSpan)) : null;
+                    Terrain terrain = parsed.newInstance(owner);
+
+                    if (terrain != null) {
+
+                        int variation = variationSpan.contains(".") ? 0 : Integer.parseInt(variationSpan);
+                        terrain.setTextureVariation(variation);
+
+                        return terrain;
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        return null;
 
     }
 
@@ -87,6 +106,6 @@ public abstract class Terrain {
         return PathUtil.getTerrainPath(weather, this.getType(), this.getTextureVariation(), isFoggy);
     }
 
-    public abstract Terrain.Type getType();
+    public abstract TerrainType getType();
 
 }

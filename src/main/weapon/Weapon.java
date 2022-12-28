@@ -1,7 +1,14 @@
 package main.weapon;
 
-import main.unit.Unit;
+import main.unit.UnitType;
 
+/**
+ * Classe abstraite representant une arme et
+ * ses munitions
+ *
+ * @author Tristan LECONTE--DENIS
+ * @author Lucien GRAVOT
+ */
 public abstract class Weapon {
 
     private int ammo;
@@ -12,16 +19,27 @@ public abstract class Weapon {
 
     }
 
+    /**
+     * Obtenir le nombre de munitions restantes
+     * pour l'arme
+     *
+     * @return Le nombre de munitions restantes
+     */
     public int getAmmo() {
         return ammo;
     }
 
+    /**
+     * Changer le nombre de munitions pour
+     * cette arme
+     *
+     * @param ammo Le nouveau nombre de munitions
+     */
     public void setAmmo(int ammo) {
         this.ammo = ammo;
     }
 
-    public abstract boolean canBeUsedOn(Unit.Type unitType);
-    public abstract float getMultiplierOn(Unit.Type unitType);
-
+    public abstract boolean canBeUsedOn(UnitType unitType);
+    public abstract float getMultiplierOn(UnitType unitType);
 
 }

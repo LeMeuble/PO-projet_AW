@@ -2,6 +2,7 @@ package main.terrain.type;
 
 import main.game.Player;
 import main.terrain.Property;
+import main.terrain.TerrainType;
 
 /**
  * Classe representant un QG
@@ -20,8 +21,8 @@ public class HQ extends Property {
     }
 
     @Override
-    public Type getType() {
-        return Type.HQ;
+    public TerrainType getType() {
+        return TerrainType.HQ;
     }
 
 }

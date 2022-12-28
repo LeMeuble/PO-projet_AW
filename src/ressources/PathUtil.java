@@ -1,9 +1,9 @@
 package ressources;
 
 import main.game.Player;
-import main.terrain.Terrain;
+import main.terrain.TerrainType;
 import main.unit.Animation;
-import main.unit.Unit;
+import main.unit.UnitType;
 import main.weather.Weather;
 
 import java.io.File;
@@ -37,20 +37,20 @@ public class PathUtil {
 
     }
 
-    public static String getBuildingPath(Weather weather, Player.Type player, Terrain.Type terrain, boolean isFoggy) {
+    public static String getBuildingPath(Weather weather, Player.Type player, TerrainType terrain, boolean isFoggy) {
 
         String playerOrFog = isFoggy ? "foggy" : player.getName();
 
         return PICTURE_BUILDINGS_FOLDER + SEP + weather.getName() + SEP + playerOrFog + SEP + terrain.getFileName();
     }
 
-    public static String getTerrainPath(Weather weather, Terrain.Type terrain, int textureVariation, boolean isFoggy) {
+    public static String getTerrainPath(Weather weather, TerrainType terrain, int textureVariation, boolean isFoggy) {
 
         String foggy = isFoggy ? "foggy" : "normal";
         return PICTURE_TERRAINS_FOLDER + SEP + weather.getName() + SEP + foggy + SEP + terrain.getDirectoryName() + SEP + textureVariation + ".png";
     }
 
-    public static String getAnimatedTerrainPath(Weather weather, Terrain.Type terrain, int frame, int textureVariation, boolean isFoggy) {
+    public static String getAnimatedTerrainPath(Weather weather, TerrainType terrain, int frame, int textureVariation, boolean isFoggy) {
 
         String foggy = isFoggy ? "foggy" : "normal";
         return PICTURE_TERRAINS_FOLDER + SEP + weather.getName() + SEP + foggy + SEP + terrain.getDirectoryName() + SEP + "frame" + frame + SEP + textureVariation + ".png";
@@ -65,7 +65,7 @@ public class PathUtil {
         return PICTURE_UI_FOLDER + SEP + name + ".png";
     }
 
-    public static String getUnitPath(Player.Type player, Unit.Type unit, Animation animation, boolean isAvailable, int frame) {
+    public static String getUnitPath(Player.Type player, UnitType unit, Animation animation, boolean isAvailable, int frame) {
 
         String pose = isAvailable ? animation.getName() : "unavailable";
         return PICTURE_TROOPS_FOLDER + SEP + player.getName() + SEP + unit.getName() + SEP + pose + SEP + frame + ".png";

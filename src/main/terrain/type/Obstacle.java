@@ -1,6 +1,7 @@
 package main.terrain.type;
 
 import main.terrain.AnimatedTerrain;
+import main.terrain.TerrainType;
 
 /**
  * Class representant un obstacle quelconque
@@ -10,8 +11,8 @@ import main.terrain.AnimatedTerrain;
 public class Obstacle extends AnimatedTerrain {
 
     @Override
-    public Type getType() {
-        return Type.OBSTACLE;
+    public TerrainType getType() {
+        return TerrainType.OBSTACLE;
     }
 
 }

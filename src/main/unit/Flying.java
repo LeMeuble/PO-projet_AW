@@ -2,25 +2,26 @@ package main.unit;
 
 import main.game.Player;
 import main.terrain.Terrain;
+import main.terrain.TerrainType;
 import main.weather.Weather;
 
 public abstract class Flying extends AnimatedUnit {
 
     public enum MovementCost {
 
-        ON_HQ_CLEAR(Terrain.Type.HQ, Weather.CLEAR, 1),
-        ON_CITY_CLEAR(Terrain.Type.CITY, Weather.CLEAR, 1),
-        ON_FACTORY_CLEAR(Terrain.Type.FACTORY, Weather.CLEAR, 1),
-        ON_PLAIN_CLEAR(Terrain.Type.PLAIN, Weather.CLEAR, 1),
-        ON_FOREST_CLEAR(Terrain.Type.FOREST, Weather.CLEAR, 1),
-        ON_MOUNTAIN_CLEAR(Terrain.Type.MOUNTAIN, Weather.CLEAR, 1),
-        ON_WATER_CLEAR(Terrain.Type.WATER, Weather.CLEAR, 1);
+        ON_HQ_CLEAR(TerrainType.HQ, Weather.CLEAR, 1),
+        ON_CITY_CLEAR(TerrainType.CITY, Weather.CLEAR, 1),
+        ON_FACTORY_CLEAR(TerrainType.FACTORY, Weather.CLEAR, 1),
+        ON_PLAIN_CLEAR(TerrainType.PLAIN, Weather.CLEAR, 1),
+        ON_FOREST_CLEAR(TerrainType.FOREST, Weather.CLEAR, 1),
+        ON_MOUNTAIN_CLEAR(TerrainType.MOUNTAIN, Weather.CLEAR, 1),
+        ON_WATER_CLEAR(TerrainType.WATER, Weather.CLEAR, 1);
 
-        private final Terrain.Type terrainType;
+        private final TerrainType terrainType;
         private final Weather weather;
         private final int cost;
 
-        MovementCost(Terrain.Type terrainType, Weather weather, int cost) {
+        MovementCost(TerrainType terrainType, Weather weather, int cost) {
 
             this.terrainType = terrainType;
             this.weather = weather;
@@ -28,7 +29,7 @@ public abstract class Flying extends AnimatedUnit {
 
         }
 
-        public static MovementCost fromTerrainAndWeather(Terrain.Type terrainType, Weather weather) {
+        public static MovementCost fromTerrainAndWeather(TerrainType terrainType, Weather weather) {
 
             for (MovementCost cost : MovementCost.values()) {
                 if (cost.terrainType == terrainType && cost.weather == weather) {

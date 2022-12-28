@@ -82,9 +82,6 @@ public class Renderer {
 
             if (menu instanceof AnimatedMenu) {
 
-                if (menu instanceof MainMenu)
-                    System.out.println("Rendering main menu: " + menu.isVisible() + " " + menu.needsRefresh() + "" + menu.getClass());
-
                 AnimatedMenu animatedMenu = (AnimatedMenu) menu;
 
                 if (animatedMenu.needsRefresh() || forceRender) {
@@ -210,7 +207,7 @@ public class Renderer {
 
             }
 
-            game.getMovement().refreshed();
+            game.getMovement().needsRefresh(false);
 
             return true;
 

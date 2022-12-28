@@ -2,6 +2,7 @@ package main.unit;
 
 import main.game.Player;
 import main.terrain.Terrain;
+import main.terrain.TerrainType;
 import main.weather.Weather;
 
 import java.util.Arrays;
@@ -11,28 +12,28 @@ public abstract class Motorized extends AnimatedUnit {
 
     public enum MovementCost {
 
-        ON_HQ_NORMAL(Terrain.Type.HQ, 1, Weather.CLEAR, Weather.RAINY, Weather.HEAVY_WIND),
-        ON_CITY_NORMAL(Terrain.Type.CITY, 1, Weather.CLEAR, Weather.RAINY, Weather.HEAVY_WIND),
-        ON_FACTORY_NORMAL(Terrain.Type.FACTORY, 1, Weather.CLEAR, Weather.RAINY, Weather.HEAVY_WIND),
-        ON_PLAIN_NORMAL(Terrain.Type.PLAIN, 1, Weather.CLEAR, Weather.RAINY, Weather.HEAVY_WIND),
-        ON_FOREST_NORMAL(Terrain.Type.FOREST, 2, Weather.CLEAR, Weather.RAINY, Weather.HEAVY_WIND),
-        ON_MOUNTAIN_NORMAL(Terrain.Type.MOUNTAIN, Integer.MAX_VALUE, Weather.CLEAR, Weather.RAINY, Weather.HEAVY_WIND),
-        ON_WATER_NORMAL(Terrain.Type.WATER, Integer.MAX_VALUE, Weather.CLEAR, Weather.RAINY, Weather.HEAVY_WIND),
+        ON_HQ_NORMAL(TerrainType.HQ, 1, Weather.CLEAR, Weather.RAINY, Weather.HEAVY_WIND),
+        ON_CITY_NORMAL(TerrainType.CITY, 1, Weather.CLEAR, Weather.RAINY, Weather.HEAVY_WIND),
+        ON_FACTORY_NORMAL(TerrainType.FACTORY, 1, Weather.CLEAR, Weather.RAINY, Weather.HEAVY_WIND),
+        ON_PLAIN_NORMAL(TerrainType.PLAIN, 1, Weather.CLEAR, Weather.RAINY, Weather.HEAVY_WIND),
+        ON_FOREST_NORMAL(TerrainType.FOREST, 2, Weather.CLEAR, Weather.RAINY, Weather.HEAVY_WIND),
+        ON_MOUNTAIN_NORMAL(TerrainType.MOUNTAIN, Integer.MAX_VALUE, Weather.CLEAR, Weather.RAINY, Weather.HEAVY_WIND),
+        ON_WATER_NORMAL(TerrainType.WATER, Integer.MAX_VALUE, Weather.CLEAR, Weather.RAINY, Weather.HEAVY_WIND),
 
-        ON_HQ_SNOWY(Terrain.Type.HQ, 1, Weather.SNOWY),
-        ON_CITY_SNOWY(Terrain.Type.CITY, 1, Weather.SNOWY),
-        ON_FACTORY_SNOWY(Terrain.Type.FACTORY, 1, Weather.SNOWY),
-        ON_PLAIN_SNOWY(Terrain.Type.PLAIN, 2, Weather.SNOWY),
-        ON_FOREST_SNOWY(Terrain.Type.FOREST, 3, Weather.SNOWY),
-        ON_MOUNTAIN_SNOWY(Terrain.Type.MOUNTAIN, Integer.MAX_VALUE, Weather.SNOWY),
-        ON_WATER_CLEAR(Terrain.Type.WATER, Integer.MAX_VALUE, Weather.CLEAR);
+        ON_HQ_SNOWY(TerrainType.HQ, 1, Weather.SNOWY),
+        ON_CITY_SNOWY(TerrainType.CITY, 1, Weather.SNOWY),
+        ON_FACTORY_SNOWY(TerrainType.FACTORY, 1, Weather.SNOWY),
+        ON_PLAIN_SNOWY(TerrainType.PLAIN, 2, Weather.SNOWY),
+        ON_FOREST_SNOWY(TerrainType.FOREST, 3, Weather.SNOWY),
+        ON_MOUNTAIN_SNOWY(TerrainType.MOUNTAIN, Integer.MAX_VALUE, Weather.SNOWY),
+        ON_WATER_CLEAR(TerrainType.WATER, Integer.MAX_VALUE, Weather.CLEAR);
 
 
-        private final Terrain.Type terrainType;
+        private final TerrainType terrainType;
         private final List<Weather> weather;
         private final int cost;
 
-        MovementCost(Terrain.Type terrainType, int cost, Weather ...weather) {
+        MovementCost(TerrainType terrainType, int cost, Weather ...weather) {
 
             this.terrainType = terrainType;
             this.cost = cost;
@@ -40,7 +41,7 @@ public abstract class Motorized extends AnimatedUnit {
 
         }
 
-        public static MovementCost fromTerrainAndWeather(Terrain.Type terrainType, Weather weather) {
+        public static MovementCost fromTerrainAndWeather(TerrainType terrainType, Weather weather) {
 
             for (MovementCost cost : MovementCost.values()) {
                 if (cost.terrainType == terrainType && cost.weather.contains(weather)) {

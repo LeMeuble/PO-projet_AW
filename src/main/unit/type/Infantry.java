@@ -3,6 +3,7 @@ package main.unit.type;
 import main.game.Player;
 import main.unit.Animation;
 import main.unit.OnFoot;
+import main.unit.UnitType;
 import main.weapon.type.LightMachineGun;
 import ressources.PathUtil;
 
@@ -17,8 +18,8 @@ public class Infantry extends OnFoot {
     }
 
     @Override
-    public Type getType() {
-        return Type.INFANTRY;
+    public UnitType getType() {
+        return UnitType.INFANTRY;
     }
 
     @Override
@@ -33,7 +34,7 @@ public class Infantry extends OnFoot {
 
     @Override
     public String getFile(int frame) {
-        return PathUtil.getUnitPath(this.getOwner(), Type.INFANTRY, Animation.IDLE, !this.hasPlayed(), frame);
+        return PathUtil.getUnitPath(this.getOwner(), UnitType.INFANTRY, Animation.IDLE, !this.hasPlayed(), frame);
     }
 
 }

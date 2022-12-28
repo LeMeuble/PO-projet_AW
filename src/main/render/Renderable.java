@@ -12,7 +12,20 @@ package main.render;
  */
 public interface Renderable {
 
+    /**
+     * Indique si l'objet qui implement {@link Renderable}
+     * a besoin d'etre rafraichi a l'ecran.
+     *
+     * @return true si l'objet a besoin d'etre rafraichi, false sinon
+     */
     boolean needsRefresh();
+
+    /**
+     * Change l'etat de l'objet pour indiquer qu'il a ou non
+     * besoin d'etre rafraichi a l'ecran.
+     *
+     * @param needsRefresh true si l'objet a besoin d'etre rafraichi, false sinon
+     */
     void needsRefresh(boolean needsRefresh);
 
 }

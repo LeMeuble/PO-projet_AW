@@ -1,6 +1,6 @@
 package main.weapon.type;
 
-import main.unit.Unit;
+import main.unit.UnitType;
 import main.weapon.Weapon;
 
 public class LightMachineGun extends Weapon {
@@ -11,25 +11,25 @@ public class LightMachineGun extends Weapon {
 
     public enum DamageMultiplier {
 
-        ON_INFANTRY(Unit.Type.INFANTRY, 0.6f),
-        ON_BAZOOKA(Unit.Type.BAZOOKA, 0.55f),
-        ON_TANK(Unit.Type.TANK, 0.15f),
-        ON_ANTIAIR(Unit.Type.ANTIAIR, 0.1f),
-        ON_HELICOPTER(Unit.Type.HELICOPTER, 0.3f),
-        ON_BOMBER(Unit.Type.BOMBER, 0.0f),
-        ON_CONVOY(Unit.Type.CONVOY, 0.4f);
+        ON_INFANTRY(UnitType.INFANTRY, 0.6f),
+        ON_BAZOOKA(UnitType.BAZOOKA, 0.55f),
+        ON_TANK(UnitType.TANK, 0.15f),
+        ON_ANTIAIR(UnitType.ANTIAIR, 0.1f),
+        ON_HELICOPTER(UnitType.HELICOPTER, 0.3f),
+        ON_BOMBER(UnitType.BOMBER, 0.0f),
+        ON_CONVOY(UnitType.CONVOY, 0.4f);
 
-        private final Unit.Type unit;
+        private final UnitType unit;
         private final float multiplier;
 
-        DamageMultiplier(Unit.Type unit, float multiplier) {
+        DamageMultiplier(UnitType unit, float multiplier) {
 
             this.unit = unit;
             this.multiplier = multiplier;
 
         }
 
-         public static DamageMultiplier fromUnit(Unit.Type unit) {
+         public static DamageMultiplier fromUnit(UnitType unit) {
 
             for (DamageMultiplier d : DamageMultiplier.values()) {
 
@@ -55,14 +55,14 @@ public class LightMachineGun extends Weapon {
     }
 
     @Override
-    public boolean canBeUsedOn(Unit.Type unitType) {
+    public boolean canBeUsedOn(UnitType unitType) {
 
         return this.getMultiplierOn(unitType) != 0.0f;
 
     }
 
     @Override
-    public float getMultiplierOn(Unit.Type unitType) {
+    public float getMultiplierOn(UnitType unitType) {
         DamageMultiplier damage = DamageMultiplier.fromUnit(unitType);
         return damage != null ? damage.getMultiplier() : 0.0f;
     }

@@ -98,7 +98,7 @@ public class KeystrokeListener {
      */
     public void start() {
 
-        if (this.isRunning) {
+        if (!this.isRunning) {
             this.isRunning = true;
             this.thread = new Thread(this::run);
             this.thread.start();

@@ -3,6 +3,7 @@ package main.unit.type;
 import main.game.Player;
 import main.unit.Animation;
 import main.unit.Motorized;
+import main.unit.UnitType;
 import main.weapon.type.HeavyMachineGun;
 import ressources.PathUtil;
 
@@ -17,8 +18,8 @@ public class AntiAir extends Motorized {
     }
 
     @Override
-    public Type getType() {
-        return Type.ANTIAIR;
+    public UnitType getType() {
+        return UnitType.ANTIAIR;
     }
 
     @Override

@@ -2,6 +2,7 @@ package main.terrain.type;
 
 import main.game.Player;
 import main.terrain.Property;
+import main.terrain.TerrainType;
 
 /**
  * Classe representant une usine
@@ -20,8 +21,8 @@ public class Factory extends Property {
     }
 
     @Override
-    public Type getType() {
-        return Type.FACTORY;
+    public TerrainType getType() {
+        return TerrainType.FACTORY;
     }
 
 }

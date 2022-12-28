@@ -88,8 +88,8 @@ public class MapParser {
                     String unitCase = unitSplit[j];
                     String terrainCase = terrainSplit[j];
 
-                    Unit unit = UnitParser.parse(unitCase); // Parse the unit. If the unit is null, it means that there is no unit on this case
-                    Terrain terrain = TerrainParser.parse(terrainCase);
+                    Unit unit = Unit.parse(unitCase); // Parse the unit. If the unit is null, it means that there is no unit on this case
+                    Terrain terrain = Terrain.parse(terrainCase);
 
                     if (terrain == null)
                         throw new IOException("Invalid map file : Invalid terrain at " + j + "c, " + (mapHeight - i) + "l");

@@ -30,6 +30,7 @@ public class Player {
             return this.name().toLowerCase();
         }
 
+
         public static Type fromValue(int value) {
 
             for (Type p : Type.values()) {

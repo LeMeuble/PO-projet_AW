@@ -1,6 +1,7 @@
 package main.terrain.type;
 
 import main.terrain.AnimatedTerrain;
+import main.terrain.TerrainType;
 
 /**
  * Classe representant de l'eau
@@ -11,8 +12,8 @@ import main.terrain.AnimatedTerrain;
 public class Water extends AnimatedTerrain {
 
     @Override
-    public Type getType() {
-        return Type.WATER;
+    public TerrainType getType() {
+        return TerrainType.WATER;
     }
 
 }

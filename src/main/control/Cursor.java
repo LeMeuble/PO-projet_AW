@@ -12,6 +12,7 @@ import main.render.Renderable;
  *
  * @author Tristan LECONTE--DENIS
  * @author Lucien GRAVOT
+ *
  * @see Renderable
  */
 public class Cursor implements Renderable {
@@ -144,7 +145,10 @@ public class Cursor implements Renderable {
      * a l'ecran
      *
      * @return True si il faut rafraichir l'ecran, false sinon
+     *
+     * @see Renderable#needsRefresh()
      */
+    @Override
     public boolean needsRefresh() {
         return this.needsRefresh;
     }
@@ -154,8 +158,13 @@ public class Cursor implements Renderable {
      *
      * @param needsRefresh true si on a besoin de rafraichir le curseur
      *                     à l'ecran, false sinon
+     *
+     * @see Renderable#needsRefresh(boolean)
      */
+    @Override
     public void needsRefresh(boolean needsRefresh) {
         this.needsRefresh = needsRefresh;
     }
+
+
 }
