@@ -1,6 +1,6 @@
 package main.unit;
 
-public enum Animation {
+public enum UnitAnimation {
 
     IDLE("idle"),
     MOVE_UP("moveup"),
@@ -10,7 +10,7 @@ public enum Animation {
 
     private final String name;
 
-    Animation(String name) {
+    UnitAnimation(String name) {
         this.name = name;
     }
 

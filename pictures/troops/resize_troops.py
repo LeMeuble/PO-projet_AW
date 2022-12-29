@@ -28,33 +28,33 @@ def rec_resize(path):
 
 					newim.save(abs_path)
 
-				elif im.size == (24, 24):
+				# elif im.size == (24, 24):
 
-					skip = ["lander", "bomber", "battleship", "cruiser", "helicopter", "fighter_plane", "transport_copter"]
+				# 	skip = ["lander", "bomber", "battleship", "cruiser", "helicopter", "fighter_plane", "transport_copter"]
 
-					if "move" in abs_path:
+				# 	if "move" in abs_path:
 
-						shift = True
+				# 		shift = True
 
-						for s in skip:
+				# 		for s in skip:
 
-							if s in abs_path:
+				# 			if s in abs_path:
 
-								shift = False
-								break
+				# 				shift = False
+				# 				break
 
-						if shift:
+				# 		if shift:
 
-							print("SHIFTING " + abs_path)
+				# 			print("SHIFTING " + abs_path)
 							
-							newim = Image.new("RGBA", (24, 24), (0, 0, 0, 0))
-							newim.paste(im.crop((0, 4, 24, 24)), (0, 0))
-							im = newim
+				# 			newim = Image.new("RGBA", (24, 24), (0, 0, 0, 0))
+				# 			newim.paste(im.crop((0, 4, 24, 24)), (0, 0))
+				# 			im = newim
 
-						print("UPSCALING to 96  " + abs_path)
+				# 		print("UPSCALING to 96  " + abs_path)
 
-						im = im.resize((96, 96), resample=Image.Resampling.NEAREST)
-						im.save(abs_path)
+				# 		im = im.resize((96, 96), resample=Image.Resampling.NEAREST)
+				# 		im.save(abs_path)
 
 
 		else:

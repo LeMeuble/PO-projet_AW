@@ -137,6 +137,10 @@ public class Movement implements Renderable {
 
     }
 
+    public List<Case> getCases() {
+        return this.cases;
+    }
+
     public void goBack() {
         ((LinkedList<Case>) cases).removeLast();
     }

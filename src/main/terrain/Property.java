@@ -61,7 +61,7 @@ public abstract class Property extends Terrain {
      * @param defense La valeur de la defense
      */
     public void setDefense(double defense) {
-        this.defense = defense;
+        this.defense = Math.max(0, Math.min(defense, DEFAULT_DEFENSE));
     }
 
     @Override

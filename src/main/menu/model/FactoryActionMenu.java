@@ -2,6 +2,7 @@ package main.menu.model;
 
 import main.game.Player;
 import main.menu.Menu;
+import main.menu.MenuModel;
 
 public class FactoryActionMenu extends Menu {
 
@@ -19,8 +20,8 @@ public class FactoryActionMenu extends Menu {
 
     }
 
-    public Model getModel() {
-        return Model.FACTORY_ACTION_MENU;
+    public MenuModel getModel() {
+        return MenuModel.FACTORY_ACTION_MENU;
     }
 
 }

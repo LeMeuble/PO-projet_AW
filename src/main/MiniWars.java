@@ -8,11 +8,11 @@ import main.game.ActionHandler;
 import main.game.Game;
 import main.game.GameState;
 import main.map.MapMetadata;
-import main.map.MapSelector;
-import main.menu.Menu;
 import main.menu.MenuManager;
+import main.menu.MenuModel;
 import main.menu.model.MainMenu;
 import main.menu.model.MapSelectionMenu;
+import main.util.OptionSelector;
 import main.parser.MapParser;
 import main.render.Renderer;
 import main.weather.Weather;
@@ -28,7 +28,7 @@ import ressources.Config;
  */
 public class MiniWars {
 
-    private final MapSelector mapSelector;
+    private final OptionSelector<MapMetadata> mapSelector;
     private final MenuManager menuManager;
     private final Renderer renderer;
     private final KeystrokeListener keystrokeListener;
@@ -42,7 +42,7 @@ public class MiniWars {
         this.currentGame = null;
         this.gameState = GameState.MENU_TITLE_SCREEN;
 
-        this.mapSelector = new MapSelector(MapParser.listAvailableMaps());
+        this.mapSelector = new OptionSelector<>(MapParser.listAvailableMaps());
         this.keystrokeListener = new KeystrokeListener();
         this.actionHandler = new ActionHandler(this);
 
@@ -111,7 +111,7 @@ public class MiniWars {
         return this.renderer;
     }
 
-    public MapSelector getMapSelector() {
+    public OptionSelector<MapMetadata> getMapSelector() {
         return this.mapSelector;
     }
 
@@ -129,9 +129,9 @@ public class MiniWars {
         int mainMenuVariant = (int) (Math.random() * Config.MAIN_MENU_BACKGROUND_VARIATION_COUNT);
 
         // TODO: Weather-based background
-        this.menuManager.addMenu(Menu.Model.MAIN_MENU, new MainMenu(mainMenuVariant, Weather.CLEAR));
-        this.menuManager.addMenu(Menu.Model.MAP_SELECTION_MENU, new MapSelectionMenu(this.mapSelector));
-        this.menuManager.getMenu(Menu.Model.MAP_SELECTION_MENU).setVisible(false);
+        this.menuManager.addMenu(MenuModel.MAIN_MENU, new MainMenu(mainMenuVariant, Weather.CLEAR));
+        this.menuManager.addMenu(MenuModel.MAP_SELECTION_MENU, new MapSelectionMenu(this.mapSelector));
+        this.menuManager.getMenu(MenuModel.MAP_SELECTION_MENU).setVisible(false);
     }
 
 }

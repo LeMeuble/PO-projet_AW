@@ -2,6 +2,7 @@ package main.map;
 
 import main.unit.Unit;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -37,6 +38,15 @@ public class Grid {
 
         return grid[y][x];
 
+    }
+
+    public List<Case> getCases() {
+
+        List<Case> cases = new LinkedList<>();
+        for (int i = 0; i < grid.length; i++) {
+            cases.addAll(Arrays.asList(grid[i]));
+        }
+        return cases;
     }
 
     /**

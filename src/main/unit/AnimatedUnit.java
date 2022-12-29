@@ -1,17 +1,17 @@
 package main.unit;
 
 import main.game.Player;
-import main.render.AnimationClock;
+import main.animation.AnimationClock;
 
 public abstract class AnimatedUnit extends Unit {
 
-    private Animation animation;
+    private UnitAnimation unitAnimation;
     private AnimationClock animationClock;
 
     public AnimatedUnit(Player.Type owner, int frameCount, int frameDuration) {
 
         super(owner);
-        this.animation = Animation.IDLE;
+        this.unitAnimation = UnitAnimation.IDLE;
         this.animationClock = new AnimationClock(frameCount, frameDuration, true);
 
     }
@@ -24,12 +24,12 @@ public abstract class AnimatedUnit extends Unit {
         this.animationClock.setFrame(frame);
     }
 
-    public void setAnimation(Animation animation) {
-        this.animation = animation;
+    public void setAnimation(UnitAnimation unitAnimation) {
+        this.unitAnimation = unitAnimation;
     }
 
-    public void switchAnimation(Animation animation) {
-        this.setAnimation(animation);
+    public void switchAnimation(UnitAnimation unitAnimation) {
+        this.setAnimation(unitAnimation);
         this.setFrame(0);
     }
 
@@ -37,16 +37,10 @@ public abstract class AnimatedUnit extends Unit {
         this.animationClock = new AnimationClock(frameCount, frameDuration, true);
     }
 
-    public Animation getAnimation() {
-        return this.animation;
+    public UnitAnimation getAnimation() {
+        return this.unitAnimation;
     }
 
-    public boolean needsRefresh() {
-        return this.animationClock.needsRefresh();
-    }
 
-    public void nextFrame() {
-        this.animationClock.nextFrame();
-    }
 
 }

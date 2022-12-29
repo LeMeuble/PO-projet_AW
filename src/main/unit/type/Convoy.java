@@ -1,7 +1,7 @@
 package main.unit.type;
 
 import main.game.Player;
-import main.unit.Animation;
+import main.unit.UnitAnimation;
 import main.unit.Motorized;
 import main.unit.UnitType;
 import ressources.PathUtil;
@@ -38,7 +38,7 @@ public class Convoy extends Motorized {
 
     @Override
     public String getFile(int frame) {
-        return PathUtil.getUnitPath(this.getOwner(), UnitType.TANK, Animation.IDLE, !this.hasPlayed(), this.getFrame());
+        return PathUtil.getUnitPath(this.getOwner(), this.getType(), UnitAnimation.IDLE, !this.hasPlayed(), frame);
     }
 
 }

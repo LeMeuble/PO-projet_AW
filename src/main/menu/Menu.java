@@ -3,14 +3,6 @@ package main.menu;
 
 public abstract class Menu {
 
-    public enum Model {
-        MAIN_MENU,
-        MAP_SELECTION_MENU,
-        UNIT_ACTION_MENU,
-        FACTORY_ACTION_MENU,
-        PAUSE_MENU;
-    }
-
 
     private boolean isVisible;
     private boolean needsRefresh;
@@ -65,6 +57,6 @@ public abstract class Menu {
     }
 
     public abstract void render();
-    public abstract Model getModel();
+    public abstract MenuModel getModel();
 
 }

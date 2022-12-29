@@ -1,7 +1,7 @@
 package main.unit.type;
 
 import main.game.Player;
-import main.unit.Animation;
+import main.unit.UnitAnimation;
 import main.unit.Flying;
 import main.unit.UnitType;
 import main.weapon.type.HeavyMachineGun;
@@ -37,16 +37,7 @@ public class Helicopter extends Flying {
 
     @Override
     public String getFile(int frame) {
-        return PathUtil.getUnitPath(this.getOwner(), UnitType.TANK, Animation.IDLE, !this.hasPlayed(), this.getFrame());
+        return PathUtil.getUnitPath(this.getOwner(), this.getType(), UnitAnimation.IDLE, !this.hasPlayed(), frame);
     }
 
-    @Override
-    public void switchAnimation(Animation animation) {
-
-        int frameCount = animation == Animation.IDLE ? Config.UNIT_LONG_ANIMATION_FRAME_COUNT : Config.UNIT_SHORT_ANIMATION_FRAME_COUNT;
-
-        this.setAnimation(animation);
-        this.newAnimationClock(frameCount, Config.UNIT_ANIMATION_FRAME_DURATION);
-
-    }
 }

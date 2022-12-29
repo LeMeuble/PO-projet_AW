@@ -1,7 +1,7 @@
 package main.unit.type;
 
 import main.game.Player;
-import main.unit.Animation;
+import main.unit.UnitAnimation;
 import main.unit.OnFoot;
 import main.unit.UnitType;
 import main.weapon.type.Canon;
@@ -21,7 +21,7 @@ public class Bazooka extends OnFoot {
 
     @Override
     public UnitType getType() {
-        return UnitType.TANK;
+        return UnitType.BAZOOKA;
     }
 
     @Override
@@ -36,7 +36,7 @@ public class Bazooka extends OnFoot {
 
     @Override
     public String getFile(int frame) {
-        return PathUtil.getUnitPath(this.getOwner(), UnitType.TANK, Animation.IDLE, !this.hasPlayed(), this.getFrame());
+        return PathUtil.getUnitPath(this.getOwner(), this.getType(), UnitAnimation.IDLE, !this.hasPlayed(), frame);
     }
 
 }

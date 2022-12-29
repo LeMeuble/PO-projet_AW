@@ -4,7 +4,7 @@ import main.game.Player;
 import main.unit.type.*;
 
 /**
- * Unumeration de tous les types d'unites possibles
+ * Enumeration de tous les types d'unites possibles
  * Contient leur nom en String, leur prix et leurs points de mouvements
  */
 public enum UnitType {

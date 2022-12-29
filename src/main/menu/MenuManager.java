@@ -7,43 +7,28 @@ import java.util.Map;
 
 public class MenuManager {
 
-    private Map<Menu.Model, Menu> menus;
-    private Menu.Model focusedMenu;
+    private Map<MenuModel, Menu> menus;
 
     public MenuManager() {
         this.menus = new HashMap<>();
-        this.focusedMenu = null;
     }
 
-    public void addMenu(Menu.Model menuKey, Menu menu) {
+    public void addMenu(MenuModel menuKey, Menu menu) {
         this.addMenu(menuKey, menu, false);
     }
 
-    public void addMenu(Menu.Model menuKey, Menu menu, boolean focus) {
+    public void addMenu(MenuModel menuKey, Menu menu, boolean focus) {
 
         if(menu != null) {
             this.menus.put(menuKey, menu);
-            if(focus) this.focusedMenu = menuKey;
         }
     }
 
-    public boolean removeMenu(Menu.Model menuKey) {
+    public boolean removeMenu(MenuModel menuKey) {
         return this.menus.remove(menuKey) != null;
     }
 
-    public void focusMenu(Menu.Model menuKey) {
-        this.focusedMenu = menuKey;
-    }
-
-    public void unfocusMenu() {
-        this.focusedMenu = null;
-    }
-
-    public Menu getFocusedMenu() {
-        return this.menus.get(this.focusedMenu);
-    }
-
-    public Menu getMenu(Menu.Model menuKey) {
+    public Menu getMenu(MenuModel menuKey) {
         return this.menus.get(menuKey);
     }
 

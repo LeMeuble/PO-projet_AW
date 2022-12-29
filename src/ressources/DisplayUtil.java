@@ -18,7 +18,7 @@ public class DisplayUtil {
      *         x : offset if the grid is smaller than the window width otherwise 0
      *         y : offset if the grid is smaller than the window height otherwise 0
      */
-    private static double[] getCenteringOffset(int gridWidth, int gridHeight) {
+    public static double[] getCenteringOffset(int gridWidth, int gridHeight) {
 
         double xPixelOffset = 0;
         if (gridWidth < Config.MAP_COLUMN_COUNT)

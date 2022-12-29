@@ -1,6 +1,6 @@
 package main.menu;
 
-import main.render.AnimationClock;
+import main.animation.AnimationClock;
 
 public abstract class AnimatedMenu extends Menu {
 

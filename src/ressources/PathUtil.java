@@ -2,7 +2,7 @@ package ressources;
 
 import main.game.Player;
 import main.terrain.TerrainType;
-import main.unit.Animation;
+import main.unit.UnitAnimation;
 import main.unit.UnitType;
 import main.weather.Weather;
 
@@ -25,6 +25,8 @@ public class PathUtil {
     public static final String PICTURE_UI_FOLDER = PICTURES_FOLDER + SEP + "ui";
     public static final String PICTURE_UI_BACKGROUND_FOLDER = PICTURE_UI_FOLDER + SEP + "backgrounds";
     public static final String PICTURE_UI_OVERLAY_FOLDER = PICTURE_UI_FOLDER + SEP + "overlay";
+    public static final String PICTURE_UI_GUI_FOLDER = PICTURE_UI_FOLDER + SEP + "gui";
+    public static final String PICTURE_UI_HP_FOLDER = PICTURE_UI_FOLDER + SEP + "hp";
 
 
 
@@ -65,9 +67,9 @@ public class PathUtil {
         return PICTURE_UI_FOLDER + SEP + name + ".png";
     }
 
-    public static String getUnitPath(Player.Type player, UnitType unit, Animation animation, boolean isAvailable, int frame) {
+    public static String getUnitPath(Player.Type player, UnitType unit, UnitAnimation unitAnimation, boolean isAvailable, int frame) {
 
-        String pose = isAvailable ? animation.getName() : "unavailable";
+        String pose = isAvailable ? unitAnimation.getName() : "unavailable";
         return PICTURE_TROOPS_FOLDER + SEP + player.getName() + SEP + unit.getName() + SEP + pose + SEP + frame + ".png";
 
     }
@@ -83,4 +85,14 @@ public class PathUtil {
         return PICTURE_UI_OVERLAY_FOLDER + SEP + player.getName() + ".png";
 
     }
+
+    public static String getGuiPath(String type) {
+        return PICTURE_UI_GUI_FOLDER + SEP + type + ".png";
+    }
+
+    public static String getHealthPath(int health, boolean isAvailable) {
+        String available = isAvailable ? "available" : "unavailable";
+        return PICTURE_UI_HP_FOLDER + SEP + available + SEP + health + ".png";
+    }
+
 }

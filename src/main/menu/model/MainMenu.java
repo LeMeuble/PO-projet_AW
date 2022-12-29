@@ -1,7 +1,8 @@
 package main.menu.model;
 
 import main.menu.AnimatedMenu;
-import main.render.AnimationClock;
+import main.menu.MenuModel;
+import main.animation.AnimationClock;
 import main.weather.Weather;
 import ressources.Config;
 import ressources.DisplayUtil;
@@ -39,8 +40,8 @@ public class MainMenu extends AnimatedMenu {
 
     }
 
-    public Model getModel() {
-        return Model.MAIN_MENU;
+    public MenuModel getModel() {
+        return MenuModel.MAIN_MENU;
     }
 
 }

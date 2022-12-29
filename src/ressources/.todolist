@@ -7,10 +7,7 @@ Prioritaire :
     - Capture => hasPlayed = true
 - Fin de jeu
     - S'il ne reste qu'un playertype de type
-
-Non prioritaire :
-
-- Réorganiser le bordel du déplacement
+- Réorganiser le bordel du déplacement (OK?)
     - Lors du déplacement
         - Impossible sur les cases avec unite ennemi
         - Cout de la case
@@ -20,10 +17,14 @@ Non prioritaire :
         - Pas d'unité sur l'usine
         - Crédits
 
+Non prioritaire :
+
 - Surbrillance des cases possibles
 - Arrondi des PV lors de attaques ?
 
 Bonus :
+- Animation de mouvement des unites
+- Classe coordonnée
 - Ajuster les PV ?
 - Touche pour lister les unités encore utilisables (espace) 6.1
 - Cases de déplacement/d'attaques possibles 6.2

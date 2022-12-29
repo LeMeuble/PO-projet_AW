@@ -16,6 +16,7 @@ import java.util.List;
  */
 public abstract class Unit {
 
+    public static final int MAX_HEALTH = 10;
     private static final double HELICOPTER_SNOWY_MOVEMENT_MULTIPLIER = 2 / 3d;
 
 
@@ -36,7 +37,7 @@ public abstract class Unit {
     public Unit(Player.Type owner) {
 
         this.owner = owner;
-        this.health = 10;
+        this.health = MAX_HEALTH;
         this.weapons = new ArrayList<>();
         this.fuel = 100;
         this.hasPlayed = false;
@@ -102,7 +103,7 @@ public abstract class Unit {
      */
     public void damageBy(double damage) {
         this.health -= damage;
-
+        // Todo : Dégats en fonction de l'unité (El famoso Problème Pour Les Nous Du Futur) (aka ceux qui relisent ce commentaire)
         // Si l'unite n'a plus de vie, on la tue
         if (this.health <= 0.0d) {
             this.isAlive = false;
@@ -212,7 +213,7 @@ public abstract class Unit {
         UnitType targetType = target.getType();
         Weapon bestWeapon = this.bestWeaponAgainst(targetType);
         // Todo : Verifier si c'est les bonnes fonctions qui sont appelees
-        target.damageBy(calculateDamage(bestWeapon.getMultiplierOn(targetType)));
+        target.damageBy(this.calculateDamage(bestWeapon.getMultiplierOn(targetType)));
 
     }
 

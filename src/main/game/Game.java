@@ -5,20 +5,17 @@ import main.map.Case;
 import main.map.Grid;
 import main.map.MapMetadata;
 import main.parser.MapParser;
+import main.terrain.Property;
+import main.terrain.Terrain;
+import main.unit.Unit;
 import main.weather.Weather;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Classe representant une partie dans une carte.
- * Une partie est caracterisee par / contient :
- * - Une carte (La grille)
- * - Une metadonnee de carte
- * - Le joueur courant
- * - Les joueurs
- * - Le curseur de selection
- * - Le temps (météo)
+ * Classe representant une partie dans une carte. Une partie est caracterisee par / contient : - Une carte (La grille) -
+ * Une metadonnee de carte - Le joueur courant - Les joueurs - Le curseur de selection - Le temps (météo)
  *
  * @author LECONTE--DENIS Tristan
  * @author GRAVOT Lucien
@@ -26,23 +23,20 @@ import java.util.Map;
 public class Game {
 
 
+    private final MapMetadata mapMetadata;
+    private final Grid grid;
+    private final GameView view;
+    private final Map<Player.Type, Player> players;
     private Cursor cursor;
     private Movement movement;
     private Player.Type currentPlayer;
     private Case selectedCase;
     private Weather weather;
 
-    private final MapMetadata mapMetadata;
-    private final Grid grid;
-    private final GameView view;
-    private final Map<Player.Type, Player> players;
-
     /**
-     * Constructeur de Game.
-     * Permet de creer une partie a partir des metadonnees de la carte.
+     * Constructeur de Game. Permet de creer une partie a partir des metadonnees de la carte.
      *
-     * @param mapMetadata Metadonnee de la carte a charger
-     *                    pour cette nouvelle partie.
+     * @param mapMetadata Metadonnee de la carte a charger pour cette nouvelle partie.
      *
      * @see MapMetadata
      */
@@ -86,10 +80,8 @@ public class Game {
     }
 
     /**
-     * Obtenir la vue de la partie.
-     * La vue est utilisee pour permettre l'adaptation
-     * de la carte (grille) reelle avec la grille de la
-     * fenetre de jeu.
+     * Obtenir la vue de la partie. La vue est utilisee pour permettre l'adaptation de la carte (grille) reelle avec la
+     * grille de la fenetre de jeu.
      *
      * @return La vue de la partie.
      *
@@ -100,8 +92,7 @@ public class Game {
     }
 
     /**
-     * Obtenir la largeur de la carte a partir
-     * des metadonnees de la carte.
+     * Obtenir la largeur de la carte a partir des metadonnees de la carte.
      *
      * @return Largeur de la carte.
      */
@@ -110,8 +101,7 @@ public class Game {
     }
 
     /**
-     * Obtenir la hauteur de la carte a partir
-     * des metadonnees de la carte.
+     * Obtenir la hauteur de la carte a partir des metadonnees de la carte.
      *
      * @return Hauteur de la carte.
      */
@@ -139,7 +129,7 @@ public class Game {
 
         for (Player player : this.players.values()) {
 
-            if(player.isAlive()) count++;
+            if (player.isAlive()) count++;
 
         }
 
@@ -158,11 +148,62 @@ public class Game {
         return this.players.get(currentPlayer);
     }
 
-    // TODO: Adapter selon les joueurs en vie
-    public void nextPlayer() {
+    public void nextTurn() {
 
-        int nextPlayer = this.currentPlayer.getValue() + 1 > this.getPlayerCount() ? 1 : this.currentPlayer.getValue() + 1;
-        this.currentPlayer = Player.Type.fromValue(nextPlayer);
+        // TODO: System de meteo si actif
+        // TODO: System de brouillard si actif
+        Player nextPlayer = this.nextPlayer();
+        System.out.println("Next player: " + nextPlayer.getType().toString());
+
+        for (Case c : this.grid.getCases()) {
+
+            Terrain terrain = c.getTerrain();
+            Unit unit = c.getUnit();
+
+            if (unit != null) {
+                unit.setHasPlayed(false);
+                unit.setHasMoved(false);
+            }
+
+            if (terrain instanceof Property) {
+
+                Property property = (Property) terrain;
+
+                if (unit == null) {
+
+                    property.setDefense(property.getDefense() + 5); // todo: add config
+
+                }
+                else {
+
+                    if (unit.getOwner() == property.getOwner()) {
+
+//                        unit.supply()
+
+                    }
+
+                }
+
+            }
+
+        }
+
+    }
+
+    public Player nextPlayer() {
+
+        if (this.getAlivePlayerCount() != 0) {
+
+            do {
+
+                int nextPlayer = this.currentPlayer.getValue() + 1 > this.getPlayerCount() ? 1 : this.currentPlayer.getValue() + 1;
+                this.currentPlayer = Player.Type.fromValue(nextPlayer);
+
+            } while (!this.getCurrentPlayer().isAlive());
+
+        }
+
+        return this.getCurrentPlayer();
 
     }
 
@@ -211,23 +252,22 @@ public class Game {
     }
 
     /**
-     * Annuler le mouvement en cours.
-     * Revient a faire :
-     * <code>
-     *     Game#setMovement(null);
-     * </code>
-     */
-    public void cancelMovement() {
-        this.movement = null;
-    }
-
-    /**
      * Definir une nouvelle instance de mouvement.
      *
      * @param movement Nouvelle instance de mouvement
      */
     public void setMovement(Movement movement) {
         this.movement = movement;
+    }
+
+    /**
+     * Annuler le mouvement en cours. Revient a faire :
+     * <code>
+     * Game#setMovement(null);
+     * </code>
+     */
+    public void resetMovement() {
+        this.movement = null;
     }
 
     /**

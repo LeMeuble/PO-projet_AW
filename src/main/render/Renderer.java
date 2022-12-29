@@ -1,6 +1,7 @@
 package main.render;
 
 import librairies.StdDraw;
+import main.animation.AnimationClock;
 import main.control.Cursor;
 import main.game.Game;
 import main.game.GameState;
@@ -10,7 +11,7 @@ import main.map.Case;
 import main.menu.AnimatedMenu;
 import main.menu.Menu;
 import main.menu.MenuManager;
-import main.menu.model.MainMenu;
+import main.menu.MenuModel;
 import main.weather.Weather;
 import ressources.Config;
 import ressources.DisplayUtil;
@@ -51,11 +52,14 @@ public class Renderer {
 
             switch (gameState) {
                 case PLAYING_SELECTING_UNIT_ACTION:
+                case PLAYING_SELECTING_TARGET:
                 case PLAYING_SELECTING:
                     copyBuffer = this.renderMap(gameState, game, game.getCursor().needsRefresh());
                     copyBuffer |= this.renderCursor(game, copyBuffer);
                     break;
                 case PLAYING_MOVING_UNIT:
+
+                    // TODO: render movement layer below unit layer
                     copyBuffer = this.renderMap(gameState, game, game.getCursor().needsRefresh());
                     copyBuffer |= this.renderMovement(game, copyBuffer);
                     copyBuffer |= this.renderCursor(game, copyBuffer);
@@ -107,7 +111,7 @@ public class Renderer {
 
     }
 
-    private boolean renderMenu(Menu.Model model, boolean forceRender) {
+    private boolean renderMenu(MenuModel model, boolean forceRender) {
 
         Menu menu = this.menuManager.getMenu(model);
         if (menu == null) return false;
@@ -173,6 +177,7 @@ public class Renderer {
     private boolean renderMovement(Game game, boolean forceRender) {
 
         if (game == null) return false;
+        if (game.getMovement() == null) return false;
 
         if (game.getMovement().needsRefresh() || forceRender) {
 
@@ -192,7 +197,7 @@ public class Renderer {
                     int y = gameView.offsetY(c.getY());
 
                     DisplayUtil.drawPictureInCase(x, y, mapWidth, mapHeight, arrow.getPath(game.getCurrentPlayer().getType()));
-
+                    c.renderUnit(x, y, mapWidth, mapHeight, this.unitClockSync); // remove unit
                 }
 
             }

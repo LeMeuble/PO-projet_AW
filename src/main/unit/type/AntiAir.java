@@ -1,7 +1,7 @@
 package main.unit.type;
 
 import main.game.Player;
-import main.unit.Animation;
+import main.unit.UnitAnimation;
 import main.unit.Motorized;
 import main.unit.UnitType;
 import main.weapon.type.HeavyMachineGun;
@@ -34,6 +34,6 @@ public class AntiAir extends Motorized {
 
     @Override
     public String getFile(int frame) {
-        return PathUtil.getUnitPath(this.getOwner(), this.getType(), Animation.IDLE, !this.hasPlayed(), frame);
+        return PathUtil.getUnitPath(this.getOwner(), this.getType(), UnitAnimation.IDLE, !this.hasPlayed(), frame);
     }
 }

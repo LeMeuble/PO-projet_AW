@@ -1,12 +1,15 @@
 package main.map;
 
-import main.render.AnimationClock;
+import main.animation.AnimationClock;
 import main.terrain.AnimatedTerrain;
 import main.terrain.Property;
 import main.terrain.Terrain;
+import main.unit.OnFoot;
 import main.unit.Unit;
 import main.weather.Weather;
+import ressources.Config;
 import ressources.DisplayUtil;
+import ressources.PathUtil;
 
 /**
  * Classe representant une Case
@@ -98,19 +101,34 @@ public class Case {
 
         if (terrain instanceof AnimatedTerrain) {
             DisplayUtil.drawPictureInCase(x, y, width, height, ((AnimatedTerrain) terrain).getFile(weather, isFoggy, terrainClockSync.getFrame()));
-        } else if (terrain instanceof Property) {
+        }
+        else if (terrain instanceof Property) {
             DisplayUtil.drawPictureInCase(x, y, width, height, 1, 2, terrain.getFile(weather, isFoggy));
-        } else {
+        }
+        else {
             DisplayUtil.drawPictureInCase(x, y, width, height, terrain.getFile(weather, isFoggy));
         }
 
     }
 
     public void renderUnit(int x, int y, int width, int height, AnimationClock unitClockSync) {
-        if (this.hasUnit()) {
 
-            DisplayUtil.drawPictureInCase(x, y, width, height, this.getUnit().getFile(unitClockSync.getFrame()));
+        if (this.hasUnit() && this.getUnit().isAlive()) {
 
+            final Unit unit = this.getUnit();
+
+            DisplayUtil.drawPictureInCase(x, y, width, height, unit.getFile(unitClockSync.getFrame()));
+
+            if (unit.getHealth() < Unit.MAX_HEALTH || true) {
+
+                double offsetDivider = (unit instanceof OnFoot) ? 4.0d : 5.0d;
+
+                double pixelX = DisplayUtil.getCenterX(x, width) + Config.PIXEL_PER_CASE / offsetDivider;
+                double pixelY = DisplayUtil.getCenterY(y, height) - Config.PIXEL_PER_CASE / offsetDivider;
+
+                DisplayUtil.drawPicture(pixelX, pixelY, PathUtil.getHealthPath((int) unit.getHealth() - 1, !unit.hasPlayed()), Config.PIXEL_PER_CASE / 3, Config.PIXEL_PER_CASE / 3);
+
+            }
         }
     }
 

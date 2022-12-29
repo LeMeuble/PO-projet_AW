@@ -1,4 +1,4 @@
-package main.render;
+package main.animation;
 
 public class AnimationClock {
 
