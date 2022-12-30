@@ -1,7 +1,9 @@
 package main.unit;
 
 import main.game.Player;
+import main.terrain.Property;
 import main.terrain.Terrain;
+import main.weapon.RangedWeapon;
 import main.weapon.Weapon;
 import main.weather.Weather;
 
@@ -104,6 +106,8 @@ public abstract class Unit {
     public void damageBy(double damage) {
         this.health -= damage;
         // Todo : Dégats en fonction de l'unité (El famoso Problème Pour Les Nous Du Futur) (aka ceux qui relisent ce commentaire)
+        // Todo : Se rendre compte que ces gens, c'est vous
+        // Todo : Enfin, nous, mais vous saisissez l'idée
         // Si l'unite n'a plus de vie, on la tue
         if (this.health <= 0.0d) {
             this.isAlive = false;
@@ -215,6 +219,13 @@ public abstract class Unit {
         // Todo : Verifier si c'est les bonnes fonctions qui sont appelees
         target.damageBy(this.calculateDamage(bestWeapon.getMultiplierOn(targetType)));
 
+        if(!(bestWeapon instanceof RangedWeapon)) {
+
+            Weapon targetBestWeapon = target.bestWeaponAgainst(this.getType());
+            this.damageBy(target.calculateDamage(targetBestWeapon.getMultiplierOn(this.getType())));
+
+        }
+
     }
 
     /**
@@ -251,6 +262,25 @@ public abstract class Unit {
 
         }
         return bestWeapon;
+    }
+
+    public void capture(Property property) {
+
+        if(this instanceof OnFoot) {
+            double currentDefense = property.getDefense();
+            double newDefense = Math.ceil(currentDefense - this.getHealth());
+
+            property.setDefense(newDefense);
+
+            if (property.getDefense() <= 0) {
+
+                property.setOwner(this.getOwner());
+                property.setDefense(5);
+
+            }
+            this.setHasPlayed(true);
+        }
+
     }
 
     // Todo : De la doc pour des abstracts ?

@@ -3,18 +3,13 @@ package main.menu.model;
 import librairies.StdDraw;
 import main.menu.ActionMenu;
 import main.menu.MenuModel;
-import main.menu.SelectionMenu;
 import main.unit.UnitAction;
 import main.util.OptionSelector;
 import ressources.Config;
-import ressources.DisplayUtil;
-import ressources.PathUtil;
 
-import javax.swing.text.html.Option;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 
 public class UnitActionMenu extends ActionMenu<UnitAction> {
 
@@ -28,14 +23,20 @@ public class UnitActionMenu extends ActionMenu<UnitAction> {
     public void render() {
 
         super.render();
-        Font font = new Font("Arial", Font.BOLD, 20);
+        Font font = new Font("Arial", Font.BOLD, 16);
         try {
-            font = Font.createFont(Font.TRUETYPE_FONT, new File("pictures/Minecraftia-Regular.ttf")).deriveFont(20f);
+            font = Font.createFont(Font.TRUETYPE_FONT, new File("pictures/Minecraftia-Regular.ttf")).deriveFont(16f);
         }
         catch (Exception ignored) {}
 
+        BufferedImage image = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
+        Graphics g = image.getGraphics();
+        FontMetrics f = g.getFontMetrics(font);
+
         double x = Config.MENU_ACTION_MARGIN + Config.MENU_ACTION_TOP_HEIGHT / 1.5d;
-        double y = (Config.HEIGHT - Config.MENU_ACTION_MARGIN) - Config.MENU_ACTION_TOP_HEIGHT - Config.MENU_ACTION_MIDDLE_HEIGHT / 2.0d;
+        double y = (Config.HEIGHT - Config.MENU_ACTION_MARGIN) - Config.MENU_ACTION_TOP_HEIGHT - Config.MENU_ACTION_MIDDLE_HEIGHT / 2.0d - f.getHeight() / 2.0d;
+
+        StdDraw.setFont(font);
 
         for (UnitAction action : this.getOptions()) {
 
@@ -46,7 +47,6 @@ public class UnitActionMenu extends ActionMenu<UnitAction> {
             }
 
             StdDraw.textLeft(x, y, action.name().toLowerCase());
-            StdDraw.circle(x, y, 5);
 
             y -= Config.MENU_ACTION_MIDDLE_HEIGHT;
 

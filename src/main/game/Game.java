@@ -1,5 +1,6 @@
 package main.game;
 
+import com.sun.istack.internal.Nullable;
 import main.control.Cursor;
 import main.map.Case;
 import main.map.Grid;
@@ -7,11 +8,15 @@ import main.map.MapMetadata;
 import main.parser.MapParser;
 import main.terrain.Property;
 import main.terrain.Terrain;
+import main.terrain.TerrainType;
+import main.terrain.type.HQ;
 import main.unit.Unit;
 import main.weather.Weather;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Classe representant une partie dans une carte. Une partie est caracterisee par / contient : - Une carte (La grille) -
@@ -91,6 +96,10 @@ public class Game {
         return this.view;
     }
 
+    public List<Player> getPlayers() {
+        return (List<Player>) this.players.values();
+    }
+
     /**
      * Obtenir la largeur de la carte a partir des metadonnees de la carte.
      *
@@ -148,6 +157,21 @@ public class Game {
         return this.players.get(currentPlayer);
     }
 
+    public Player getPlayerFromType(Player.Type playerType) {
+
+        return this.players.get(playerType);
+
+    }
+
+    public boolean hasRemainingHQ(Player.Type player) {
+
+        return this.grid.getCases()
+                .stream()
+                .filter(c -> c.getTerrain() instanceof HQ)
+                .anyMatch(c -> ((HQ) c.getTerrain()).getOwner() == player);
+
+    }
+
     public void nextTurn() {
 
         // TODO: System de meteo si actif
@@ -169,24 +193,62 @@ public class Game {
 
                 Property property = (Property) terrain;
 
+                if (property.getOwner() != Player.Type.NEUTRAL) {
+                    Player currentPlayer = getPlayerFromType(property.getOwner());
+                    currentPlayer.setMoney(currentPlayer.getMoney() + 1000);
+                }
+
                 if (unit == null) {
 
                     property.setDefense(property.getDefense() + 5); // todo: add config
 
                 }
-                else {
-
-                    if (unit.getOwner() == property.getOwner()) {
+                else if (unit.getOwner() == property.getOwner()) {
 
 //                        unit.supply()
 
-                    }
-
                 }
+
 
             }
 
         }
+
+
+    }
+
+    public void endGame() {
+
+        System.out.println("fin de jeu");
+
+    }
+
+    public boolean hasWinner() {
+        return this.getAlivePlayerCount() == 1;
+    }
+
+    @Nullable
+    public Player.Type getWinner() {
+        //todo remove this
+        Player.Type winner = null;
+        List<HQ> hqs =
+                this.grid.getCases()
+                        .stream()
+                        .filter(c -> c.getTerrain().getType() == TerrainType.HQ)
+                        .map(c -> (HQ) c.getTerrain())
+                        .collect(Collectors.toList());
+
+        for (HQ hq : hqs) {
+
+            if (winner == null) {
+
+                winner = hq.getOwner();
+
+            }
+            else if (winner != hq.getOwner()) return null;
+
+        }
+        return winner;
 
     }
 
@@ -290,6 +352,28 @@ public class Game {
      */
     public void setSelectedCase(Case selectedCase) {
         this.selectedCase = selectedCase;
+    }
+
+    public void endPlayer(Player player) {
+
+        for (Case c : this.grid.getCases()) {
+
+            if (c.hasUnit()) {
+                if (c.getUnit().getOwner() == player.getType()) {
+                    c.setUnit(null);
+                }
+            }
+
+            if (c.getTerrain() instanceof Property) {
+
+                if (((Property) c.getTerrain()).getOwner() == player.getType()) {
+                    ((Property) c.getTerrain()).setOwner(Player.Type.NEUTRAL);
+                }
+
+            }
+
+        }
+
     }
 
 }

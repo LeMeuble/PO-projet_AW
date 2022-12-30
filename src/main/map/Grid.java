@@ -2,9 +2,8 @@ package main.map;
 
 import main.unit.Unit;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * Classe representant la grille du plateau de jeu sous forme d'un
@@ -13,7 +12,7 @@ import java.util.List;
  * @author LECONTE--DENIS Tristan
  * @author GRAVOT Lucien
  */
-public class Grid {
+public class Grid implements Iterable<Case> {
 
     private final Case[][] grid;
 
@@ -108,6 +107,21 @@ public class Grid {
 
         }
         return output;
+    }
+
+    @Override
+    public Iterator<Case> iterator() {
+        return this.getCases().iterator();
+    }
+
+    @Override
+    public void forEach(Consumer<? super Case> action) {
+        this.getCases().forEach(action);
+    }
+
+    @Override
+    public Spliterator<Case> spliterator() {
+        return Iterable.super.spliterator();
     }
 
 }

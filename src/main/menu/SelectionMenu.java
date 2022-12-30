@@ -2,9 +2,7 @@ package main.menu;
 
 import main.util.OptionSelector;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public abstract class SelectionMenu<T> extends Menu {
 

@@ -6,22 +6,23 @@ package main;
 import main.control.KeystrokeListener;
 import main.game.ActionHandler;
 import main.game.Game;
+import main.game.GameLoop;
 import main.game.GameState;
 import main.map.MapMetadata;
 import main.menu.MenuManager;
 import main.menu.MenuModel;
 import main.menu.model.MainMenu;
 import main.menu.model.MapSelectionMenu;
-import main.util.OptionSelector;
 import main.parser.MapParser;
 import main.render.Renderer;
+import main.unit.UnitType;
+import main.util.OptionSelector;
 import main.weather.Weather;
 import ressources.Config;
 
 /**
- * Classe principale du jeu
- * Cette classe est le point d'entrée du programme
- * Elle initialise les composants du jeu et lance la boucle principale
+ * Classe principale du jeu Cette classe est le point d'entrée du programme Elle initialise les composants du jeu et
+ * lance la boucle principale
  *
  * @author LECONTE--DENIS Tristan
  * @author GRAVOT Lucien
@@ -33,7 +34,7 @@ public class MiniWars {
     private final Renderer renderer;
     private final KeystrokeListener keystrokeListener;
     private final ActionHandler actionHandler;
-    private final Thread gameLoop;
+    private final GameLoop gameLoop;
     private Game currentGame;
     private GameState gameState;
 
@@ -43,44 +44,33 @@ public class MiniWars {
         this.gameState = GameState.MENU_TITLE_SCREEN;
 
         this.mapSelector = new OptionSelector<>(MapParser.listAvailableMaps());
+        this.menuManager = new MenuManager();
+        this.renderer = new Renderer(this.menuManager);
+
         this.keystrokeListener = new KeystrokeListener();
+        this.keystrokeListener.setHandler(this::handleKey);
+
         this.actionHandler = new ActionHandler(this);
 
-        this.keystrokeListener.setHandler((keycode) -> {
-            boolean updateDisplay = this.actionHandler.handle(keycode);
-            if (updateDisplay) this.update();
-        });
-        this.keystrokeListener.start();
+        this.gameLoop = new GameLoop();
+        this.gameLoop.setHandler(this::update);
 
-        this.menuManager = new MenuManager();
         this.registerDefaultMenus();
-
-        this.renderer = new Renderer(this.menuManager);
-        this.update();
-
-        this.gameLoop = new Thread(() -> {
-            synchronized (this) {
-                while (!this.isOver()) {
-                    this.update();
-                    try {
-                        Thread.sleep(50);
-                    } catch (InterruptedException ignored) {
-                    }
-                }
-
-                this.end();
-            }
-        });
+        this.keystrokeListener.start();
         this.gameLoop.start();
+        this.update();
 
     }
 
     public boolean isOver() {
-        return this.gameState == GameState.PLAYING_ENDIND_SCREEN;
+        return this.gameState == null;
     }
 
+    public void handleKey(KeystrokeListener.KeyCodes keycode) {
+        if (this.actionHandler.handle(keycode)) this.update();
+    }
 
-    public void update() {
+    public synchronized void update() {
 
         this.renderer.render(this.gameState, this.currentGame);
 
@@ -121,7 +111,7 @@ public class MiniWars {
 
     public void end() {
         this.keystrokeListener.stop();
-        this.gameLoop.interrupt();
+        this.gameLoop.stop();
     }
 
     private void registerDefaultMenus() {

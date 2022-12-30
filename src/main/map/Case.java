@@ -119,7 +119,7 @@ public class Case {
 
             DisplayUtil.drawPictureInCase(x, y, width, height, unit.getFile(unitClockSync.getFrame()));
 
-            if (unit.getHealth() < Unit.MAX_HEALTH || true) {
+            if (unit.getHealth() < Unit.MAX_HEALTH) {
 
                 double offsetDivider = (unit instanceof OnFoot) ? 4.0d : 5.0d;
 

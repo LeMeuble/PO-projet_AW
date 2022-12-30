@@ -51,6 +51,7 @@ public class Renderer {
             boolean copyBuffer = false;
 
             switch (gameState) {
+                case PLAYING_SELECTING_FACTORY_UNIT:
                 case PLAYING_SELECTING_UNIT_ACTION:
                 case PLAYING_SELECTING_TARGET:
                 case PLAYING_SELECTING:
@@ -63,6 +64,12 @@ public class Renderer {
                     copyBuffer = this.renderMap(gameState, game, game.getCursor().needsRefresh());
                     copyBuffer |= this.renderMovement(game, copyBuffer);
                     copyBuffer |= this.renderCursor(game, copyBuffer);
+                    break;
+                case PLAYING_ENDIND_SCREEN:
+                    clearBuffer();
+                    StdDraw.setPenColor(StdDraw.WHITE);
+                    StdDraw.text(150, 150, game.getWinner().getName());
+                    copyBuffer = true;
                     break;
             }
 

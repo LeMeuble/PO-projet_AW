@@ -1,8 +1,8 @@
 package main.unit.type;
 
 import main.game.Player;
-import main.unit.UnitAnimation;
 import main.unit.OnFoot;
+import main.unit.UnitAnimation;
 import main.unit.UnitType;
 import main.weapon.type.LightMachineGun;
 import ressources.PathUtil;
@@ -34,7 +34,7 @@ public class Infantry extends OnFoot {
 
     @Override
     public String getFile(int frame) {
-        return PathUtil.getUnitPath(this.getOwner(), this.getType(), UnitAnimation.IDLE, !this.hasPlayed(), frame);
+        return PathUtil.getUnitPath(this.getType(), this.getOwner(), UnitAnimation.IDLE, !this.hasPlayed(), frame);
     }
 
 }

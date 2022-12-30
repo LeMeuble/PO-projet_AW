@@ -1,7 +1,7 @@
 package main.unit;
 
-import main.game.Player;
 import main.animation.AnimationClock;
+import main.game.Player;
 
 public abstract class AnimatedUnit extends Unit {
 

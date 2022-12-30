@@ -2,7 +2,6 @@ package main.menu.model;
 
 import librairies.StdDraw;
 import main.map.MapMetadata;
-import main.menu.Menu;
 import main.menu.MenuModel;
 import main.menu.SelectionMenu;
 import main.util.OptionSelector;

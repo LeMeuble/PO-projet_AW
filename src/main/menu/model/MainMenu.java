@@ -1,8 +1,8 @@
 package main.menu.model;
 
+import main.animation.AnimationClock;
 import main.menu.AnimatedMenu;
 import main.menu.MenuModel;
-import main.animation.AnimationClock;
 import main.weather.Weather;
 import ressources.Config;
 import ressources.DisplayUtil;

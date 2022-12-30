@@ -65,7 +65,7 @@ public class KeystrokeListener {
     }
 
     private final Set<KeyCodes> keyDowns;
-    private Thread thread;
+    private final Thread thread;
     private Consumer<KeyCodes> handler;
     private volatile boolean isRunning;
 
@@ -75,7 +75,7 @@ public class KeystrokeListener {
     public KeystrokeListener() {
 
         this.keyDowns = new HashSet<>();
-        this.thread = null;
+        this.thread = new Thread(this::run);
         this.handler = (key) -> {
             throw new UnsupportedOperationException("No handler defined");
         };
@@ -99,9 +99,9 @@ public class KeystrokeListener {
     public void start() {
 
         if (!this.isRunning) {
-            this.isRunning = true;
-            this.thread = new Thread(this::run);
+            this.thread.setDaemon(true);
             this.thread.start();
+            this.isRunning = true;
         }
 
     }
@@ -109,7 +109,10 @@ public class KeystrokeListener {
     public void stop() {
 
         this.isRunning = false;
-        this.thread.interrupt();
+        try {
+            this.thread.join();
+        }
+        catch (InterruptedException ignored) {}
 
     }
 

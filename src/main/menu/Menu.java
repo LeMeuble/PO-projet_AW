@@ -1,7 +1,7 @@
 package main.menu;
 
 
-public abstract class Menu {
+public abstract class Menu implements Comparable<Menu> {
 
 
     private boolean isVisible;
@@ -53,7 +53,11 @@ public abstract class Menu {
     }
     public boolean needsRefresh() {
         return this.isVisible && this.needsRefresh;
+    }
 
+    @Override
+    public int compareTo(Menu other) {
+        return 0;
     }
 
     public abstract void render();

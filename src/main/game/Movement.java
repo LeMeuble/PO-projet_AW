@@ -7,7 +7,6 @@ import main.unit.Unit;
 import main.weather.Weather;
 import ressources.PathUtil;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
@@ -173,24 +172,30 @@ public class Movement implements Renderable {
 
     public List<Arrow> toDirectionalArrows() {
 
-        ListIterator<Case> cases = this.cases.listIterator();
         List<Arrow> directionalArrows = new LinkedList<>();
+        synchronized (this) {
 
-        Case previous = null;
-        Case current = startingPoint;
-        Case next;
-        while (cases.hasNext()) {
+            ListIterator<Case> cases = this.cases.listIterator();
 
-            next = cases.next();
+            Case previous = null;
+            Case current = startingPoint;
+            Case next;
+            while (cases.hasNext()) {
 
-            directionalArrows.add(calculateDirection(previous, current, next));
+                next = cases.next();
 
-            previous = current;
-            current = next;
+                directionalArrows.add(calculateDirection(previous, current, next));
+
+                previous = current;
+                current = next;
+
+            }
+
+            directionalArrows.add(calculateDirection(previous, current, null)); // Cas ou le mouvement est vide
 
         }
 
-        directionalArrows.add(calculateDirection(previous, current, null)); // Cas ou le mouvement est vide
+
 
         return directionalArrows;
 

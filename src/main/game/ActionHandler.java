@@ -8,17 +8,18 @@ import main.map.Case;
 import main.map.Grid;
 import main.menu.Menu;
 import main.menu.MenuModel;
-import main.menu.SelectionMenu;
 import main.menu.model.FactoryActionMenu;
 import main.menu.model.UnitActionMenu;
 import main.terrain.Property;
 import main.terrain.Terrain;
 import main.terrain.type.Factory;
+import main.terrain.type.HQ;
 import main.unit.Unit;
 import main.unit.UnitAction;
+import main.unit.UnitType;
 import main.util.OptionSelector;
 
-import java.util.List;
+import java.util.*;
 
 /**
  * Class prenant en charge les actions associees aux differentes touches pressees
@@ -109,16 +110,22 @@ public class ActionHandler {
                 if (cursor != null) this.updateMovement(cursor::up);
                 return true;
 
+            case PLAYING_SELECTING_FACTORY_UNIT:
             case PLAYING_SELECTING_UNIT_ACTION:
-                Menu menu = this.instance.getMenuManager().getMenu(MenuModel.UNIT_ACTION_MENU);
-                if (menu instanceof UnitActionMenu) {
-                    UnitActionMenu unitActionMenu = (UnitActionMenu) this.instance.getMenuManager().getMenu(MenuModel.UNIT_ACTION_MENU);
+                Menu unitMenu = this.instance.getMenuManager().getMenu(MenuModel.UNIT_ACTION_MENU);
+                Menu factoryMenu = this.instance.getMenuManager().getMenu(MenuModel.FACTORY_ACTION_MENU);
+                if (unitMenu instanceof UnitActionMenu) {
+                    UnitActionMenu unitActionMenu = (UnitActionMenu) unitMenu;
                     unitActionMenu.previous();
                     unitActionMenu.needsRefresh(true);
-                    System.out.println("Now selected: " + unitActionMenu.getSelectedOption());
-                    return true;
                 }
-                break;
+                if(factoryMenu instanceof FactoryActionMenu) {
+                    FactoryActionMenu factoryActionMenu = (FactoryActionMenu) factoryMenu;
+                    factoryActionMenu.previous();
+                    factoryActionMenu.needsRefresh(true);
+                    System.out.println("UP");
+                }
+                return true;
 
         }
 
@@ -153,16 +160,22 @@ public class ActionHandler {
                 if (cursor != null) this.updateMovement(cursor::down);
                 return true;
 
+            case PLAYING_SELECTING_FACTORY_UNIT:
             case PLAYING_SELECTING_UNIT_ACTION:
-                Menu menu = this.instance.getMenuManager().getMenu(MenuModel.UNIT_ACTION_MENU);
-                if (menu instanceof UnitActionMenu) {
-                    UnitActionMenu unitActionMenu = (UnitActionMenu) menu;
+                Menu unitMenu = this.instance.getMenuManager().getMenu(MenuModel.UNIT_ACTION_MENU);
+                Menu factoryMenu = this.instance.getMenuManager().getMenu(MenuModel.FACTORY_ACTION_MENU);
+                if (unitMenu instanceof UnitActionMenu) {
+                    UnitActionMenu unitActionMenu = (UnitActionMenu) unitMenu;
                     unitActionMenu.next();
                     unitActionMenu.needsRefresh(true);
-                    System.out.println("Now selected: " + unitActionMenu.getSelectedOption());
-
                 }
-                break;
+                if(factoryMenu instanceof FactoryActionMenu) {
+                    FactoryActionMenu factoryActionMenu = (FactoryActionMenu) factoryMenu;
+                    factoryActionMenu.next();
+                    factoryActionMenu.needsRefresh(true);
+                }
+                System.out.println("DOWN");
+                return true;
 
         }
 
@@ -304,8 +317,6 @@ public class ActionHandler {
 
                         this.instance.setGameState(GameState.PLAYING_SELECTING_UNIT_ACTION);
 
-                        Terrain terrain = currentCase.getTerrain();
-
                         OptionSelector<UnitAction> actionSelector = new OptionSelector<UnitAction>()
                                 .addOption(UnitAction.MOVE)
                                 .addOption(UnitAction.ATTACK)
@@ -324,9 +335,26 @@ public class ActionHandler {
 
                     if (terrain.getOwner() == currentPlayer.getType()) {
 
-                        FactoryActionMenu factoryActionMenu = new FactoryActionMenu(currentPlayer.getType());
-                        this.instance.getMenuManager().addMenu(MenuModel.FACTORY_ACTION_MENU, factoryActionMenu);
-                        this.instance.setGameState(GameState.PLAYING_SELECTING_FACTORY_UNIT);
+                        if(currentCase.getUnit() == null) {
+
+                            OptionSelector<UnitType> factorySelector = new OptionSelector<>();
+
+                            for(UnitType type : UnitType.values()) {
+                                boolean isAvailable = type.getPrice() <= currentPlayer.getMoney();
+                                factorySelector.addOption(type, isAvailable);
+                            }
+
+                            this.instance.getMenuManager().addMenu(MenuModel.FACTORY_ACTION_MENU, new FactoryActionMenu(factorySelector));
+                            this.instance.setGameState(GameState.PLAYING_SELECTING_FACTORY_UNIT);
+                            game.setSelectedCase(currentCase);
+
+                            return true;
+
+                        }
+
+                        else{
+                            System.out.println("There is already a unit here !");
+                        }
 
                     }
                     else System.out.println("Warn: This is not your factory");
@@ -389,21 +417,37 @@ public class ActionHandler {
                         }
 
                     }
+
                     else if (action == UnitAction.CAPTURE) {
 
-                        double currentDefense = ((Property) currentCase.getTerrain()).getDefense();
-                        Unit currentUnit = currentCase.getUnit();
-                        double newDefense = currentDefense - currentUnit.getHealth();
+                        if (currentCase.getTerrain() instanceof Property) {
 
-                        ((Property) currentCase.getTerrain()).setDefense(newDefense);
+                            Player.Type propertyOwner = ((Property) currentCase.getTerrain()).getOwner();
+                            game.getSelectedCase().getUnit().capture((Property) currentCase.getTerrain());
 
-                        if (((Property) currentCase.getTerrain()).getDefense() <= 0) {
+                            if (currentCase.getTerrain() instanceof HQ) {
 
-                            ((Property) currentCase.getTerrain()).setOwner(currentPlayer.getType());
-                            ((Property) currentCase.getTerrain()).setDefense(5);
+                                if (!game.hasRemainingHQ(propertyOwner)) {
+
+                                    Player p = game.getPlayerFromType(propertyOwner);
+
+                                    p.setAlive(false);
+                                    game.endPlayer(p);
+
+                                    if(game.hasWinner()) {
+
+                                        game.endGame();
+                                        this.instance.setGameState(GameState.PLAYING_ENDIND_SCREEN);
+                                        return true;
+
+                                    }
+
+                                }
+
+                            }
 
                         }
-                        currentUnit.setHasPlayed(true);
+
                         this.instance.setGameState(GameState.PLAYING_SELECTING);
                         this.instance.getMenuManager().getMenu(MenuModel.UNIT_ACTION_MENU).setVisible(false);
 
@@ -437,7 +481,7 @@ public class ActionHandler {
 
                     MovementAnimation animation = new MovementAnimation(destination.getUnit(), game.getMovement());
                     System.out.println("Moving unit from " + source + " to " + destination);
-                    animation.waitUntilFinished(); // TODO: Animation in its own thread
+                    //animation.waitUntilFinished(); // TODO: Animation in its own thread
                     System.out.println("Unit moved");
 
                     game.setSelectedCase(destination);
@@ -446,15 +490,25 @@ public class ActionHandler {
                     source.setUnit(null);
                     destination.getUnit().setHasMoved(true);
 
-                    if (destination.getTerrain() instanceof Property) {
+                    // TODO
+                    if (destination.getUnit().getType() != UnitType.HELICOPTER && destination.getUnit().getType() != UnitType.BOMBER) {
 
-                        if (((Property) destination.getTerrain()).getOwner() != currentPlayer.getType()) {
-//                            UnitActionMenu unitActionMenu = new UnitActionMenu();
-//                            unitActionMenu.addOption("move", "Déplacer", !currentCase.getUnit().hasMoved());
-//                            unitActionMenu.addOption("attack", "Attaquer", true);
-//                            unitActionMenu.addOption("capture", "Capturer", destination.getTerrain() instanceof Property && ((Property) destination.getTerrain()).getOwner() != currentPlayer.getType());
-//                            this.instance.getMenuManager().addMenu(MenuModel.UNIT_ACTION_MENU, unitActionMenu);
-//                            this.instance.setGameState(GameState.PLAYING_SELECTING_UNIT_ACTION);
+                        if (destination.getTerrain() instanceof Property) {
+
+                            if (((Property) destination.getTerrain()).getOwner() != currentPlayer.getType()) {
+
+                                OptionSelector<UnitAction> actionSelector = new OptionSelector<UnitAction>()
+                                        .addOption(UnitAction.MOVE)
+                                        .addOption(UnitAction.ATTACK)
+                                        .addOption(UnitAction.CAPTURE);
+
+                                this.instance.getMenuManager().addMenu(MenuModel.UNIT_ACTION_MENU, new UnitActionMenu(actionSelector));
+                                this.instance.setGameState(GameState.PLAYING_SELECTING_UNIT_ACTION);
+
+
+
+                            }
+
                         }
 
                     }
@@ -539,6 +593,29 @@ public class ActionHandler {
      * @return true si le jeu doit actualiser l'ecran
      */
     private boolean space(GameState gameState) {
+
+        final Game game = this.instance.getCurrentGame();
+        final Grid grid = this.instance.isPlaying() ? game.getGrid() : null;
+        final Cursor cursor = this.instance.isPlaying() ? game.getCursor() : null;
+
+        switch (gameState) {
+
+            case PLAYING_SELECTING:
+
+                if(grid==null) break;
+
+                List<Case> casesWithPlayableUnit = new LinkedList<>();
+
+                for(Case c : grid) {
+
+                    if(c.hasUnit() && c.getUnit().getOwner() == game.getCurrentPlayer().getType()) {
+                        casesWithPlayableUnit.add(c);
+                    }
+
+                }
+
+
+        }
 
         return false;
 

@@ -40,4 +40,9 @@ public final class Config {
     public static final int MENU_ACTION_MIDDLE_HEIGHT = 40;
     public static final int MENU_ACTION_BOTTOM_HEIGHT = 26;
 
+    /**
+     * Config lie au jeu
+     */
+
+
 }
