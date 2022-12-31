@@ -13,6 +13,10 @@ public abstract class Weapon {
 
     private int ammo;
 
+    /**
+     * Constructeur de Weapon
+     * @param ammo Le nombre de munitions de l'arme
+     */
     public Weapon(int ammo) {
 
         this.ammo = ammo;

@@ -1,6 +1,7 @@
 package main.unit;
 
 import main.game.Player;
+import main.map.MapMetadata;
 import main.terrain.Property;
 import main.terrain.Terrain;
 import main.weapon.RangedWeapon;
@@ -48,6 +49,12 @@ public abstract class Unit {
 
     }
 
+    /**
+     * Trnasforme une string en une nouvelle instance d'unite.
+     * Fonction appelee dans {@link main.parser.MapParser#parseMap(MapMetadata)}
+     * @param string La string a parser
+     * @return Une nouvelle instance de l'unite presente sur la case si il en a une, null sinon
+     */
     public static Unit parse(String string) {
 
         if (string == null) return null;
@@ -264,20 +271,28 @@ public abstract class Unit {
         return bestWeapon;
     }
 
+    /**
+     * Capture une propriete
+     * @param property La propriete a capturer
+     */
     public void capture(Property property) {
 
+        // Seules les unitees a pied peuvent capturer une propriete
         if(this instanceof OnFoot) {
             double currentDefense = property.getDefense();
             double newDefense = Math.ceil(currentDefense - this.getHealth());
 
             property.setDefense(newDefense);
 
+            // Si la defense de la propriete passe en dessous de 0, elle se fait capturer
             if (property.getDefense() <= 0) {
 
                 property.setOwner(this.getOwner());
                 property.setDefense(5);
 
             }
+
+            // L'attaque d'une propriete compte comme un tour complet
             this.setHasPlayed(true);
         }
 

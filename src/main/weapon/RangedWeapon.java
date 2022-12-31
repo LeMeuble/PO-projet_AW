@@ -1,5 +1,11 @@
 package main.weapon;
 
+/**
+ * Classe abstraite representant une arme a distance
+ *
+ * @author Tristan LECONTE--DENIS
+ * @author Lucien GRAVOT
+ */
 public abstract class RangedWeapon extends Weapon {
 
     public RangedWeapon(int ammo) {

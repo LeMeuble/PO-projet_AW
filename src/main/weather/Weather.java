@@ -1,5 +1,8 @@
 package main.weather;
 
+/**
+ * Enumeration de tous les types de meteo
+ */
 public enum Weather {
 
     CLEAR("clear"),

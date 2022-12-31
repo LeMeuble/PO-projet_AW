@@ -1,5 +1,8 @@
 package main.unit;
 
+/**
+ * Enumeration des actions possibles pour les unites
+ */
 public enum UnitAction {
 
     // Action : attendre
