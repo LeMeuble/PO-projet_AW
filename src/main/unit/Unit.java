@@ -3,12 +3,16 @@ package main.unit;
 import main.game.Player;
 import main.terrain.Property;
 import main.terrain.Terrain;
+import main.util.OptionSelector;
 import main.weapon.RangedWeapon;
 import main.weapon.Weapon;
 import main.weather.Weather;
 
+import javax.swing.text.html.Option;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Classe abstraite representant une unite
@@ -267,6 +271,7 @@ public abstract class Unit {
     public void capture(Property property) {
 
         if(this instanceof OnFoot) {
+
             double currentDefense = property.getDefense();
             double newDefense = Math.ceil(currentDefense - this.getHealth());
 
@@ -284,10 +289,19 @@ public abstract class Unit {
     }
 
     // Todo : De la doc pour des abstracts ?
+
     public String toString() {
 
         return this.getClass().getSimpleName();
 
+    }
+
+    public OptionSelector<UnitAction> getAvailableActions() {
+        OptionSelector<UnitAction> actions = new OptionSelector<>();
+        actions.addOption(UnitAction.WAIT, true);
+        actions.addOption(UnitAction.MOVE, !this.hasMoved());
+
+        return actions;
     }
 
     public abstract UnitType getType();

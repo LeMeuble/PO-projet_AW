@@ -10,20 +10,26 @@ import ressources.PathUtil;
 
 public class MainMenu extends AnimatedMenu {
 
+    private static final int PRIORITY = 10;
+
     private final int id;
     private final Weather weather;
 
 
-    public MainMenu(int id, Weather weather) {
+    public MainMenu() {
         super(
                 Config.WIDTH / 2,
                 Config.HEIGHT / 2,
                 Config.WIDTH,
                 Config.HEIGHT,
-                new AnimationClock(Config.MAIN_MENU_ANIMATION_FRAME_COUNT, Config.MAIN_MENU_ANIMATION_FRAME_DURATION)
+                MainMenu.PRIORITY,
+                new AnimationClock(
+                        Config.MAIN_MENU_ANIMATION_FRAME_COUNT,
+                        Config.MAIN_MENU_ANIMATION_FRAME_DURATION
+                )
         );
-        this.id = id;
-        this.weather = weather;
+        this.id = (int) (Math.random() * Config.MAIN_MENU_BACKGROUND_VARIATION_COUNT);
+        this.weather = Weather.CLEAR; //Weather.random();
     }
 
 
@@ -36,7 +42,7 @@ public class MainMenu extends AnimatedMenu {
         final String title = PathUtil.getUiComponentPath("title_screen_" + frame);
 
         DisplayUtil.drawPicture(super.getX(), super.getY(), backgroundPath, super.getWidth(), super.getHeight());
-        DisplayUtil.drawPicture(super.getX(), 170d, title);
+        DisplayUtil.drawPicture(super.getX(), 0.18d * Config.HEIGHT, title);
 
     }
 

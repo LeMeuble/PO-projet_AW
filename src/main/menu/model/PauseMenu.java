@@ -7,7 +7,7 @@ public class PauseMenu extends Menu {
 
     public PauseMenu() {
 
-        super(0, 0, 0, 0);
+        super(0, 0, 0, 0, 10);
 
     }
 

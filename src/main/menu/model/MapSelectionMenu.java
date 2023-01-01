@@ -12,7 +12,7 @@ import java.awt.*;
 public class MapSelectionMenu extends SelectionMenu<MapMetadata> {
 
     public MapSelectionMenu(OptionSelector<MapMetadata> mapSelector) {
-        super(0, 0, 0, 0, mapSelector);
+        super(0, 0, 0, 0, 10, mapSelector);
     }
 
     @Override

@@ -13,6 +13,16 @@ package main.render;
 public interface Renderable {
 
     /**
+     * Methode qui permet de rendre l'objet sur l'ecran.
+     * Cette methode est appelle par le {@link Renderer}
+     * pour realise l'affichage de l'objet sur l'ecran.
+     * Note : Met egalement l'objet dans l'etat "raffraichi" (needsRefresh = false)
+     *
+     * @see Renderer
+     */
+    void render();
+
+    /**
      * Indique si l'objet qui implement {@link Renderable}
      * a besoin d'etre rafraichi a l'ecran.
      *

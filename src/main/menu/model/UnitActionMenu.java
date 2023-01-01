@@ -15,7 +15,7 @@ public class UnitActionMenu extends ActionMenu<UnitAction> {
 
     public UnitActionMenu(OptionSelector<UnitAction> optionSelector) {
 
-        super(optionSelector);
+        super(10, 10, 10, 10, optionSelector);
 
     }
 

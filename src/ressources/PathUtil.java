@@ -30,18 +30,18 @@ public class PathUtil {
     public static final String PICTURE_UI_GUI_FOLDER = PICTURE_UI_FOLDER + SEP + "gui";
     public static final String PICTURE_UI_HP_FOLDER = PICTURE_UI_FOLDER + SEP + "hp";
 
-    enum UIComponent {
+    public enum UiComponentFolder {
 
-        BACKGROUND("backgrounds");
+        GUI("gui");
 
         private final String folder;
 
-        UIComponent(String folder) {
-            this.folder = folder;
+        UiComponentFolder(String folderName) {
+            this.folder = folderName;
         }
 
         public String getFolder() {
-            return this.folder;
+            return folder;
         }
 
     }
@@ -90,8 +90,9 @@ public class PathUtil {
     public static String getUiComponentPath(String name) {
         return PICTURE_UI_FOLDER + SEP + name + ".png";
     }
-    public static String getUiComponentPath(UIComponent component, String name) {
-        return PICTURE_UI_FOLDER + SEP + component.getFolder() + SEP + name + ".png";
+
+    public static String getUiComponentPath(UiComponentFolder folder, String name) {
+        return PICTURE_UI_FOLDER + SEP + folder.getFolder() + SEP + name + ".png";
     }
 
     public static String getCursorPath() {
@@ -106,13 +107,11 @@ public class PathUtil {
 
     }
 
-    public static String getGuiPath(String type) {
-        return PICTURE_UI_GUI_FOLDER + SEP + type + ".png";
-    }
-
     public static String getHealthPath(int health, boolean isAvailable) {
+
         String available = isAvailable ? "available" : "unavailable";
         return PICTURE_UI_HP_FOLDER + SEP + available + SEP + health + ".png";
+
     }
 
 }

@@ -2,11 +2,16 @@ package main.unit.type;
 
 import main.game.Player;
 import main.unit.Motorized;
+import main.unit.UnitAction;
 import main.unit.UnitAnimation;
 import main.unit.UnitType;
+import main.util.OptionSelector;
 import main.weapon.type.Canon;
 import main.weapon.type.LightMachineGun;
 import ressources.PathUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Tank extends Motorized {
 
@@ -35,8 +40,18 @@ public class Tank extends Motorized {
     }
 
     @Override
+    public OptionSelector<UnitAction> getAvailableActions() {
+
+        OptionSelector<UnitAction> actions = super.getAvailableActions();
+
+        actions.addOption(UnitAction.ATTACK);
+
+        return actions;
+    }
+
+    @Override
     public String getFile(int frame) {
-        return PathUtil.getUnitPath(UnitType.TANK, this.getOwner(), UnitAnimation.IDLE, !this.hasPlayed(), frame);
+        return PathUtil.getUnitPath(this.getType(), this.getOwner(), UnitAnimation.IDLE, !this.hasPlayed(), frame);
     }
 
 }

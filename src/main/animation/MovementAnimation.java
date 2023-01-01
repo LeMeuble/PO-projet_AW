@@ -1,6 +1,7 @@
 package main.animation;
 
 import main.game.Movement;
+import main.render.Renderable;
 import main.unit.Unit;
 
 public class MovementAnimation {
@@ -27,5 +28,13 @@ public class MovementAnimation {
 
     }
 
+
+    public boolean needsRefresh() {
+        return false;
+    }
+
+    public void needsRefresh(boolean needsRefresh) {
+
+    }
 
 }

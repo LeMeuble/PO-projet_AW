@@ -1,6 +1,7 @@
 package main.control;
 
 import main.render.Renderable;
+import ressources.DisplayUtil;
 
 
 /**
@@ -139,6 +140,13 @@ public class Cursor implements Renderable {
         return false;
 
     }
+
+    @Override
+    public void render() {
+
+
+    }
+
 
     /**
      * Determine si le curseur a besoin d'etre rafraichi

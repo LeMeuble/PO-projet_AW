@@ -19,7 +19,7 @@ public class FactoryActionMenu extends ActionMenu<UnitType> {
 
     public FactoryActionMenu(OptionSelector<UnitType> optionSelector) {
 
-        super(optionSelector);
+        super(10, 10, 10, 10, optionSelector);
 
     }
 

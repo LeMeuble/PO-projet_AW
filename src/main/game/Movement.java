@@ -20,7 +20,7 @@ import java.util.ListIterator;
  *
  * @see Renderable
  */
-public class Movement implements Renderable {
+public class Movement {
 
     /**
      * Enumeration des directions possibles
@@ -225,12 +225,10 @@ public class Movement implements Renderable {
 
     }
 
-    @Override
     public boolean needsRefresh() {
         return this.needsRefresh;
     }
 
-    @Override
     public void needsRefresh(boolean needsRefresh) {
         this.needsRefresh = needsRefresh;
     }

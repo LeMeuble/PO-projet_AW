@@ -50,14 +50,14 @@ public class MiniWars {
         this.keystrokeListener = new KeystrokeListener();
         this.keystrokeListener.setHandler(this::handleKey);
 
-        this.actionHandler = new ActionHandler(this);
-
         this.gameLoop = new GameLoop();
         this.gameLoop.setHandler(this::update);
 
+        this.actionHandler = new ActionHandler(this);
+
         this.registerDefaultMenus();
-        this.keystrokeListener.start();
         this.gameLoop.start();
+        this.keystrokeListener.start();
         this.update();
 
     }
@@ -71,9 +71,7 @@ public class MiniWars {
     }
 
     public synchronized void update() {
-
         this.renderer.render(this.gameState, this.currentGame);
-
     }
 
     public boolean isPlaying() {
@@ -109,19 +107,17 @@ public class MiniWars {
         return this.menuManager;
     }
 
+    private void registerDefaultMenus() {
+
+        this.menuManager.addMenu(new MainMenu());
+        this.menuManager.addMenu(new MapSelectionMenu(this.mapSelector));
+        this.menuManager.getMenu(MenuModel.MAP_SELECTION_MENU).setVisible(false);
+
+    }
+
     public void end() {
         this.keystrokeListener.stop();
         this.gameLoop.stop();
-    }
-
-    private void registerDefaultMenus() {
-
-        int mainMenuVariant = (int) (Math.random() * Config.MAIN_MENU_BACKGROUND_VARIATION_COUNT);
-
-        // TODO: Weather-based background
-        this.menuManager.addMenu(MenuModel.MAIN_MENU, new MainMenu(mainMenuVariant, Weather.CLEAR));
-        this.menuManager.addMenu(MenuModel.MAP_SELECTION_MENU, new MapSelectionMenu(this.mapSelector));
-        this.menuManager.getMenu(MenuModel.MAP_SELECTION_MENU).setVisible(false);
     }
 
 }

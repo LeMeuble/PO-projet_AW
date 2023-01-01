@@ -1,6 +1,12 @@
 package main;
 
+import main.menu.MenuManager;
+import main.menu.model.FactoryActionMenu;
+import main.menu.model.MainMenu;
+import main.weather.Weather;
+
 import java.io.IOException;
+import java.util.Arrays;
 
 
 public class Main {
@@ -10,7 +16,6 @@ public class Main {
 		try {
 
 			MiniWars miniWars = new MiniWars();
-			System.out.println("MiniWars started");
 
 		} catch (Exception e) {
 			System.out.println("Erreur lors de l'execution du jeu : " + e.getMessage());

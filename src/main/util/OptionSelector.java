@@ -78,6 +78,10 @@ public class OptionSelector<T> {
 
     }
 
+    public int getOptionCount() {
+        return this.options.size();
+    }
+
     public boolean hasAvailableOption() {
         return this.options.stream().anyMatch(Option::isAvailable);
     }

@@ -71,6 +71,7 @@ public class Renderer {
                     StdDraw.text(150, 150, game.getWinner().getName());
                     copyBuffer = true;
                     break;
+
             }
 
             for (Menu menu : this.menuManager.getMenus()) {
@@ -91,26 +92,12 @@ public class Renderer {
 
         if (menu.needsRefresh() || forceRender) {
 
+            menu.render();
             if (menu instanceof AnimatedMenu) {
-
-                AnimatedMenu animatedMenu = (AnimatedMenu) menu;
-
-                if (animatedMenu.needsRefresh() || forceRender) {
-                    animatedMenu.render();
-                    animatedMenu.nextFrame();
-                    animatedMenu.needsRefresh(false);
-                    return true;
-                }
-
-            } else {
-
-                if (menu.needsRefresh() || forceRender) {
-                    menu.render();
-                    menu.needsRefresh(false);
-                    return true;
-                }
-
+                ((AnimatedMenu) menu).nextFrame();
             }
+            menu.needsRefresh(false);
+            return true;
 
         }
 
@@ -132,6 +119,7 @@ public class Renderer {
      *
      * @param game        La partie en cours
      * @param forceRender Forcer le rendu
+     *
      * @return True s'il est necessaire de mettre a jour l'ecran
      */
     private boolean renderMap(GameState gameState, Game game, boolean forceRender) {
@@ -224,7 +212,6 @@ public class Renderer {
             return true;
 
         }
-
 
         return false;
 
