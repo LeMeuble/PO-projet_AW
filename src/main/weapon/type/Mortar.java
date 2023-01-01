@@ -1,20 +1,27 @@
 package main.weapon.type;
 
 import main.unit.UnitType;
-import main.weapon.Weapon;
+import main.weapon.RangedWeapon;
 
-public class Missile extends Weapon {
+/**
+ * Classe representant un mortier
+ *
+ * @author Tristan LECONTE--DENIS
+ * @author Lucien GRAVOT
+ */
+public class Mortar extends RangedWeapon {
 
-    public static int DEFAULT_AMMO = 2;
+    public static int DEFAULT_AMMO = 3;
 
     public enum DamageMultiplier {
 
-        ON_INFANTRY(UnitType.INFANTRY, 0.5f),
+        ON_INFANTRY(UnitType.INFANTRY, 0.4f),
         ON_BAZOOKA(UnitType.BAZOOKA, 0.5f),
         ON_TANK(UnitType.TANK, 0.7f),
-        ON_ANTIAIR(UnitType.ANTIAIR, 0.4f),
-        ON_HELICOPTER(UnitType.HELICOPTER, 0.7f),
-        ON_BOMBER(UnitType.BOMBER, 0.7f),
+        ON_ANTIAIR(UnitType.ANTIAIR, 0.7f),
+        ON_HELICOPTER(UnitType.HELICOPTER, 0.0f),
+        ON_BOMBER(UnitType.BOMBER, 0.0f),
+        ON_ARTILLERY(UnitType.ARTILLERY, 0.7f),
         ON_CONVOY(UnitType.CONVOY, 0.7f);
 
 
@@ -28,9 +35,9 @@ public class Missile extends Weapon {
 
         }
 
-        public static DamageMultiplier fromUnit(UnitType unit) {
+        public static Mortar.DamageMultiplier fromUnit(UnitType unit) {
 
-            for (DamageMultiplier d : DamageMultiplier.values()) {
+            for (Mortar.DamageMultiplier d : Mortar.DamageMultiplier.values()) {
 
                 if(d.unit == unit) {
                     return d;
@@ -46,11 +53,8 @@ public class Missile extends Weapon {
         }
 
     }
-
-    public Missile() {
-
-        super(Missile.DEFAULT_AMMO);
-
+    public Mortar() {
+        super(Mortar.DEFAULT_AMMO);
     }
 
     @Override
@@ -62,7 +66,7 @@ public class Missile extends Weapon {
 
     @Override
     public float getMultiplierOn(UnitType unitType) {
-        DamageMultiplier damage = DamageMultiplier.fromUnit(unitType);
+        Mortar.DamageMultiplier damage = Mortar.DamageMultiplier.fromUnit(unitType);
         return damage != null ? damage.getMultiplier() : 0.0f;
     }
 

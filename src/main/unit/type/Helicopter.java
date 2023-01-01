@@ -5,7 +5,7 @@ import main.unit.Flying;
 import main.unit.UnitAnimation;
 import main.unit.UnitType;
 import main.weapon.type.HeavyMachineGun;
-import main.weapon.type.Missile;
+import main.weapon.type.AirToGroundMissile;
 import ressources.PathUtil;
 
 public class Helicopter extends Flying {
@@ -15,7 +15,7 @@ public class Helicopter extends Flying {
 
     public Helicopter(Player.Type owner){
         super(owner, 0, 0);
-        this.addWeapon(new Missile());
+        this.addWeapon(new AirToGroundMissile());
         this.addWeapon(new HeavyMachineGun());
     }
 

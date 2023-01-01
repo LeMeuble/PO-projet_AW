@@ -38,6 +38,12 @@ public class MiniWars {
     private Game currentGame;
     private GameState gameState;
 
+
+    /**
+     * Constructeur de MiniWars
+     * Initialise les instances gerant les entrees clavier, la boucle du jeu
+     * Ouvre le menu de selection des cartes
+     */
     public MiniWars() {
 
         this.currentGame = null;
@@ -62,6 +68,9 @@ public class MiniWars {
 
     }
 
+    /**
+     * @return true si le jeu est termine, false sinon
+     */
     public boolean isOver() {
         return this.gameState == null;
     }
@@ -78,6 +87,9 @@ public class MiniWars {
         return this.currentGame != null;
     }
 
+    /**
+     * @return L'instance du jeu
+     */
     public Game getCurrentGame() {
         return this.currentGame;
     }

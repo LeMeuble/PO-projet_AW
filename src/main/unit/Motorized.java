@@ -8,6 +8,12 @@ import main.weather.Weather;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Classe abstraite representant une unite motorisee
+ *
+ * @author Tristan LECONTE--DENIS
+ * @author Lucien GRAVOT
+ */
 public abstract class Motorized extends AnimatedUnit {
 
     public enum MovementCost {

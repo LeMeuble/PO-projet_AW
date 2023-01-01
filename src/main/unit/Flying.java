@@ -5,8 +5,17 @@ import main.terrain.Terrain;
 import main.terrain.TerrainType;
 import main.weather.Weather;
 
+/**
+ * Classe abstraite representant une unite volante
+ *
+ * @author Tristan LECONTE--DENIS
+ * @author Lucien GRAVOT
+ */
 public abstract class Flying extends AnimatedUnit {
 
+    /**
+     * Enumeration des couts d'un mouvement, en fonction du type du terrain de destination et de la meteo
+     */
     public enum MovementCost {
 
         ON_HQ_CLEAR(TerrainType.HQ, Weather.CLEAR, 1),

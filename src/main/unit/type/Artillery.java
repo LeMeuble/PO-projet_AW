@@ -8,8 +8,8 @@ import ressources.PathUtil;
 
 public class Artillery extends Motorized {
 
-    public static final int MIN_REACH = 1;
-    public static final int MAX_REACH = 1;
+    public static final int MIN_REACH = 2;
+    public static final int MAX_REACH = 3;
 
     public Artillery(Player.Type owner) {
 

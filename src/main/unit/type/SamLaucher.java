@@ -2,35 +2,29 @@ package main.unit.type;
 
 import main.game.Player;
 import main.unit.Motorized;
-import main.unit.Transport;
 import main.unit.UnitAnimation;
 import main.unit.UnitType;
 import ressources.PathUtil;
 
 /**
- * Class representant un convoi
+ * Classe representant un lance-missiles Sol-Air
  *
  * @author Tristan LECONTE--DENIS
  * @author Lucien GRAVOT
  */
-public class Convoy extends Transport {
+public class SamLaucher extends Motorized {
 
-    public static final int MIN_REACH = 1;
-    public static final int MAX_REACH = 1;
+    public static final int MIN_REACH = 3;
+    public static final int MAX_REACH = 6;
 
-    public Convoy(Player.Type owner){
+    public SamLaucher(Player.Type owner) {
+
         super(owner, 0, 0);
 
     }
-
-    /**
-     * Calcule des degats infliges par cette unite
-     *
-     * @return
-     */
     @Override
     public UnitType getType() {
-        return UnitType.CONVOY;
+        return UnitType.SAMLAUNCHER;
     }
 
     @Override

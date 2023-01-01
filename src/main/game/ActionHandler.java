@@ -15,6 +15,7 @@ import main.terrain.Property;
 import main.terrain.Terrain;
 import main.terrain.type.Factory;
 import main.terrain.type.HQ;
+import main.unit.Transport;
 import main.unit.Unit;
 import main.unit.UnitAction;
 import main.unit.UnitType;
@@ -331,15 +332,38 @@ public class ActionHandler {
 
                             this.instance.setGameState(GameState.PLAYING_SELECTING_UNIT_ACTION);
 
-                            OptionSelector<UnitAction> actionSelector = new OptionSelector<UnitAction>()
+
+                        // Todo : Rendre [323-349] moins merdique
+                        OptionSelector<UnitAction> actionSelector = new OptionSelector<UnitAction>();
+
+                        if(currentCase.getUnit() instanceof Transport) {
+
+                            if(((Transport) currentCase.getUnit()).isCarryingUnit()) {
+                                actionSelector
+                                        .addOption(UnitAction.MOVE)
+                                        .addOption(UnitAction.GET_OUT)
+                                        .addOption(UnitAction.ATTACK)
+                                        .addOption(UnitAction.CAPTURE);
+                            }
+                            else{
+                                actionSelector
+                                        .addOption(UnitAction.MOVE)
+                                        .addOption(UnitAction.GET_IN)
+                                        .addOption(UnitAction.ATTACK)
+                                        .addOption(UnitAction.CAPTURE);
+                            }
+
+                        }
+
+                        else {
+                            actionSelector
                                     .addOption(UnitAction.MOVE)
                                     .addOption(UnitAction.ATTACK)
                                     .addOption(UnitAction.CAPTURE);
-
-                            this.instance.getMenuManager().addMenu(new UnitActionMenu(actionSelector));
-                            game.setSelectedCase(currentCase);
-
                         }
+
+                        this.instance.getMenuManager().addMenu(MenuModel.UNIT_ACTION_MENU, new UnitActionMenu(actionSelector));
+                        game.setSelectedCase(currentCase);
 
                     }
                     else System.out.println("Warn: Unit not owned by current player");

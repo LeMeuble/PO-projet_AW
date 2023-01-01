@@ -16,7 +16,8 @@ public enum UnitType {
     ANTIAIR('d', AntiAir.class, 6000, 6),
     HELICOPTER('h', Helicopter.class, 12000, 6),
     TANK('t', Tank.class, 7000, 6),
-    ARTILLERY('a', Artillery.class, 6000, 5);
+    ARTILLERY('a', Artillery.class, 6000, 5),
+    SAMLAUNCHER('s', SamLaucher.class, 12000, 6);
 
     private final char character;
     private final Class<? extends Unit> unitClass;
