@@ -5,12 +5,13 @@
     - [X] Resistance = Res - pv attaquant (arrondi sup)
     - [X] Il faut etre sur la case sinon annulation
     - [X] Capture => hasPlayed = true
+- [ ] Fonction move (Case destination) pour les unités ?
 
 - [X] Fin de jeu
     - [X] S'il ne reste qu'un playertype de type
     - [ ] Beautify 
   
-- [ ] Réorganiser le bordel du déplacement (OK?)
+- [ ] Réorganiser le bordel du déplacement (OK ?)
     - [X] Lors du déplacement
         - [X] Impossible sur les cases avec unite ennemi
         - [X] Cout de la case
@@ -23,9 +24,12 @@
 Non prioritaire :
 
 - [ ] Surbrillance des cases possibles
-- [ ] Arrondi des PV lors de attaques ?
+- [ ] Arrondi des PV lors des attaques ?
 - [ ] Animation de pluie
 - [ ] Animation de direction d'unité
+- [ ] Portée de tir dans l'arme et pas dans l'unité ?
+- [ ] Une quantité effarante de commentaires / javadoc
+- [ ] Désengorger ActionHandler#enter (c pas beau)
 
 Bonus :
 - [ ] Animation de mouvement des unites
@@ -34,7 +38,11 @@ Bonus :
 - [ ] Touche pour lister les unités encore utilisables (espace) 6.1
 - [ ] Cases de déplacement/d'attaques possibles 6.2
 - [ ] Armes multiples 6.3
-- [ ] Attaques à distance (faire un mortier) (lance missile sol-air) 6.4
+- [ ] Attaques à distance (lance-missiles sol-air) 6.4
+    - [X] Faire un mortier
+    - [X] Faire un missile sol-air
+    - [ ] Faire un lance-missiles sol-air
+    - [ ] Implémenter les dégâts infligés sur une artillerie 
     - [ ] Si unite ne s'est pas déplacé lors de ce tour
 
 - [ ] Ravitaillement et réparations 6.5
@@ -43,24 +51,25 @@ Bonus :
         - [ ] Mitrailleuse infinie ??? (9-10)
     - [ ] Carburant
         - [ ] pt de carburant = pt de déplacement
-        - [ ] aerienne (cout de deplacement + fixe par tour):
-            - [ ] helico = 2 pt de carburant/tour
+        - [ ] aérienne (cout de déplacement + fixe par tour):
+            - [ ] hélico = 2 pt de carburant/tour
             - [ ] bombardier = 5 pt de carburant/tour
         - [ ] si aérien sans fuel, détruit
         - [ ] indicateur low ammo/low fuel
 
-- [ ] Transport d'unite 6.6
+- [ ] Transport d'unité 6.6
     - [ ] Une seule unite
     - [ ] Monter à bord (case adjacente)
-    - [ ] Depoter (//)
+    - [ ] Dépoter (//)
+    - [ ] Pour l'instant seulement pour le Convoi, trouver le moyen de fix
 - [ ] Fin de tour automatique 6.7
-    - [ ] Activable/desactivable (dans Player)
+    - [ ] Activable/désactivable (dans Player)
     - [ ] Si plus d'action possible (tt unite en hasPlayed = true && factory occupés)
-- [ ] Converture de terrain 6.8
+- [ ] Couverture de terrain 6.8
     - [ ] -20% foret/usine
     - [ ] -30% ville
     - [ ] -40% montagne/qg
-    - [ ] aerien : pas de couverture
+    - [ ] aérien : pas de couverture
 - [ ] unite navale 6.9
 - [ ] brouillard
     - [ ] choisir si on le veut
