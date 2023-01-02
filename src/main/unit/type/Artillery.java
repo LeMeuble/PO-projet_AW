@@ -4,16 +4,15 @@ import main.game.Player;
 import main.unit.Motorized;
 import main.unit.UnitAnimation;
 import main.unit.UnitType;
+import main.weapon.type.Mortar;
 import ressources.PathUtil;
 
 public class Artillery extends Motorized {
 
-    public static final int MIN_REACH = 2;
-    public static final int MAX_REACH = 3;
-
     public Artillery(Player.Type owner) {
 
-        super(owner, 0, 0);
+        super(owner);
+        this.addWeapon(new Mortar());
 
     }
     @Override
@@ -21,15 +20,6 @@ public class Artillery extends Motorized {
         return UnitType.ARTILLERY;
     }
 
-    @Override
-    public int getMinReach() {
-        return MIN_REACH;
-    }
-
-    @Override
-    public int getMaxReach() {
-        return MAX_REACH;
-    }
 
     @Override
     public String getFile(int frame) {

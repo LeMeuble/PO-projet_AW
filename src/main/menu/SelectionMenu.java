@@ -70,14 +70,25 @@ public abstract class SelectionMenu<T> extends Menu {
     }
 
     /**
-     * Obtenir la liste des options disponibles sous forme de liste
+     * Obtenir la liste completes des options sous forme de liste
      *
-     * @return La liste des options disponibles
+     * @return La liste des options completes
      *
      * @see OptionSelector#getOptions()
      */
     public List<T> getOptions() {
         return this.optionSelector.getOptions();
+    }
+
+    /**
+     * Obtenir la liste uniquement des options disponibles sous forme de liste
+     *
+     * @return La liste des options disponibles
+     *
+     * @see OptionSelector#getAvailableOptions() ()
+     */
+    public List<T> getAvailableOptions() {
+        return this.optionSelector.getAvailableOptions();
     }
 
 }

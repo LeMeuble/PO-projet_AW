@@ -17,6 +17,7 @@ import ressources.Config;
 import ressources.DisplayUtil;
 
 import java.awt.*;
+import java.util.Set;
 
 public class Renderer {
 
@@ -62,6 +63,7 @@ public class Renderer {
 
                     // TODO: render movement layer below unit layer
                     copyBuffer = this.renderMap(gameState, game, game.getCursor().needsRefresh());
+                    copyBuffer |= this.renderOverlay(game, copyBuffer);
                     copyBuffer |= this.renderMovement(game, copyBuffer);
                     copyBuffer |= this.renderCursor(game, copyBuffer);
                     break;
@@ -84,6 +86,28 @@ public class Renderer {
 
         }
 
+    }
+
+    private boolean renderOverlay(Game game, boolean forceRender) {
+
+        if(forceRender) {
+
+            final Set<Case> cases = game.getGrid().getReachableCases(game.getSelectedCase(), game.getSelectedCase().getUnit(), game.getWeather());
+
+            StdDraw.setPenColor(StdDraw.BLUE);
+
+            for (Case c : cases) {
+                double x = DisplayUtil.getCenterX(c.getX(), game.getWidth());
+                double y = DisplayUtil.getCenterY(c.getY(), game.getHeight());
+
+                StdDraw.rectangle(x, y, (double) Config.PIXEL_PER_CASE / 3, (double) Config.PIXEL_PER_CASE / 3);
+
+            }
+
+            return true;
+
+        }
+        return false;
     }
 
     private boolean renderMenu(Menu menu, boolean forceRender) {

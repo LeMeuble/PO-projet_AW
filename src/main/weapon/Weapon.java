@@ -1,6 +1,6 @@
 package main.weapon;
 
-import main.unit.UnitType;
+import main.unit.Unit;
 
 /**
  * Classe abstraite representant une arme et
@@ -15,12 +15,11 @@ public abstract class Weapon {
 
     /**
      * Constructeur de Weapon
+     *
      * @param ammo Le nombre de munitions de l'arme
      */
-    public Weapon(int ammo) {
-
-        this.ammo = ammo;
-
+    public Weapon() {
+        this.ammo = this.getDefaultAmmo();
     }
 
     /**
@@ -43,7 +42,20 @@ public abstract class Weapon {
         this.ammo = ammo;
     }
 
-    public abstract boolean canBeUsedOn(UnitType unitType);
-    public abstract float getMultiplierOn(UnitType unitType);
+    public void supply() {
+        this.ammo = this.getDefaultAmmo();
+    }
+
+    public boolean canBeUsedOn(Unit unit) {
+        return this.getMultiplierOn(unit) > 0.0f;
+    }
+
+    public abstract int getMinReach();
+
+    public abstract int getMaxReach();
+
+    public abstract int getDefaultAmmo();
+
+    public abstract float getMultiplierOn(Unit unit);
 
 }

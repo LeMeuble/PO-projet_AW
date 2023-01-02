@@ -43,13 +43,12 @@ public enum TerrainType {
 
         try {
             if (Property.class.isAssignableFrom(this.terrainClass)) {
-                return this.terrainClass.getConstructor(Player.Type.class).newInstance(p);
+                return p != null ? this.terrainClass.getConstructor(Player.Type.class).newInstance(p) : null;
             } else {
                 return this.terrainClass.newInstance();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
+        catch (Exception ignored) {}
 
         return null;
 

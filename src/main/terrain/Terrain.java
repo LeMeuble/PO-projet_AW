@@ -54,14 +54,12 @@ public abstract class Terrain {
                 }
 
                 TerrainType parsed = TerrainType.fromCharacter(terrainSpan.charAt(0));
-
                 if (parsed != null) {
 
                     Player.Type owner = !ownerSpan.equals(".") ? Player.Type.fromValue(Integer.parseInt(ownerSpan)) : null;
                     Terrain terrain = parsed.newInstance(owner);
 
                     if (terrain != null) {
-
                         int variation = variationSpan.contains(".") ? 0 : Integer.parseInt(variationSpan);
                         terrain.setTextureVariation(variation);
 

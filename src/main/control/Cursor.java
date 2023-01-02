@@ -1,7 +1,6 @@
 package main.control;
 
 import main.render.Renderable;
-import ressources.DisplayUtil;
 
 
 /**
@@ -13,11 +12,11 @@ import ressources.DisplayUtil;
  *
  * @author Tristan LECONTE--DENIS
  * @author Lucien GRAVOT
- *
  * @see Renderable
  */
 public class Cursor implements Renderable {
 
+    //todo : degager Renderable
     private final int maxWidth;
     private final int maxHeight;
     private int currentX;

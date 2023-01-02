@@ -43,6 +43,8 @@ public final class Config {
     /**
      * Config lie au jeu
      */
-
+    public static final int UNIT_MAX_HEALTH = 10;
+    public static final int PROPERTY_DEFAULT_DEFENSE = 20;
+    public static final int PROPERTY_DEFAULT_RECOVERY = 5;
 
 }

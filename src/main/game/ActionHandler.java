@@ -12,10 +12,8 @@ import main.menu.MenuModel;
 import main.menu.model.FactoryActionMenu;
 import main.menu.model.UnitActionMenu;
 import main.terrain.Property;
-import main.terrain.Terrain;
 import main.terrain.type.Factory;
 import main.terrain.type.HQ;
-import main.unit.Transport;
 import main.unit.Unit;
 import main.unit.UnitAction;
 import main.unit.UnitType;
@@ -80,7 +78,9 @@ public class ActionHandler {
 
     public boolean keyD(GameState gameState) {
 
+        this.instance.getCurrentGame().nextPlayer();
         this.instance.getCurrentGame().nextTurn();
+
         return true;
 
     }
@@ -205,9 +205,7 @@ public class ActionHandler {
 
                 this.instance.getRenderer().clearBuffer();
                 this.instance.getMapSelector().previous();
-                this.instance.getMenuManager()
-                        .getMenu(MenuModel.MAP_SELECTION_MENU)
-                        .needsRefresh(true);
+                this.instance.getMenuManager().getMenu(MenuModel.MAP_SELECTION_MENU).needsRefresh(true);
                 return true;
             }
 
@@ -249,9 +247,7 @@ public class ActionHandler {
             case MENU_MAP_SELECTION: {
                 this.instance.getRenderer().clearBuffer();
                 this.instance.getMapSelector().next();
-                this.instance.getMenuManager()
-                        .getMenu(MenuModel.MAP_SELECTION_MENU)
-                        .needsRefresh(true);
+                this.instance.getMenuManager().getMenu(MenuModel.MAP_SELECTION_MENU).needsRefresh(true);
                 return true;
             }
 
@@ -315,7 +311,7 @@ public class ActionHandler {
                 return true;
             }
 
-            case PLAYING_SELECTING:
+            case PLAYING_SELECTING: {
 
                 if (cursor == null) break;
                 if (grid == null) break;
@@ -332,50 +328,18 @@ public class ActionHandler {
 
                             this.instance.setGameState(GameState.PLAYING_SELECTING_UNIT_ACTION);
 
+                            OptionSelector<UnitAction> actionSelector = unit.getAvailableActions(currentCase, grid);
 
-                        // Todo : Rendre [323-349] moins merdique
-                        OptionSelector<UnitAction> actionSelector = new OptionSelector<UnitAction>();
-
-                        if(currentCase.getUnit() instanceof Transport) {
-
-                            if(((Transport) currentCase.getUnit()).isCarryingUnit()) {
-                                actionSelector
-                                        .addOption(UnitAction.MOVE)
-                                        .addOption(UnitAction.GET_OUT)
-                                        .addOption(UnitAction.ATTACK)
-                                        .addOption(UnitAction.CAPTURE);
-                            }
-                            else{
-                                actionSelector
-                                        .addOption(UnitAction.MOVE)
-                                        .addOption(UnitAction.GET_IN)
-                                        .addOption(UnitAction.ATTACK)
-                                        .addOption(UnitAction.CAPTURE);
-                            }
+                            this.instance.getMenuManager().addMenu(new UnitActionMenu(actionSelector));
+                            game.setSelectedCase(currentCase);
 
                         }
-
-                        else {
-                            actionSelector
-                                    .addOption(UnitAction.MOVE)
-                                    .addOption(UnitAction.ATTACK)
-                                    .addOption(UnitAction.CAPTURE);
-                        }
-
-                        this.instance.getMenuManager().addMenu(MenuModel.UNIT_ACTION_MENU, new UnitActionMenu(actionSelector));
-                        game.setSelectedCase(currentCase);
+                        else System.out.println("Warn: Unit not owned by current player");
 
                     }
-                    else System.out.println("Warn: Unit not owned by current player");
+                    else if (currentCase.getTerrain() instanceof Factory) {
 
-                }
-                else if (currentCase.getTerrain() instanceof Factory) {
-
-                    Property terrain = (Property) currentCase.getTerrain();
-
-                    if (terrain.getOwner() == currentPlayer.getType()) {
-
-                        if (currentCase.getUnit() == null) {
+                        if (Factory.canCreateUnit(currentCase, currentPlayer)) {
 
                             OptionSelector<UnitType> factorySelector = new OptionSelector<>();
 
@@ -388,21 +352,13 @@ public class ActionHandler {
                             this.instance.setGameState(GameState.PLAYING_SELECTING_FACTORY_UNIT);
                             game.setSelectedCase(currentCase);
 
-                            return true;
-
                         }
-
-                        else {
-                            System.out.println("There is already a unit here !");
-                        }
-
+                        else System.out.println("There is already a unit here !");
                     }
-                    else System.out.println("Warn: This is not your factory");
-
+                    else System.out.println("Warn: There is nothing to do here");
                 }
-                else System.out.println("Warn: There is nothing to do here");
-
                 return true;
+            }
 
             case PLAYING_SELECTING_UNIT_ACTION:
 
@@ -426,7 +382,7 @@ public class ActionHandler {
                         if (game.getSelectedCase().hasUnit()) {
 
                             Unit current = game.getSelectedCase().getUnit();
-                            List<Case> casesAround = game.getGrid().getCasesAround(cursor.getCurrentX(), cursor.getCurrentY(), current.getMinReach(), current.getMaxReach());
+                            List<Case> casesAround = game.getGrid().getCasesAround(cursor.getCurrentX(), cursor.getCurrentY(), current.getMinWeaponRange(), current.getMaxWeaponRange());
                             List<Unit> unitsAround = game.getGrid().getUnitsAround(casesAround);
 
                             System.out.println(unitsAround);
@@ -495,7 +451,7 @@ public class ActionHandler {
                 }
 
                 return true;
-            case PLAYING_SELECTING_TARGET:
+            case PLAYING_SELECTING_TARGET: {
 
                 if (cursor == null) break;
                 if (grid == null) break;
@@ -508,52 +464,32 @@ public class ActionHandler {
                 }
 
                 return true;
+            }
 
-            case PLAYING_MOVING_UNIT:
+            case PLAYING_MOVING_UNIT: {
 
                 Case source = game.getSelectedCase();
                 Case destination = game.getMovement().getMovementTail();
 
                 if (!destination.hasUnit()) {
 
-                    this.instance.setGameState(GameState.PLAYING_SELECTING_UNIT_ACTION);
+                    grid.moveUnit(source, destination);
+                    destination.getUnit().setMoved(true);
 
-                    MovementAnimation animation = new MovementAnimation(destination.getUnit(), game.getMovement());
-                    System.out.println("Moving unit from " + source + " to " + destination);
-                    //animation.waitUntilFinished(); // TODO: Animation in its own thread
-                    System.out.println("Unit moved");
+                    // Animation
+                    MovementAnimation animation = new MovementAnimation(source.getUnit(), game.getMovement());
+                    game.resetMovement();
+                    // Wait for animation to finish
 
                     game.setSelectedCase(destination);
-                    game.resetMovement();
-                    destination.setUnit(source.getUnit());
-                    source.setUnit(null);
-                    destination.getUnit().setHasMoved(true);
+                    this.instance.setGameState(GameState.PLAYING_SELECTING_UNIT_ACTION);
 
-                    // TODO
-                    if (destination.getUnit().getType() != UnitType.HELICOPTER && destination.getUnit().getType() != UnitType.BOMBER) {
+                    OptionSelector<UnitAction> actions = destination.getUnit().getAvailableActions(destination, grid);
 
-                        if (destination.getTerrain() instanceof Property) {
+                    this.instance.getMenuManager().addMenu(new UnitActionMenu(actions));
+                    this.instance.setGameState(GameState.PLAYING_SELECTING_UNIT_ACTION);
 
-                            if (((Property) destination.getTerrain()).getOwner() != currentPlayer.getType()) {
-
-                                OptionSelector<UnitAction> actionSelector = new OptionSelector<UnitAction>()
-                                        .addOption(UnitAction.MOVE)
-                                        .addOption(UnitAction.ATTACK)
-                                        .addOption(UnitAction.CAPTURE);
-
-                                this.instance.getMenuManager().addMenu(new UnitActionMenu(actionSelector));
-                                this.instance.setGameState(GameState.PLAYING_SELECTING_UNIT_ACTION);
-
-
-                            }
-
-                        }
-
-                    }
-                }
-
-
-                // Todo : Anim de mouvement
+                    // Todo : Anim de mouvement
 
 //                    Exemple code:
 //                    MovementAnimation animation = new MovementAnimation(unit, movement);
@@ -568,9 +504,10 @@ public class ActionHandler {
 //                        courante = c;
 //                        this.instance.getRenderer().render();
 //
-//                    }
+                }
 
                 return true;
+            }
         }
 
         return false;
@@ -588,38 +525,40 @@ public class ActionHandler {
 
         final Game game = this.instance.getCurrentGame();
 
+        this.instance.getRenderer().clearBuffer();
+
         switch (gameState) {
 
             case MENU_MAP_SELECTION:
                 this.instance.setGameState(GameState.MENU_TITLE_SCREEN);
-                return true;
+                break;
 
             case PLAYING_SELECTING:
                 this.instance.setGameState(GameState.MENU_PAUSE);
-                return true;
+                break;
 
             case MENU_PAUSE:
                 this.instance.setGameState(GameState.PLAYING_SELECTING);
-                return true;
+                break;
 
             case PLAYING_SELECTING_UNIT_ACTION:
                 this.instance.setGameState(GameState.PLAYING_SELECTING);
                 this.instance.getMenuManager().removeMenu(MenuModel.UNIT_ACTION_MENU);
-                return true;
+                break;
 
             case PLAYING_SELECTING_FACTORY_UNIT:
                 instance.setGameState(GameState.PLAYING_SELECTING);
                 this.instance.getMenuManager().removeMenu(MenuModel.FACTORY_ACTION_MENU);
-                return true;
+                break;
 
             case PLAYING_MOVING_UNIT:
                 instance.setGameState(GameState.PLAYING_SELECTING);
                 game.resetMovement();
-                return true;
+                break;
 
         }
 
-        return false;
+        return true;
 
     }
 
@@ -652,7 +591,6 @@ public class ActionHandler {
 
                 }
 
-
         }
 
         return false;
@@ -666,11 +604,11 @@ public class ActionHandler {
      */
     private void updateMovement(Runnable movement) {
 
-        Game game = this.instance.getCurrentGame();
-        Movement move = game.getMovement();
+        final Game game = this.instance.getCurrentGame();
+        final Movement move = game.getMovement();
 
-        int x = game.getCursor().getCurrentX();
-        int y = game.getCursor().getCurrentY();
+        final int x = game.getCursor().getCurrentX();
+        final int y = game.getCursor().getCurrentY();
 
         movement.run();
 
@@ -685,27 +623,14 @@ public class ActionHandler {
 
         if (game.getMovement().isEmpty()) return;
 
-        // TODO : Au lieu de verifier si on peut passer, cancel seulement si on peut pas passer (aka : inverser les conditions)
         // Ne peut pas passer au-dessus d'une unite sauf s'il s'agit d'une unite volante
-        if (currentUnit.canMoveTo(destination.getTerrain(), game.getWeather())) {
+        if (currentUnit.canMoveTo(destination, game.getWeather())) {
 
-            Terrain terrain = destination.getTerrain();
+            // Verifie si l'unite a asser de points (en tenant en compte de la meteo) pour se deplacer sur cette case
+            if (move.getCost(currentUnit, game.getWeather()) <= currentUnit.getMovementPoint(game.getWeather())) {
 
-            // Verifie si le terrain n'est pas une propriete
-            // Si la case en est une, verfie si le joueur courant en est proprietaire
-            // Sinon, pas possble de passer dessus sans attaquer la propriete
-            if (!destination.hasUnit() || (destination.hasUnit() && destination.getUnit().getOwner() == game.getCurrentPlayer().getType())) {
-
-                // Verifie si l'unite a asser de points (en tenant en compte la meteo) pour se deplacer sur cette case
-                if (move.getCost(currentUnit, game.getWeather()) <= currentUnit.getMovementPoint(game.getWeather())) {
-
-                    // Verifie si la case n'a pas deja une unite
-                    // Si c'est le cas, on verifie si notre unite est une unite volante, auquel cas elle peut passer par dessus
-
-                    game.getView().adjustOffset();
-                    return;
-
-                }
+                game.getView().adjustOffset();
+                return;
 
             }
         }

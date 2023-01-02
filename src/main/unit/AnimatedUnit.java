@@ -42,31 +42,9 @@ public abstract class AnimatedUnit extends Unit {
         this.animationClock.setFrame(frame);
     }
 
-    /**
-     * Definit la nouvelle animation de l'unite
-     * L'animation va continuer en fonction du numero de la frame courante
-     * @param unitAnimation La nouvelle animation
-     */
-    public void setAnimation(UnitAnimation unitAnimation) {
-        this.unitAnimation = unitAnimation;
-    }
 
-    /**
-     * Change l'animation de l'unite et reinitialise les frames
-     * @param unitAnimation La nouvelle animation
-     */
-    public void switchAnimation(UnitAnimation unitAnimation) {
-        this.setAnimation(unitAnimation);
-        this.setFrame(0);
-    }
 
-    public void newAnimationClock(int frameCount, int frameDuration) {
-        this.animationClock = new AnimationClock(frameCount, frameDuration, true);
-    }
 
-    public UnitAnimation getAnimation() {
-        return this.unitAnimation;
-    }
 
 
 

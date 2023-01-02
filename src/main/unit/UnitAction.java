@@ -27,6 +27,6 @@ public enum UnitAction {
     GET_IN,
 
     // Action : Deposer
-    GET_OUT,
+    DROP_UNIT,
 
 }

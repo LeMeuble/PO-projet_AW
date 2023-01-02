@@ -1,39 +1,40 @@
 package main.weapon.type;
 
+import main.unit.Unit;
 import main.unit.UnitType;
-import main.weapon.Weapon;
+import main.weapon.MeleeWeapon;
 
-public class LightMachineGun extends Weapon {
+public class LightMachineGun extends MeleeWeapon {
 
-    public static int DEFAULT_AMMO = Integer.MAX_VALUE;
+    private static final int DEFAULT_AMMO = Integer.MAX_VALUE;
 
-    int maxAmmo = 9;
-
-    public enum DamageMultiplier {
+    private enum DamageMultiplier {
 
         ON_INFANTRY(UnitType.INFANTRY, 0.6f),
         ON_BAZOOKA(UnitType.BAZOOKA, 0.55f),
         ON_TANK(UnitType.TANK, 0.15f),
         ON_ANTIAIR(UnitType.ANTIAIR, 0.1f),
+        ON_ARTILLERY(UnitType.ARTILLERY, 0.4f),
         ON_HELICOPTER(UnitType.HELICOPTER, 0.3f),
         ON_BOMBER(UnitType.BOMBER, 0.0f),
-        ON_CONVOY(UnitType.CONVOY, 0.4f);
+        ON_CONVOY(UnitType.CONVOY, 0.4f),
+        ON_SAMLAUNCHER(UnitType.SAMLAUNCHER, 0.4f);
 
-        private final UnitType unit;
+        private final UnitType unitType;
         private final float multiplier;
 
-        DamageMultiplier(UnitType unit, float multiplier) {
+        DamageMultiplier(UnitType unitType, float multiplier) {
 
-            this.unit = unit;
+            this.unitType = unitType;
             this.multiplier = multiplier;
 
         }
 
-         public static DamageMultiplier fromUnit(UnitType unit) {
+        public static DamageMultiplier fromUnit(UnitType unit) {
 
             for (DamageMultiplier d : DamageMultiplier.values()) {
 
-                if(d.unit == unit) {
+                if (d.unitType == unit) {
                     return d;
                 }
 
@@ -50,20 +51,18 @@ public class LightMachineGun extends Weapon {
 
     public LightMachineGun() {
 
-        super(LightMachineGun.DEFAULT_AMMO);
+        super();
 
     }
 
     @Override
-    public boolean canBeUsedOn(UnitType unitType) {
-
-        return this.getMultiplierOn(unitType) != 0.0f;
-
+    public int getDefaultAmmo() {
+        return LightMachineGun.DEFAULT_AMMO;
     }
 
     @Override
-    public float getMultiplierOn(UnitType unitType) {
-        DamageMultiplier damage = DamageMultiplier.fromUnit(unitType);
+    public float getMultiplierOn(Unit unit) {
+        DamageMultiplier damage = DamageMultiplier.fromUnit(unit.getType());
         return damage != null ? damage.getMultiplier() : 0.0f;
     }
 

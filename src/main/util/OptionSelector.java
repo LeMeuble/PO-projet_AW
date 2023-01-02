@@ -56,13 +56,23 @@ public class OptionSelector<T> {
 
     public OptionSelector<T> addOption(T value, boolean available) {
 
-        if (this.selectedOption == -1) {
-            this.selectedOption = 0;
+        if (!this.contains(value)) {
+
+            this.options.add(new Option(value, available));
+
+            if (this.selectedOption == -1 && available) {
+                this.selectedOption = this.getOptionsCount() - 1;
+            }
+
         }
 
-        this.options.add(new Option(value, available));
-
         return this;
+
+    }
+
+    public boolean contains(T value) {
+
+        return this.options.stream().anyMatch(o -> o.getValue().equals(value));
 
     }
 
@@ -78,8 +88,25 @@ public class OptionSelector<T> {
 
     }
 
-    public int getOptionCount() {
-        return this.options.size();
+    public List<T> getAvailableOptions() {
+
+        List<T> options = new ArrayList<>();
+
+        for (Option option : this.options) {
+            if (option.isAvailable())
+                options.add(option.getValue());
+        }
+
+        return options;
+
+    }
+
+    public int getOptionsCount() {
+        return this.getOptions().size();
+    }
+
+    public int getAvailableOptionsCount() {
+        return this.getAvailableOptions().size();
     }
 
     public boolean hasAvailableOption() {

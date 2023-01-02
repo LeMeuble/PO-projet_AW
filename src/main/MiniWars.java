@@ -95,7 +95,7 @@ public class MiniWars {
     }
 
     public void newGame(MapMetadata mapMetadata) {
-        this.currentGame = new Game(mapMetadata);
+        this.currentGame = new Game(this, mapMetadata);
         this.gameState = GameState.PLAYING_SELECTING;
     }
 

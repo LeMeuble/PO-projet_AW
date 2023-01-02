@@ -1,8 +1,10 @@
 package main.terrain.type;
 
 import main.game.Player;
+import main.map.Case;
 import main.terrain.Property;
 import main.terrain.TerrainType;
+import main.unit.Unit;
 
 /**
  * Classe representant une usine
@@ -12,17 +14,59 @@ import main.terrain.TerrainType;
  */
 public class Factory extends Property {
 
-    /**
-     * Constructeur de l'usine
-     * @param owner Le joueur proprietaire de l'usine
-     */
     public Factory(Player.Type owner) {
         super(owner);
+    }
+
+    /**
+     * Verifie si la case passee en parametre peut faire apparaitre une unite
+     *
+     * @param currentCase   La case sur laquelle on veut faire apparaitre l'unite
+     * @param currentPlayer Le joueur proprietaire de l'unite/de la case
+     *
+     * @return true si l'unite peut apparaitre, false sinon
+     */
+    public static boolean canCreateUnit(Case currentCase, Player currentPlayer) {
+
+        // Si la case n'est pas une propriete, on ne peut pas creer d'unite
+        if (!(currentCase.getTerrain() instanceof Factory)) {
+            return false;
+        }
+
+        // Si la case est une propriete
+        else {
+
+            Property currentTerrain = (Property) currentCase.getTerrain();
+            // On verifie que le terrain appartient bien au joueur selectionne
+            if (currentTerrain.getOwner() == currentPlayer.getType()) {
+
+                // On verifie si il n'y a pas d'unite sur la case
+                return currentCase.getUnit() == null;
+
+            }
+        }
+
+        return false;
     }
 
     @Override
     public TerrainType getType() {
         return TerrainType.FACTORY;
+    }
+
+    /**
+     * Cree une unite sur la case
+     *
+     * @param unit
+     * @param c
+     * @param owner
+     */
+    public void createUnit(Unit unit, Case c, Player owner) {
+
+        int price = unit.getType().getPrice();
+        c.setUnit(unit);
+        owner.setMoney(owner.getMoney() - price);
+
     }
 
 }

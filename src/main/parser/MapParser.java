@@ -127,7 +127,7 @@ public class MapParser {
 
     }
 
-    private static MapMetadata parseMetadata(File file, String mapPath) {
+    public static MapMetadata parseMetadata(File file, String mapPath) {
 
         if (!file.getName().endsWith(".meta")) return null;
 

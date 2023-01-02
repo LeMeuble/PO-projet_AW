@@ -1,13 +1,14 @@
 package main.weapon.type;
 
+import main.unit.Unit;
 import main.unit.UnitType;
-import main.weapon.Weapon;
+import main.weapon.MeleeWeapon;
 
-public class HeavyMachineGun extends Weapon {
+public class HeavyMachineGun extends MeleeWeapon {
 
-    public static int DEFAULT_AMMO = Integer.MAX_VALUE;
+    private static final int DEFAULT_AMMO = Integer.MAX_VALUE;
 
-    public enum DamageMultiplier {
+    private enum DamageMultiplier {
 
         ON_INFANTRY(UnitType.INFANTRY, 1f),
         ON_BAZOOKA(UnitType.BAZOOKA, 0.8f),
@@ -15,14 +16,16 @@ public class HeavyMachineGun extends Weapon {
         ON_ANTIAIR(UnitType.ANTIAIR, 0.3f),
         ON_HELICOPTER(UnitType.HELICOPTER, 1.1f),
         ON_BOMBER(UnitType.BOMBER, 0.7f),
-        ON_CONVOY(UnitType.CONVOY, 0.5f);
+        ON_ARTILLERY(UnitType.ARTILLERY, 0.5f),
+        ON_CONVOY(UnitType.CONVOY, 0.5f),
+        ON_SAMLAUNCHER(UnitType.SAMLAUNCHER, 0.5f);
 
-        private final UnitType unit;
+        private final UnitType unitType;
         private final float multiplier;
 
-        DamageMultiplier(UnitType unit, float multiplier) {
+        DamageMultiplier(UnitType unitType, float multiplier) {
 
-            this.unit = unit;
+            this.unitType = unitType;
             this.multiplier = multiplier;
 
         }
@@ -31,7 +34,7 @@ public class HeavyMachineGun extends Weapon {
 
             for (DamageMultiplier d : DamageMultiplier.values()) {
 
-                if(d.unit == unit) {
+                if (d.unitType == unit) {
                     return d;
                 }
 
@@ -48,20 +51,18 @@ public class HeavyMachineGun extends Weapon {
 
     public HeavyMachineGun() {
 
-        super(HeavyMachineGun.DEFAULT_AMMO);
+        super();
 
     }
 
     @Override
-    public boolean canBeUsedOn(UnitType unitType) {
-
-        return this.getMultiplierOn(unitType) != 0.0f;
-
+    public int getDefaultAmmo() {
+        return HeavyMachineGun.DEFAULT_AMMO;
     }
 
     @Override
-    public float getMultiplierOn(UnitType unitType) {
-        DamageMultiplier damage = DamageMultiplier.fromUnit(unitType);
+    public float getMultiplierOn(Unit unit) {
+        DamageMultiplier damage = DamageMultiplier.fromUnit(unit.getType());
         return damage != null ? damage.getMultiplier() : 0.0f;
     }
 

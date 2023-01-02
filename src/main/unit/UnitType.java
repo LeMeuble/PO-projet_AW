@@ -9,26 +9,24 @@ import main.unit.type.*;
  */
 public enum UnitType {
 
-    INFANTRY('i', Infantry.class, 1500, 3),
-    BAZOOKA('z', Bazooka.class, 3500, 2),
-    BOMBER('b', Bomber.class, 20000, 7),
-    CONVOY('c', Convoy.class, 5000, 6),
-    ANTIAIR('d', AntiAir.class, 6000, 6),
-    HELICOPTER('h', Helicopter.class, 12000, 6),
-    TANK('t', Tank.class, 7000, 6),
-    ARTILLERY('a', Artillery.class, 6000, 5),
-    SAMLAUNCHER('s', SamLaucher.class, 12000, 6);
+    INFANTRY('i', Infantry.class, 1500),
+    BAZOOKA('z', Bazooka.class, 3500),
+    BOMBER('b', Bomber.class, 20000),
+    CONVOY('c', Convoy.class, 5000),
+    ANTIAIR('d', AntiAir.class, 6000),
+    HELICOPTER('h', Helicopter.class, 12000),
+    TANK('t', Tank.class, 7000),
+    ARTILLERY('a', Artillery.class, 6000),
+    SAMLAUNCHER('s', SamLauncher.class, 12000);
 
     private final char character;
     private final Class<? extends Unit> unitClass;
     private final int price;
-    private final int movementPoint;
 
-    UnitType(char character, Class<? extends Unit> unitClass, int price, int movementPoint) {
+    UnitType(char character, Class<? extends Unit> unitClass, int price) {
         this.character = character;
         this.unitClass = unitClass;
         this.price = price;
-        this.movementPoint = movementPoint;
     }
 
     public static UnitType fromCharacter(char character) {
@@ -50,10 +48,6 @@ public enum UnitType {
 
     public String getName() {
         return this.name().toLowerCase();
-    }
-
-    public int getMovementPoint() {
-        return this.movementPoint;
     }
 
     public Unit newInstance(Player.Type p) {

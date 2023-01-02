@@ -9,9 +9,9 @@ def rec_righizer(path):
 
 		abs_path = os.path.abspath(os.path.normpath(os.path.join(path, file)))
 
-		if os.path.isdir(abs_path) and file == "moveleft":
+		if os.path.isdir(abs_path) and file == "idle":
 
-			newFolder = os.path.join(path, "moveright")
+			newFolder = os.path.join(path, "idleright")
 
 			if not os.path.exists(newFolder):
 				os.mkdir(newFolder)

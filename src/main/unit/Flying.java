@@ -1,9 +1,13 @@
 package main.unit;
 
 import main.game.Player;
+import main.map.Case;
 import main.terrain.Terrain;
 import main.terrain.TerrainType;
 import main.weather.Weather;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Classe abstraite representant une unite volante
@@ -11,87 +15,44 @@ import main.weather.Weather;
  * @author Tristan LECONTE--DENIS
  * @author Lucien GRAVOT
  */
-public abstract class Flying extends AnimatedUnit {
+public abstract class Flying extends Unit {
 
-    /**
-     * Enumeration des couts d'un mouvement, en fonction du type du terrain de destination et de la meteo
-     */
-    public enum MovementCost {
+    public Flying(Player.Type owner) {
 
-        ON_HQ_CLEAR(TerrainType.HQ, Weather.CLEAR, 1),
-        ON_CITY_CLEAR(TerrainType.CITY, Weather.CLEAR, 1),
-        ON_FACTORY_CLEAR(TerrainType.FACTORY, Weather.CLEAR, 1),
-        ON_PLAIN_CLEAR(TerrainType.PLAIN, Weather.CLEAR, 1),
-        ON_FOREST_CLEAR(TerrainType.FOREST, Weather.CLEAR, 1),
-        ON_MOUNTAIN_CLEAR(TerrainType.MOUNTAIN, Weather.CLEAR, 1),
-        ON_WATER_CLEAR(TerrainType.WATER, Weather.CLEAR, 1);
-
-        private final TerrainType terrainType;
-        private final Weather weather;
-        private final int cost;
-
-        MovementCost(TerrainType terrainType, Weather weather, int cost) {
-
-            this.terrainType = terrainType;
-            this.weather = weather;
-            this.cost = cost;
-
-        }
-
-        public static MovementCost fromTerrainAndWeather(TerrainType terrainType, Weather weather) {
-
-            for (MovementCost cost : MovementCost.values()) {
-                if (cost.terrainType == terrainType && cost.weather == weather) {
-                    return cost;
-                }
-            }
-            return null;
-
-        }
-
-        public int getCost() {
-            return this.cost;
-
-        }
-
-        public boolean canMoveTo() {
-
-            return this.cost != Integer.MAX_VALUE;
-
-        }
-
-    }
-
-    public Flying(Player.Type owner, int frameCount, int frameDuration) {
-
-        super(owner, frameCount, frameDuration);
+        super(owner);
 
     }
 
     /**
      * Verifie si l'unite peut se deplacer sur un terrain en fonction de la meteo
-     * @param destination Le terrain de destination
-     * @param weather La meteo courante
+     *
+     * @param destination La case de destination
+     * @param weather     La meteo courante
+     *
      * @return true si le deplacement est possible, false sinon
      */
     @Override
-    public boolean canMoveTo(Terrain destination, Weather weather) {
+    public boolean canMoveTo(Case destination, Weather weather) {
 
-        MovementCost cost = MovementCost.fromTerrainAndWeather(destination.getType(), weather);
-        return cost != null && cost.canMoveTo();
+        boolean canMoveParent = super.canMoveTo(destination, weather);
+
+        UnitMovementCost.Flying cost =  UnitMovementCost.Flying.fromTerrainAndWeather(destination.getTerrain().getType(), weather);
+        return canMoveParent && cost != null && cost.isAccessible();
 
     }
 
     /**
      * Renvoie le cout de deplacement de l'unite vers un terrain, en fonction de la meteo
-     * @param destination Le terrain de destination
-     * @param weather La meteo de destination
-     * @return Le cout de deplacement
+     *
+     * @param destination La case de destination
+     * @param weather     La meteo courante
+     *
+     * @return Le cout de deplacement de l'unite vers une case, en fonction de la meteo
      */
-    public int getMovementCostTo(Terrain destination, Weather weather) {
+    public int getMovementCostTo(Case destination, Weather weather) {
 
-        MovementCost cost = MovementCost.fromTerrainAndWeather(destination.getType(), weather);
-        return cost == null ? Integer.MAX_VALUE : cost.getCost();
+        UnitMovementCost.Flying cost =  UnitMovementCost.Flying.fromTerrainAndWeather(destination.getTerrain().getType(), weather);
+        return cost == null ? -1 : cost.getCost();
 
     }
 

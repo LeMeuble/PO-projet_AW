@@ -164,7 +164,9 @@ public class Movement {
         int cost = 0;
 
         for(Case c : this.cases) {
-            cost += unit.getMovementCostTo(c.getTerrain(), weather);
+            int moveCost = unit.getMovementCostTo(c, weather);
+            if(moveCost == -1) return Integer.MAX_VALUE;
+            cost += moveCost;
         }
 
         return cost;

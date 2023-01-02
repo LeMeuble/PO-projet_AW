@@ -1,6 +1,7 @@
 package main.game;
 
 import com.sun.istack.internal.Nullable;
+import main.MiniWars;
 import main.control.Cursor;
 import main.map.Case;
 import main.map.Grid;
@@ -12,6 +13,8 @@ import main.terrain.TerrainType;
 import main.terrain.type.HQ;
 import main.unit.Unit;
 import main.weather.Weather;
+import main.weather.WeatherManager;
+import ressources.Config;
 
 import java.util.HashMap;
 import java.util.List;
@@ -28,15 +31,16 @@ import java.util.stream.Collectors;
 public class Game {
 
 
+    private final MiniWars instance;
     private final MapMetadata mapMetadata;
     private final Grid grid;
     private final GameView view;
     private final Map<Player.Type, Player> players;
+    private final WeatherManager weatherManager;
     private Cursor cursor;
     private Movement movement;
     private Player.Type currentPlayer;
     private Case selectedCase;
-    private Weather weather;
 
     /**
      * Constructeur de Game. Permet de creer une partie a partir des metadonnees de la carte.
@@ -45,8 +49,9 @@ public class Game {
      *
      * @see MapMetadata
      */
-    public Game(MapMetadata mapMetadata) {
+    public Game(MiniWars instance, MapMetadata mapMetadata) {
 
+        this.instance = instance;
         this.cursor = new Cursor(mapMetadata.getWidth(), mapMetadata.getHeight());
         this.movement = null;
         this.currentPlayer = Player.Type.RED;
@@ -54,7 +59,7 @@ public class Game {
         this.grid = MapParser.parseMap(mapMetadata);
         this.view = new GameView(this.grid, this.cursor, mapMetadata.getWidth(), mapMetadata.getHeight());
         this.players = new HashMap<>();
-        this.weather = Weather.random();
+        this.weatherManager = new WeatherManager();
 
         for (int i = 1; i <= mapMetadata.getPlayerCount(); i++) {
             players.put(Player.Type.fromValue(i), new Player(Player.Type.values()[i]));
@@ -174,20 +179,20 @@ public class Game {
 
     public void nextTurn() {
 
-        // TODO: System de meteo si actif
         // TODO: System de brouillard si actif
-        Player nextPlayer = this.nextPlayer();
-        System.out.println("Next player: " + nextPlayer.getType().toString());
 
+        this.weatherManager.clock();
+        if (this.weatherManager.willChange()) {
+
+            System.out.println("Weather will change on next turn to " + this.weatherManager.getNextWeather().name());
+
+        }
+
+        Player nextPlayer = this.nextPlayer();
         for (Case c : this.grid.getCases()) {
 
             Terrain terrain = c.getTerrain();
             Unit unit = c.getUnit();
-
-            if (unit != null) {
-                unit.setHasPlayed(false);
-                unit.setHasMoved(false);
-            }
 
             if (terrain instanceof Property) {
 
@@ -200,16 +205,20 @@ public class Game {
 
                 if (unit == null) {
 
-                    property.setDefense(property.getDefense() + 5); // todo: add config
+                    property.setDefense(property.getDefense() + Config.PROPERTY_DEFAULT_RECOVERY);
 
                 }
                 else if (unit.getOwner() == property.getOwner()) {
 
-//                        unit.supply()
+                    unit.supply();
 
                 }
 
 
+            }
+            if (unit != null) {
+                unit.setPlayed(false);
+                unit.setMoved(false);
             }
 
         }
@@ -288,18 +297,11 @@ public class Game {
      * @see Weather
      */
     public Weather getWeather() {
-        return this.weather;
+        return this.weatherManager.getCurrentWeather();
     }
 
-    /**
-     * Changer la meteo actuelle de la partie.
-     *
-     * @param weather
-     *
-     * @see Weather
-     */
-    public void setWeather(Weather weather) {
-        this.weather = weather;
+    public WeatherManager getWeatherManager() {
+        return this.weatherManager;
     }
 
     /**
