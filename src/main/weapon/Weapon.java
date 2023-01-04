@@ -42,6 +42,10 @@ public abstract class Weapon {
         this.ammo = ammo;
     }
 
+    public boolean hasAmmo() {
+        return ammo > 0;
+    }
+
     public void supply() {
         this.ammo = this.getDefaultAmmo();
     }

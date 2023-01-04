@@ -14,16 +14,27 @@ public class Coordinate {
         return this.x;
     }
 
-    public int getY() {
-        return this.y;
-    }
-
     public void setX(int x) {
         this.x = x;
     }
 
+    public int getY() {
+        return this.y;
+    }
+
     public void setY(int y) {
         this.y = y;
+    }
+
+    /**
+     * Retourne une distance (distance de Manhattan) entre cette instance et une autre instance
+     *
+     * @param other L'autre instance a laquelle calculer la distance
+     *
+     * @return La distance entre les deux instances
+     */
+    public double distance(Coordinate other) {
+        return Math.abs(this.x - other.x) + Math.abs(this.y - other.y);
     }
 
 }

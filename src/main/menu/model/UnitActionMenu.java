@@ -15,7 +15,7 @@ public class UnitActionMenu extends ActionMenu<UnitAction> {
 
     public UnitActionMenu(OptionSelector<UnitAction> optionSelector) {
 
-        super(10, 10, 10, 10, optionSelector);
+        super(optionSelector, false);
 
     }
 
@@ -38,7 +38,7 @@ public class UnitActionMenu extends ActionMenu<UnitAction> {
 
         StdDraw.setFont(font);
 
-        for (UnitAction action : this.getOptions()) {
+        for (UnitAction action : this.getAvailableOptions()) {
 
             if(action == this.getSelectedOption()) {
                 StdDraw.setPenColor(Color.BLUE);

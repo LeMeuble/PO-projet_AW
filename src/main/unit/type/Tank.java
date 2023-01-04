@@ -21,10 +21,4 @@ public class Tank extends Motorized {
         return UnitType.TANK;
     }
 
-
-    @Override
-    public String getFile(int frame) {
-        return PathUtil.getUnitPath(this.getType(), this.getOwner(), UnitAnimation.IDLE, !this.hasPlayed(), frame);
-    }
-
 }

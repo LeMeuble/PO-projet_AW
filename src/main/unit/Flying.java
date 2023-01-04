@@ -15,7 +15,7 @@ import java.util.List;
  * @author Tristan LECONTE--DENIS
  * @author Lucien GRAVOT
  */
-public abstract class Flying extends Unit {
+public abstract class Flying extends Fueled {
 
     public Flying(Player.Type owner) {
 

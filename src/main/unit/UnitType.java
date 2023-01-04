@@ -2,6 +2,7 @@ package main.unit;
 
 import main.game.Player;
 import main.unit.type.*;
+import main.util.OptionSelector;
 
 /**
  * Enumeration de tous les types d'unites possibles
@@ -17,7 +18,11 @@ public enum UnitType {
     HELICOPTER('h', Helicopter.class, 12000),
     TANK('t', Tank.class, 7000),
     ARTILLERY('a', Artillery.class, 6000),
-    SAMLAUNCHER('s', SamLauncher.class, 12000);
+    SAMLAUNCHER('s', SAMLauncher.class, 12000),
+    CRUISER('r', Cruiser.class, 18000),
+    SUBMARINE('u', Submarine.class, 16000),
+    LANDINGSHIP('l', LandingShip.class, 5000),
+    DREADNOUGHT('n', Dreadnought.class, 25000);
 
     private final char character;
     private final Class<? extends Unit> unitClass;
@@ -42,6 +47,19 @@ public enum UnitType {
 
     }
 
+    public static OptionSelector<UnitType> asSelector(int money) {
+
+        OptionSelector<UnitType> factorySelector = new OptionSelector<>();
+
+        for (UnitType type : UnitType.values()) {
+            boolean isAvailable = type.getPrice() <= money;
+            factorySelector.addOption(type, isAvailable);
+        }
+
+        return factorySelector;
+
+    }
+
     public int getPrice() {
         return this.price;
     }
@@ -54,7 +72,8 @@ public enum UnitType {
 
         try {
             return this.unitClass.getConstructor(Player.Type.class).newInstance(p);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }
 

@@ -8,4 +8,12 @@ public enum UnitFacing {
     LEFT,
     RIGHT;
 
+    public String getName() {
+        return this.name().toLowerCase();
+    }
+
+    public static UnitFacing random() {
+        return UnitFacing.values()[(int) (Math.random() * UnitFacing.values().length)];
+    }
+
 }

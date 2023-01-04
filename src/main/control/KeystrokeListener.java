@@ -40,6 +40,7 @@ public class KeystrokeListener {
         DOWN(40),
         SHIFT(16),
         ESCAPE(27),
+        SPACE(32),
         KEY_T('t'),
         KEY_D('d');
 

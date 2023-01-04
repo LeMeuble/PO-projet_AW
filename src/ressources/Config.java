@@ -1,18 +1,46 @@
 package ressources;
 
+import java.awt.*;
+import java.io.File;
+
 public final class Config {
+
+    static {
+
+
+        Font font1 = new Font("Arial", Font.BOLD, 30);
+        Font font2 = new Font("Arial", Font.BOLD, 25);
+        Font font3 = new Font("Arial", Font.BOLD, 18);
+        try {
+            font1 = Font.createFont(Font.TRUETYPE_FONT, new File(PathUtil.getUiComponentPath("fixedsys.ttf")))
+                    .deriveFont(32f);
+            font2 = Font.createFont(Font.TRUETYPE_FONT, new File(PathUtil.getUiComponentPath("fixedsys.ttf")))
+                    .deriveFont(26f);
+            font3 = Font.createFont(Font.TRUETYPE_FONT, new File(PathUtil.getUiComponentPath("fixedsys.ttf")))
+                    .deriveFont(20f);
+        } catch (Exception ignored) {}
+
+        FONT_32 = font1;
+        FONT_26 = font2;
+        FONT_20 = font3;
+
+    }
 
     /*
     Config lie au rendu graphique
     */
-    public static final int PIXEL_PER_CASE = 48;
     public static final int MAP_ROW_COUNT = 16;
     public static final int MAP_COLUMN_COUNT = 16;
-    public static final int BOTTOM_MENU_MARGIN = 3 * PIXEL_PER_CASE;
-    public static final int WIDTH = MAP_COLUMN_COUNT * PIXEL_PER_CASE;
-    public static final int HEIGHT = MAP_ROW_COUNT * PIXEL_PER_CASE + BOTTOM_MENU_MARGIN;
+    public static final double PIXEL_PER_CASE = 48d;
+    public static final double BOTTOM_MENU_MARGIN = 3 * PIXEL_PER_CASE;
+    public static final double WIDTH = MAP_COLUMN_COUNT * PIXEL_PER_CASE;
+    public static final double HEIGHT = MAP_ROW_COUNT * PIXEL_PER_CASE + BOTTOM_MENU_MARGIN;
     public static final String TITLE = "MiniWars";
-    public static final String ICON_PATH = PathUtil.getUiComponentPath("icon");
+    public static final String ICON_PATH = PathUtil.getUiComponentPath("icon.png");
+
+    public static final Font FONT_32;
+    public static final Font FONT_26;
+    public static final Font FONT_20;
 
     /*
     Config lie aux animations
@@ -34,16 +62,24 @@ public final class Config {
     /*
     Config lie au menus
      */
-    public static final int MENU_ACTION_MARGIN = 16;
+    public static final int MENU_ACTION_MARGIN = 32;
     public static final int MENU_ACTION_WIDTH = 128;
-    public static final int MENU_ACTION_TOP_HEIGHT = 23;
+    public static final int MENU_ACTION_TOP_HEIGHT = 24;
     public static final int MENU_ACTION_MIDDLE_HEIGHT = 40;
-    public static final int MENU_ACTION_BOTTOM_HEIGHT = 26;
+    public static final int MENU_ACTION_BOTTOM_HEIGHT = 24;
+
+    /*
+    Config lie aux tailles des textures
+     */
 
     /**
      * Config lie au jeu
      */
-    public static final int UNIT_MAX_HEALTH = 10;
+    public static final float UNIT_MAX_HEALTH = 10f;
+    public static final int UNIT_MAX_HEALTH_RECOVERY = 2; // pv par tour
+    public static final double UNIT_HEALTH_PRICE_RATIO = 0.1d;
+    public static final double UNIT_LOW_AMMO_THRESHOLD = 1/2d;
+    public static final double UNIT_LOW_FUEL_THRESHOLD = 1/2d;
     public static final int PROPERTY_DEFAULT_DEFENSE = 20;
     public static final int PROPERTY_DEFAULT_RECOVERY = 5;
 

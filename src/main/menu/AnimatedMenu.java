@@ -27,8 +27,8 @@ public abstract class AnimatedMenu extends Menu {
      *
      * @see AnimationClock
      */
-    public AnimatedMenu(int x, int y, int width, int height, int priority, AnimationClock animationClock) {
-        super(x, y, width, height, priority);
+    public AnimatedMenu(int priority, AnimationClock animationClock) {
+        super(priority);
         this.animationClock = animationClock;
     }
 

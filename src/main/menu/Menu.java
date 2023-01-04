@@ -18,11 +18,6 @@ import main.render.Renderable;
  */
 public abstract class Menu implements Comparable<Menu>, Renderable {
 
-
-    private final int x;
-    private final int y;
-    private final int width;
-    private final int height;
     private final int priority;
     private boolean isVisible;
     private boolean needsRefresh;
@@ -36,52 +31,12 @@ public abstract class Menu implements Comparable<Menu>, Renderable {
      * @param height   La hauteur du menu
      * @param priority La priorite d'affichage du menu
      */
-    public Menu(int x, int y, int width, int height, int priority) {
+    public Menu(int priority) {
 
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
         this.priority = priority;
         this.isVisible = true;
         this.needsRefresh = true;
 
-    }
-
-    /**
-     * Obtenir la position x du menu
-     *
-     * @return La position x du menu
-     */
-    public int getX() {
-        return this.x;
-    }
-
-    /**
-     * Obtenir la position y du menu
-     *
-     * @return La position y du menu
-     */
-    public int getY() {
-        return this.y;
-    }
-
-    /**
-     * Obtenir la largeur du menu
-     *
-     * @return La largeur du menu
-     */
-    public int getWidth() {
-        return this.width;
-    }
-
-    /**
-     * Obtenir la hauteur du menu
-     *
-     * @return La hauteur du menu
-     */
-    public int getHeight() {
-        return this.height;
     }
 
     /**

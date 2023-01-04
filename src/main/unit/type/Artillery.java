@@ -20,9 +20,4 @@ public class Artillery extends Motorized {
         return UnitType.ARTILLERY;
     }
 
-
-    @Override
-    public String getFile(int frame) {
-        return PathUtil.getUnitPath(this.getType(), this.getOwner(), UnitAnimation.IDLE, !this.hasPlayed(), frame);
-    }
 }

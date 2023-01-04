@@ -11,23 +11,17 @@ import ressources.PathUtil;
 public class MainMenu extends AnimatedMenu {
 
     private static final int PRIORITY = 10;
+    public static final double WIDTH = Config.WIDTH;
+    public static final double HEIGHT = Config.HEIGHT;
+    private static final double CENTER_X = Config.WIDTH / 2;
+    private static final double CENTER_Y = Config.HEIGHT / 2;
 
     private final int id;
     private final Weather weather;
 
 
     public MainMenu() {
-        super(
-                Config.WIDTH / 2,
-                Config.HEIGHT / 2,
-                Config.WIDTH,
-                Config.HEIGHT,
-                MainMenu.PRIORITY,
-                new AnimationClock(
-                        Config.MAIN_MENU_ANIMATION_FRAME_COUNT,
-                        Config.MAIN_MENU_ANIMATION_FRAME_DURATION
-                )
-        );
+        super(PRIORITY, new AnimationClock(Config.MAIN_MENU_ANIMATION_FRAME_COUNT, Config.MAIN_MENU_ANIMATION_FRAME_DURATION));
         this.id = (int) (Math.random() * Config.MAIN_MENU_BACKGROUND_VARIATION_COUNT);
         this.weather = Weather.CLEAR; //Weather.random();
     }
@@ -39,10 +33,10 @@ public class MainMenu extends AnimatedMenu {
         final int frame = this.getFrame();
 
         final String backgroundPath = PathUtil.getBackgroundPath(this.weather, this.id);
-        final String title = PathUtil.getUiComponentPath("title_screen_" + frame);
+        final String title = PathUtil.getUiComponentPath("title_screen_" + frame + ".png");
 
-        DisplayUtil.drawPicture(super.getX(), super.getY(), backgroundPath, super.getWidth(), super.getHeight());
-        DisplayUtil.drawPicture(super.getX(), 0.18d * Config.HEIGHT, title);
+        DisplayUtil.drawPicture(CENTER_X, CENTER_Y, backgroundPath, WIDTH, HEIGHT);
+        DisplayUtil.drawPicture(CENTER_X, 0.18d * Config.HEIGHT, title);
 
     }
 

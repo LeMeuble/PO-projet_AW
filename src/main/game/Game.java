@@ -31,7 +31,6 @@ import java.util.stream.Collectors;
 public class Game {
 
 
-    private final MiniWars instance;
     private final MapMetadata mapMetadata;
     private final Grid grid;
     private final GameView view;
@@ -49,9 +48,8 @@ public class Game {
      *
      * @see MapMetadata
      */
-    public Game(MiniWars instance, MapMetadata mapMetadata) {
+    public Game(MapMetadata mapMetadata) {
 
-        this.instance = instance;
         this.cursor = new Cursor(mapMetadata.getWidth(), mapMetadata.getHeight());
         this.movement = null;
         this.currentPlayer = Player.Type.RED;

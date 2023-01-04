@@ -19,9 +19,4 @@ public class AntiAir extends Motorized {
         return UnitType.ANTIAIR;
     }
 
-    @Override
-    public String getFile(int frame) {
-        return PathUtil.getUnitPath(this.getType(), this.getOwner(), UnitAnimation.IDLE, !this.hasPlayed(), frame);
-    }
-
 }

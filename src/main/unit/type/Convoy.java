@@ -34,11 +34,6 @@ public class Convoy extends Motorized implements Transport {
         return UnitType.CONVOY;
     }
 
-    @Override
-    public String getFile(int frame) {
-        return PathUtil.getUnitPath(this.getType(), this.getOwner(), UnitAnimation.IDLE, !this.hasPlayed(), frame);
-    }
-
     public Unit getCarriedUnit() {
         return carriedUnit;
     }

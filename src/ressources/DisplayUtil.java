@@ -45,7 +45,7 @@ public class DisplayUtil {
      *                   or number of case in the y direction
      * @param path       The path to the picture file (relative to the project)
      */
-    public static void drawPictureInCase(int gridX, int gridY, int gridWidth, int gridHeight, int factorX, int factorY, String path) {
+    public static void drawPictureInCase(int gridX, int gridY, int gridWidth, int gridHeight, double factorX, double factorY, String path) {
 
         double[] offset = getCenteringOffset(gridWidth, gridHeight);
 
@@ -70,7 +70,7 @@ public class DisplayUtil {
      */
     public static void drawPictureInCase(int gridX, int gridY, int gridWidth, int gridHeight, String path) {
 
-        drawPictureInCase(gridX, gridY, gridWidth, gridHeight, 1, 1, path);
+        drawPictureInCase(gridX, gridY, gridWidth, gridHeight, 1d, 1d, path);
 
     }
 
@@ -136,7 +136,7 @@ public class DisplayUtil {
      * @param scaledWidth The width of the picture in pixel
      * @param scaledHeight The height of the picture in pixel
      */
-    public static void drawPicture(double pixelX, double pixelY, String file, int scaledWidth, int scaledHeight) {
+    public static void drawPicture(double pixelX, double pixelY, String file, double scaledWidth, double scaledHeight) {
 
         StdDraw.picture(pixelX, pixelY, file, scaledWidth, scaledHeight);
 

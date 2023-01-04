@@ -14,7 +14,7 @@ public class Canon extends MeleeWeapon {
         ON_BAZOOKA(UnitType.BAZOOKA, 0.45f),
         ON_TANK(UnitType.TANK, 0.55f),
         ON_ANTIAIR(UnitType.ANTIAIR, 0.6f),
-        ON_HELICOPTER(UnitType.HELICOPTER, 0.3f),
+        ON_HELICOPTER(UnitType.HELICOPTER, 0.0f),
         ON_BOMBER(UnitType.BOMBER, 0.0f),
         ON_ARTILLERY(UnitType.ARTILLERY, 0.7f),
         ON_CONVOY(UnitType.CONVOY, 0.7f),

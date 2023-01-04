@@ -9,9 +9,19 @@ package main.menu;
  * @see Menu
  */
 public enum MenuModel {
-    MAIN_MENU,
-    MAP_SELECTION_MENU,
-    UNIT_ACTION_MENU,
-    FACTORY_ACTION_MENU,
-    PAUSE_MENU;
+    MAIN_MENU(true),
+    MAP_SELECTION_MENU(true),
+    UNIT_ACTION_MENU(false),
+    FACTORY_ACTION_MENU(false),
+    PAUSE_MENU(false);
+
+    private final boolean isPersistent;
+
+    MenuModel(boolean isPersistent) {
+        this.isPersistent = false;
+    }
+
+    public boolean isPersistent() {
+        return this.isPersistent;
+    }
 }

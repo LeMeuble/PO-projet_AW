@@ -33,6 +33,10 @@ public enum GameState {
     PLAYING_SELECTING_TARGET,
     // Selection d'une action pour une usine
     PLAYING_SELECTING_FACTORY_UNIT,
+    // Selection d'un transport
+    PLAYING_SELECTING_TRANSPORT,
+    // Selection d'une zone de depot d'unite
+    PLAYING_SELECTING_DROP_ZONE,
     // Ecran de fin
     PLAYING_ENDIND_SCREEN;
 

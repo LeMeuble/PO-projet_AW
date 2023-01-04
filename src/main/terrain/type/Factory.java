@@ -28,25 +28,17 @@ public class Factory extends Property {
      */
     public static boolean canCreateUnit(Case currentCase, Player currentPlayer) {
 
-        // Si la case n'est pas une propriete, on ne peut pas creer d'unite
-        if (!(currentCase.getTerrain() instanceof Factory)) {
-            return false;
-        }
+        Property currentTerrain = (Property) currentCase.getTerrain();
+        // On verifie que le terrain appartient bien au joueur selectionne
+        if (currentTerrain.getOwner() == currentPlayer.getType()) {
 
-        // Si la case est une propriete
-        else {
+            // On verifie si il n'y a pas d'unite sur la case
+            return currentCase.getUnit() == null;
 
-            Property currentTerrain = (Property) currentCase.getTerrain();
-            // On verifie que le terrain appartient bien au joueur selectionne
-            if (currentTerrain.getOwner() == currentPlayer.getType()) {
-
-                // On verifie si il n'y a pas d'unite sur la case
-                return currentCase.getUnit() == null;
-
-            }
         }
 
         return false;
+
     }
 
     @Override

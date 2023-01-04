@@ -73,7 +73,7 @@ public class MapMetadata {
     }
 
     public String getDescription() {
-        return this.description;
+        return this.description.trim();
     }
 
     public int getPlayerCount() {
@@ -86,6 +86,10 @@ public class MapMetadata {
 
     public int getHeight() {
         return this.height;
+    }
+
+    public String getSize() {
+        return this.width + "x" + this.height;
     }
 
     public String getIcon() {

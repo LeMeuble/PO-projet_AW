@@ -12,6 +12,7 @@ import main.weapon.RangedWeapon;
 import main.weapon.Weapon;
 import main.weather.Weather;
 import ressources.Config;
+import ressources.PathUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,12 +36,13 @@ import java.util.List;
  */
 public abstract class Unit {
 
-    public static final int MAX_HEALTH = Config.UNIT_MAX_HEALTH;
+    public static final float MAX_HEALTH = Config.UNIT_MAX_HEALTH;
 
 
     private final Player.Type owner;
     private final List<Weapon> weapons;
-    private double health;
+    private UnitFacing facing;
+    private float health;
     private boolean hasPlayed;
     private boolean hasMoved;
     private boolean isAlive;
@@ -55,6 +57,7 @@ public abstract class Unit {
 
         this.owner = owner;
         this.weapons = new ArrayList<>();
+        this.facing = UnitFacing.random();
         this.health = Unit.MAX_HEALTH;
         this.hasPlayed = false;
         this.hasMoved = false;
@@ -146,12 +149,12 @@ public abstract class Unit {
     }
 
     /**
-     * Obtenir le nombre de points de vie de l'unite.
+     * Obtenir le nombre de points de vie de l'unite arrondi à l'entier superieur.
      *
      * @return La vie de l'unite.
      */
-    public double getHealth() {
-        return this.health;
+    public float getHealth() {
+        return (float) Math.ceil(this.health);
     }
 
     /**
@@ -159,8 +162,8 @@ public abstract class Unit {
      *
      * @param health La nouvelle valeur de la vie.
      */
-    public void setHealth(double health) {
-        this.health = health;
+    public void setHealth(float health) {
+        this.health = Math.min(health, Unit.MAX_HEALTH);
     }
 
     /**
@@ -220,27 +223,6 @@ public abstract class Unit {
     }
 
     /**
-     * Obtenir la portee minimale de l'unite en consideration toutes
-     * les armes qu'elle possede.
-     *
-     * @return La portee minimale de l'unite, ou -1 si elle n'a pas d'arme.
-     *
-     * @see Weapon#getMinReach()
-     */
-    public int getMinWeaponRange() {
-
-        int minRange = -1;
-        for (Weapon weapon : weapons) {
-            if (minRange == -1 || weapon.getMinReach() < minRange) {
-                minRange = weapon.getMinReach();
-            }
-        }
-
-        return minRange;
-
-    }
-
-    /**
      * Obtenir la portee maximale de l'unite en consideration toutes
      * les armes qu'elle possede.
      *
@@ -262,19 +244,53 @@ public abstract class Unit {
     }
 
     /**
+     * Obtenir la portee minimale de l'unite en consideration toutes
+     * les armes qu'elle possede.
+     *
+     * @return La portee minimale de l'unite, ou -1 si elle n'a pas d'arme.
+     *
+     * @see Weapon#getMinReach()
+     */
+    public int getMinWeaponRange() {
+
+        int minRange = -1;
+        for (Weapon weapon : weapons) {
+            if (minRange == -1 || weapon.getMinReach() < minRange) {
+                minRange = weapon.getMinReach();
+            }
+        }
+
+        return minRange;
+
+    }
+
+    public boolean isDistanceReachable(double distance) {
+
+        for (Weapon weapon : weapons) {
+            if (weapon.getMinReach() <= distance && weapon.getMaxReach() >= distance) {
+                return true;
+            }
+        }
+        return false;
+
+    }
+
+    /**
      * Inflige des degats à l'unite.
      * La vie de l'unite est reduite de la valeur passee en parametre.
      * Cette methode peut indiquer une unite comme etant morte.
      *
      * @param damage Le nombre de degats a infliger
      */
-    public void damageBy(double damage) {
+    public void damageBy(float damage) {
+
         this.health -= damage;
-        // Todo : Dégats en fonction de la météo?
-        if (this.health <= 0.0d) {
+
+        if (this.health <= 0.0f) {
             this.isAlive = false;
-            this.health = 0.0d;
+            this.health = 0.0f;
         }
+
     }
 
     /**
@@ -310,14 +326,40 @@ public abstract class Unit {
 
             // Inflige les degats
             target.damageBy(this.calculateDamage(bestWeapon.getMultiplierOn(target)));
+            bestWeapon.setAmmo(bestWeapon.getAmmo() - 1);
 
             if (!(bestWeapon instanceof RangedWeapon)) {
 
-                Weapon targetBestWeapon = target.bestWeaponAgainst(this);
-                this.damageBy(target.calculateDamage(targetBestWeapon.getMultiplierOn(this)));
+                if(target.isAlive) {
+
+                    Weapon targetBestWeapon = target.bestWeaponAgainst(this);
+
+                    if (targetBestWeapon != null)
+                        this.damageBy(target.calculateDamage(targetBestWeapon.getMultiplierOn(this)));
+
+                }
 
             }
         }
+    }
+
+    public boolean canAttack(Unit target) {
+
+        if(this.getOwner() == target.getOwner()) return false;
+
+        final Weapon bestWeapon = this.bestWeaponAgainst(target);
+
+        if (bestWeapon != null) {
+
+            if (bestWeapon.hasAmmo()) {
+
+                return true;
+
+            }
+
+        }
+
+        return false;
     }
 
     /**
@@ -327,8 +369,8 @@ public abstract class Unit {
      *
      * @return Le nombre de degats infliges
      */
-    public double calculateDamage(float multiplier) {
-        return multiplier * Math.ceil(this.health);
+    public float calculateDamage(float multiplier) {
+        return (float) (multiplier * Math.ceil(this.health));
     }
 
     /**
@@ -349,10 +391,10 @@ public abstract class Unit {
         for (Weapon weapon : this.weapons) {
 
             // Si l'arme est utilisable contre l'unite cible
-            if (weapon.canBeUsedOn(unit)) {
+            if (weapon.canBeUsedOn(unit) && weapon.hasAmmo()) {
 
                 // Si l'arme est plus efficace que l'arme courante ou si l'arme courante n'est pas definie
-                if(bestWeapon == null || weapon.getMultiplierOn(unit) > bestWeapon.getMultiplierOn(unit)) {
+                if (bestWeapon == null || weapon.getMultiplierOn(unit) > bestWeapon.getMultiplierOn(unit)) {
                     bestWeapon = weapon;
                 }
 
@@ -389,6 +431,10 @@ public abstract class Unit {
             this.setPlayed(true);
         }
 
+    }
+
+    public boolean hasAnyWeapon() {
+        return !this.weapons.isEmpty();
     }
 
     public boolean hasRangeWeapon() {
@@ -469,28 +515,65 @@ public abstract class Unit {
 
     public void supply() {
 
-        this.health = Unit.MAX_HEALTH;
-
         for (Weapon weapon : weapons) {
+            System.out.println("Weapon previous ammo: " + weapon.getAmmo());
             weapon.supply();
+            System.out.println("Weapon new ammo: " + weapon.getAmmo());
         }
 
     }
 
-    public abstract String getFile(int frame);
+    /**
+     * Repare l'unite courante entre 0 et {@link Config#UNIT_MAX_HEALTH_RECOVERY} points de vie
+     */
+    public void repair() {
+
+        // TODO: Voir les cas limites
+
+        int addedHealth = (int) Math.min(Config.UNIT_MAX_HEALTH_RECOVERY, Unit.MAX_HEALTH - this.getHealth());
+        this.repair(addedHealth);
+
+    }
+
+    /**
+     * Repare l'unite courante d'un certain nombre de points de vie
+     *
+     * @param amount Le nombre de points de vie a ajouter
+     */
+    public void repair(int amount) {
+
+        this.setHealth(this.getHealth() + amount);
+
+    }
+
+    /**
+     * Retourne le prix de reparation d'un point de vie d'une unite
+     *
+     * @return Le prix de reparation d'un point de vie d'une unite
+     *
+     * @see UnitType#getPrice()
+     */
+    public int getRepairCost() {
+
+        return (int) Math.floor(this.getType().getPrice() * Config.UNIT_HEALTH_PRICE_RATIO);
+
+    }
+
+    public String getFile(int frame) {
+
+        return PathUtil.getUnitPath(this.getType(), this.getOwner(), this.getFacing(), !this.hasPlayed(), frame);
+
+    }
+
+    public UnitFacing getFacing() {
+        return this.facing;
+    }
+
+    public void setFacing(UnitFacing facing) {
+        this.facing = facing;
+    }
 
     public abstract int getMovementCostTo(Case destination, Weather weather);
-
-    private boolean isDistanceReachable(double distance) {
-
-        for (Weapon weapon : weapons) {
-            if (weapon.getMinReach() <= distance && weapon.getMaxReach() >= distance) {
-                return true;
-            }
-        }
-        return false;
-
-    }
 
 
 }

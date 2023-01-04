@@ -9,9 +9,6 @@ import ressources.PathUtil;
 
 public class Infantry extends OnFoot {
 
-    public static final int MIN_REACH = 1;
-    public static final int MAX_REACH = 1;
-
     public Infantry(Player.Type owner) {
         super(owner);
         this.addWeapon(new LightMachineGun());
@@ -20,11 +17,6 @@ public class Infantry extends OnFoot {
     @Override
     public UnitType getType() {
         return UnitType.INFANTRY;
-    }
-
-    @Override
-    public String getFile(int frame) {
-        return PathUtil.getUnitPath(this.getType(), this.getOwner(), UnitAnimation.IDLE, !this.hasPlayed(), frame);
     }
 
 }

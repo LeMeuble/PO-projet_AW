@@ -6,7 +6,7 @@ import main.weapon.MeleeWeapon;
 
 public class LightMachineGun extends MeleeWeapon {
 
-    private static final int DEFAULT_AMMO = Integer.MAX_VALUE;
+    private static final int DEFAULT_AMMO = 9;
 
     private enum DamageMultiplier {
 

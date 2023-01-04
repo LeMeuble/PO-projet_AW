@@ -3,230 +3,225 @@
   <ID>JAVA</ID>
   <OriginalElement />
   <nodes>
-    <node x="2134.5208333333335" y="1358.5">main.terrain.type.Mountain</node>
-    <node x="1510.5208333333335" y="1344.5">main.terrain.AnimatedTerrain</node>
-    <node x="900.0" y="2646.0">main.parser.MapParser</node>
-    <node x="-762.0" y="1981.0">main.util.OptionSelector</node>
-    <node x="-762.0" y="1511.0">main.weapon.type.Bombs.DamageMultiplier</node>
-    <node x="1235.0" y="1009.0">main.game.Player</node>
-    <node x="548.75" y="1009.0">main.game.Movement</node>
-    <node x="627.25" y="484.0">main.unit.Motorized</node>
-    <node x="2317.5208333333335" y="1260.0">main.terrain.Property</node>
-    <node x="2008.125" y="1567.0">main.terrain.type.Factory</node>
-    <node x="967.5" y="1316.0">main.control.KeystrokeListener.KeyCodes</node>
-    <node x="-762.0" y="2646.0">main.unit.UnitAnimation</node>
-    <node x="1271.75" y="-497.0">main.menu.Menu</node>
-    <node x="-445.0" y="1981.0">main.unit.UnitType</node>
-    <node x="1380.75" y="146.0">main.menu.AnimatedMenu</node>
-    <node x="1089.0" y="1981.0">main.map.Grid</node>
-    <node x="1130.75" y="118.0">main.menu.SelectionMenu</node>
-    <node x="1768.5208333333335" y="1358.5">main.terrain.type.Plain</node>
-    <node x="-719.5" y="2428.0">main.util.OptionSelector.Option</node>
-    <node x="1378.75" y="-663.0">main.render.Renderable</node>
-    <node x="-196.0" y="1330.0">main.weapon.type.HeavyMachineGun</node>
-    <node x="2097.0" y="1981.0">main.game.ActionHandler</node>
-    <node x="208.75" y="707.0">main.unit.type.Convoy</node>
-    <node x="-263.0" y="2646.0">main.game.GameLoop</node>
-    <node x="508.0" y="1624.0">main.game.Movement.Arrow</node>
-    <node x="-196.0" y="1009.0">main.weapon.Weapon</node>
-    <node x="2345.0208333333335" y="1595.0">main.terrain.type.City</node>
-    <node x="-471.0" y="1330.0">main.weapon.type.Canon</node>
-    <node x="-694.448275862069" y="526.5">main.unit.Flying</node>
-    <node x="-746.0" y="1330.0">main.weapon.type.Bombs</node>
-    <node x="-506.0" y="2646.0">main.menu.MenuModel</node>
-    <node x="936.75" y="791.5">main.unit.type.Tank</node>
-    <node x="685.0" y="1512.0">main.game.Movement.Direction</node>
-    <node x="1924.0208333333335" y="1009.0">main.terrain.Terrain</node>
-    <node x="-188.0" y="1981.0">main.game.GameView</node>
-    <node x="2370.0" y="1981.0">main.animation.AnimationClock</node>
-    <node x="598.75" y="791.5">main.unit.type.AntiAir</node>
-    <node x="1238.0" y="1316.0">main.game.Player.Type</node>
-    <node x="382.0" y="2646.0">main.menu.MenuManager</node>
-    <node x="211.0" y="2646.0">main.map.Coordinate</node>
-    <node x="-762.0" y="791.5">main.unit.type.Bomber</node>
-    <node x="1485.75" y="-455.0">main.control.Cursor</node>
-    <node x="1164.75" y="369.0">main.menu.ActionMenu</node>
-    <node x="47.0" y="1374.0">main.weapon.RangedWeapon</node>
-    <node x="1802.0" y="1981.0">main.game.GameState</node>
-    <node x="-313.25" y="-663.0">main.unit.Unit</node>
-    <node x="-413.44827586206895" y="498.0">main.unit.AnimatedUnit</node>
-    <node x="39.75" y="791.5">main.unit.type.Bazooka</node>
-    <node x="-28.0" y="2646.0">main.animation.MovementAnimation</node>
-    <node x="2528.020833333333" y="1595.0">main.terrain.type.HQ</node>
-    <node x="1724.75" y="-663.0">main.game.Game</node>
-    <node x="-593.0" y="707.0">main.unit.type.Helicopter</node>
-    <node x="224.0" y="1316.0">main.weapon.type.LightMachineGun</node>
-    <node x="26.0" y="1981.0">main.map.MapMetadata</node>
-    <node x="930.0" y="1009.0">main.control.KeystrokeListener</node>
-    <node x="-171.44827586206895" y="512.5">main.unit.OnFoot</node>
-    <node x="1455.0" y="1981.0">main.render.Renderer</node>
-    <node x="1445.0" y="1595.0">main.terrain.type.Water</node>
-    <node x="-129.25" y="763.0">main.unit.type.Infantry</node>
-    <node x="767.75" y="791.5">main.unit.type.Artillery</node>
-    <node x="2594.0" y="1981.0">main.unit.UnitAction</node>
-    <node x="1951.5208333333335" y="1358.5">main.terrain.type.Forest</node>
-    <node x="208.0" y="1511.0">main.weapon.type.LightMachineGun.DamageMultiplier</node>
-    <node x="-212.0" y="1511.0">main.weapon.type.HeavyMachineGun.DamageMultiplier</node>
-    <node x="405.0" y="1981.0">main.terrain.TerrainType</node>
-    <node x="676.0" y="1981.0">main.map.Case</node>
-    <node x="-487.0" y="1511.0">main.weapon.type.Canon.DamageMultiplier</node>
-    <node x="665.0" y="2646.0">main.unit.UnitFacing</node>
-    <node x="1628.0" y="1595.0">main.terrain.type.Obstacle</node>
+    <node x="815.5208333333335" y="1692.5">main.terrain.type.Plain</node>
+    <node x="2097.020833333333" y="1343.0">main.game.GameView</node>
+    <node x="282.0" y="1343.0">main.game.Player</node>
+    <node x="610.25" y="902.5">main.unit.type.Infantry</node>
+    <node x="864.25" y="369.0">main.menu.ActionMenu</node>
+    <node x="-203.0" y="1153.5">main.unit.type.Tank</node>
+    <node x="-54.0" y="2288.0">main.map.Grid</node>
+    <node x="-567.75" y="888.5">main.unit.Flying</node>
+    <node x="1364.5208333333335" y="1594.0">main.terrain.Property</node>
+    <node x="-762.0" y="1958.0">main.game.Movement.Arrow</node>
+    <node x="-762.0" y="2288.0">main.map.Case</node>
+    <node x="-340.0" y="1343.0">main.control.KeystrokeListener</node>
+    <node x="525.0" y="1153.5">main.unit.type.Artillery</node>
+    <node x="1728.25" y="-133.0">main.weapon.type.Bombs.DamageMultiplier</node>
+    <node x="1080.25" y="146.0">main.menu.AnimatedMenu</node>
+    <node x="659.0" y="2288.0">main.game.ActionHandler</node>
+    <node x="1055.125" y="1901.0">main.terrain.type.Factory</node>
+    <node x="160.25" y="846.0">main.unit.Motorized</node>
+    <node x="441.25" y="902.5">main.unit.type.Bazooka</node>
+    <node x="971.25" y="-497.0">main.menu.Menu</node>
+    <node x="1575.020833333333" y="1929.0">main.terrain.type.HQ</node>
+    <node x="492.0" y="1929.0">main.terrain.type.Water</node>
+    <node x="2795.75" y="-256.0">main.weapon.RangedWeapon</node>
+    <node x="2310.75" y="-300.0">main.weapon.type.LightMachineGun</node>
+    <node x="971.0208333333333" y="1343.0">main.terrain.Terrain</node>
+    <node x="-762.0" y="2786.0">main.parser.MapParser</node>
+    <node x="2770.0" y="2288.0">main.menu.MenuManager</node>
+    <node x="1760.75" y="-300.0">main.weapon.type.Bombs</node>
+    <node x="1391.0" y="2288.0">main.unit.UnitAnimation</node>
+    <node x="1078.25" y="-663.0">main.render.Renderable</node>
+    <node x="2585.75" y="-300.0">main.weapon.type.Canon</node>
+    <node x="2599.0" y="2288.0">main.map.Coordinate</node>
+    <node x="2278.25" y="-133.0">main.weapon.type.LightMachineGun.DamageMultiplier</node>
+    <node x="-39.05555555555554" y="723.5">main.unit.Fueled</node>
+    <node x="-34.0" y="1069.0">main.unit.type.Convoy</node>
+    <node x="2306.75" y="-663.0">main.weapon.Weapon</node>
+    <node x="557.5208333333335" y="1678.5">main.terrain.AnimatedTerrain</node>
+    <node x="1181.5208333333333" y="1692.5">main.terrain.type.Forest</node>
+    <node x="356.0" y="1153.5">main.unit.type.AntiAir</node>
+    <node x="1392.0208333333335" y="1929.0">main.terrain.type.City</node>
+    <node x="-585.0" y="1846.0">main.game.Movement.Direction</node>
+    <node x="2311.020833333333" y="1343.0">main.map.MapMetadata</node>
+    <node x="2035.75" y="-300.0">main.weapon.type.HeavyMachineGun</node>
+    <node x="998.5208333333333" y="1692.5">main.terrain.type.Mountain</node>
+    <node x="675.0" y="1929.0">main.terrain.type.Obstacle</node>
+    <node x="1156.0" y="2288.0">main.unit.UnitAction</node>
+    <node x="-35.0" y="1343.0">main.util.OptionSelector</node>
+    <node x="-14.666666666666629" y="-663.0">main.unit.Unit</node>
+    <node x="1890.0" y="2288.0">main.game.GameLoop</node>
+    <node x="415.25" y="680.0">main.unit.OnFoot</node>
+    <node x="312.0" y="2288.0">main.render.Renderer</node>
+    <node x="1424.25" y="-663.0">main.game.Game</node>
+    <node x="1783.020833333333" y="1343.0">main.unit.UnitType</node>
+    <node x="2690.020833333333" y="1343.0">main.terrain.TerrainType</node>
+    <node x="-371.99999999999994" y="1153.5">main.unit.type.Bomber</node>
+    <node x="1647.0" y="2288.0">main.menu.MenuModel</node>
+    <node x="932.0" y="2288.0">main.animation.AnimationClock</node>
+    <node x="2003.25" y="-133.0">main.weapon.type.HeavyMachineGun.DamageMultiplier</node>
+    <node x="7.5" y="1846.0">main.util.OptionSelector.Option</node>
+    <node x="-349.0" y="2288.0">main.game.GameState</node>
+    <node x="-302.5" y="1650.0">main.control.KeystrokeListener.KeyCodes</node>
+    <node x="2125.0" y="2288.0">main.animation.MovementAnimation</node>
+    <node x="-762.0" y="1069.0">main.unit.type.Helicopter</node>
+    <node x="-721.25" y="1343.0">main.game.Movement</node>
+    <node x="2364.0" y="2288.0">main.unit.UnitFacing</node>
+    <node x="1185.25" y="-455.0">main.control.Cursor</node>
+    <node x="830.25" y="118.0">main.menu.SelectionMenu</node>
+    <node x="285.0" y="1650.0">main.game.Player.Type</node>
+    <node x="2553.25" y="-133.0">main.weapon.type.Canon.DamageMultiplier</node>
   </nodes>
   <notes />
   <edges>
     <edge source="main.terrain.type.HQ" target="main.terrain.Property" relationship="GENERALIZATION">
       <point x="0.0" y="-30.0" />
-      <point x="2609.520833333333" y="1542.0" />
-      <point x="2426.5208333333335" y="1542.0" />
-      <point x="0.0" y="128.5" />
-    </edge>
-    <edge source="main.terrain.type.Factory" target="main.terrain.Property" relationship="GENERALIZATION">
-      <point x="0.0" y="-58.0" />
-      <point x="2128.125" y="1542.0" />
-      <point x="2426.5208333333335" y="1542.0" />
+      <point x="1656.520833333333" y="1876.0" />
+      <point x="1473.5208333333335" y="1876.0" />
       <point x="0.0" y="128.5" />
     </edge>
     <edge source="main.control.Cursor" target="main.render.Renderable" relationship="REALIZATION">
       <point x="0.0" y="-240.5" />
-      <point x="1582.75" y="-522.0" />
-      <point x="1475.75" y="-522.0" />
+      <point x="1282.25" y="-522.0" />
+      <point x="1175.25" y="-522.0" />
       <point x="0.0" y="58.0" />
+    </edge>
+    <edge source="main.terrain.type.Factory" target="main.terrain.Property" relationship="GENERALIZATION">
+      <point x="0.0" y="-58.0" />
+      <point x="1175.125" y="1876.0" />
+      <point x="1473.5208333333335" y="1876.0" />
+      <point x="0.0" y="128.5" />
     </edge>
     <edge source="main.menu.SelectionMenu" target="main.menu.Menu" relationship="GENERALIZATION">
       <point x="0.0" y="-100.5" />
-      <point x="1245.75" y="93.0" />
-      <point x="1368.75" y="93.0" />
+      <point x="945.25" y="93.0" />
+      <point x="1068.25" y="93.0" />
       <point x="0.0" y="282.5" />
     </edge>
     <edge source="main.terrain.type.Water" target="main.terrain.AnimatedTerrain" relationship="GENERALIZATION">
       <point x="0.0" y="-30.0" />
-      <point x="1526.5" y="1542.0" />
-      <point x="1629.5208333333335" y="1542.0" />
+      <point x="573.5" y="1876.0" />
+      <point x="676.5208333333335" y="1876.0" />
       <point x="0.0" y="44.0" />
     </edge>
     <edge source="main.menu.Menu" target="main.render.Renderable" relationship="REALIZATION">
       <point x="0.0" y="-282.5" />
-      <point x="1368.75" y="-522.0" />
-      <point x="1475.75" y="-522.0" />
+      <point x="1068.25" y="-522.0" />
+      <point x="1175.25" y="-522.0" />
       <point x="0.0" y="58.0" />
-    </edge>
-    <edge source="main.game.Movement.Direction" target="main.game.Movement" relationship="INNER_CLASS">
-      <point x="0.0" y="-198.5" />
-      <point x="785.0" y="1487.0" />
-      <point x="685.75" y="1487.0" />
-      <point x="0.0" y="226.5" />
-    </edge>
-    <edge source="main.unit.Motorized" target="main.unit.Unit" relationship="GENERALIZATION">
-      <point x="0.0" y="-86.5" />
-      <point x="757.75" y="459.0" />
-      <point x="-128.25" y="459.0" />
-      <point x="0.0" y="548.5" />
     </edge>
     <edge source="main.menu.AnimatedMenu" target="main.menu.Menu" relationship="GENERALIZATION">
       <point x="0.0" y="-72.5" />
-      <point x="1491.75" y="93.0" />
-      <point x="1368.75" y="93.0" />
+      <point x="1191.25" y="93.0" />
+      <point x="1068.25" y="93.0" />
       <point x="0.0" y="282.5" />
     </edge>
+    <edge source="main.game.Movement.Direction" target="main.game.Movement" relationship="INNER_CLASS">
+      <point x="0.0" y="-198.5" />
+      <point x="-485.0" y="1821.0" />
+      <point x="-584.25" y="1821.0" />
+      <point x="0.0" y="226.5" />
+    </edge>
     <edge source="main.unit.type.Infantry" target="main.unit.OnFoot" relationship="GENERALIZATION">
-      <point x="0.0" y="-72.5" />
-      <point x="-54.75" y="682.0" />
-      <point x="13.551724137931046" y="682.0" />
+      <point x="0.0" y="-30.0" />
+      <point x="684.75" y="821.0" />
+      <point x="600.25" y="821.0" />
       <point x="0.0" y="58.0" />
     </edge>
     <edge source="main.weapon.type.Bombs.DamageMultiplier" target="main.weapon.type.Bombs" relationship="INNER_CLASS">
-      <point x="0.0" y="-212.5" />
+      <point x="0.0" y="-226.5" />
       <point x="0.0" y="58.5" />
     </edge>
-    <edge source="main.game.Player.Type" target="main.game.Player" relationship="INNER_CLASS">
-      <point x="0.0" y="-184.5" />
-      <point x="0.0" y="128.5" />
+    <edge source="main.unit.Motorized" target="main.unit.Fueled" relationship="GENERALIZATION">
+      <point x="-130.5" y="-0.0" />
+      <point x="-230.5" y="932.5" />
+      <point x="-230.5" y="852.0" />
+      <point x="7.943999999999999" y="852.0" />
+      <point x="-4.4444444445801423E-4" y="14.5" />
     </edge>
     <edge source="main.menu.ActionMenu" target="main.menu.SelectionMenu" relationship="GENERALIZATION">
       <point x="0.0" y="-44.5" />
       <point x="0.0" y="100.5" />
     </edge>
-    <edge source="main.unit.Flying" target="main.unit.Unit" relationship="GENERALIZATION">
-      <point x="0.0" y="-44.0" />
-      <point x="-563.948275862069" y="459.0" />
-      <point x="-128.25" y="459.0" />
-      <point x="0.0" y="548.5" />
+    <edge source="main.game.Player.Type" target="main.game.Player" relationship="INNER_CLASS">
+      <point x="0.0" y="-184.5" />
+      <point x="0.0" y="128.5" />
     </edge>
     <edge source="main.unit.type.AntiAir" target="main.unit.Motorized" relationship="GENERALIZATION">
-      <point x="0.0" y="-44.0" />
-      <point x="673.25" y="682.0" />
-      <point x="757.75" y="682.0" />
+      <point x="0.0" y="-30.0" />
+      <point x="430.5" y="1044.0" />
+      <point x="290.75" y="1044.0" />
       <point x="0.0" y="86.5" />
     </edge>
-    <edge source="main.unit.AnimatedUnit" target="main.unit.Unit" relationship="GENERALIZATION">
-      <point x="0.0" y="-72.5" />
-      <point x="-302.44827586206895" y="459.0" />
-      <point x="-128.25" y="459.0" />
-      <point x="0.0" y="548.5" />
-    </edge>
     <edge source="main.unit.type.Helicopter" target="main.unit.Flying" relationship="GENERALIZATION">
-      <point x="0.0" y="-128.5" />
-      <point x="-408.0" y="682.0" />
-      <point x="-563.948275862069" y="682.0" />
+      <point x="0.0" y="-114.5" />
+      <point x="-577.0" y="1044.0" />
+      <point x="-437.25" y="1044.0" />
       <point x="0.0" y="44.0" />
     </edge>
     <edge source="main.unit.type.Artillery" target="main.unit.Motorized" relationship="GENERALIZATION">
-      <point x="0.0" y="-44.0" />
-      <point x="842.25" y="682.0" />
-      <point x="757.75" y="682.0" />
+      <point x="0.0" y="-30.0" />
+      <point x="599.5" y="1044.0" />
+      <point x="290.75" y="1044.0" />
       <point x="0.0" y="86.5" />
     </edge>
     <edge source="main.control.KeystrokeListener.KeyCodes" target="main.control.KeystrokeListener" relationship="INNER_CLASS">
-      <point x="0.0" y="-198.5" />
+      <point x="0.0" y="-212.5" />
       <point x="0.0" y="128.5" />
     </edge>
     <edge source="main.weapon.type.HeavyMachineGun.DamageMultiplier" target="main.weapon.type.HeavyMachineGun" relationship="INNER_CLASS">
-      <point x="0.0" y="-212.5" />
+      <point x="0.0" y="-226.5" />
       <point x="0.0" y="58.5" />
     </edge>
     <edge source="main.weapon.type.HeavyMachineGun" target="main.weapon.Weapon" relationship="GENERALIZATION">
       <point x="0.0" y="-58.5" />
-      <point x="0.0" y="128.5" />
+      <point x="2130.75" y="-325.0" />
+      <point x="2405.75" y="-325.0" />
+      <point x="0.0" y="156.5" />
     </edge>
     <edge source="main.unit.OnFoot" target="main.unit.Unit" relationship="GENERALIZATION">
       <point x="0.0" y="-58.0" />
-      <point x="13.551724137931046" y="459.0" />
-      <point x="-128.25" y="459.0" />
-      <point x="0.0" y="548.5" />
+      <point x="600.25" y="655.0" />
+      <point x="170.33333333333337" y="655.0" />
+      <point x="0.0" y="646.5" />
     </edge>
     <edge source="main.weapon.type.Bombs" target="main.weapon.Weapon" relationship="GENERALIZATION">
       <point x="0.0" y="-58.5" />
-      <point x="-634.5" y="1291.0" />
-      <point x="-84.5" y="1291.0" />
-      <point x="0.0" y="128.5" />
+      <point x="1855.75" y="-325.0" />
+      <point x="2405.75" y="-325.0" />
+      <point x="0.0" y="156.5" />
     </edge>
     <edge source="main.util.OptionSelector.Option" target="main.util.OptionSelector" relationship="INNER_CLASS">
       <point x="0.0" y="-86.5" />
-      <point x="0.0" y="198.5" />
+      <point x="0.0" y="226.5" />
     </edge>
     <edge source="main.unit.type.Tank" target="main.unit.Motorized" relationship="GENERALIZATION">
-      <point x="0.0" y="-44.0" />
-      <point x="1011.25" y="682.0" />
-      <point x="757.75" y="682.0" />
+      <point x="0.0" y="-30.0" />
+      <point x="-128.5" y="1044.0" />
+      <point x="290.75" y="1044.0" />
       <point x="0.0" y="86.5" />
     </edge>
-    <edge source="main.terrain.Property" target="main.terrain.Terrain" relationship="GENERALIZATION">
-      <point x="0.0" y="-128.5" />
-      <point x="2426.5208333333335" y="1235.0" />
-      <point x="2033.0208333333335" y="1235.0" />
-      <point x="0.0" y="100.5" />
+    <edge source="main.unit.Fueled" target="main.unit.Unit" relationship="GENERALIZATION">
+      <point x="-0.0" y="-14.5" />
+      <point x="-162.3888888888889" y="646.5" />
     </edge>
     <edge source="main.terrain.type.Obstacle" target="main.terrain.AnimatedTerrain" relationship="GENERALIZATION">
       <point x="0.0" y="-30.0" />
-      <point x="1709.5" y="1542.0" />
-      <point x="1629.5208333333335" y="1542.0" />
+      <point x="756.5" y="1876.0" />
+      <point x="676.5208333333335" y="1876.0" />
       <point x="0.0" y="44.0" />
     </edge>
     <edge source="main.terrain.AnimatedTerrain" target="main.terrain.Terrain" relationship="GENERALIZATION">
       <point x="0.0" y="-44.0" />
-      <point x="1629.5208333333335" y="1235.0" />
-      <point x="2033.0208333333335" y="1235.0" />
+      <point x="676.5208333333335" y="1569.0" />
+      <point x="1080.0208333333333" y="1569.0" />
+      <point x="0.0" y="100.5" />
+    </edge>
+    <edge source="main.terrain.Property" target="main.terrain.Terrain" relationship="GENERALIZATION">
+      <point x="0.0" y="-128.5" />
+      <point x="1473.5208333333335" y="1569.0" />
+      <point x="1080.0208333333333" y="1569.0" />
       <point x="0.0" y="100.5" />
     </edge>
     <edge source="main.terrain.type.City" target="main.terrain.Property" relationship="GENERALIZATION">
@@ -235,74 +230,78 @@
     </edge>
     <edge source="main.terrain.type.Forest" target="main.terrain.Terrain" relationship="GENERALIZATION">
       <point x="0.0" y="-30.0" />
+      <point x="1263.0208333333333" y="1569.0" />
+      <point x="1080.0208333333333" y="1569.0" />
       <point x="0.0" y="100.5" />
     </edge>
     <edge source="main.weapon.type.LightMachineGun" target="main.weapon.Weapon" relationship="GENERALIZATION">
-      <point x="0.0" y="-72.5" />
-      <point x="335.5" y="1291.0" />
-      <point x="-84.5" y="1291.0" />
-      <point x="0.0" y="128.5" />
+      <point x="0.0" y="-58.5" />
+      <point x="0.0" y="156.5" />
     </edge>
     <edge source="main.unit.type.Convoy" target="main.unit.Motorized" relationship="GENERALIZATION">
-      <point x="0.0" y="-128.5" />
-      <point x="393.75" y="682.0" />
-      <point x="757.75" y="682.0" />
+      <point x="0.0" y="-114.5" />
+      <point x="151.0" y="1044.0" />
+      <point x="290.75" y="1044.0" />
       <point x="0.0" y="86.5" />
     </edge>
     <edge source="main.game.Movement.Arrow" target="main.game.Movement" relationship="INNER_CLASS">
       <point x="0.0" y="-86.5" />
-      <point x="586.5" y="1487.0" />
-      <point x="685.75" y="1487.0" />
+      <point x="-683.5" y="1821.0" />
+      <point x="-584.25" y="1821.0" />
       <point x="0.0" y="226.5" />
     </edge>
     <edge source="main.weapon.type.Canon.DamageMultiplier" target="main.weapon.type.Canon" relationship="INNER_CLASS">
-      <point x="0.0" y="-212.5" />
+      <point x="0.0" y="-226.5" />
       <point x="0.0" y="58.5" />
     </edge>
     <edge source="main.terrain.type.Mountain" target="main.terrain.Terrain" relationship="GENERALIZATION">
       <point x="0.0" y="-30.0" />
-      <point x="2216.0208333333335" y="1235.0" />
-      <point x="2033.0208333333335" y="1235.0" />
+      <point x="0.0" y="100.5" />
+    </edge>
+    <edge source="main.terrain.type.Plain" target="main.terrain.Terrain" relationship="GENERALIZATION">
+      <point x="0.0" y="-30.0" />
+      <point x="897.0208333333335" y="1569.0" />
+      <point x="1080.0208333333333" y="1569.0" />
       <point x="0.0" y="100.5" />
     </edge>
     <edge source="main.weapon.type.Canon" target="main.weapon.Weapon" relationship="GENERALIZATION">
       <point x="0.0" y="-58.5" />
-      <point x="-359.5" y="1291.0" />
-      <point x="-84.5" y="1291.0" />
-      <point x="0.0" y="128.5" />
-    </edge>
-    <edge source="main.terrain.type.Plain" target="main.terrain.Terrain" relationship="GENERALIZATION">
-      <point x="0.0" y="-30.0" />
-      <point x="1850.0208333333335" y="1235.0" />
-      <point x="2033.0208333333335" y="1235.0" />
-      <point x="0.0" y="100.5" />
+      <point x="2680.75" y="-325.0" />
+      <point x="2405.75" y="-325.0" />
+      <point x="0.0" y="156.5" />
     </edge>
     <edge source="main.weapon.type.LightMachineGun.DamageMultiplier" target="main.weapon.type.LightMachineGun" relationship="INNER_CLASS">
-      <point x="0.0" y="-212.5" />
-      <point x="0.0" y="72.5" />
+      <point x="0.0" y="-226.5" />
+      <point x="0.0" y="58.5" />
     </edge>
     <edge source="main.unit.type.Bomber" target="main.unit.Flying" relationship="GENERALIZATION">
-      <point x="0.0" y="-44.0" />
-      <point x="-687.5" y="682.0" />
-      <point x="-563.948275862069" y="682.0" />
+      <point x="0.0" y="-30.0" />
+      <point x="-297.49999999999994" y="1044.0" />
+      <point x="-437.25" y="1044.0" />
       <point x="0.0" y="44.0" />
+    </edge>
+    <edge source="main.unit.Flying" target="main.unit.Fueled" relationship="GENERALIZATION">
+      <point x="-0.0" y="-44.0" />
+      <point x="-437.25" y="852.0" />
+      <point x="7.943999999999999" y="852.0" />
+      <point x="-4.4444444445801423E-4" y="14.5" />
+    </edge>
+    <edge source="main.unit.type.Bazooka" target="main.unit.OnFoot" relationship="GENERALIZATION">
+      <point x="0.0" y="-30.0" />
+      <point x="515.75" y="821.0" />
+      <point x="600.25" y="821.0" />
+      <point x="0.0" y="58.0" />
     </edge>
     <edge source="main.weapon.RangedWeapon" target="main.weapon.Weapon" relationship="GENERALIZATION">
       <point x="0.0" y="-14.5" />
-      <point x="125.5" y="1291.0" />
-      <point x="-84.5" y="1291.0" />
-      <point x="0.0" y="128.5" />
-    </edge>
-    <edge source="main.unit.type.Bazooka" target="main.unit.OnFoot" relationship="GENERALIZATION">
-      <point x="0.0" y="-44.0" />
-      <point x="114.25" y="682.0" />
-      <point x="13.551724137931046" y="682.0" />
-      <point x="0.0" y="58.0" />
+      <point x="2874.25" y="-325.0" />
+      <point x="2405.75" y="-325.0" />
+      <point x="0.0" y="156.5" />
     </edge>
   </edges>
-  <settings layout="Hierarchic" zoom="0.8081162774107636" showDependencies="false" x="152.74031414838066" y="-27.872543364681405" />
+  <settings layout="Hierarchic" zoom="0.6351544266543108" showDependencies="false" x="325.45356749340385" y="758.5773813192612" />
   <SelectedNodes>
-    <node>main.unit.Unit</node>
+    <node>main.unit.Fueled</node>
   </SelectedNodes>
   <Categories>
     <Category>Fields</Category>

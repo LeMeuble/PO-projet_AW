@@ -25,11 +25,6 @@ public class Helicopter extends Flying implements Transport {
         return UnitType.HELICOPTER;
     }
 
-    @Override
-    public String getFile(int frame) {
-        return PathUtil.getUnitPath(this.getType(), this.getOwner(), UnitAnimation.IDLE, !this.hasPlayed(), frame);
-    }
-
     public Unit getCarriedUnit() {
         return carriedUnit;
     }

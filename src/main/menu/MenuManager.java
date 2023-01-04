@@ -18,6 +18,8 @@ import java.util.stream.Collectors;
  */
 public class MenuManager {
 
+    private static MenuManager instance;
+
     private final Map<MenuModel, Menu> menus;
 
 
@@ -27,8 +29,15 @@ public class MenuManager {
      * @see Menu
      * @see MenuModel
      */
-    public MenuManager() {
+    private MenuManager() {
         this.menus = new HashMap<>();
+    }
+
+    public static MenuManager getInstance() {
+        if (instance == null) {
+            instance = new MenuManager();
+        }
+        return instance;
     }
 
     /**
@@ -93,6 +102,19 @@ public class MenuManager {
                 .stream()
                 .sorted()
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * Supprimer tous les menus non permanents du gestionnaire de menus
+     *
+     * @see Menu
+     * @see MenuModel
+     */
+    public void clearNonPersistent() {
+        this.menus.values()
+                .stream()
+                .filter(menu -> !menu.getModel().isPersistent())
+                .forEach(menu -> this.removeMenu(menu.getModel()));
     }
 
 }

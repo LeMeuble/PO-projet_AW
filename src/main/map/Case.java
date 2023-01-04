@@ -4,6 +4,7 @@ import main.animation.AnimationClock;
 import main.terrain.AnimatedTerrain;
 import main.terrain.Property;
 import main.terrain.Terrain;
+import main.unit.Motorized;
 import main.unit.OnFoot;
 import main.unit.Unit;
 import main.weather.Weather;
@@ -53,8 +54,19 @@ public class Case {
         return y;
     }
 
+    /**
+     * Retourne une distance (distance de Manhattan) entre la case et une autre case
+     *
+     * @param other La case a laquelle calculer la distance
+     *
+     * @return La distance entre les deux cases
+     */
     public double distance(Case other) {
-        return Math.sqrt(Math.pow(this.x - other.x, 2) + Math.pow(this.y - other.y, 2));
+        return Math.abs(this.x - other.x) + Math.abs(this.y - other.y);
+    }
+
+    public boolean isAdjacent(Case other) {
+        return this.distance(other) == 1;
     }
 
     /**
@@ -80,12 +92,6 @@ public class Case {
         return this.unit != null;
     }
 
-    /**
-     * Verifie si l'unite presente sur la case est vivante, sinon la fait disparaitre
-     */
-    public void garbageUnit() {
-        if (this.hasUnit() && !this.getUnit().isAlive()) this.unit = null;
-    }
 
     /**
      * @return Le terrain de la case
@@ -119,16 +125,40 @@ public class Case {
 
             DisplayUtil.drawPictureInCase(x, y, width, height, unit.getFile(unitClockSync.getFrame()));
 
+            double offsetDivider = (unit instanceof OnFoot) ? 4.0d : 5.0d;
+            double pixelX = DisplayUtil.getCenterX(x, width) + Config.PIXEL_PER_CASE / offsetDivider;
+            double pixelY = DisplayUtil.getCenterY(y, height) - Config.PIXEL_PER_CASE / offsetDivider;
+
             if (unit.getHealth() < Unit.MAX_HEALTH) {
 
-                double offsetDivider = (unit instanceof OnFoot) ? 4.0d : 5.0d;
-
-                double pixelX = DisplayUtil.getCenterX(x, width) + Config.PIXEL_PER_CASE / offsetDivider;
-                double pixelY = DisplayUtil.getCenterY(y, height) - Config.PIXEL_PER_CASE / offsetDivider;
-
-                DisplayUtil.drawPicture(pixelX, pixelY, PathUtil.getHealthPath((int) unit.getHealth() - 1, !unit.hasPlayed()), Config.PIXEL_PER_CASE / 3, Config.PIXEL_PER_CASE / 3);
+                DisplayUtil.drawPicture(pixelX, pixelY, PathUtil.getHealthPath((int) Math.floor(unit.getHealth()), !unit.hasPlayed()), Config.PIXEL_PER_CASE / 3, Config.PIXEL_PER_CASE / 3);
 
             }
+
+            boolean isLowAmmo = unit.getWeapons().stream()
+                    .anyMatch(weapon -> weapon.getAmmo() <= weapon.getDefaultAmmo() * Config.UNIT_LOW_AMMO_THRESHOLD);
+            boolean noAmmo = unit.getWeapons().stream()
+                    .allMatch(weapon -> weapon.getAmmo() == 0);
+
+            boolean displayLowAmmo = ((isLowAmmo && (unitClockSync.getFrame() % 2 == 0)) || noAmmo) && unit.hasAnyWeapon();
+
+            if(displayLowAmmo) {
+                pixelY += (double) Config.PIXEL_PER_CASE / 3;
+                DisplayUtil.drawPicture(pixelX, pixelY, PathUtil.getIndicatorPath("low_ammo"), Config.PIXEL_PER_CASE / 3, Config.PIXEL_PER_CASE / 3);
+            }
+
+//            boolean displayLowFuel = false;
+//
+//            if(unit instanceof Motorized) {
+//
+//                Motorized motorized = (Motorized) unit;
+//                displayLowFuel = motorized.getFuel() <= motorized.getf() * Config.UNIT_LOW_FUEL_THRESHOLD;
+//
+//            }
+//
+//
+//            DisplayUtil.drawPicture(pixelX, pixelY, PathUtil.getIndicatorPath((int) unit.getHealth() - 1, !unit.hasPlayed()), Config.PIXEL_PER_CASE / 3, Config.PIXEL_PER_CASE / 3);
+
         }
     }
 

@@ -14,7 +14,7 @@ import java.util.List;
  * @author Tristan LECONTE--DENIS
  * @author Lucien GRAVOT
  */
-public abstract class Motorized extends Unit {
+public abstract class Motorized extends Fueled {
 
     private int fuel;
 

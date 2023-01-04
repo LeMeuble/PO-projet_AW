@@ -9,6 +9,7 @@ import main.game.Game;
 import main.game.GameLoop;
 import main.game.GameState;
 import main.map.MapMetadata;
+import main.menu.Menu;
 import main.menu.MenuManager;
 import main.menu.MenuModel;
 import main.menu.model.MainMenu;
@@ -30,8 +31,6 @@ import ressources.Config;
 public class MiniWars {
 
     private final OptionSelector<MapMetadata> mapSelector;
-    private final MenuManager menuManager;
-    private final Renderer renderer;
     private final KeystrokeListener keystrokeListener;
     private final ActionHandler actionHandler;
     private final GameLoop gameLoop;
@@ -50,8 +49,6 @@ public class MiniWars {
         this.gameState = GameState.MENU_TITLE_SCREEN;
 
         this.mapSelector = new OptionSelector<>(MapParser.listAvailableMaps());
-        this.menuManager = new MenuManager();
-        this.renderer = new Renderer(this.menuManager);
 
         this.keystrokeListener = new KeystrokeListener();
         this.keystrokeListener.setHandler(this::handleKey);
@@ -64,6 +61,7 @@ public class MiniWars {
         this.registerDefaultMenus();
         this.gameLoop.start();
         this.keystrokeListener.start();
+
         this.update();
 
     }
@@ -80,7 +78,7 @@ public class MiniWars {
     }
 
     public synchronized void update() {
-        this.renderer.render(this.gameState, this.currentGame);
+        Renderer.getInstance().render(this.gameState, this.currentGame);
     }
 
     public boolean isPlaying() {
@@ -95,7 +93,7 @@ public class MiniWars {
     }
 
     public void newGame(MapMetadata mapMetadata) {
-        this.currentGame = new Game(this, mapMetadata);
+        this.currentGame = new Game(mapMetadata);
         this.gameState = GameState.PLAYING_SELECTING;
     }
 
@@ -107,23 +105,15 @@ public class MiniWars {
         this.gameState = gameState;
     }
 
-    public Renderer getRenderer() {
-        return this.renderer;
-    }
-
     public OptionSelector<MapMetadata> getMapSelector() {
         return this.mapSelector;
     }
 
-    public MenuManager getMenuManager() {
-        return this.menuManager;
-    }
-
     private void registerDefaultMenus() {
 
-        this.menuManager.addMenu(new MainMenu());
-        this.menuManager.addMenu(new MapSelectionMenu(this.mapSelector));
-        this.menuManager.getMenu(MenuModel.MAP_SELECTION_MENU).setVisible(false);
+        MenuManager.getInstance().addMenu(new MainMenu());
+        MenuManager.getInstance().addMenu(new MapSelectionMenu(this.mapSelector));
+        MenuManager.getInstance().getMenu(MenuModel.MAP_SELECTION_MENU).setVisible(false);
 
     }
 

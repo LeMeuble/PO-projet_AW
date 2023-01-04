@@ -6,6 +6,7 @@ import main.weather.Weather;
 
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 /**
  * Classe representant la grille du plateau de jeu sous forme d'un
@@ -30,26 +31,26 @@ public class Grid implements Iterable<Case> {
 
     }
 
-    public Set<Case> getReachableCases(Case c, Unit unit, Weather weather) {
+    public Set<Case> getReachableCases(Case center, Unit unit, Weather weather) {
 
-        if (c.getUnit() == unit) {
+        return this.getCases()
+                .stream()
+                .filter(c -> c.distance(center) <= unit.getMovementPoint(weather))
+                .filter(c -> unit.canMoveTo(c, weather))
+                .collect(Collectors.toSet());
 
-            List<Case> allReachable = this.getCasesAround(c.getX(), c.getY(), 0, unit.getMovementPoint(weather));
-            allReachable.remove(c);
-            Set<Case> reachable = new HashSet<>();
+    }
 
-            for (Case aCase : allReachable) {
+    /**
+     * Verifie si l'unite presente sur la case est vivante, sinon la fait disparaitre
+     */
+    public void garbageUnit() {
 
-                if (unit.canMoveTo(aCase, weather) && aCase.getUnit() == null) {
-                    if (isReachableFor(c, aCase, unit, weather)) reachable.add(aCase);
-                }
-
+        this.getCases().forEach(c -> {
+            if(c.hasUnit() && !c.getUnit().isAlive()) {
+                c.setUnit(null);
             }
-
-            return reachable;
-        }
-
-        return null;
+        });
 
     }
 
@@ -77,6 +78,7 @@ public class Grid implements Iterable<Case> {
     }
 
     public List<Case> getAdjacentCases(Case c) {
+
         List<Case> adjacentCases = new ArrayList<>();
 
         int x = c.getX();
@@ -164,49 +166,6 @@ public class Grid implements Iterable<Case> {
     @Override
     public Spliterator<Case> spliterator() {
         return Iterable.super.spliterator();
-    }
-
-    private boolean isReachableFor(Case source, Case destination, Unit unit, Weather weather) {
-
-        return costToRec(source, destination, unit, weather) <= unit.getMovementPoint(weather);
-
-    }
-
-    private int costToRec(Case source, Case destination, Unit unit, Weather weather) {
-
-        if (source.equals(destination)) return 0;
-
-        int dx = destination.getX() - source.getX();
-        int dy = destination.getY() - source.getY();
-
-        if (dx == 0) {
-            if (dy > 0) dy = 1;
-            else if (dy < 0) dy = -1;
-        }
-        else if (dy == 0) {
-            if (dx > 0) dx = 1;
-            else if (dx < 0) dx = -1;
-        }
-        else {
-            if (Math.abs(dx) > Math.abs(dy)) {
-                dx = dx > 0 ? 1 : -1;
-                dy = 0;
-            }
-            else {
-                dy = dy > 0 ? 1 : -1;
-                dx = 0;
-            }
-        }
-
-        Case next = this.getCase(source.getX() + dx, source.getY() + dy);
-
-        if (unit.canMoveTo(next, weather)) {
-            return unit.getMovementCostTo(next, weather) + costToRec(next, destination, unit, weather);
-        }
-        else {
-            return Integer.MAX_VALUE / 2;
-        }
-
     }
 
 }

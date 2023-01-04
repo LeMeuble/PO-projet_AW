@@ -3,6 +3,7 @@ package ressources;
 import main.game.Player;
 import main.terrain.TerrainType;
 import main.unit.UnitAnimation;
+import main.unit.UnitFacing;
 import main.unit.UnitType;
 import main.weather.Weather;
 
@@ -27,8 +28,10 @@ public class PathUtil {
     // Sous-dossier lie aux textures
     public static final String PICTURE_UI_BACKGROUND_FOLDER = PICTURE_UI_FOLDER + SEP + "backgrounds";
     public static final String PICTURE_UI_OVERLAY_FOLDER = PICTURE_UI_FOLDER + SEP + "overlay";
-    public static final String PICTURE_UI_GUI_FOLDER = PICTURE_UI_FOLDER + SEP + "gui";
+    public static final String PICTURE_UI_ACTION_GUI_FOLDER = PICTURE_UI_FOLDER + SEP + "gui" + SEP + "action";
+    public static final String PICTURE_UI_GLOBAL_GUI_FOLDER = PICTURE_UI_FOLDER + SEP + "gui" + SEP + "global";
     public static final String PICTURE_UI_HP_FOLDER = PICTURE_UI_FOLDER + SEP + "hp";
+    public static final String PICTURE_UI_INDICATOR_FOLDER = PICTURE_UI_FOLDER + SEP + "indicator";
 
     public enum UiComponentFolder {
 
@@ -82,22 +85,38 @@ public class PathUtil {
 
     }
 
+    public static String getUnitPath(UnitType unit, Player.Type player, UnitFacing unitFacing, boolean isAvailable, int frame) {
+
+        String pose = isAvailable ? UnitAnimation.IDLE.getName() : "unavailable";
+        String facing = unitFacing.getName();
+
+        return PICTURE_TROOPS_FOLDER + SEP + player.getName() + SEP + unit.getName() + SEP + pose + facing + SEP + frame + ".png";
+
+    }
+
     public static String getBackgroundPath(Weather weather, int id) {
         return PICTURE_UI_BACKGROUND_FOLDER + SEP + weather.getName() + SEP + "background_" + id + ".png";
+    }
+
+    public static String getActionGuiPath(String name) {
+        return PICTURE_UI_ACTION_GUI_FOLDER + SEP + name + ".png";
+    }
+
+    public static String getGlobalGuiPath(String name) {
+        return PICTURE_UI_GLOBAL_GUI_FOLDER + SEP + name + ".png";
+    }
+
+
+    public static String getHealthPath(int health, boolean isAvailable) {
+
+        String available = isAvailable ? "available" : "unavailable";
+        return PICTURE_UI_HP_FOLDER + SEP + available + SEP + health + ".png";
 
     }
 
-    public static String getUiComponentPath(String name) {
-        return PICTURE_UI_FOLDER + SEP + name + ".png";
-    }
+    public static String getIndicatorPath(String indicator) {
 
-    public static String getUiComponentPath(UiComponentFolder folder, String name) {
-        return PICTURE_UI_FOLDER + SEP + folder.getFolder() + SEP + name + ".png";
-    }
-
-    public static String getCursorPath() {
-
-        return PICTURE_UI_FOLDER + SEP + "cursor.png";
+        return PICTURE_UI_INDICATOR_FOLDER + SEP + indicator + ".png";
 
     }
 
@@ -107,11 +126,14 @@ public class PathUtil {
 
     }
 
-    public static String getHealthPath(int health, boolean isAvailable) {
+    public static String getCursorPath() {
 
-        String available = isAvailable ? "available" : "unavailable";
-        return PICTURE_UI_HP_FOLDER + SEP + available + SEP + health + ".png";
+        return PICTURE_UI_FOLDER + SEP + "cursor.png";
 
+    }
+
+    public static String getUiComponentPath(String file) {
+        return PICTURE_UI_FOLDER + SEP + file;
     }
 
 }

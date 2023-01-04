@@ -33,9 +33,9 @@ public abstract class SelectionMenu<T> extends Menu {
      *
      * @see OptionSelector<T>
      */
-    public SelectionMenu(int x, int y, int width, int height, int priority, OptionSelector<T> optionSelector) {
+    public SelectionMenu(int priority, OptionSelector<T> optionSelector) {
 
-        super(x, y, width, height, priority);
+        super(priority);
         this.optionSelector = optionSelector;
 
     }
