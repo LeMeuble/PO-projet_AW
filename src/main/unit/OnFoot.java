@@ -3,6 +3,7 @@ package main.unit;
 import main.game.Player;
 import main.map.Case;
 import main.map.Grid;
+import main.terrain.Property;
 import main.terrain.Terrain;
 import main.terrain.type.HQ;
 import main.util.OptionSelector;
@@ -64,7 +65,7 @@ public abstract class OnFoot extends Unit {
         final List<Case> adjacentCases = contextGrid.getAdjacentCases(currentCase);
         final Terrain currentTerrain = currentCase.getTerrain();
 
-        boolean anyCapturableHQ = currentTerrain instanceof HQ && ((HQ) currentTerrain).getOwner() != this.getOwner();
+        boolean canCapture = currentTerrain instanceof Property && ((Property) currentTerrain).getOwner() != this.getOwner();
         boolean anyEmptyTransport = false;
 
         System.out.println("Adjacent cases : " + adjacentCases);
@@ -80,7 +81,7 @@ public abstract class OnFoot extends Unit {
 
         }
 
-        actions.addOption(UnitAction.CAPTURE, anyCapturableHQ);
+        actions.addOption(UnitAction.CAPTURE, canCapture);
         actions.addOption(UnitAction.GET_IN, anyEmptyTransport);
 
         return actions;

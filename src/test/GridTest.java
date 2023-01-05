@@ -3,7 +3,7 @@ package test;
 import main.map.Case;
 import main.map.Grid;
 import main.terrain.type.Plain;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;

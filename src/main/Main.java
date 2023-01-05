@@ -16,7 +16,7 @@ public class Main {
 
 		try {
 
-			MiniWars miniWars = new MiniWars();
+			MiniWars miniWars = MiniWars.launch();
 
 		} catch (Exception e) {
 			System.out.println("Erreur lors de l'execution du jeu : " + e.getMessage());

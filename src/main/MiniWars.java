@@ -30,20 +30,20 @@ import ressources.Config;
  */
 public class MiniWars {
 
+    private static MiniWars instance;
+
     private final OptionSelector<MapMetadata> mapSelector;
     private final KeystrokeListener keystrokeListener;
     private final ActionHandler actionHandler;
     private final GameLoop gameLoop;
     private Game currentGame;
     private GameState gameState;
-
-
     /**
      * Constructeur de MiniWars
      * Initialise les instances gerant les entrees clavier, la boucle du jeu
      * Ouvre le menu de selection des cartes
      */
-    public MiniWars() {
+    private MiniWars() {
 
         this.currentGame = null;
         this.gameState = GameState.MENU_TITLE_SCREEN;
@@ -63,6 +63,19 @@ public class MiniWars {
         this.keystrokeListener.start();
 
         this.update();
+
+    }
+
+    public static MiniWars launch() {
+
+        instance = new MiniWars();
+        return instance;
+
+    }
+
+    public static MiniWars getInstance() {
+
+        return instance;
 
     }
 

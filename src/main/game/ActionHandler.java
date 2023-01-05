@@ -684,6 +684,7 @@ public class ActionHandler {
                 this.instance.setGameState(GameState.PLAYING_SELECTING);
                 break;
 
+            case PLAYING_MOVING_UNIT:
             case PLAYING_SELECTING_UNIT_ACTION:
             case PLAYING_SELECTING_FACTORY_UNIT:
                 Renderer.getInstance().clearBuffer();

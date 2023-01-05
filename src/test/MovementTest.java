@@ -8,7 +8,7 @@ import main.map.MapMetadata;
 import main.parser.MapParser;
 import main.terrain.Terrain;
 import main.terrain.TerrainType;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

@@ -1,6 +1,7 @@
 package main.menu;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -111,10 +112,19 @@ public class MenuManager {
      * @see MenuModel
      */
     public void clearNonPersistent() {
-        this.menus.values()
-                .stream()
-                .filter(menu -> !menu.getModel().isPersistent())
-                .forEach(menu -> this.removeMenu(menu.getModel()));
+
+        List<MenuModel> toRemove = new LinkedList<>();
+
+        this.menus.keySet().iterator().forEachRemaining(menuModel -> {
+            if(!menuModel.isPersistent()) {
+                toRemove.add(menuModel);
+            }
+        });
+
+        for (MenuModel model : toRemove) {
+            this.removeMenu(model);
+        }
+
     }
 
 }
