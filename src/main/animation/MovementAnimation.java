@@ -18,6 +18,7 @@ public class MovementAnimation {
         this.unit = unit;
         this.movement = movement;
         this.isFinished = false;
+
     }
 
     public void waitUntilFinished() {

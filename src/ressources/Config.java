@@ -83,4 +83,15 @@ public final class Config {
     public static final int PROPERTY_DEFAULT_DEFENSE = 20;
     public static final int PROPERTY_DEFAULT_RECOVERY = 5;
 
+    /*
+    Config lie a la meteo
+     */
+
+    public static final double CHANGING_WEATHER = 0.2d;
+    public static final double START_WEATHER_CLEAR = 1/2d;
+    public static final double START_WEATHER_RAIN = 1/4d;
+    public static final double START_WEATHER_HEAVY_WIND = 1/8d;
+    public static final double START_WEATHER_SNOW = 1/8d;
+
+
 }

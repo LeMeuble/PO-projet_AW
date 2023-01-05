@@ -4,7 +4,7 @@ import main.game.Player;
 import main.terrain.Terrain;
 import main.terrain.TerrainType;
 import main.terrain.type.*;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
