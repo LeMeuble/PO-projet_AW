@@ -16,9 +16,11 @@ public enum TerrainType {
     MOUNTAIN('M', Mountain.class),
     WATER('W', Water.class),
     OBSTACLE('O', Obstacle.class),
-    FACTORY('f', Factory.class),
     CITY('c', City.class),
-    HQ('h', HQ.class);
+    HQ('h', HQ.class),
+    FACTORY('f', FactoryTerrain.class),
+    PORT('p', Port.class),
+    AIRPORT('a', Airport.class);
 
     private final char character;
     private final Class<? extends Terrain> terrainClass;
@@ -59,6 +61,8 @@ public enum TerrainType {
     }
 
     public String getFileName() {
+        if(this == TerrainType.AIRPORT) return "factory.png";
+        if(this == TerrainType.PORT) return "factory.png";
         return this.name().toLowerCase() + ".png";
     }
 

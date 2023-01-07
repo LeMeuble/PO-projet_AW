@@ -2,6 +2,7 @@ package main.game;
 
 
 import main.map.Case;
+import main.map.Coordinate;
 import main.render.Renderable;
 import main.unit.Unit;
 import main.weather.Weather;
@@ -26,7 +27,7 @@ public class Movement {
      * Enumeration des directions possibles
      * pour un mouvement
      */
-    enum Direction {
+    public enum Direction {
 
         BEGIN(Integer.MAX_VALUE, Integer.MAX_VALUE),
         END(Integer.MIN_VALUE, Integer.MIN_VALUE),
@@ -61,6 +62,14 @@ public class Movement {
 
         public String getName() {
             return this.name().toLowerCase();
+        }
+
+        public int getDx() {
+            return this.dx;
+        }
+
+        public int getDy() {
+            return this.dy;
         }
 
         /**
@@ -102,6 +111,14 @@ public class Movement {
 
         public Case getCase() {
             return c;
+        }
+
+        public Direction getFrom() {
+            return from;
+        }
+
+        public Direction getTo() {
+            return to;
         }
 
         public String getPath(Player.Type owner) {
@@ -180,7 +197,7 @@ public class Movement {
             ListIterator<Case> cases = this.cases.listIterator();
 
             Case previous = null;
-            Case current = startingPoint;
+            Case current = this.startingPoint;
             Case next;
             while (cases.hasNext()) {
 
@@ -218,10 +235,18 @@ public class Movement {
         Direction to;
 
         if(previous == null) from = Direction.BEGIN;
-        else from = Direction.fromDelta(current.getX() - previous.getX(), current.getY() - previous.getY()).opposite();
+        else {
+            final int dx = current.getCoordinate().getX() - previous.getCoordinate().getX();
+            final int dy = current.getCoordinate().getY() - previous.getCoordinate().getY();
+            from = Direction.fromDelta(dx, dy).opposite();
+        }
 
         if(next == null) to = Direction.END;
-        else to = Direction.fromDelta(next.getX() - current.getX(), next.getY() - current.getY());
+        else {
+            final int dx = next.getCoordinate().getX() - current.getCoordinate().getX();
+            final int dy = next.getCoordinate().getY() - current.getCoordinate().getY();
+            to = Direction.fromDelta(dx, dy);
+        }
 
         return new Arrow(current, from, to);
 
@@ -245,7 +270,7 @@ public class Movement {
         String result = "";
 
         for (Case c : this.cases) {
-            result += "(" + c.getX() + " " + c.getY() + ") -> ";
+            result += "(" + c.getCoordinate().getX() + " " + c.getCoordinate().getY() + ") -> ";
         }
         return result.substring(0, result.length() - 4);
     }

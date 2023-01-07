@@ -1,18 +1,18 @@
 package main.menu.model;
 
 import librairies.StdDraw;
+import main.MiniWars;
 import main.game.Player;
 import main.menu.ActionMenu;
-import main.menu.Menu;
 import main.menu.MenuModel;
-import main.unit.UnitAction;
+import main.unit.UnitFacing;
 import main.unit.UnitType;
 import main.util.OptionSelector;
 import ressources.Config;
+import ressources.DisplayUtil;
+import ressources.PathUtil;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
 
 public class FactoryActionMenu extends ActionMenu<UnitType> {
 
@@ -27,30 +27,25 @@ public class FactoryActionMenu extends ActionMenu<UnitType> {
     public void render() {
 
         super.render();
-        Font font = new Font("Arial", Font.BOLD, 16);
-        try {
-            font = Font.createFont(Font.TRUETYPE_FONT, new File("pictures/Minecraftia-Regular.ttf")).deriveFont(16f);
-        }
-        catch (Exception ignored) {}
-
-        BufferedImage image = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
-        Graphics g = image.getGraphics();
-        FontMetrics f = g.getFontMetrics(font);
-
         double x = Config.MENU_ACTION_MARGIN + Config.MENU_ACTION_TOP_HEIGHT / 1.5d;
-        double y = (Config.HEIGHT - Config.MENU_ACTION_MARGIN) - Config.MENU_ACTION_TOP_HEIGHT - Config.MENU_ACTION_MIDDLE_HEIGHT / 2.0d - f.getHeight() / 2.0d;
+        double y = (Config.HEIGHT - Config.MENU_ACTION_MARGIN) - Config.MENU_ACTION_TOP_HEIGHT - Config.MENU_ACTION_MIDDLE_HEIGHT / 2.0d + 4;
 
-        StdDraw.setFont(font);
+        StdDraw.setFont(Config.FONT_20);
+
+        Player.Type playerType = MiniWars.getInstance().getCurrentGame().getCurrentPlayer().getType();
 
         for (UnitType unit : this.getOptions()) {
 
-            if(unit == this.getSelectedOption()) {
+            DisplayUtil.drawPicture(x + 20, y, PathUtil.getUnitIdleFacingPath(unit, playerType, UnitFacing.RIGHT, true, 0), 38, 38);
+
+            if (unit == this.getSelectedOption()) {
                 StdDraw.setPenColor(Color.BLUE);
-            } else {
+            }
+            else {
                 StdDraw.setPenColor(Color.BLACK);
             }
 
-            StdDraw.textLeft(x, y, unit.name().toLowerCase() + " (" + unit.getPrice() + ")");
+            StdDraw.textLeft(x + 38, y, unit.name().toLowerCase() + " (" + unit.getPrice() + ")");
 
             y -= Config.MENU_ACTION_MIDDLE_HEIGHT;
 

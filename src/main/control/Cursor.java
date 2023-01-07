@@ -1,5 +1,6 @@
 package main.control;
 
+import main.map.Coordinate;
 import main.render.Renderable;
 
 
@@ -14,13 +15,11 @@ import main.render.Renderable;
  * @author Lucien GRAVOT
  * @see Renderable
  */
-public class Cursor implements Renderable {
+public class Cursor {
 
-    //todo : degager Renderable
     private final int maxWidth;
     private final int maxHeight;
-    private int currentX;
-    private int currentY;
+    private final Coordinate coordinate;
     private boolean needsRefresh;
 
     /**
@@ -35,45 +34,19 @@ public class Cursor implements Renderable {
         this.maxWidth = maxWidth;
         this.maxHeight = maxHeight;
 
-        this.currentX = 0;
-        this.currentY = 0;
+        this.coordinate = new Coordinate();
 
     }
 
-    /**
-     * Obtient la position en x du curseur
-     *
-     * @return La coordonnee x du curseur
-     */
-    public int getCurrentX() {
-        return this.currentX;
+    public void setCoordinate(Coordinate coordinate) {
+
+        this.coordinate.setX(coordinate.getX());
+        this.coordinate.setY(coordinate.getY());
+
     }
 
-    /**
-     * Definir la coordonnee du curseur
-     *
-     * @param currentX La coordonnee x
-     */
-    public void setCurrentX(int currentX) {
-        this.currentX = currentX;
-    }
-
-    /**
-     * Obtient la position en y du curseur
-     *
-     * @return La coordonnee y du curseur
-     */
-    public int getCurrentY() {
-        return this.currentY;
-    }
-
-    /**
-     * Definit la coordonnee y du curseur
-     *
-     * @param currentY La coordonnee y
-     */
-    public void setCurrentY(int currentY) {
-        this.currentY = currentY;
+    public Coordinate getCoordinate() {
+        return this.coordinate.clone();
     }
 
     /**
@@ -83,8 +56,8 @@ public class Cursor implements Renderable {
      */
     public boolean up() {
 
-        if (this.currentY < this.maxHeight - 1) {
-            this.currentY++;
+        if (this.coordinate.getY() < this.maxHeight - 1) {
+            this.coordinate.add(0, 1);
             this.needsRefresh = true;
             return true;
         }
@@ -99,8 +72,8 @@ public class Cursor implements Renderable {
      */
     public boolean down() {
 
-        if (this.currentY > 0) {
-            this.currentY--;
+        if (this.coordinate.getY() > 0) {
+            this.coordinate.add(0, -1);
             this.needsRefresh = true;
             return true;
         }
@@ -115,8 +88,8 @@ public class Cursor implements Renderable {
      */
     public boolean right() {
 
-        if (this.currentX < this.maxWidth - 1) {
-            this.currentX++;
+        if (this.coordinate.getX() < this.maxWidth - 1) {
+            this.coordinate.add(1, 0);
             this.needsRefresh = true;
             return true;
         }
@@ -131,21 +104,14 @@ public class Cursor implements Renderable {
      */
     public boolean left() {
 
-        if (this.currentX > 0) {
-            this.currentX--;
+        if (this.coordinate.getX() > 0) {
+            this.coordinate.add(-1, 0);
             this.needsRefresh = true;
             return true;
         }
         return false;
 
     }
-
-    @Override
-    public void render() {
-
-
-    }
-
 
     /**
      * Determine si le curseur a besoin d'etre rafraichi
@@ -155,7 +121,6 @@ public class Cursor implements Renderable {
      *
      * @see Renderable#needsRefresh()
      */
-    @Override
     public boolean needsRefresh() {
         return this.needsRefresh;
     }
@@ -168,7 +133,6 @@ public class Cursor implements Renderable {
      *
      * @see Renderable#needsRefresh(boolean)
      */
-    @Override
     public void needsRefresh(boolean needsRefresh) {
         this.needsRefresh = needsRefresh;
     }

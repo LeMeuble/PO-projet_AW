@@ -52,9 +52,9 @@ public class TerrainTest {
     public void terrainParserNeutralProperty() {
 
         Terrain t1 = Terrain.parse("{f;3;0}");
-        assertInstanceOf(Factory.class, t1);
+        assertInstanceOf(FactoryTerrain.class, t1);
         assertEquals(3, t1.getTextureVariation());
-        assertEquals(Player.Type.NEUTRAL, ((Factory) t1).getOwner());
+        assertEquals(Player.Type.NEUTRAL, ((FactoryTerrain) t1).getOwner());
 
         Terrain t2 = Terrain.parse("{c;3;0}");
         assertInstanceOf(City.class, t2);
@@ -72,9 +72,9 @@ public class TerrainTest {
     public void terrainParserOwnedProperty() {
 
         Terrain t1 = Terrain.parse("{f;3;1}");
-        assertInstanceOf(Factory.class, t1);
+        assertInstanceOf(FactoryTerrain.class, t1);
         assertEquals(3, t1.getTextureVariation());
-        assertEquals(Player.Type.RED, ((Factory) t1).getOwner());
+        assertEquals(Player.Type.RED, ((FactoryTerrain) t1).getOwner());
 
         Terrain t2 = Terrain.parse("{c;3;2}");
         assertInstanceOf(City.class, t2);
@@ -100,7 +100,7 @@ public class TerrainTest {
         assertNull(TerrainType.CITY.newInstance(null));
         assertNull(TerrainType.HQ.newInstance(null));
 
-        assertInstanceOf(Factory.class, TerrainType.FACTORY.newInstance(Player.Type.NEUTRAL));
+        assertInstanceOf(FactoryTerrain.class, TerrainType.FACTORY.newInstance(Player.Type.NEUTRAL));
         assertInstanceOf(City.class, TerrainType.CITY.newInstance(Player.Type.NEUTRAL));
         assertInstanceOf(HQ.class, TerrainType.HQ.newInstance(Player.Type.RED));
 

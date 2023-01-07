@@ -2,6 +2,7 @@ package main.render;
 
 import librairies.StdDraw;
 import main.animation.AnimationClock;
+import main.animation.MovementAnimation;
 import main.control.Cursor;
 import main.game.Game;
 import main.game.GameState;
@@ -11,13 +12,14 @@ import main.map.Case;
 import main.menu.AnimatedMenu;
 import main.menu.Menu;
 import main.menu.MenuManager;
-import main.menu.MenuModel;
+import main.unit.UnitAnimation;
+import main.unit.UnitType;
 import main.weather.Weather;
 import ressources.Config;
 import ressources.DisplayUtil;
+import ressources.PathUtil;
 
 import java.awt.*;
-import java.util.Set;
 
 public class Renderer {
 
@@ -25,11 +27,20 @@ public class Renderer {
 
     private final AnimationClock terrainClockSync;
     private final AnimationClock unitClockSync;
+    private final AnimationClock unitMovingClockSync;
+
+    private MovementAnimation movementAnimation;
+
+    private int frames;
+    private long previousFrameUpdate;
 
     public Renderer() {
 
         this.terrainClockSync = new AnimationClock(Config.MAP_ANIMATION_FRAME_COUNT, Config.MAP_ANIMATION_FRAME_DURATION, true);
-        this.unitClockSync = new AnimationClock(Config.UNIT_LONG_ANIMATION_FRAME_COUNT, Config.UNIT_ANIMATION_FRAME_DURATION, true);
+        this.unitClockSync = new AnimationClock(Config.UNIT_ANIMATION_FRAME_COUNT, Config.UNIT_ANIMATION_FRAME_DURATION, true);
+        this.unitMovingClockSync = new AnimationClock(Config.UNIT_ANIMATION_FRAME_COUNT, Config.UNIT_MOVING_FRAME_DURATION, true);
+
+        this.movementAnimation = null;
 
         StdDraw.enableDoubleBuffering();
         StdDraw.setCanvasSize((int) Config.WIDTH, (int) Config.HEIGHT);
@@ -37,6 +48,9 @@ public class Renderer {
         StdDraw.setYscale(0, Config.HEIGHT);
         StdDraw.setTitle(Config.TITLE);
         StdDraw.setIcon(Config.ICON_PATH);
+
+        this.frames = 0;
+        this.previousFrameUpdate = System.currentTimeMillis();
 
     }
 
@@ -81,6 +95,12 @@ public class Renderer {
                     copyBuffer |= this.renderMovement(game, copyBuffer);
                     copyBuffer |= this.renderCursor(game, copyBuffer);
                     break;
+                case PLAYING_RENDERING_MOVING_UNIT:
+
+                    copyBuffer = this.renderMap(gameState, game, game.getCursor().needsRefresh() || this.unitMovingClockSync.needsRefresh());
+                    copyBuffer |= this.renderMovementAnimation(game, copyBuffer);
+
+                    break;
                 case PLAYING_ENDIND_SCREEN:
                     clearBuffer();
                     StdDraw.setPenColor(StdDraw.WHITE);
@@ -100,31 +120,84 @@ public class Renderer {
 
             if (copyBuffer) {
                 StdDraw.show();
+                frames++;
+            }
+
+            if (System.currentTimeMillis() - previousFrameUpdate > 1000) {
+                System.out.println("FPS: " + frames);
+                frames = 0;
+                previousFrameUpdate = System.currentTimeMillis();
             }
 
         }
 
     }
 
-    private boolean renderOverlay(Game game, boolean forceRender) {
+    public void addMovementAnimation(MovementAnimation movementAnimation) {
+        this.movementAnimation = movementAnimation;
+    }
 
-        if (forceRender) {
+    private boolean renderMovementAnimation(Game game, boolean forceRender) {
 
-            final Set<Case> cases = game.getGrid().getReachableCases(game.getSelectedCase(), game.getSelectedCase().getUnit(), game.getWeather());
+        if (this.movementAnimation == null) return false;
 
-            StdDraw.setPenColor(StdDraw.BLUE);
+        if (this.movementAnimation.isFinished()) {
+            this.movementAnimation = null;
+            return false;
+        }
 
-            for (Case c : cases) {
-                double x = DisplayUtil.getCenterX(c.getX(), game.getWidth());
-                double y = DisplayUtil.getCenterY(c.getY(), game.getHeight());
+        if (this.unitMovingClockSync.needsRefresh() || forceRender) {
 
-                StdDraw.rectangle(x, y, (double) Config.PIXEL_PER_CASE / 3, (double) Config.PIXEL_PER_CASE / 3);
+            final int gridX = this.movementAnimation.getGridX();
+            final int gridY = this.movementAnimation.getGridY();
 
+            game.getView().focus(game.getGrid().getCase(gridX, gridY));
+
+            final double x = this.movementAnimation.getPixelX();
+            final double y = this.movementAnimation.getPixelY() + Config.PIXEL_PER_CASE / 8;
+
+            final UnitAnimation unitAnimation = movementAnimation.getUnitAnimation();
+            final UnitType unitType = movementAnimation.getUnit().getType();
+
+            DisplayUtil.drawPicture(x, y, PathUtil.getUnitAnimationPath(unitType, game.getCurrentPlayer().getType(), unitAnimation, unitMovingClockSync.getFrame()), Config.PIXEL_PER_CASE, Config.PIXEL_PER_CASE);
+
+            if (this.unitMovingClockSync.needsRefresh()) {
+                this.movementAnimation.nextStep();
+                this.unitMovingClockSync.nextFrame();
             }
 
             return true;
 
         }
+
+        return false;
+
+    }
+
+    private boolean renderOverlay(Game game, boolean forceRender) {
+
+        //TODO: NullPointerException here apres l'activation de l'animation de mouvement
+        // probablement a cause de la synchronisation et du gamestate
+
+//        if (forceRender) {
+//
+//            final Set<Case> cases = game.getGrid().getReachableCases(game.getSelectedCase(), game.getSelectedCase().getUnit(), game.getWeather());
+//
+//            StdDraw.setPenColor(StdDraw.BLUE);
+//
+//            for (Case c : cases) {
+//
+//                double x = DisplayUtil.getCenterX(c.getX(), game.getWidth());
+//                double y = DisplayUtil.getCenterY(c.getY(), game.getHeight());
+//
+//                StdDraw.rectangle(x, y, (double) Config.PIXEL_PER_CASE / 3, (double) Config.PIXEL_PER_CASE / 3);
+//
+//            }
+//
+//            return true;
+//
+//        }
+
         return false;
     }
 
@@ -136,7 +209,7 @@ public class Renderer {
 
             menu.render();
             if (menu instanceof AnimatedMenu) {
-                ((AnimatedMenu) menu).nextFrame();
+                if (menu.needsRefresh()) ((AnimatedMenu) menu).nextFrame();
             }
             menu.needsRefresh(false);
             return true;
@@ -178,7 +251,9 @@ public class Renderer {
             for (int i = 0; i < maxIterationX; i++) {
                 for (int j = maxIterationY; j >= 0; j--) {
                     gameView.getCase(i, j).renderTerrain(i, j, mapWidth, mapHeight, weather, this.terrainClockSync);
-                    gameView.getCase(i, j).renderUnit(i, j, mapWidth, mapHeight, this.unitClockSync);
+                    if(!gameView.getCase(i, j).getIsFoggy()) {
+                        gameView.getCase(i, j).renderUnit(i, j, mapWidth, mapHeight, this.unitClockSync);
+                    }
                 }
             }
 
@@ -221,8 +296,8 @@ public class Renderer {
 
                 if (gameView.isVisible(c)) {
 
-                    int x = gameView.offsetX(c.getX()); // Coordonnees reelles de la case -> Coordonnees de l'ecran
-                    int y = gameView.offsetY(c.getY());
+                    int x = gameView.offsetX(c.getCoordinate().getX()); // Coordonnees reelles de la case -> Coordonnees de l'ecran
+                    int y = gameView.offsetY(c.getCoordinate().getY());
 
                     DisplayUtil.drawPictureInCase(x, y, mapWidth, mapHeight, arrow.getPath(game.getCurrentPlayer().getType()));
                     c.renderUnit(x, y, mapWidth, mapHeight, this.unitClockSync);

@@ -2,6 +2,7 @@ package main.game;
 
 import main.control.Cursor;
 import main.map.Case;
+import main.map.Coordinate;
 import main.map.Grid;
 import ressources.Config;
 
@@ -94,7 +95,7 @@ public class GameView {
      * @return La coordonnee x du curseur sur l'ecran.
      */
     public int getCursorX() {
-        return this.offsetX(this.cursor.getCurrentX());
+        return this.offsetX(this.cursor.getCoordinate().getX());
     }
 
     /**
@@ -103,7 +104,7 @@ public class GameView {
      * @return La coordonnee y du curseur sur l'ecran.
      */
     public int getCursorY() {
-        return this.offsetY(this.cursor.getCurrentY());
+        return this.offsetY(this.cursor.getCoordinate().getY());
     }
 
     /**
@@ -153,7 +154,8 @@ public class GameView {
      * @return true si la case est visible a l'ecran, false sinon
      */
     public boolean isVisible(Case c) {
-        return c.getX() >= this.offsetX && c.getX() < this.offsetX + Config.MAP_COLUMN_COUNT && c.getY() >= this.offsetY && c.getY() < this.offsetY + Config.MAP_ROW_COUNT;
+        final Coordinate coordinate = c.getCoordinate();
+        return coordinate.getX() >= this.offsetX && coordinate.getX() < this.offsetX + Config.MAP_COLUMN_COUNT && coordinate.getY() >= this.offsetY && coordinate.getY() < this.offsetY + Config.MAP_ROW_COUNT;
     }
 
     /**
@@ -171,7 +173,7 @@ public class GameView {
             this.offsetX += this.getCursorX();
             return true;
         } else if (this.getCursorX() >= Config.MAP_COLUMN_COUNT) {
-            this.offsetX += this.getCursorX() - Config.MAP_ROW_COUNT + 1;
+            this.offsetX += this.getCursorX() - Config.MAP_COLUMN_COUNT + 1;
             return true;
         }
 
@@ -197,24 +199,14 @@ public class GameView {
      */
     public void focus(Case c) {
 
-        int x = c.getX();
-        int y = c.getY();
+        int x = c.getCoordinate().getX();
+        int y = c.getCoordinate().getY();
 
-        if (x < Config.MAP_COLUMN_COUNT / 2) {
-            this.offsetX = 0;
-        } else if (x > this.width - Config.MAP_COLUMN_COUNT / 2) {
-            this.offsetX = this.width - Config.MAP_COLUMN_COUNT;
-        } else {
-            this.offsetX = x - Config.MAP_COLUMN_COUNT / 2;
-        }
+        int maxOffsetX = Math.max(0, this.width - Config.MAP_COLUMN_COUNT);
+        int maxOffsetY = Math.max(0, this.height - Config.MAP_ROW_COUNT);
 
-        if (y < Config.MAP_ROW_COUNT / 2) {
-            this.offsetY = 0;
-        } else if (y > this.height - Config.MAP_ROW_COUNT / 2) {
-            this.offsetY = this.height - Config.MAP_ROW_COUNT;
-        } else {
-            this.offsetY = y - Config.MAP_ROW_COUNT / 2;
-        }
+        this.offsetX = Math.min(maxOffsetX, Math.max(0, x - Config.MAP_COLUMN_COUNT / 2));
+        this.offsetY = Math.min(maxOffsetY, Math.max(0, y - Config.MAP_ROW_COUNT / 2));
 
     }
 

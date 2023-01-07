@@ -17,7 +17,8 @@ public final class UnitMovementCost {
         ON_FOREST_NORMAL(TerrainType.FOREST, 1, Weather.CLEAR, Weather.RAINY, Weather.HEAVY_WIND),
         ON_MOUNTAIN_NORMAL(TerrainType.MOUNTAIN, 2, Weather.CLEAR, Weather.RAINY, Weather.HEAVY_WIND),
         ON_WATER_NORMAL(TerrainType.WATER, -1, Weather.CLEAR, Weather.RAINY, Weather.HEAVY_WIND),
-
+//todo add airport
+        //todo add port
         ON_HQ_SNOWY(TerrainType.HQ, 1, Weather.SNOWY),
         ON_CITY_SNOWY(TerrainType.CITY, 1, Weather.SNOWY),
         ON_FACTORY_SNOWY(TerrainType.FACTORY, 1, Weather.SNOWY),

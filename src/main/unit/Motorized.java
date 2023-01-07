@@ -14,22 +14,12 @@ import java.util.List;
  * @author Tristan LECONTE--DENIS
  * @author Lucien GRAVOT
  */
-public abstract class Motorized extends Fueled {
-
-    private int fuel;
+public abstract class Motorized extends Unit {
 
     public Motorized(Player.Type owner) {
 
         super(owner);
 
-    }
-
-    public int getFuel() {
-        return fuel;
-    }
-
-    public void setFuel(int fuel) {
-        this.fuel = fuel;
     }
 
     /**

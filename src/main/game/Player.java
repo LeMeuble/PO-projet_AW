@@ -26,6 +26,7 @@ public class Player {
         public int getValue() {
             return this.value;
         }
+
         public String getName() {
             return this.name().toLowerCase();
         }

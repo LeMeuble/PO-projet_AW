@@ -4,7 +4,7 @@ import main.game.Player;
 import main.map.Case;
 import main.weather.Weather;
 
-public abstract class Naval extends Fueled {
+public abstract class Naval extends Unit {
 
     public static final int MOVEMENT_COST_PER_CASE = 1;
 

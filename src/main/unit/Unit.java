@@ -43,9 +43,9 @@ public abstract class Unit {
     private final List<Weapon> weapons;
     private UnitFacing facing;
     private float health;
+    private int energy;
     private boolean hasPlayed;
     private boolean hasMoved;
-    private boolean isAlive;
 
     /**
      * Constructeur d'une unite.
@@ -61,7 +61,6 @@ public abstract class Unit {
         this.health = Unit.MAX_HEALTH;
         this.hasPlayed = false;
         this.hasMoved = false;
-        this.isAlive = true;
 
     }
 
@@ -163,7 +162,18 @@ public abstract class Unit {
      * @param health La nouvelle valeur de la vie.
      */
     public void setHealth(float health) {
-        this.health = Math.min(health, Unit.MAX_HEALTH);
+        this.health = Math.max(0, Math.min(health, Unit.MAX_HEALTH));
+    }
+
+    public boolean hasEnergy() {
+        return this.energy > 0;
+    }
+    public int getEnergy() {
+        return this.energy;
+    }
+
+    public void setEnergy(int energy) {
+        this.energy = Math.max(energy, this.energy);
     }
 
     /**
@@ -209,17 +219,7 @@ public abstract class Unit {
      * @return true si l'unite est en vie, false sinon.
      */
     public boolean isAlive() {
-        return this.isAlive;
-    }
-
-    /**
-     * Definit si l'unite est vivant ou non.
-     * Attention, indiquer l'unite comme etant morte la supprimera de la carte.
-     *
-     * @param alive true si l'unite est en vie, false sinon.
-     */
-    public void setAlive(boolean alive) {
-        this.isAlive = alive;
+        return this.health > 0;
     }
 
     /**
@@ -284,12 +284,7 @@ public abstract class Unit {
      */
     public void damageBy(float damage) {
 
-        this.health -= damage;
-
-        if (this.health <= 0.0f) {
-            this.isAlive = false;
-            this.health = 0.0f;
-        }
+        this.setHealth(this.getHealth() - damage);
 
     }
 
@@ -330,15 +325,15 @@ public abstract class Unit {
 
             if (!(bestWeapon instanceof RangedWeapon)) {
 
-                if(target.isAlive) {
+                if(target.isAlive()) {
 
                     Weapon targetBestWeapon = target.bestWeaponAgainst(this);
 
-                    if (targetBestWeapon != null)
+                    if (targetBestWeapon != null) {
                         this.damageBy(target.calculateDamage(targetBestWeapon.getMultiplierOn(this)));
-
+                        targetBestWeapon.setAmmo(targetBestWeapon.getAmmo() - 1);
+                    }
                 }
-
             }
         }
     }
@@ -348,7 +343,7 @@ public abstract class Unit {
         if(this.getOwner() == target.getOwner()) return false;
 
         final Weapon bestWeapon = this.bestWeaponAgainst(target);
-
+        System.out.println("bestWeapon = " + bestWeapon);
         if (bestWeapon != null) {
 
             if (bestWeapon.hasAmmo()) {
@@ -474,7 +469,7 @@ public abstract class Unit {
         final int minRange = this.getMinWeaponRange();
         final int maxRange = this.getMaxWeaponRange();
 
-        List<Case> cases = contextGrid.getCasesAround(currentCase.getX(), currentCase.getY(), minRange, maxRange);
+        List<Case> cases = contextGrid.getCasesAround(currentCase.getCoordinate().getX(), currentCase.getCoordinate().getY(), minRange, maxRange);
 
         boolean adjacentEnemy = false;
         boolean inRangeEnemy = false;
@@ -497,7 +492,7 @@ public abstract class Unit {
         }
 
         actions.addOption(UnitAction.ATTACK, adjacentEnemy);
-        actions.addOption(UnitAction.RANGED_ATTACK, inRangeEnemy);
+        actions.addOption(UnitAction.RANGED_ATTACK, inRangeEnemy && !this.hasMoved);
 
         return actions;
 
@@ -516,10 +511,10 @@ public abstract class Unit {
     public void supply() {
 
         for (Weapon weapon : weapons) {
-            System.out.println("Weapon previous ammo: " + weapon.getAmmo());
             weapon.supply();
-            System.out.println("Weapon new ammo: " + weapon.getAmmo());
         }
+
+        this.energy = this.getType().getEnergy();
 
     }
 
@@ -561,7 +556,7 @@ public abstract class Unit {
 
     public String getFile(int frame) {
 
-        return PathUtil.getUnitPath(this.getType(), this.getOwner(), this.getFacing(), !this.hasPlayed(), frame);
+        return PathUtil.getUnitIdleFacingPath(this.getType(), this.getOwner(), this.getFacing(), !this.hasPlayed(), frame);
 
     }
 

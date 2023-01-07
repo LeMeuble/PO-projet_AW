@@ -7,10 +7,19 @@ import java.util.Stack;
 
 public class PopupRegistry {
 
+    private static PopupRegistry instance;
+
     public final Stack<Popup> popups;
 
-    public PopupRegistry() {
+    private PopupRegistry() {
         this.popups = new Stack<>();
+    }
+
+    public static PopupRegistry getInstance() {
+        if(instance == null) {
+            instance = new PopupRegistry();
+        }
+        return instance;
     }
 
     public void push(Popup popup) {
@@ -20,7 +29,5 @@ public class PopupRegistry {
     public List<Popup> getPopups() {
         return new ArrayList<>(this.popups);
     }
-
-
 
 }

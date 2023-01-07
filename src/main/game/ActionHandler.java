@@ -5,6 +5,7 @@ import main.animation.MovementAnimation;
 import main.control.Cursor;
 import main.control.KeystrokeListener;
 import main.map.Case;
+import main.map.Coordinate;
 import main.map.Grid;
 import main.menu.ActionMenu;
 import main.menu.MenuManager;
@@ -12,9 +13,11 @@ import main.menu.MenuModel;
 import main.menu.model.FactoryActionMenu;
 import main.menu.model.UnitActionMenu;
 import main.render.Renderer;
+import main.terrain.Factory;
 import main.terrain.Property;
-import main.terrain.type.Factory;
+import main.terrain.type.FactoryTerrain;
 import main.terrain.type.HQ;
+import main.terrain.type.Port;
 import main.unit.Transport;
 import main.unit.Unit;
 import main.unit.UnitAction;
@@ -295,8 +298,8 @@ public class ActionHandler {
 
         final Player currentPlayer = this.instance.isPlaying() ? game.getCurrentPlayer() : null;
 
-        final int x = cursor != null ? cursor.getCurrentX() : 0;
-        final int y = cursor != null ? cursor.getCurrentY() : 0;
+        final int x = cursor != null ? cursor.getCoordinate().getX() : 0;
+        final int y = cursor != null ? cursor.getCoordinate().getY() : 0;
 
         final Case currentCase = grid != null ? grid.getCase(x, y) : null;
 
@@ -349,9 +352,11 @@ public class ActionHandler {
                 }
                 else if (currentCase.getTerrain() instanceof Factory) {
 
-                    if (Factory.canCreateUnit(currentCase, currentPlayer)) {
+                    if (FactoryTerrain.canCreateUnit(currentCase, currentPlayer)) {
 
-                        MenuManager.getInstance().addMenu(new FactoryActionMenu(UnitType.asSelector(currentPlayer.getMoney())));
+                        MenuManager.getInstance().addMenu(
+                                new FactoryActionMenu(
+                                        ((Factory) currentCase.getTerrain()).getUnitSelector(currentPlayer.getMoney())));
                         game.setSelectedCase(currentCase);
 
                         this.instance.setGameState(GameState.PLAYING_SELECTING_FACTORY_UNIT);
@@ -359,6 +364,7 @@ public class ActionHandler {
                     }
                     else System.out.println("Warn: There is already a unit here / u can't!");
                 }
+
                 else System.out.println("Warn: There is nothing to do here");
 
                 return true;
@@ -389,14 +395,20 @@ public class ActionHandler {
                         if (currentCase.hasUnit()) {
 
                             Unit current = currentCase.getUnit();
-                            List<Case> casesAround = game.getGrid().getCasesAround(cursor.getCurrentX(), cursor.getCurrentY(), current.getMinWeaponRange(), current.getMaxWeaponRange());
+                            List<Case> casesAround = game.getGrid().getCasesAround(x, y, current.getMinWeaponRange(), current.getMaxWeaponRange());
 
+
+                            System.out.println(casesAround);
                             casesAround = casesAround.stream()
+                                    .filter(c -> c.hasUnit())
                                     .filter(c -> current.isDistanceReachable(c.distance(currentCase)))
-                                    .filter(c -> current.canAttack(currentCase.getUnit()))
+                                    .filter(c -> current.canAttack(c.getUnit()))
                                     .collect(Collectors.toList());
+                            System.out.println(casesAround);
 
                             List<Unit> unitsAround = game.getGrid().getUnitsAround(casesAround);
+
+                            System.out.println(unitsAround);
 
                             System.out.println(unitsAround);
 
@@ -486,12 +498,14 @@ public class ActionHandler {
 
                             adjacentTransport.get(0).setCarriedUnit(unit);
                             currentCase.setUnit(null);
+                            MenuManager.getInstance().clearNonPersistent();
 
                         }
                         else if (adjacentTransport.size() >= 2) {
 
                             game.setSelectedCase(currentCase);
                             this.instance.setGameState(GameState.PLAYING_SELECTING_TRANSPORT);
+                            MenuManager.getInstance().clearNonPersistent();
 
                         }
 
@@ -509,6 +523,7 @@ public class ActionHandler {
                         else if (adjacentCase.size() >= 2) {
 
                             game.setSelectedCase(currentCase);
+                            MenuManager.getInstance().clearNonPersistent();
                             this.instance.setGameState(GameState.PLAYING_SELECTING_DROP_ZONE);
 
                         }
@@ -578,23 +593,26 @@ public class ActionHandler {
 
                 if (!destination.hasUnit()) {
 
-                    grid.moveUnit(source, destination);
-                    destination.getUnit().setMoved(true);
+                    Unit u = source.getUnit();
+                    u.setMoved(true);
+                    source.setUnit(null);
 
-                    // Animation
-                    MovementAnimation animation = new MovementAnimation(source.getUnit(), game.getMovement());
-                    game.resetMovement();
-                    // Wait for animation to finish
+                    MiniWars.getInstance().setGameState(GameState.PLAYING_RENDERING_MOVING_UNIT);
+                    MovementAnimation animation = new MovementAnimation(u, game.getMovement());
+
+                    Renderer.getInstance().addMovementAnimation(animation);
+
+                    animation.waitUntilFinished();
+                    System.out.println("OK: Animation finished");
+
+                    destination.setUnit(u);
+                    grid.moveUnit(source, destination, game.getMovement());
 
                     game.setSelectedCase(destination);
                     this.instance.setGameState(GameState.PLAYING_SELECTING_UNIT_ACTION);
 
                     OptionSelector<UnitAction> actions = destination.getUnit().getAvailableActions(destination, grid);
-
                     MenuManager.getInstance().addMenu(new UnitActionMenu(actions));
-                    this.instance.setGameState(GameState.PLAYING_SELECTING_UNIT_ACTION);
-
-                    //TODO: Animation de mouvement
 
                 }
 
@@ -613,7 +631,7 @@ public class ActionHandler {
 
                     currentCase.setUnit(carriedUnit);
                     ((Transport) game.getSelectedCase().getUnit()).setCarriedUnit(null);
-
+                    this.instance.setGameState(GameState.PLAYING_SELECTING);
                 }
 
                 return true;
@@ -638,6 +656,7 @@ public class ActionHandler {
 
                                 ((Transport) transportUnit).setCarriedUnit(game.getSelectedCase().getUnit());
                                 game.getSelectedCase().setUnit(null);
+                                this.instance.setGameState(GameState.PLAYING_SELECTING);
 
                             }
 
@@ -711,7 +730,7 @@ public class ActionHandler {
         final Game game = this.instance.getCurrentGame();
         final Grid grid = this.instance.isPlaying() ? game.getGrid() : null;
         final Cursor cursor = this.instance.isPlaying() ? game.getCursor() : null;
-        final Case currentCase = grid != null ? grid.getCase(cursor.getCurrentX(), cursor.getCurrentY()) : null;
+        final Case currentCase = grid != null ? grid.getCase(cursor.getCoordinate().getX(), cursor.getCoordinate().getY()) : null;
 
         switch (gameState) {
 
@@ -725,17 +744,17 @@ public class ActionHandler {
                         .filter(c -> !c.getUnit().hasPlayed())
                         .collect(Collectors.toList());
 
-                if(playerUnitsCases.contains(currentCase)) {
+                if (playerUnitsCases.contains(currentCase)) {
 
                     int index = playerUnitsCases.indexOf(currentCase);
                     index = (index + 1) % playerUnitsCases.size();
+                    
+                    cursor.setCoordinate(playerUnitsCases.get(index).getCoordinate());
 
-                    cursor.setCurrentX(playerUnitsCases.get(index).getX());
-                    cursor.setCurrentY(playerUnitsCases.get(index).getY());
+                }
+                else if (playerUnitsCases.size() != 0) {
 
-                } else if(playerUnitsCases.size() != 0){
-                    cursor.setCurrentX(playerUnitsCases.get(0).getX());
-                    cursor.setCurrentY(playerUnitsCases.get(0).getY());
+                    cursor.setCoordinate(playerUnitsCases.get(0).getCoordinate());
                 }
 
         }
@@ -754,13 +773,13 @@ public class ActionHandler {
         final Game game = this.instance.getCurrentGame();
         final Movement move = game.getMovement();
 
-        final int x = game.getCursor().getCurrentX();
-        final int y = game.getCursor().getCurrentY();
+        final int x = game.getCursor().getCoordinate().getX();
+        final int y = game.getCursor().getCoordinate().getY();
 
         movement.run();
 
-        int newX = game.getCursor().getCurrentX();
-        int newY = game.getCursor().getCurrentY();
+        int newX = game.getCursor().getCoordinate().getX();
+        int newY = game.getCursor().getCoordinate().getY();
 
         // Simulation du mouvement
         game.getMovement().update(game.getGrid().getCase(newX, newY));
@@ -782,8 +801,7 @@ public class ActionHandler {
         }
 
         // Annule le mouvement si une des conditions n'est pas respectee
-        game.getCursor().setCurrentX(x);
-        game.getCursor().setCurrentY(y);
+        game.getCursor().setCoordinate(new Coordinate(x, y));
         game.getMovement().goBack();
 
     }
