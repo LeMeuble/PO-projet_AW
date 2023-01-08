@@ -40,7 +40,7 @@ public abstract class AnimatedMenu extends Menu {
      * @see Renderable
      */
     @Override
-    public boolean needsRefresh() {
+    public synchronized boolean needsRefresh() {
         return this.isVisible() && (super.needsRefresh() || this.animationClock.needsRefresh());
     }
 

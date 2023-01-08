@@ -3,7 +3,6 @@ package test;
 import main.util.OptionSelector;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -20,9 +19,9 @@ public class OptionSelectorTest {
         assertEquals( 1, test.getOptionsCount());
         assertEquals(1, test.getAvailableOptionsCount());
 
-        assertTrue(test.getOptions().contains(1));
+        assertTrue(test.getValues().contains(1));
 
-        assertFalse(test.getOptions().contains(2));
+        assertFalse(test.getValues().contains(2));
 
     }
 
@@ -35,9 +34,9 @@ public class OptionSelectorTest {
         assertEquals(1, test.getOptionsCount());
         assertEquals(0, test.getAvailableOptionsCount());
 
-        assertTrue(test.getOptions().contains(1));
+        assertTrue(test.getValues().contains(1));
 
-        assertFalse(test.getOptions().contains(2));
+        assertFalse(test.getValues().contains(2));
 
     }
 
@@ -51,9 +50,9 @@ public class OptionSelectorTest {
         assertEquals(1, test.getOptionsCount());
         assertEquals(1, test.getAvailableOptionsCount());
 
-        assertTrue(test.getOptions().contains(1));
+        assertTrue(test.getValues().contains(1));
 
-        assertFalse(test.getOptions().contains(2));
+        assertFalse(test.getValues().contains(2));
     }
 
     @Test
@@ -66,11 +65,11 @@ public class OptionSelectorTest {
         assertEquals(2, test.getOptionsCount());
         assertEquals(1, test.getAvailableOptionsCount());
 
-        assertTrue(test.getOptions().contains(1));
-        assertTrue(test.getOptions().contains(2));
-        assertTrue(test.getAvailableOptions().contains(1));
+        assertTrue(test.getValues().contains(1));
+        assertTrue(test.getValues().contains(2));
+        assertTrue(test.getAvailableValues().contains(1));
 
-        assertFalse(test.getAvailableOptions().contains(2));
+        assertFalse(test.getAvailableValues().contains(2));
 
     }
 
@@ -85,15 +84,15 @@ public class OptionSelectorTest {
         assertEquals(5, test.getOptionsCount());
         assertEquals(5, test.getAvailableOptionsCount());
 
-        assertTrue(test.getOptions().contains(1));
-        assertTrue(test.getOptions().contains(2));
-        assertTrue(test.getOptions().contains(3));
-        assertTrue(test.getOptions().contains(4));
-        assertTrue(test.getOptions().contains(5));
+        assertTrue(test.getValues().contains(1));
+        assertTrue(test.getValues().contains(2));
+        assertTrue(test.getValues().contains(3));
+        assertTrue(test.getValues().contains(4));
+        assertTrue(test.getValues().contains(5));
 
-        assertTrue(test.getAvailableOptions().contains(1));
+        assertTrue(test.getAvailableValues().contains(1));
 
-        assertFalse(test.getAvailableOptions().contains(7));
+        assertFalse(test.getAvailableValues().contains(7));
 
     }
 
@@ -117,13 +116,13 @@ public class OptionSelectorTest {
         test.addOption(1);
         test.addOption(2);
 
-        assertEquals(0, test.getSelectedOption());
+        assertEquals(0, test.getSelectedValue());
         test.next();
-        assertEquals(1, test.getSelectedOption());
+        assertEquals(1, test.getSelectedValue());
         test.next();
-        assertEquals(2, test.getSelectedOption());
+        assertEquals(2, test.getSelectedValue());
         test.next();
-        assertEquals(0, test.getSelectedOption());
+        assertEquals(0, test.getSelectedValue());
 
     }
 
@@ -135,11 +134,11 @@ public class OptionSelectorTest {
         testFirstFalse.addOption(1);
         testFirstFalse.addOption(2);
 
-        assertEquals(1, testFirstFalse.getSelectedOption());
+        assertEquals(1, testFirstFalse.getSelectedValue());
         testFirstFalse.next();
-        assertEquals(2, testFirstFalse.getSelectedOption());
+        assertEquals(2, testFirstFalse.getSelectedValue());
         testFirstFalse.next();
-        assertEquals(1, testFirstFalse.getSelectedOption());
+        assertEquals(1, testFirstFalse.getSelectedValue());
 
 
         OptionSelector<Integer> testSecondFalse = new OptionSelector<>();
@@ -147,11 +146,11 @@ public class OptionSelectorTest {
         testSecondFalse.addOption(1, false);
         testSecondFalse.addOption(2);
 
-        assertEquals(0, testSecondFalse.getSelectedOption());
+        assertEquals(0, testSecondFalse.getSelectedValue());
         testSecondFalse.next();
-        assertEquals(2, testSecondFalse.getSelectedOption());
+        assertEquals(2, testSecondFalse.getSelectedValue());
         testSecondFalse.next();
-        assertEquals(0, testSecondFalse.getSelectedOption());
+        assertEquals(0, testSecondFalse.getSelectedValue());
 
 
         OptionSelector<Integer> testLastFalse = new OptionSelector<>();
@@ -159,11 +158,11 @@ public class OptionSelectorTest {
         testLastFalse.addOption(1);
         testLastFalse.addOption(2, false);
 
-        assertEquals(0, testLastFalse.getSelectedOption());
+        assertEquals(0, testLastFalse.getSelectedValue());
         testLastFalse.next();
-        assertEquals(1, testLastFalse.getSelectedOption());
+        assertEquals(1, testLastFalse.getSelectedValue());
         testLastFalse.next();
-        assertEquals(0, testLastFalse.getSelectedOption());
+        assertEquals(0, testLastFalse.getSelectedValue());
 
     }
 

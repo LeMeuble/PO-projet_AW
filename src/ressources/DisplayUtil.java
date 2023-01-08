@@ -88,7 +88,27 @@ public class DisplayUtil {
      */
     public static void drawCursor(int gridX, int gridY, int gridWidth, int gridHeight) {
 
-        drawPictureInCase(gridX, gridY, gridWidth, gridHeight, 1, 1, PathUtil.getCursorPath());
+        double x = getCenterX(gridX, gridWidth);
+        double y = getCenterY(gridY, gridHeight);
+
+        drawPicture(x, y, PathUtil.getUiComponentPath("cursor.png"), Config.PIXEL_PER_CASE * 1.25, Config.PIXEL_PER_CASE * 1.25);
+
+    }
+
+    /**
+     * Draw the game crosshair in a case
+     *
+     * @param gridX      The x position in the grid
+     * @param gridY      The y position in the grid
+     * @param gridWidth  The width of the grid
+     * @param gridHeight The height of the grid
+     */
+    public static void drawCrosshair(int gridX, int gridY, int gridWidth, int gridHeight) {
+
+        double x = getCenterX(gridX, gridWidth);
+        double y = getCenterY(gridY, gridHeight);
+
+        drawPicture(x, y, PathUtil.getUiComponentPath("crosshair.png"), Config.PIXEL_PER_CASE * 1.25, Config.PIXEL_PER_CASE * 1.25);
 
     }
 
@@ -104,7 +124,7 @@ public class DisplayUtil {
     public static double getCenterX(int gridX, int gridWidth) {
 
         double[] offset = getCenteringOffset(gridWidth, 0);
-        return gridX * Config.PIXEL_PER_CASE + (double) Config.PIXEL_PER_CASE / 2 + offset[0];
+        return gridX * Config.PIXEL_PER_CASE + Config.PIXEL_PER_CASE / 2 + offset[0];
 
     }
 

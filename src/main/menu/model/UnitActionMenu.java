@@ -12,8 +12,6 @@ import ressources.DisplayUtil;
 import ressources.PathUtil;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
 
 public class UnitActionMenu extends ActionMenu<UnitAction> {
 
@@ -31,16 +29,11 @@ public class UnitActionMenu extends ActionMenu<UnitAction> {
         double x = Config.MENU_ACTION_MARGIN + Config.MENU_ACTION_TOP_HEIGHT / 1.5d;
         double y = (Config.HEIGHT - Config.MENU_ACTION_MARGIN) - Config.MENU_ACTION_TOP_HEIGHT - Config.MENU_ACTION_MIDDLE_HEIGHT / 2.0d + 4;
 
+        StdDraw.setPenColor(Color.BLACK);
         StdDraw.setFont(Config.FONT_20);
         Player.Type playerType = MiniWars.getInstance().getCurrentGame().getCurrentPlayer().getType();
 
-        for (UnitAction action : this.getAvailableOptions()) {
-
-            if(action == this.getSelectedOption()) {
-                StdDraw.setPenColor(Color.BLUE);
-            } else {
-                StdDraw.setPenColor(Color.BLACK);
-            }
+        for (UnitAction action : this.getAvailableValues()) {
 
             if (action == UnitAction.MOVE) {
 

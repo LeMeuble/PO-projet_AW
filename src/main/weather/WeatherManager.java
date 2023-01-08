@@ -79,65 +79,11 @@ public class WeatherManager {
                 this.hasChanged = false;
             }
 
-            // Todo : Optimiser ce truc
-            // C'est pas modulable
             else if (Math.random() < WEATHER_CHANGE_CHANCE) {
+
                 this.willChange = true;
+                this.nextWeather = this.currentWeather.next();
 
-                double probability = Math.random();
-
-                if(this.currentWeather == Weather.CLEAR) {
-                    if(probability <= ChangingWeather.Clear.getToSnow()) {
-                        nextWeather = Weather.SNOWY;
-                    }
-                    else if(probability <= ChangingWeather.Clear.getToRain()) {
-                        nextWeather = Weather.RAINY;
-                    }
-                    else if(probability <= ChangingWeather.Clear.getToWind()) {
-                        nextWeather = Weather.HEAVY_WIND;
-                    }
-                }
-
-
-                if(this.currentWeather == Weather.RAINY) {
-                    if(probability <= ChangingWeather.Clear.getToSnow()) {
-                        nextWeather = Weather.SNOWY;
-                    }
-                    else if(probability <= ChangingWeather.Clear.getToWind()) {
-                        nextWeather = Weather.HEAVY_WIND;
-                    }
-                    else if(probability <= ChangingWeather.Clear.getToClear()) {
-                        nextWeather = Weather.CLEAR;
-                    }
-                }
-
-
-                if(this.currentWeather == Weather.HEAVY_WIND) {
-                    if(probability <= ChangingWeather.Clear.getToSnow()) {
-                        nextWeather = Weather.SNOWY;
-                    }
-                    else if(probability <= ChangingWeather.Clear.getToRain()) {
-                        nextWeather = Weather.RAINY;
-                    }
-                    else if(probability <= ChangingWeather.Clear.getToClear()) {
-                        nextWeather = Weather.CLEAR;
-                    }
-                }
-
-
-                if(this.currentWeather == Weather.SNOWY) {
-                    if(probability <= ChangingWeather.Clear.getToClear()) {
-                        nextWeather = Weather.CLEAR;
-                    }
-                    else if(probability <= ChangingWeather.Clear.getToRain()) {
-                        nextWeather = Weather.RAINY;
-                    }
-                    else if(probability <= ChangingWeather.Clear.getToWind()) {
-                        nextWeather = Weather.HEAVY_WIND;
-                    }
-                }
-
-                // this.nextWeather = Weather.random();
             }
         }
     }

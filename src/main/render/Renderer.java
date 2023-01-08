@@ -19,7 +19,9 @@ import ressources.Config;
 import ressources.DisplayUtil;
 import ressources.PathUtil;
 
+import javax.swing.Popup;
 import java.awt.*;
+import java.util.Set;
 
 public class Renderer {
 
@@ -82,6 +84,7 @@ public class Renderer {
         synchronized (this) {
 
             boolean copyBuffer = false;
+            this.clearBuffer();
 
             switch (gameState) {
 
@@ -89,11 +92,10 @@ public class Renderer {
                 case MENU_TITLE_SCREEN:
                     break;
                 case PLAYING_MOVING_UNIT:
-
                     copyBuffer = this.renderMap(gameState, game, game.getCursor().needsRefresh());
                     copyBuffer |= this.renderOverlay(game, copyBuffer);
                     copyBuffer |= this.renderMovement(game, copyBuffer);
-                    copyBuffer |= this.renderCursor(game, copyBuffer);
+                    copyBuffer |= this.renderCursor(game, gameState, copyBuffer);
                     break;
                 case PLAYING_RENDERING_MOVING_UNIT:
 
@@ -109,14 +111,16 @@ public class Renderer {
                     break;
 
                 default:
-                    copyBuffer = this.renderMap(gameState, game, game.getCursor().needsRefresh());
-                    copyBuffer |= this.renderCursor(game, copyBuffer);
+                    copyBuffer = this.renderMap(gameState, game, game.getCursor().needsRefresh() || MenuManager.getInstance().anyMenuNeedsRefresh() || PopupRegistry.getInstance().needsRefresh());
+                    copyBuffer |= this.renderCursor(game, gameState, copyBuffer);
                     break;
             }
 
             for (Menu menu : MenuManager.getInstance().getMenus()) {
                 copyBuffer |= this.renderMenu(menu, copyBuffer);
             }
+
+            copyBuffer |= this.renderPopups(copyBuffer);
 
             if (copyBuffer) {
                 StdDraw.show();
@@ -131,6 +135,18 @@ public class Renderer {
 
         }
 
+    }
+
+    private boolean renderPopups(boolean forceRender) {
+
+        if (PopupRegistry.getInstance().needsRefresh() || forceRender) {
+
+            PopupRegistry.getInstance().render();
+            return true;
+
+        }
+
+        return false;
     }
 
     public void addMovementAnimation(MovementAnimation movementAnimation) {
@@ -179,24 +195,24 @@ public class Renderer {
         //TODO: NullPointerException here apres l'activation de l'animation de mouvement
         // probablement a cause de la synchronisation et du gamestate
 
-//        if (forceRender) {
-//
-//            final Set<Case> cases = game.getGrid().getReachableCases(game.getSelectedCase(), game.getSelectedCase().getUnit(), game.getWeather());
-//
-//            StdDraw.setPenColor(StdDraw.BLUE);
-//
-//            for (Case c : cases) {
-//
-//                double x = DisplayUtil.getCenterX(c.getX(), game.getWidth());
-//                double y = DisplayUtil.getCenterY(c.getY(), game.getHeight());
-//
-//                StdDraw.rectangle(x, y, (double) Config.PIXEL_PER_CASE / 3, (double) Config.PIXEL_PER_CASE / 3);
-//
-//            }
-//
-//            return true;
-//
-//        }
+        if (forceRender) {
+
+            final Set<Case> cases = game.getOverlayedCases();
+
+            StdDraw.setPenColor(StdDraw.BLUE);
+
+            for (Case c : cases) {
+
+                double x = DisplayUtil.getCenterX(c.getCoordinate().getX(), game.getWidth());
+                double y = DisplayUtil.getCenterY(c.getCoordinate().getY(), game.getHeight());
+
+                StdDraw.rectangle(x, y, (double) Config.PIXEL_PER_CASE / 3, (double) Config.PIXEL_PER_CASE / 3);
+
+            }
+
+            return true;
+
+        }
 
         return false;
     }
@@ -204,7 +220,6 @@ public class Renderer {
     private boolean renderMenu(Menu menu, boolean forceRender) {
 
         if (!menu.isVisible()) return false;
-
         if (menu.needsRefresh() || forceRender) {
 
             menu.render();
@@ -251,7 +266,7 @@ public class Renderer {
             for (int i = 0; i < maxIterationX; i++) {
                 for (int j = maxIterationY; j >= 0; j--) {
                     gameView.getCase(i, j).renderTerrain(i, j, mapWidth, mapHeight, weather, this.terrainClockSync);
-                    if(!gameView.getCase(i, j).getIsFoggy()) {
+                    if (!gameView.getCase(i, j).getIsFoggy()) {
                         gameView.getCase(i, j).renderUnit(i, j, mapWidth, mapHeight, this.unitClockSync);
                     }
                 }
@@ -265,12 +280,15 @@ public class Renderer {
 
     }
 
-    private boolean renderCursor(Game game, boolean forceRender) {
+    private boolean renderCursor(Game game, GameState gameState, boolean forceRender) {
 
         Cursor cursor = game.getCursor();
 
         if (cursor.needsRefresh() || forceRender) {
-            DisplayUtil.drawCursor(game.getView().getCursorX(), game.getView().getCursorY(), game.getWidth(), game.getHeight());
+            if (gameState == GameState.PLAYING_SELECTING_TARGET)
+                DisplayUtil.drawCrosshair(game.getView().getCursorX(), game.getView().getCursorY(), game.getWidth(), game.getHeight());
+            else
+                DisplayUtil.drawCursor(game.getView().getCursorX(), game.getView().getCursorY(), game.getWidth(), game.getHeight());
             game.getCursor().needsRefresh(false);
             return true;
         }

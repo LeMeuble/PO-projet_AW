@@ -1,5 +1,7 @@
 package main.game;
 
+import main.render.PopupRegistry;
+
 public class GameLoop {
 
     private final Thread thread;
@@ -45,6 +47,7 @@ public class GameLoop {
         try {
 
             while (this.isRunning) {
+                PopupRegistry.getInstance().garbageCollect();
                 this.handler.run();
                 Thread.sleep(50);
             }

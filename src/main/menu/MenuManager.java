@@ -57,6 +57,10 @@ public class MenuManager {
 
     }
 
+    public boolean anyMenuNeedsRefresh() {
+        return this.menus.values().stream().anyMatch(Menu::needsRefresh);
+    }
+
     /**
      * Supprimer un menu du gestionnaire de menus
      * a partir de son modele

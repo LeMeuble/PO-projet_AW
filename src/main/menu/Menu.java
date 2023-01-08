@@ -20,7 +20,7 @@ public abstract class Menu implements Comparable<Menu>, Renderable {
 
     private final int priority;
     private boolean isVisible;
-    private boolean needsRefresh;
+    private volatile boolean needsRefresh;
 
     /**
      * Constructeur d'un menu
@@ -74,7 +74,7 @@ public abstract class Menu implements Comparable<Menu>, Renderable {
      *
      * @see Renderable
      */
-    public boolean needsRefresh() {
+    public synchronized boolean needsRefresh() {
         return this.isVisible && this.needsRefresh;
     }
 

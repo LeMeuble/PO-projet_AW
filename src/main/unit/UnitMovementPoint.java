@@ -11,7 +11,7 @@ public enum UnitMovementPoint {
     INFANTRY(UnitType.INFANTRY, 300),
     BAZOOKA(UnitType.BAZOOKA, 2),
     BOMBER(UnitType.BOMBER, 7),
-    CONVOY(UnitType.CONVOY, 6),
+    CONVOY(UnitType.CONVOY, 60),
     ANTIAIR(UnitType.ANTIAIR, 6),
     HELICOPTER(UnitType.HELICOPTER, 6),
     TANK(UnitType.TANK, 6),

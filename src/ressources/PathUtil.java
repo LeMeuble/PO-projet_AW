@@ -112,12 +112,6 @@ public class PathUtil {
 
     }
 
-    public static String getCursorPath() {
-
-        return PICTURE_UI_FOLDER + SEP + "cursor.png";
-
-    }
-
     public static String getUiComponentPath(String file) {
         return PICTURE_UI_FOLDER + SEP + file;
     }

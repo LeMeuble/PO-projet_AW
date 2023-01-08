@@ -90,7 +90,7 @@ public class MiniWars {
         if (this.actionHandler.handle(keycode)) this.update();
     }
 
-    public synchronized void update() {
+    public void update() {
         Renderer.getInstance().render(this.gameState, this.currentGame);
     }
 

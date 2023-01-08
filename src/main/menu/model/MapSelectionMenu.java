@@ -24,7 +24,7 @@ public class MapSelectionMenu extends SelectionMenu<MapMetadata> {
     @Override
     public void render() {
 
-        MapMetadata map = this.getSelectedOption();
+        MapMetadata map = this.getSelectedValue();
 
         double x = Config.WIDTH / 2;
         double y = Config.HEIGHT - (TOP_MARGIN * Config.HEIGHT + Config.HEIGHT / (1.8d * 2));

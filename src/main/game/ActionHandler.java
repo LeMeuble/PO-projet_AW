@@ -8,22 +8,25 @@ import main.map.Case;
 import main.map.Coordinate;
 import main.map.Grid;
 import main.menu.ActionMenu;
+import main.menu.Menu;
 import main.menu.MenuManager;
 import main.menu.MenuModel;
 import main.menu.model.FactoryActionMenu;
 import main.menu.model.UnitActionMenu;
+import main.render.Popup;
+import main.render.PopupRegistry;
 import main.render.Renderer;
 import main.terrain.Factory;
 import main.terrain.Property;
 import main.terrain.type.FactoryTerrain;
 import main.terrain.type.HQ;
-import main.terrain.type.Port;
 import main.unit.Transport;
 import main.unit.Unit;
 import main.unit.UnitAction;
-import main.unit.UnitType;
+import main.util.Dijkstra;
 import main.util.OptionSelector;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -134,11 +137,14 @@ public class ActionHandler {
 
             case PLAYING_SELECTING_FACTORY_UNIT:
             case PLAYING_SELECTING_UNIT_ACTION: {
-                MenuManager.getInstance().getMenus().stream().filter(m -> m instanceof ActionMenu).forEach(m -> {
-                    ((ActionMenu) m).previous();
-                    m.needsRefresh(true);
-                });
-                return true;
+                List<Menu> menus = MenuManager.getInstance().getMenus();
+                for (Menu menu : menus) {
+                    if (menu instanceof ActionMenu) {
+                        ((ActionMenu) menu).previous();
+                        menu.needsRefresh(true);
+                    }
+                }
+                return false;
             }
 
         }
@@ -169,6 +175,9 @@ public class ActionHandler {
 
                 boolean updateDisplay = cursor.down();
                 updateDisplay |= game.getView().adjustOffset();
+
+                PopupRegistry.getInstance().push(new Popup("Action impossible!", "Cette unite ne vous appartient pas!"));
+                PopupRegistry.getInstance().push(new Popup("Erreur!", "??"));
 
                 return updateDisplay;
             }
@@ -317,7 +326,7 @@ public class ActionHandler {
             case MENU_MAP_SELECTION: {
                 Renderer.getInstance().clearBuffer();
                 if (this.instance.getMapSelector().getSelectedOption() != null) {
-                    this.instance.newGame(this.instance.getMapSelector().getSelectedOption());
+                    this.instance.newGame(this.instance.getMapSelector().getSelectedValue());
                     MenuManager.getInstance().getMenu(MenuModel.MAP_SELECTION_MENU).setVisible(false);
                 }
                 return true;
@@ -378,7 +387,7 @@ public class ActionHandler {
 
                 if (menu != null) {
 
-                    UnitAction action = ((UnitActionMenu) menu).getSelectedOption();
+                    UnitAction action = ((UnitActionMenu) menu).getSelectedValue();
                     Unit unit = game.getSelectedCase().getUnit();
 
                     if (action == UnitAction.MOVE) {
@@ -388,6 +397,7 @@ public class ActionHandler {
                         MenuManager.getInstance().getMenu(MenuModel.UNIT_ACTION_MENU).setVisible(false);
 
                         this.instance.setGameState(GameState.PLAYING_MOVING_UNIT);
+                        game.setOverlayedCases(grid.getReachableCases(currentCase, unit, game.getWeatherManager().getCurrentWeather()));
 
                     }
                     else if (action == UnitAction.ATTACK || action == UnitAction.RANGED_ATTACK) {
@@ -498,6 +508,7 @@ public class ActionHandler {
 
                             adjacentTransport.get(0).setCarriedUnit(unit);
                             currentCase.setUnit(null);
+                            this.instance.setGameState(GameState.PLAYING_SELECTING);
                             MenuManager.getInstance().clearNonPersistent();
 
                         }
@@ -517,14 +528,18 @@ public class ActionHandler {
                         if (adjacentCase.size() == 1) {
 
                             adjacentCase.get(0).setUnit(((Transport) unit).getCarriedUnit());
+                            this.instance.setGameState(GameState.PLAYING_SELECTING);
+
+                            MenuManager.getInstance().clearNonPersistent();
                             ((Transport) unit).setCarriedUnit(null);
+
 
                         }
                         else if (adjacentCase.size() >= 2) {
 
                             game.setSelectedCase(currentCase);
-                            MenuManager.getInstance().clearNonPersistent();
                             this.instance.setGameState(GameState.PLAYING_SELECTING_DROP_ZONE);
+                            MenuManager.getInstance().clearNonPersistent();
 
                         }
 
@@ -554,6 +569,7 @@ public class ActionHandler {
                         if (hasSupplied) {
                             unit.setPlayed(true);
                             this.instance.setGameState(GameState.PLAYING_SELECTING);
+                            MenuManager.getInstance().clearNonPersistent();
                         }
                         else System.out.println("Warn: No unit to supply");
 
@@ -795,6 +811,7 @@ public class ActionHandler {
             if (move.getCost(currentUnit, game.getWeather()) <= currentUnit.getMovementPoint(game.getWeather())) {
 
                 game.getView().adjustOffset();
+                game.setOverlayedCases(new HashSet<>(new Dijkstra(game.getMovement().getMovementHead(), game.getGrid().getCases(), currentUnit, game.getWeather()).getShortestPathTo(destination)));
                 return;
 
             }

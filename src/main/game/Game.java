@@ -13,13 +13,12 @@ import main.terrain.TerrainType;
 import main.terrain.type.HQ;
 import main.unit.Flying;
 import main.unit.Unit;
+import main.util.Dijkstra;
 import main.weather.Weather;
 import main.weather.WeatherManager;
 import ressources.Config;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -42,6 +41,8 @@ public class Game {
     private Player.Type currentPlayer;
     private Case selectedCase;
 
+    private Set<Case> overlayedCases;
+
     /**
      * Constructeur de Game. Permet de creer une partie a partir des metadonnees de la carte.
      *
@@ -59,6 +60,8 @@ public class Game {
         this.view = new GameView(this.grid, this.cursor, mapMetadata.getWidth(), mapMetadata.getHeight());
         this.players = new HashMap<>();
         this.weatherManager = new WeatherManager();
+        this.selectedCase = null;
+        this.overlayedCases = new HashSet<>();
 
         for (int i = 1; i <= mapMetadata.getPlayerCount(); i++) {
             players.put(Player.Type.fromValue(i), new Player(Player.Type.values()[i]));
@@ -187,6 +190,14 @@ public class Game {
 
     }
 
+    public Set<Case> getOverlayedCases() {
+        return this.overlayedCases;
+    }
+
+    public void setOverlayedCases(Set<Case> overlayedCases) {
+        this.overlayedCases = overlayedCases;
+    }
+
     public void nextTurn() {
 
         // TODO: System de brouillard si actif
@@ -225,7 +236,6 @@ public class Game {
                     unit.supply();
 
                 }
-
 
             }
             if (unit != null) {

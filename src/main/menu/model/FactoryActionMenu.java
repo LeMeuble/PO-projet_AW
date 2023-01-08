@@ -34,18 +34,18 @@ public class FactoryActionMenu extends ActionMenu<UnitType> {
 
         Player.Type playerType = MiniWars.getInstance().getCurrentGame().getCurrentPlayer().getType();
 
-        for (UnitType unit : this.getOptions()) {
+        for (OptionSelector<UnitType>.Option option : this.getOptions()) {
 
-            DisplayUtil.drawPicture(x + 20, y, PathUtil.getUnitIdleFacingPath(unit, playerType, UnitFacing.RIGHT, true, 0), 38, 38);
+            DisplayUtil.drawPicture(x + 20, y, PathUtil.getUnitIdleFacingPath(option.getValue(), playerType, UnitFacing.RIGHT, option.isAvailable(), 0), 38, 38);
 
-            if (unit == this.getSelectedOption()) {
-                StdDraw.setPenColor(Color.BLUE);
-            }
-            else {
+            if (option.isAvailable()) {
                 StdDraw.setPenColor(Color.BLACK);
             }
+            else {
+                StdDraw.setPenColor(Color.GRAY);
+            }
 
-            StdDraw.textLeft(x + 38, y, unit.name().toLowerCase() + " (" + unit.getPrice() + ")");
+            StdDraw.textLeft(x + 38, y, option.getValue().name().toLowerCase() + " (" + option.getValue().getPrice() + ")");
 
             y -= Config.MENU_ACTION_MIDDLE_HEIGHT;
 

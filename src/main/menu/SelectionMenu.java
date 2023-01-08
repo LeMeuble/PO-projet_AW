@@ -24,10 +24,6 @@ public abstract class SelectionMenu<T> extends Menu {
     /**
      * Constructeur d'un menu de selection
      *
-     * @param x        La position x du centre du menu
-     * @param y        La position y du centre du menu
-     * @param width    La largeur du menu
-     * @param height   La hauteur du menu
      * @param priority La priorite d'affichage du menu
      * @param optionSelector  Selectionneur d'option
      *
@@ -63,9 +59,9 @@ public abstract class SelectionMenu<T> extends Menu {
      *
      * @return L'option selectionnee
      *
-     * @see OptionSelector#getSelectedOption()
+     * @see OptionSelector#getSelectedOption() ()
      */
-    public T getSelectedOption() {
+    public OptionSelector<T>.Option getSelectedOption() {
         return this.optionSelector.getSelectedOption();
     }
 
@@ -76,7 +72,7 @@ public abstract class SelectionMenu<T> extends Menu {
      *
      * @see OptionSelector#getOptions()
      */
-    public List<T> getOptions() {
+    public List<OptionSelector<T>.Option> getOptions() {
         return this.optionSelector.getOptions();
     }
 
@@ -85,10 +81,49 @@ public abstract class SelectionMenu<T> extends Menu {
      *
      * @return La liste des options disponibles
      *
-     * @see OptionSelector#getAvailableOptions() ()
+     * @see OptionSelector#getAvailableOptions()
      */
-    public List<T> getAvailableOptions() {
+    public List<OptionSelector<T>.Option> getAvailableOptions() {
         return this.optionSelector.getAvailableOptions();
     }
+
+    /**
+     * Obtenir l'option selectionnee
+     *
+     * @return L'option selectionnee
+     *
+     * @see OptionSelector#getSelectedOption()
+     */
+    public T getSelectedValue() {
+        return this.optionSelector.getSelectedValue();
+    }
+
+    /**
+     * Obtenir la liste completes des options sous forme de liste
+     *
+     * @return La liste des options completes
+     *
+     * @see OptionSelector#getOptions()
+     */
+    public List<T> getValues() {
+        return this.optionSelector.getValues();
+    }
+
+    /**
+     * Obtenir la liste uniquement des options disponibles sous forme de liste
+     *
+     * @return La liste des options disponibles
+     *
+     * @see OptionSelector#getAvailableOptions()
+     */
+    public List<T> getAvailableValues() {
+        return this.optionSelector.getAvailableValues();
+    }
+
+    public OptionSelector<T> getOptionSelector() {
+        return this.optionSelector;
+    }
+
+    //Todo : replace everything by getOptionSelector()
 
 }

@@ -10,6 +10,7 @@ import main.unit.Flying;
 import main.unit.Motorized;
 import main.unit.OnFoot;
 import main.unit.Unit;
+import main.util.Dijkstra;
 import main.weather.Weather;
 
 import java.util.*;
@@ -41,11 +42,12 @@ public class Grid implements Iterable<Case> {
 
     public Set<Case> getReachableCases(Case center, Unit unit, Weather weather) {
 
-        return this.getCases()
-                .stream()
-                .filter(c -> c.distance(center) <= unit.getMovementPoint(weather))
-                .filter(c -> unit.canMoveTo(c, weather))
-                .collect(Collectors.toSet());
+        List<Case> around = this.getCasesAround(center.getCoordinate().getX(), center.getCoordinate().getY(), 1, unit.getMovementPoint(weather));
+        around.add(center);
+
+        Dijkstra dijkstra = new Dijkstra(center, around, unit, weather);
+
+        return dijkstra.getReachables(unit.getMovementPoint(weather));
 
     }
 

@@ -2,10 +2,11 @@ package main.util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class OptionSelector<T> {
 
-    private class Option {
+    public class Option {
 
         private final T value;
         private boolean available;
@@ -76,29 +77,46 @@ public class OptionSelector<T> {
 
     }
 
-    public List<T> getOptions() {
-
-        List<T> options = new ArrayList<>();
-
-        for (Option option : this.options) {
-            options.add(option.getValue());
-        }
-
-        return options;
-
+    public List<Option> getOptions() {
+        return new ArrayList<>(this.options);
     }
 
-    public List<T> getAvailableOptions() {
-
-        List<T> options = new ArrayList<>();
+    public List<Option> getAvailableOptions() {
+        List<Option> options = new ArrayList<>();
 
         for (Option option : this.options) {
             if (option.isAvailable())
-                options.add(option.getValue());
+                options.add(option);
         }
 
         return options;
+    }
 
+    public Option getSelectedOption() {
+        if (this.selectedOption == -1) return null;
+        return this.options.get(this.selectedOption);
+    }
+
+    public List<T> getValues() {
+        return this.options.stream()
+                .map(Option::getValue)
+                .collect(Collectors.toList());
+    }
+
+    public List<T> getAvailableValues() {
+        return this.options.stream()
+                .filter(Option::isAvailable)
+                .map(Option::getValue)
+                .collect(Collectors.toList());
+    }
+
+    public T getSelectedValue() {
+        if (this.selectedOption == -1) return null;
+        return this.options.get(this.selectedOption).getValue();
+    }
+
+    public int getSelectedIndex() {
+        return this.selectedOption;
     }
 
     public int getOptionsCount() {
@@ -125,10 +143,6 @@ public class OptionSelector<T> {
 
     }
 
-    public T getSelectedOption() {
-        if (this.selectedOption == -1) return null;
-        return this.options.get(this.selectedOption).getValue();
-    }
 
     private void nextRecursive() {
 
