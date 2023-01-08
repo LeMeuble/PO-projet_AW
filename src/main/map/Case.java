@@ -4,7 +4,6 @@ import main.animation.AnimationClock;
 import main.terrain.AnimatedTerrain;
 import main.terrain.Property;
 import main.terrain.Terrain;
-import main.unit.Motorized;
 import main.unit.OnFoot;
 import main.unit.Unit;
 import main.weather.Weather;
@@ -20,38 +19,28 @@ import ressources.PathUtil;
  */
 public class Case {
 
-    private final int x;
-    private final int y;
+    private final Coordinate coordinate;
     private final Terrain terrain;
+
+    private boolean isFoggy;
 
     private Unit unit;
 
     /**
      * Constructeur d'une case
      *
-     * @param x       La coordonnee x de la case
-     * @param y       La coordonnee y de la case
-     * @param terrain Le terrain de la case
+     * @param coordinate Coordonnees de la case
+     * @param terrain    Le terrain de la case
      */
-    public Case(int x, int y, Terrain terrain) {
-        this.x = x;
-        this.y = y;
+    public Case(Coordinate coordinate, Terrain terrain) {
+        this.coordinate = coordinate;
         this.terrain = terrain;
         this.unit = null;
+        this.isFoggy = true;
     }
 
-    /**
-     * @return La coordonnee x de la case dans la grille
-     */
-    public int getX() {
-        return x;
-    }
-
-    /**
-     * @return La coordonnee y de la case dans la grille
-     */
-    public int getY() {
-        return y;
+    public Coordinate getCoordinate() {
+        return this.coordinate.clone();
     }
 
     /**
@@ -62,7 +51,7 @@ public class Case {
      * @return La distance entre les deux cases
      */
     public double distance(Case other) {
-        return Math.abs(this.x - other.x) + Math.abs(this.y - other.y);
+        return this.coordinate.distance(other.coordinate);
     }
 
     public boolean isAdjacent(Case other) {
@@ -83,6 +72,7 @@ public class Case {
      */
     public void setUnit(Unit unit) {
         this.unit = unit;
+        //TODO: Update unit position
     }
 
     /**
@@ -92,7 +82,6 @@ public class Case {
         return this.unit != null;
     }
 
-
     /**
      * @return Le terrain de la case
      */
@@ -100,19 +89,22 @@ public class Case {
         return this.terrain;
     }
 
+    public boolean getIsFoggy() {
+        return isFoggy;
+    }
+
+    public void setIsFoggy(boolean isFoggy) {this.isFoggy = isFoggy;}
 
     public void renderTerrain(int x, int y, int width, int height, Weather weather, AnimationClock terrainClockSync) {
 
-        final boolean isFoggy = false;
-
         if (terrain instanceof AnimatedTerrain) {
-            DisplayUtil.drawPictureInCase(x, y, width, height, ((AnimatedTerrain) terrain).getFile(weather, isFoggy, terrainClockSync.getFrame()));
+            DisplayUtil.drawPictureInCase(x, y, width, height, ((AnimatedTerrain) terrain).getFile(weather, this.isFoggy, terrainClockSync.getFrame()));
         }
         else if (terrain instanceof Property) {
-            DisplayUtil.drawPictureInCase(x, y, width, height, 1, 2, terrain.getFile(weather, isFoggy));
+            DisplayUtil.drawPictureInCase(x, y, width, height, 1, 2, terrain.getFile(weather, this.isFoggy));
         }
         else {
-            DisplayUtil.drawPictureInCase(x, y, width, height, terrain.getFile(weather, isFoggy));
+            DisplayUtil.drawPictureInCase(x, y, width, height, terrain.getFile(weather, this.isFoggy));
         }
 
     }
@@ -142,8 +134,8 @@ public class Case {
 
             boolean displayLowAmmo = ((isLowAmmo && (unitClockSync.getFrame() % 2 == 0)) || noAmmo) && unit.hasAnyWeapon();
 
-            if(displayLowAmmo) {
-                pixelY += (double) Config.PIXEL_PER_CASE / 3;
+            if (displayLowAmmo) {
+                pixelY += Config.PIXEL_PER_CASE / 3;
                 DisplayUtil.drawPicture(pixelX, pixelY, PathUtil.getIndicatorPath("low_ammo"), Config.PIXEL_PER_CASE / 3, Config.PIXEL_PER_CASE / 3);
             }
 
@@ -166,7 +158,7 @@ public class Case {
      * @return Les coordonnee de la case, sous le format d'un tuple
      */
     public String toString() {
-        return "(" + this.x + ", " + this.y + ")";
+        return "(" + this.coordinate.getX() + ", " + this.coordinate.getY() + ")";
     }
 
 }

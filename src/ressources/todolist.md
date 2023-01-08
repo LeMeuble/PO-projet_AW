@@ -31,10 +31,9 @@
 - [ ] Une quantité effarante de commentaires / javadoc
 - [ ] Désengorger ActionHandler#enter (c pas beau)
 
-# Bonus :
-
+# Bonus
 - [ ] Animation de pluie
-- [ ] Animation de mouvement des unites
+- [X] Animation de mouvement des unites
 - [X] Touche pour lister les unités encore utilisables (espace) 6.1
 - [ ] Cases de déplacement/d'attaques possibles 6.2
 - [X] Armes multiples 6.3
@@ -43,12 +42,12 @@
   - [X] Faire un missile sol-air
   - [X] Faire un lance-missiles sol-air
   - [X] Implémenter les dégâts infligés sur une artillerie
-  - [ ] Si unite ne s'est pas déplacé lors de ce tour
+  - [X] Si unite ne s'est pas déplacé lors de ce tour
 
 - [ ] Ravitaillement et réparations 6.5
   - [ ] Munitions
-    - [ ] Utilisation en attaque ou en riposte
-    - [ ] Mitrailleuse infinie ??? (9-10)
+    - [X] Utilisation en attaque ou en riposte
+    - [X] Mitrailleuse infinie ??? (9-10)
         - [ ] Carburant
     - [ ] pt de carburant = pt de déplacement
     - [ ] aérienne (cout de déplacement + fixe par tour):
@@ -86,7 +85,7 @@
     - [ ] Portée des bonus allant de 1 à 5 cases
     - [ ] Si unité détruite, commandant bat en retraite
 # Niveau pas de vie
-    - [ ] Dijkstra
-    - [ ] Bot
+- [ ] Dijkstra
+- [ ] Bot
 # Readme :
 - [ ] UML

@@ -1,32 +1,45 @@
 package main.unit;
 
+import main.menu.ActionMenu;
+import ressources.Language;
+
 /**
  * Enumeration des actions possibles pour les unites
  */
-public enum UnitAction {
+public enum UnitAction implements ActionMenu.Text {
 
     // Action : attendre
-    WAIT,
+    WAIT(Language.UNIT_ACTION_WAIT),
 
     // Action : Se deplacer
-    MOVE,
+    MOVE(Language.UNIT_ACTION_MOVE),
 
     // Action : Attaquer
-    ATTACK,
+    ATTACK(Language.UNIT_ACTION_ATTACK),
 
     // Action : Attaque a distance
-    RANGED_ATTACK,
+    RANGED_ATTACK(Language.UNIT_ACTION_RANGED_ATTACK),
 
     // Action : Capturer
-    CAPTURE,
+    CAPTURE(Language.UNIT_ACTION_CAPTURE),
 
     // Action : Ravitailler
-    SUPPLY,
+    SUPPLY(Language.UNIT_ACTION_SUPPLY),
 
     // Action : Monter a bord
-    GET_IN,
+    GET_IN(Language.UNIT_ACTION_GET_IN),
 
     // Action : Deposer
-    DROP_UNIT,
+    DROP_UNIT(Language.UNIT_ACTION_DROP_UNIT);
+
+    private final String text;
+
+    UnitAction(String text) {
+        this.text = text;
+    }
+
+    public String getText() {
+        return this.text;
+    }
 
 }

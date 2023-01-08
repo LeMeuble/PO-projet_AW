@@ -1,6 +1,7 @@
 package test;
 
 import main.control.Cursor;
+import main.map.Coordinate;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -14,13 +15,13 @@ public class CursorTest {
 
         // Test deplacement vers le haut
         for (int i = 0; i < 5; i++) {
-            assertEquals(i, cursor.getCurrentY());
+            assertEquals(i, cursor.getCoordinate().getY());
             cursor.up();
         }
 
         // Test de depacement vers le haut
         cursor.up();
-        assertEquals(4, cursor.getCurrentY());
+        assertEquals(4, cursor.getCoordinate().getY());
 
     }
 
@@ -28,17 +29,17 @@ public class CursorTest {
     public void down() {
 
         Cursor cursor = new Cursor(5, 5);
-        cursor.setCurrentY(4);
+        cursor.setCoordinate(new Coordinate(0, 4));
 
         // Test deplacement vers le haut
         for (int i = 0; i < 5; i++) {
-            assertEquals(4 - i, cursor.getCurrentY());
+            assertEquals(4 - i, cursor.getCoordinate().getY());
             cursor.down();
         }
 
         // Test de depacement vers le bas
         cursor.down();
-        assertEquals(0, cursor.getCurrentY());
+        assertEquals(0, cursor.getCoordinate().getY());
 
     }
 
@@ -49,13 +50,13 @@ public class CursorTest {
 
         // Test deplacement vers le haut
         for (int i = 0; i < 5; i++) {
-            assertEquals(i, cursor.getCurrentX());
+            assertEquals(i, cursor.getCoordinate().getX());
             cursor.right();
         }
 
         // Test de depacement vers le bas
         cursor.right();
-        assertEquals(4, cursor.getCurrentX());
+        assertEquals(4, cursor.getCoordinate().getX());
 
     }
 
@@ -63,17 +64,17 @@ public class CursorTest {
     public void left() {
 
         Cursor cursor = new Cursor(5, 5);
-        cursor.setCurrentX(4);
+        cursor.setCoordinate(new Coordinate(4, 0));
 
         // Test deplacement vers la gauche
         for (int i = 0; i < 5; i++) {
-            assertEquals(4 - i, cursor.getCurrentX());
+            assertEquals(4 - i, cursor.getCoordinate().getX());
             cursor.left();
         }
 
         // Test de depacement vers la gauche
         cursor.left();
-        assertEquals(0, cursor.getCurrentX());
+        assertEquals(0, cursor.getCoordinate().getX());
 
     }
 
@@ -82,16 +83,16 @@ public class CursorTest {
 
         Cursor cursor = new Cursor(5, 5);
 
-        assertEquals(0, cursor.getCurrentX());
-        assertEquals(0, cursor.getCurrentY());
+        assertEquals(0, cursor.getCoordinate().getX());
+        assertEquals(0, cursor.getCoordinate().getY());
 
         cursor.up();
-        assertEquals(0, cursor.getCurrentX());
-        assertEquals(1, cursor.getCurrentY());
+        assertEquals(0, cursor.getCoordinate().getX());
+        assertEquals(1, cursor.getCoordinate().getY());
 
         cursor.right();
-        assertEquals(1, cursor.getCurrentX());
-        assertEquals(1, cursor.getCurrentY());
+        assertEquals(1, cursor.getCoordinate().getX());
+        assertEquals(1, cursor.getCoordinate().getY());
 
     }
 

@@ -2,6 +2,9 @@ package ressources;
 
 import librairies.StdDraw;
 
+import java.awt.*;
+import java.awt.image.BufferedImage;
+
 import static ressources.Config.BOTTOM_MENU_MARGIN;
 
 public class DisplayUtil {
@@ -11,12 +14,13 @@ public class DisplayUtil {
      * the current window size and the given width and height
      * of the grid.
      *
-     * @param gridWidth The width of the grid in case units
+     * @param gridWidth  The width of the grid in case units
      * @param gridHeight The height of the grid in case units
+     *
      * @return The x and y margin offsets in pixel in an array
-     *         First element is the x offset, second is the y offset
-     *         x : offset if the grid is smaller than the window width otherwise 0
-     *         y : offset if the grid is smaller than the window height otherwise 0
+     * First element is the x offset, second is the y offset
+     * x : offset if the grid is smaller than the window width otherwise 0
+     * y : offset if the grid is smaller than the window height otherwise 0
      */
     public static double[] getCenteringOffset(int gridWidth, int gridHeight) {
 
@@ -76,9 +80,10 @@ public class DisplayUtil {
 
     /**
      * Draw the game cursor in a case
-     * @param gridX The x position in the grid
-     * @param gridY The y position in the grid
-     * @param gridWidth The width of the grid
+     *
+     * @param gridX      The x position in the grid
+     * @param gridY      The y position in the grid
+     * @param gridWidth  The width of the grid
      * @param gridHeight The height of the grid
      */
     public static void drawCursor(int gridX, int gridY, int gridWidth, int gridHeight) {
@@ -90,8 +95,10 @@ public class DisplayUtil {
 
     /**
      * Get the center x of a case in pixel using the grid
-     * @param gridX The X position in the grid
+     *
+     * @param gridX     The X position in the grid
      * @param gridWidth The width of the grid
+     *
      * @return The center X of the case in pixel on the screen
      */
     public static double getCenterX(int gridX, int gridWidth) {
@@ -103,8 +110,10 @@ public class DisplayUtil {
 
     /**
      * Get the center Y of a case in pixel using the grid
-     * @param gridY The y position in the grid
+     *
+     * @param gridY      The y position in the grid
      * @param gridHeight The height of the grid
+     *
      * @return The center Y of the case in pixel on the screen
      */
     public static double getCenterY(int gridY, int gridHeight) {
@@ -119,7 +128,7 @@ public class DisplayUtil {
      *
      * @param pixelX The x position in pixel
      * @param pixelY The y position in pixel
-     * @param file The path to the picture file (relative to the project)
+     * @param file   The path to the picture file (relative to the project)
      */
     public static void drawPicture(double pixelX, double pixelY, String file) {
 
@@ -130,15 +139,24 @@ public class DisplayUtil {
     /**
      * Draw a picture using pixel position and pixel size
      *
-     * @param pixelX The x position in pixel
-     * @param pixelY The y position in pixel
-     * @param file The path to the picture file (relative to the project)
-     * @param scaledWidth The width of the picture in pixel
+     * @param pixelX       The x position in pixel
+     * @param pixelY       The y position in pixel
+     * @param file         The path to the picture file (relative to the project)
+     * @param scaledWidth  The width of the picture in pixel
      * @param scaledHeight The height of the picture in pixel
      */
     public static void drawPicture(double pixelX, double pixelY, String file, double scaledWidth, double scaledHeight) {
 
         StdDraw.picture(pixelX, pixelY, file, scaledWidth, scaledHeight);
+
+    }
+
+    public static int getTextWidth(Font font, String text) {
+
+        final BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
+        final Graphics2D g2d = img.createGraphics();
+        final FontMetrics fm = g2d.getFontMetrics(font);
+        return fm.stringWidth(text);
 
     }
 

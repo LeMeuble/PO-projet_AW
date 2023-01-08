@@ -5,9 +5,6 @@ package main.unit;
  */
 public enum UnitAnimation {
 
-    // Animation : Ne rien faire
-    IDLE("idle"),
-
     // Animation : Se deplacer vers le haut
     MOVE_UP("moveup"),
 

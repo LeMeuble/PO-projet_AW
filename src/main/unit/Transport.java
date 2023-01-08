@@ -10,7 +10,7 @@ import main.game.Player;
  */
 
 public interface Transport {
-
+    // Todo : Plusieurs unités dans le transport
     Unit getCarriedUnit();
 
     void setCarriedUnit(Unit carriedUnit);

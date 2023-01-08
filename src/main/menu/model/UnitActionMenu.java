@@ -1,11 +1,15 @@
 package main.menu.model;
 
 import librairies.StdDraw;
+import main.MiniWars;
+import main.game.Player;
 import main.menu.ActionMenu;
 import main.menu.MenuModel;
-import main.unit.UnitAction;
+import main.unit.*;
 import main.util.OptionSelector;
 import ressources.Config;
+import ressources.DisplayUtil;
+import ressources.PathUtil;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -23,20 +27,12 @@ public class UnitActionMenu extends ActionMenu<UnitAction> {
     public void render() {
 
         super.render();
-        Font font = new Font("Arial", Font.BOLD, 16);
-        try {
-            font = Font.createFont(Font.TRUETYPE_FONT, new File("pictures/Minecraftia-Regular.ttf")).deriveFont(16f);
-        }
-        catch (Exception ignored) {}
-
-        BufferedImage image = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
-        Graphics g = image.getGraphics();
-        FontMetrics f = g.getFontMetrics(font);
 
         double x = Config.MENU_ACTION_MARGIN + Config.MENU_ACTION_TOP_HEIGHT / 1.5d;
-        double y = (Config.HEIGHT - Config.MENU_ACTION_MARGIN) - Config.MENU_ACTION_TOP_HEIGHT - Config.MENU_ACTION_MIDDLE_HEIGHT / 2.0d - f.getHeight() / 2.0d;
+        double y = (Config.HEIGHT - Config.MENU_ACTION_MARGIN) - Config.MENU_ACTION_TOP_HEIGHT - Config.MENU_ACTION_MIDDLE_HEIGHT / 2.0d + 4;
 
-        StdDraw.setFont(font);
+        StdDraw.setFont(Config.FONT_20);
+        Player.Type playerType = MiniWars.getInstance().getCurrentGame().getCurrentPlayer().getType();
 
         for (UnitAction action : this.getAvailableOptions()) {
 
@@ -46,7 +42,23 @@ public class UnitActionMenu extends ActionMenu<UnitAction> {
                 StdDraw.setPenColor(Color.BLACK);
             }
 
-            StdDraw.textLeft(x, y, action.name().toLowerCase());
+            if (action == UnitAction.MOVE) {
+
+                DisplayUtil.drawPicture(x + 20, y, PathUtil.getArrowPath(playerType, "left", "end"), 28, 28);
+
+            } else if (action == UnitAction.DROP_UNIT) {
+
+                Unit selectedUnit = MiniWars.getInstance().getCurrentGame().getSelectedCase().getUnit();
+                if (selectedUnit instanceof Transport) {
+
+                    UnitType carriedUnit = ((Transport) selectedUnit).getCarriedUnit().getType();
+
+                    DisplayUtil.drawPicture(x + 20, y, PathUtil.getUnitIdleFacingPath(carriedUnit, playerType, UnitFacing.RIGHT, true, 0), 38, 38);
+
+                }
+
+            } else DisplayUtil.drawPicture(x + 16, y, PathUtil.getIconPath(action.name().toLowerCase()), 32, 32);
+            StdDraw.textLeft(x + 38, y, action.getText());
 
             y -= Config.MENU_ACTION_MIDDLE_HEIGHT;
 

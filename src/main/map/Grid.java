@@ -1,6 +1,14 @@
 package main.map;
 
+import main.MiniWars;
+import main.game.Movement;
+import main.game.Player;
+import main.terrain.Property;
+import main.terrain.type.Mountain;
 import main.terrain.type.Water;
+import main.unit.Flying;
+import main.unit.Motorized;
+import main.unit.OnFoot;
 import main.unit.Unit;
 import main.weather.Weather;
 
@@ -81,8 +89,8 @@ public class Grid implements Iterable<Case> {
 
         List<Case> adjacentCases = new ArrayList<>();
 
-        int x = c.getX();
-        int y = c.getY();
+        int x = c.getCoordinate().getX();
+        int y = c.getCoordinate().getY();
 
         if (x > 0) adjacentCases.add(grid[y][x - 1]);
         if (x < grid[y].length - 1) adjacentCases.add(grid[y][x + 1]);
@@ -104,21 +112,21 @@ public class Grid implements Iterable<Case> {
      * @return Une liste doublement chainee de Cases
      */
     public List<Case> getCasesAround(int x, int y, int minRadius, int maxRadius) {
-
+//todo : x, y -> case
         final List<Case> cases = new LinkedList<>();
 
         // On parcourt les cases du cercle seulement pour eviter de faire des calculs inutiles
-        int minX = Math.max(x - maxRadius, 0);
-        int maxX = Math.min(x + maxRadius, grid[0].length - 1);
+        final int minX = Math.max(x - maxRadius, 0);
+        final int maxX = Math.min(x + maxRadius, grid[0].length - 1);
 
-        int minY = Math.max(y - maxRadius, 0);
-        int maxY = Math.min(y + maxRadius, grid.length - 1);
+        final int minY = Math.max(y - maxRadius, 0);
+        final int maxY = Math.min(y + maxRadius, grid.length - 1);
 
         for (int i = minX; i <= maxX; i++) {
 
             for (int j = minY; j <= maxY; j++) {
 
-                double d = Math.sqrt(Math.pow(x - i, 2) + Math.pow(y - j, 2));
+                double d = Math.abs(x - i) + Math.abs(y - j);
 
                 if (d >= minRadius && d <= maxRadius) {
 
@@ -148,9 +156,95 @@ public class Grid implements Iterable<Case> {
         return output;
     }
 
-    public void moveUnit(Case from, Case to) {
-        to.setUnit(from.getUnit());
-        from.setUnit(null);
+    public void moveUnit(Case source, Case destination, Movement path) {
+
+        Unit unit = destination.getUnit();
+
+//        destination.setUnit(source.getUnit());
+//        source.setUnit(null);
+
+        // Todo : De l'opti la dessus
+        List<Case> movement = path.getCases();
+        for(Case mainCase : movement) {
+            this.updateFogOfWar(mainCase, unit);
+        }
+
+    }
+
+    // updateForOfWar(c) -> updateForOfWar(c, null)
+    // updateForOfWar(c, u) -> updateForOfWar(c, u)
+
+    public void updateFogOfWar(Case c) {
+        this.updateFogOfWar(c, null);
+    }
+
+    public void updateFogOfWar(Case c, Unit unit) {
+
+        int distance;
+        Player.Type p = MiniWars.getInstance().getCurrentGame().getCurrentPlayer().getType();
+
+        if(unit == null) {
+
+            if(c.hasUnit() && c.getUnit().getOwner() == p) {
+
+                Unit u = c.getUnit();
+
+                if(u instanceof Flying) {
+                    for(Case caseAround : this.getCasesAround(c.getCoordinate().getX(), c.getCoordinate().getY(), 0, 4)) {
+                        caseAround.setIsFoggy(false);
+                    }
+                }
+                else {
+
+                    if(c.getTerrain() instanceof Mountain) {
+                        for (Case caseAround : this.getCasesAround(c.getCoordinate().getX(), c.getCoordinate().getY(), 0, 4)) {
+                            caseAround.setIsFoggy(false);
+                        }
+                    }
+
+                    else{
+                        for(Case caseAround : this.getCasesAround(c.getCoordinate().getX(), c.getCoordinate().getY(), 0, 2)) {
+                            caseAround.setIsFoggy(false);
+                        }
+                    }
+                }
+            }
+
+            else {
+
+                if(c.getTerrain() instanceof Property && ((Property) c.getTerrain()).getOwner() == p) {
+                    for(Case caseAround : this.getCasesAround(c.getCoordinate().getX(), c.getCoordinate().getY(), 0, 2)) {
+                        caseAround.setIsFoggy(false);
+                    }
+                }
+            }
+
+        }
+
+        else{
+
+            if(unit instanceof Flying) {
+                for(Case caseAround : this.getCasesAround(c.getCoordinate().getX(), c.getCoordinate().getY(), 0, 4)) {
+                    caseAround.setIsFoggy(false);
+                }
+            }
+            else {
+
+                if(c.getTerrain() instanceof Mountain) {
+                    for (Case caseAround : this.getCasesAround(c.getCoordinate().getX(), c.getCoordinate().getY(), 0, 4)) {
+                        caseAround.setIsFoggy(false);
+                    }
+                }
+
+                else{
+                    for(Case caseAround : this.getCasesAround(c.getCoordinate().getX(), c.getCoordinate().getY(), 0, 2)) {
+                        caseAround.setIsFoggy(false);
+                    }
+                }
+            }
+
+        }
+
     }
 
     @Override

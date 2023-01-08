@@ -30,6 +30,8 @@ public enum GameState {
     // Deplacement d'une unite (fleche)
     PLAYING_MOVING_UNIT,
     // Selection d'une cible
+    PLAYING_RENDERING_MOVING_UNIT,
+    // Selection d'une cible
     PLAYING_SELECTING_TARGET,
     // Selection d'une action pour une usine
     PLAYING_SELECTING_FACTORY_UNIT,

@@ -31,24 +31,8 @@ public class PathUtil {
     public static final String PICTURE_UI_ACTION_GUI_FOLDER = PICTURE_UI_FOLDER + SEP + "gui" + SEP + "action";
     public static final String PICTURE_UI_GLOBAL_GUI_FOLDER = PICTURE_UI_FOLDER + SEP + "gui" + SEP + "global";
     public static final String PICTURE_UI_HP_FOLDER = PICTURE_UI_FOLDER + SEP + "hp";
+    public static final String PICTURE_UI_ICON_FOLDER = PICTURE_UI_FOLDER + SEP + "icons";
     public static final String PICTURE_UI_INDICATOR_FOLDER = PICTURE_UI_FOLDER + SEP + "indicator";
-
-    public enum UiComponentFolder {
-
-        GUI("gui");
-
-        private final String folder;
-
-        UiComponentFolder(String folderName) {
-            this.folder = folderName;
-        }
-
-        public String getFolder() {
-            return folder;
-        }
-
-    }
-
 
     public static String getArrowPath(Player.Type player, String from, String to) {
 
@@ -78,16 +62,15 @@ public class PathUtil {
         return PICTURE_TERRAINS_FOLDER + SEP + weather.getName() + SEP + foggy + SEP + terrain.getDirectoryName() + SEP + "frame" + frame + SEP + textureVariation + ".png";
     }
 
-    public static String getUnitPath(UnitType unit, Player.Type player, UnitAnimation unitAnimation, boolean isAvailable, int frame) {
+    public static String getUnitAnimationPath(UnitType unit, Player.Type player, UnitAnimation unitAnimation, int frame) {
 
-        String pose = isAvailable ? unitAnimation.getName() : "unavailable";
-        return PICTURE_TROOPS_FOLDER + SEP + player.getName() + SEP + unit.getName() + SEP + pose + SEP + frame + ".png";
+        return PICTURE_TROOPS_FOLDER + SEP + player.getName() + SEP + unit.getName() + SEP + unitAnimation.getName() + SEP + frame + ".png";
 
     }
 
-    public static String getUnitPath(UnitType unit, Player.Type player, UnitFacing unitFacing, boolean isAvailable, int frame) {
+    public static String getUnitIdleFacingPath(UnitType unit, Player.Type player, UnitFacing unitFacing, boolean isAvailable, int frame) {
 
-        String pose = isAvailable ? UnitAnimation.IDLE.getName() : "unavailable";
+        String pose = isAvailable ? "idle" : "unavailable";
         String facing = unitFacing.getName();
 
         return PICTURE_TROOPS_FOLDER + SEP + player.getName() + SEP + unit.getName() + SEP + pose + facing + SEP + frame + ".png";
@@ -112,6 +95,9 @@ public class PathUtil {
         String available = isAvailable ? "available" : "unavailable";
         return PICTURE_UI_HP_FOLDER + SEP + available + SEP + health + ".png";
 
+    }
+    public static String getIconPath(String icon) {
+        return PICTURE_UI_ICON_FOLDER + SEP + icon + ".png";
     }
 
     public static String getIndicatorPath(String indicator) {

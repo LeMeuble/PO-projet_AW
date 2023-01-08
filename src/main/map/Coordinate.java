@@ -1,9 +1,13 @@
 package main.map;
 
-public class Coordinate {
+public class Coordinate implements Cloneable {
 
     private int x;
     private int y;
+
+    public Coordinate() {
+        this(0, 0);
+    }
 
     public Coordinate(int x, int y) {
         this.x = x;
@@ -26,6 +30,11 @@ public class Coordinate {
         this.y = y;
     }
 
+    public void add(int x, int y) {
+        this.x += x;
+        this.y += y;
+    }
+
     /**
      * Retourne une distance (distance de Manhattan) entre cette instance et une autre instance
      *
@@ -35,6 +44,16 @@ public class Coordinate {
      */
     public double distance(Coordinate other) {
         return Math.abs(this.x - other.x) + Math.abs(this.y - other.y);
+    }
+
+    @Override
+    public Coordinate clone() {
+        try {
+            return (Coordinate) super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 }

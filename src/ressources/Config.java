@@ -7,7 +7,6 @@ public final class Config {
 
     static {
 
-
         Font font1 = new Font("Arial", Font.BOLD, 30);
         Font font2 = new Font("Arial", Font.BOLD, 25);
         Font font3 = new Font("Arial", Font.BOLD, 18);
@@ -55,17 +54,17 @@ public final class Config {
     public static final int MAP_ANIMATION_FRAME_DURATION = 200; // En millisecondes
 
     // Animation : Rendu des unites
-    public static final int UNIT_SHORT_ANIMATION_FRAME_COUNT = 2; // Nombre d'images par animation pour les unites avec une courte animation
-    public static final int UNIT_LONG_ANIMATION_FRAME_COUNT = 3; // Nombre d'images par animation pour les unites avec une longue animation
+    public static final int UNIT_ANIMATION_FRAME_COUNT = 3; // Nombre d'images par animation pour les unites avec une longue animation
     public static final int UNIT_ANIMATION_FRAME_DURATION = 175; // En millisecondes
+    public static final int UNIT_MOVING_FRAME_DURATION = 50; // En millisecondes
 
     /*
     Config lie au menus
      */
     public static final int MENU_ACTION_MARGIN = 32;
-    public static final int MENU_ACTION_WIDTH = 128;
+    public static final int MENU_ACTION_WIDTH = 180;
     public static final int MENU_ACTION_TOP_HEIGHT = 24;
-    public static final int MENU_ACTION_MIDDLE_HEIGHT = 40;
+    public static final int MENU_ACTION_MIDDLE_HEIGHT = 44;
     public static final int MENU_ACTION_BOTTOM_HEIGHT = 24;
 
     /*

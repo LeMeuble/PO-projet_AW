@@ -1,6 +1,7 @@
 package main.parser;
 
 import main.map.Case;
+import main.map.Coordinate;
 import main.map.Grid;
 import main.map.MapMetadata;
 import main.terrain.Terrain;
@@ -106,7 +107,9 @@ public class MapParser {
 
                     }
 
-                    grid[i][j] = new Case(j, i, terrain);
+                    Coordinate coordinate = new Coordinate(j, i);
+
+                    grid[i][j] = new Case(coordinate, terrain);
                     grid[i][j].setUnit(unit);
 
                 }

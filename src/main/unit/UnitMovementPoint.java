@@ -8,7 +8,7 @@ import java.util.List;
 
 public enum UnitMovementPoint {
 
-    INFANTRY(UnitType.INFANTRY, 3),
+    INFANTRY(UnitType.INFANTRY, 300),
     BAZOOKA(UnitType.BAZOOKA, 2),
     BOMBER(UnitType.BOMBER, 7),
     CONVOY(UnitType.CONVOY, 6),

@@ -1,6 +1,8 @@
 package main.unit;
 
 import main.game.Player;
+import main.menu.ActionMenu;
+import main.terrain.TerrainType;
 import main.unit.type.*;
 import main.util.OptionSelector;
 
@@ -8,30 +10,36 @@ import main.util.OptionSelector;
  * Enumeration de tous les types d'unites possibles
  * Contient leur nom en String, leur prix et leurs points de mouvements
  */
-public enum UnitType {
+public enum UnitType implements ActionMenu.Text {
 
-    INFANTRY('i', Infantry.class, 1500),
-    BAZOOKA('z', Bazooka.class, 3500),
-    BOMBER('b', Bomber.class, 20000),
-    CONVOY('c', Convoy.class, 5000),
-    ANTIAIR('d', AntiAir.class, 6000),
-    HELICOPTER('h', Helicopter.class, 12000),
-    TANK('t', Tank.class, 7000),
-    ARTILLERY('a', Artillery.class, 6000),
-    SAMLAUNCHER('s', SAMLauncher.class, 12000),
-    CRUISER('r', Cruiser.class, 18000),
-    SUBMARINE('u', Submarine.class, 16000),
-    LANDINGSHIP('l', LandingShip.class, 5000),
-    DREADNOUGHT('n', Dreadnought.class, 25000);
+    INFANTRY('i', Infantry.class, 1000, 99),
+    BAZOOKA('z', Bazooka.class, 3000, 70),
+    BOMBER('b', Bomber.class, 20000, 99),
+    CONVOY('c', Convoy.class, 5000, 99),
+    ANTIAIR('d', AntiAir.class, 8000, 60),
+    HELICOPTER('h', Helicopter.class, 9000, 99),
+    TANK('t', Tank.class, 7000, 70),
+    ARTILLERY('a', Artillery.class, 6000, 50),
+    SAMLAUNCHER('s', SAMLauncher.class, 12000, 50),
+    CRUISER('r', Cruiser.class, 18000, 99),
+    SUBMARINE('u', Submarine.class, 20000, 60),
+    LANDINGSHIP('l', LandingShip.class, 12000, 99),
+    DREADNOUGHT('n', Dreadnought.class, 28000, 99);
 
     private final char character;
     private final Class<? extends Unit> unitClass;
     private final int price;
+    private final int energy;
 
-    UnitType(char character, Class<? extends Unit> unitClass, int price) {
+    UnitType(char character, Class<? extends Unit> unitClass, int price, int energy) {
         this.character = character;
         this.unitClass = unitClass;
         this.price = price;
+        this.energy = energy;
+    }
+
+    public boolean instanceOf(Class<? extends Unit> unitClass) {
+        return unitClass.isAssignableFrom(this.unitClass);
     }
 
     public static UnitType fromCharacter(char character) {
@@ -47,13 +55,16 @@ public enum UnitType {
 
     }
 
-    public static OptionSelector<UnitType> asSelector(int money) {
+    public static OptionSelector<UnitType> asSelector(int money, Class<? extends Unit> unitClass) {
 
         OptionSelector<UnitType> factorySelector = new OptionSelector<>();
 
         for (UnitType type : UnitType.values()) {
-            boolean isAvailable = type.getPrice() <= money;
-            factorySelector.addOption(type, isAvailable);
+
+            if (type.instanceOf(unitClass)) {
+                boolean isAvailable = type.getPrice() <= money;
+                factorySelector.addOption(type, isAvailable);
+            }
         }
 
         return factorySelector;
@@ -62,6 +73,10 @@ public enum UnitType {
 
     public int getPrice() {
         return this.price;
+    }
+
+    public int getEnergy() {
+        return this.energy;
     }
 
     public String getName() {
@@ -81,4 +96,8 @@ public enum UnitType {
 
     }
 
+    @Override
+    public String getText() {
+        return this.getName() + " (" + this.getPrice() + ")";
+    }
 }

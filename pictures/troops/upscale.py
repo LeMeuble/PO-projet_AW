@@ -17,21 +17,9 @@ def rec_resize(path):
 
 				im = Image.open(abs_path)
 
-				if im.size == (96, 96):
+				if im.size == (24, 24):
 
-					print("OUTLINING " + abs_path)
-
-					im = im.crop((4, 4, 92, 92))
-
-					print("UPSCALED to 96  " + abs_path)
-
-					im.save(abs_path)
-
-				elif im.size == (88, 88):
-
-					print("OUTLINING " + abs_path)
-
-					im = im.crop((4, 4, 84, 84))
+					im = im.resize((96, 96), resample=Image.Resampling.NEAREST)
 
 					print("UPSCALED to 96  " + abs_path)
 

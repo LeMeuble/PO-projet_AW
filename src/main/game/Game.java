@@ -11,6 +11,7 @@ import main.terrain.Property;
 import main.terrain.Terrain;
 import main.terrain.TerrainType;
 import main.terrain.type.HQ;
+import main.unit.Flying;
 import main.unit.Unit;
 import main.weather.Weather;
 import main.weather.WeatherManager;
@@ -175,6 +176,17 @@ public class Game {
 
     }
 
+    public Case getRemainingHQ(Player.Type player) {
+
+        return this.grid.getCases()
+                .stream()
+                .filter(c -> c.getTerrain() instanceof HQ)
+                .filter(c -> ((HQ) c.getTerrain()).getOwner() == player)
+                .findFirst()
+                .orElse(null);
+
+    }
+
     public void nextTurn() {
 
         // TODO: System de brouillard si actif
@@ -185,12 +197,14 @@ public class Game {
             System.out.println("Weather will change on next turn to " + this.weatherManager.getNextWeather().name());
 
         }
+        System.out.println(weatherManager.getCurrentWeather());
 
         Player nextPlayer = this.nextPlayer();
         for (Case c : this.grid.getCases()) {
 
             Terrain terrain = c.getTerrain();
             Unit unit = c.getUnit();
+            c.setIsFoggy(true);
 
             if (terrain instanceof Property) {
 
@@ -217,10 +231,23 @@ public class Game {
             if (unit != null) {
                 unit.setPlayed(false);
                 unit.setMoved(false);
+
+                if(unit instanceof Flying) {
+                    if(!unit.hasEnergy()) c.setUnit(null);
+                }
+
             }
 
         }
 
+        this.view.focus(this.getRemainingHQ(nextPlayer.getType()));
+        this.grid.getCases().forEach(this.grid::updateFogOfWar);
+
+    }
+
+    public void startGame() {
+
+        this.grid.getCases().forEach(this.grid::updateFogOfWar);
 
     }
 
