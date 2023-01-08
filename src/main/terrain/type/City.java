@@ -12,6 +12,14 @@ import main.terrain.TerrainType;
  */
 public class City extends Property {
 
+    public static final double DEFENSE_MULTIPLIER = 0.3;
+
+    public double GetTerrainCover() {
+
+        return DEFENSE_MULTIPLIER;
+
+    }
+
     /**
      * Constructeur de la ville
      * @param owner Le joueur proprietaire de la ville

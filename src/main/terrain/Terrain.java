@@ -15,7 +15,6 @@ public abstract class Terrain {
 
     private int textureVariation;
 
-
     /**
      * Constructeur du Terrain sans variation de texture
      * La valeur est definie a 0
@@ -106,4 +105,5 @@ public abstract class Terrain {
 
     public abstract TerrainType getType();
 
+    public abstract double GetTerrainCover();
 }

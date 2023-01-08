@@ -11,6 +11,13 @@ import main.terrain.TerrainType;
  */
 public class Forest extends Terrain {
 
+    public static final double DEFENSE_MULTIPLIER = 0.2;
+
+    public double GetTerrainCover() {
+
+        return DEFENSE_MULTIPLIER;
+
+    }
     @Override
     public TerrainType getType() {
         return TerrainType.FOREST;

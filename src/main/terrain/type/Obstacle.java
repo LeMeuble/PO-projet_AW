@@ -10,6 +10,14 @@ import main.terrain.TerrainType;
  */
 public class Obstacle extends AnimatedTerrain {
 
+    public static final double DEFENSE_MULTIPLIER = 0.1;
+
+    public double GetTerrainCover() {
+
+        return DEFENSE_MULTIPLIER;
+
+    }
+
     @Override
     public TerrainType getType() {
         return TerrainType.OBSTACLE;
