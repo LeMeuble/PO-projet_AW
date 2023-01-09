@@ -11,9 +11,9 @@ import main.terrain.TerrainType;
  */
 public class Forest extends Terrain {
 
-    public static final double DEFENSE_MULTIPLIER = 0.2;
+    public static final float DEFENSE_MULTIPLIER = 0.2f;
 
-    public double GetTerrainCover() {
+    public float getTerrainCover() {
 
         return DEFENSE_MULTIPLIER;
 

@@ -1,5 +1,6 @@
 package main.game;
 
+import main.Logger;
 import main.render.PopupRegistry;
 
 public class GameLoop {

@@ -2,7 +2,6 @@ package main.game;
 
 
 import main.map.Case;
-import main.map.Coordinate;
 import main.render.Renderable;
 import main.unit.Unit;
 import main.weather.Weather;
@@ -153,6 +152,12 @@ public class Movement {
 
     }
 
+    public void setPath(List<Case> path) {
+        this.cases.clear();
+        this.cases.addAll(path);
+        this.needsRefresh = true;
+    }
+
     public List<Case> getCases() {
         return this.cases;
     }
@@ -187,6 +192,25 @@ public class Movement {
         }
 
         return cost;
+    }
+
+    public boolean pathTrapped(Unit unit) {
+
+        for(Case c : this.cases) {
+
+            if (c.hasUnit() && c.getUnit().getOwner() != unit.getOwner()) {
+
+                int index = this.cases.indexOf(c);
+                this.cases.subList(index, this.cases.size()).clear();
+
+                return true;
+
+            }
+
+        }
+
+        return false;
+
     }
 
     public List<Arrow> toDirectionalArrows() {

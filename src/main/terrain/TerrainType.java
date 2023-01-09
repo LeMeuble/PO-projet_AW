@@ -61,8 +61,6 @@ public enum TerrainType {
     }
 
     public String getFileName() {
-        if(this == TerrainType.AIRPORT) return "factory.png";
-        if(this == TerrainType.PORT) return "factory.png";
         return this.name().toLowerCase() + ".png";
     }
 

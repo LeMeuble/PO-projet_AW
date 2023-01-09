@@ -13,12 +13,13 @@ public enum MenuModel {
     MAP_SELECTION_MENU(true),
     UNIT_ACTION_MENU(false),
     FACTORY_ACTION_MENU(false),
+    BOTTOM_MENU(true),
     PAUSE_MENU(false);
 
     private final boolean isPersistent;
 
     MenuModel(boolean isPersistent) {
-        this.isPersistent = false;
+        this.isPersistent = isPersistent;
     }
 
     public boolean isPersistent() {

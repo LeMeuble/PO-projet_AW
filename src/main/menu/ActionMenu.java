@@ -5,7 +5,6 @@ import ressources.Config;
 import ressources.DisplayUtil;
 import ressources.PathUtil;
 
-import javax.swing.event.ListDataEvent;
 import java.util.List;
 
 /**

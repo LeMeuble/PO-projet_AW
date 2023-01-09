@@ -19,27 +19,8 @@ def rec_resize(path):
 
 					print("UPSCALING to 64  " + abs_path)
 
-					im = im.resize((64, 64), resample=Image.Resampling.NEAREST)
-					im.save(abs_path)
-
-					print("OK!")
-
-				elif im.size == (24, 24):
-
-					print("UPSCALING to 96  " + abs_path)
-
-					im = im.resize((96, 96), resample=Image.Resampling.NEAREST)
-					im.save(abs_path)
-
-					print("OK!")
-
-
-				elif im.size == (16, 32):
-
-					print("UPSCALING to 128  " + abs_path)
-
-					im = im.resize((64, 128), resample=Image.Resampling.NEAREST)
-					im.save(abs_path)
+					# im = im.resize((64, 128), resample=Image.Resampling.NEAREST)
+					# im.save(abs_path)
 
 					print("OK!")
 

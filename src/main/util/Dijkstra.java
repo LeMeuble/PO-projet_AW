@@ -2,6 +2,7 @@ package main.util;
 
 import com.sun.istack.internal.Nullable;
 import main.map.Case;
+import main.map.Grid;
 import main.unit.Unit;
 import main.weather.Weather;
 
@@ -50,6 +51,10 @@ public class Dijkstra {
     private final Unit unit;
     private final Weather weather;
 
+    public Dijkstra(Case source, Grid grid, Unit unit, Weather weather) {
+        this(source, grid.getCases(), unit, weather);
+    }
+
     public Dijkstra(Case source, List<Case> cases, Unit unit, Weather weather) {
         this.source = source;
         this.graph = new HashMap<>();
@@ -61,27 +66,30 @@ public class Dijkstra {
         this.run();
     }
 
-    public Set<Case> getReachables(int cost) {
+    public Set<Case> getReachableCases(int cost) {
         return this.graph.keySet().stream().filter(c -> this.graph.get(c).distance <= cost).collect(Collectors.toSet());
     }
 
     @Nullable
-    public List<Case> getShortestPathTo(Case target) {
+    public List<Case> getShortestPathTo(Case target, int point) {
 
-        Vertex v = this.graph.get(target);
+        Vertex vertex = this.graph.get(target);
 
-        if (v == null) return null;
-        if (v.distance == Integer.MAX_VALUE) return null;
+        if (vertex == null) return null;
+        if (vertex.distance == Integer.MAX_VALUE) return null;
 
         List<Case> path = new ArrayList<>();
 
-        while (v != null && v.c != this.source) {
-            path.add(v.c);
-            v = v.previous;
+        while (vertex != null && vertex.c != this.source) {
+            if(vertex.distance <= point) path.add(vertex.c);
+            vertex = vertex.previous;
         }
+
+        Collections.reverse(path);
 
         return path;
     }
+
 
     private void run() {
 
@@ -128,8 +136,10 @@ public class Dijkstra {
 
                 if (v.c.isAdjacent(v2.c)) {
 
-                    if (this.unit.canMoveTo(v2.c, this.weather)) {
-                        v.neighbours.put(v2, this.unit.getMovementCostTo(v2.c, this.weather));
+                    if (this.unit.canMoveTo(v2.c, this.weather) || v2.c.isFoggy()) {
+                        if (this.unit.getMovementCostTo(v2.c, this.weather) != -1) {
+                            v.neighbours.put(v2, this.unit.getMovementCostTo(v2.c, this.weather));
+                        }
                     }
 
                 }

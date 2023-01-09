@@ -22,12 +22,18 @@ public class Bombs extends MeleeWeapon {
         ON_INFANTRY(UnitType.INFANTRY, 1f),
         ON_BAZOOKA(UnitType.BAZOOKA, 1f),
         ON_TANK(UnitType.TANK, 1f),
-        ON_ANTIAIR(UnitType.ANTIAIR, 0.7f),
+        ON_ANTIAIR(UnitType.ANTI_AIR, 0.7f),
         ON_HELICOPTER(UnitType.HELICOPTER, 0.0f),
         ON_BOMBER(UnitType.BOMBER, 0.0f),
         ON_ARTILLERY(UnitType.ARTILLERY, 1f),
         ON_CONVOY(UnitType.CONVOY, 1f),
-        ON_SAMLAUNCHER(UnitType.SAMLAUNCHER, 1f);
+        ON_SAMLAUNCHER(UnitType.SAM_LAUNCHER, 1f),
+        ON_AIRCRAFT_CARRIER(UnitType.AIRCRAFT_CARRIER, 0.8f),
+        ON_CORVETTE(UnitType.CORVETTE, 0.7f),
+        ON_CRUISER(UnitType.CRUISER, 0.6f),
+        ON_DREADNOUGHT(UnitType.DREADNOUGHT, 0.5f),
+        ON_LANDINGSHIP(UnitType.LANDING_SHIP, 1f),
+        ON_SUBMARINE(UnitType.SUBMARINE, 0.5f);
 
         private final UnitType unitType;
         private final float multiplier;

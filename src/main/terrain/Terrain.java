@@ -105,5 +105,5 @@ public abstract class Terrain {
 
     public abstract TerrainType getType();
 
-    public abstract double GetTerrainCover();
+    public abstract float getTerrainCover();
 }

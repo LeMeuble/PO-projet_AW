@@ -2,7 +2,6 @@ package main.unit;
 
 import main.game.Player;
 import main.menu.ActionMenu;
-import main.terrain.TerrainType;
 import main.unit.type.*;
 import main.util.OptionSelector;
 
@@ -12,19 +11,22 @@ import main.util.OptionSelector;
  */
 public enum UnitType implements ActionMenu.Text {
 
-    INFANTRY('i', Infantry.class, 1000, 99),
+    AIRCRAFT_CARRIER('f', AircraftCarrier.class, 30000, 99),
+    ANTI_AIR('d', AntiAir.class, 8000, 60),
+    ARTILLERY('a', Artillery.class, 6000, 50),
     BAZOOKA('z', Bazooka.class, 3000, 70),
     BOMBER('b', Bomber.class, 20000, 99),
     CONVOY('c', Convoy.class, 5000, 99),
-    ANTIAIR('d', AntiAir.class, 8000, 60),
-    HELICOPTER('h', Helicopter.class, 9000, 99),
-    TANK('t', Tank.class, 7000, 70),
-    ARTILLERY('a', Artillery.class, 6000, 50),
-    SAMLAUNCHER('s', SAMLauncher.class, 12000, 50),
+    CORVETTE('e', Corvette.class, 7500, 99),
     CRUISER('r', Cruiser.class, 18000, 99),
+    DREADNOUGHT('n', Dreadnought.class, 28000, 99),
+//    FLARE('f', Flare.class, 5000, 60), //todo fix
+    HELICOPTER('h', Helicopter.class, 9000, 99),
+    INFANTRY('i', Infantry.class, 1000, 99),
+    LANDING_SHIP('l', LandingShip.class, 12000, 99),
+    SAM_LAUNCHER('s', SAMLauncher.class, 12000, 50),
     SUBMARINE('u', Submarine.class, 20000, 60),
-    LANDINGSHIP('l', LandingShip.class, 12000, 99),
-    DREADNOUGHT('n', Dreadnought.class, 28000, 99);
+    TANK('t', Tank.class, 7000, 70);
 
     private final char character;
     private final Class<? extends Unit> unitClass;

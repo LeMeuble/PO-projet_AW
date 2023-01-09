@@ -1,0 +1,32 @@
+package main.unit.type;
+
+import main.game.Player;
+import main.unit.*;
+import main.weapon.type.AntiShipMissile;
+
+public class Corvette extends NavalTransport {
+
+    private static final int DAILY_ENERGY_CONSUMPTION = 3;
+    private static final int CARRYING_CAPACITY = 1;
+
+    public Corvette(Player.Type owner) {
+        super(owner, Corvette.CARRYING_CAPACITY);
+        this.addWeapon(new AntiShipMissile());
+    }
+
+    @Override
+    public boolean accept(Unit unit) {
+        return unit instanceof OnFoot;
+    }
+
+    @Override
+    public UnitType getType() {
+        return UnitType.CORVETTE;
+    }
+
+    @Override
+    public int getDailyEnergyConsumption() {
+        return Corvette.DAILY_ENERGY_CONSUMPTION;
+    }
+
+}

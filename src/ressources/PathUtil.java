@@ -27,12 +27,20 @@ public class PathUtil {
 
     // Sous-dossier lie aux textures
     public static final String PICTURE_UI_BACKGROUND_FOLDER = PICTURE_UI_FOLDER + SEP + "backgrounds";
+    public static final String PICTURE_UI_DIGIT_FOLDER = PICTURE_UI_FOLDER + SEP + "digit";
     public static final String PICTURE_UI_OVERLAY_FOLDER = PICTURE_UI_FOLDER + SEP + "overlay";
     public static final String PICTURE_UI_ACTION_GUI_FOLDER = PICTURE_UI_FOLDER + SEP + "gui" + SEP + "action";
     public static final String PICTURE_UI_GLOBAL_GUI_FOLDER = PICTURE_UI_FOLDER + SEP + "gui" + SEP + "global";
+    public static final String PICTURE_UI_BOTTOM_GUI_FOLDER = PICTURE_UI_FOLDER + SEP + "gui" + SEP + "bottom";
     public static final String PICTURE_UI_HP_FOLDER = PICTURE_UI_FOLDER + SEP + "hp";
     public static final String PICTURE_UI_ICON_FOLDER = PICTURE_UI_FOLDER + SEP + "icons";
     public static final String PICTURE_UI_INDICATOR_FOLDER = PICTURE_UI_FOLDER + SEP + "indicator";
+
+    public static String getDigitPath(String digit) {
+
+        return PICTURE_UI_DIGIT_FOLDER + SEP + digit + ".png";
+
+    }
 
     public static String getArrowPath(Player.Type player, String from, String to) {
 
@@ -47,19 +55,19 @@ public class PathUtil {
 
         String playerOrFog = isFoggy ? "foggy" : player.getName();
 
-        return PICTURE_BUILDINGS_FOLDER + SEP + weather.getName() + SEP + playerOrFog + SEP + terrain.getFileName();
+        return PICTURE_BUILDINGS_FOLDER + SEP + weather.getTextureName() + SEP + playerOrFog + SEP + terrain.getFileName();
     }
 
     public static String getTerrainPath(Weather weather, TerrainType terrain, int textureVariation, boolean isFoggy) {
 
         String foggy = isFoggy ? "foggy" : "normal";
-        return PICTURE_TERRAINS_FOLDER + SEP + weather.getName() + SEP + foggy + SEP + terrain.getDirectoryName() + SEP + textureVariation + ".png";
+        return PICTURE_TERRAINS_FOLDER + SEP + weather.getTextureName() + SEP + foggy + SEP + terrain.getDirectoryName() + SEP + textureVariation + ".png";
     }
 
     public static String getAnimatedTerrainPath(Weather weather, TerrainType terrain, int frame, int textureVariation, boolean isFoggy) {
 
         String foggy = isFoggy ? "foggy" : "normal";
-        return PICTURE_TERRAINS_FOLDER + SEP + weather.getName() + SEP + foggy + SEP + terrain.getDirectoryName() + SEP + "frame" + frame + SEP + textureVariation + ".png";
+        return PICTURE_TERRAINS_FOLDER + SEP + weather.getTextureName() + SEP + foggy + SEP + terrain.getDirectoryName() + SEP + "frame" + frame + SEP + textureVariation + ".png";
     }
 
     public static String getUnitAnimationPath(UnitType unit, Player.Type player, UnitAnimation unitAnimation, int frame) {
@@ -78,7 +86,7 @@ public class PathUtil {
     }
 
     public static String getBackgroundPath(Weather weather, int id) {
-        return PICTURE_UI_BACKGROUND_FOLDER + SEP + weather.getName() + SEP + "background_" + id + ".png";
+        return PICTURE_UI_BACKGROUND_FOLDER + SEP + weather.getTextureName() + SEP + "background_" + id + ".png";
     }
 
     public static String getActionGuiPath(String name) {
@@ -89,6 +97,11 @@ public class PathUtil {
         return PICTURE_UI_GLOBAL_GUI_FOLDER + SEP + name + ".png";
     }
 
+    public static String getBottomGuiPath(Player.Type player) {
+
+        return PICTURE_UI_BOTTOM_GUI_FOLDER + SEP + player.getName() + ".png";
+
+    }
 
     public static String getHealthPath(int health, boolean isAvailable) {
 
@@ -106,9 +119,9 @@ public class PathUtil {
 
     }
 
-    public static String getOverlayPath(Player.Type player) {
+    public static String getOverlayPath(String overlay) {
 
-        return PICTURE_UI_OVERLAY_FOLDER + SEP + player.getName() + ".png";
+        return PICTURE_UI_OVERLAY_FOLDER + SEP + overlay + ".png";
 
     }
 

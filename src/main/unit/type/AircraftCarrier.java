@@ -1,14 +1,14 @@
 package main.unit.type;
 
 import main.game.Player;
-import main.unit.Naval;
-import main.unit.Transport;
-import main.unit.Unit;
-import main.unit.UnitType;
+import main.unit.*;
+import main.weapon.type.HeavyMachineGun;
+import ressources.PathUtil;
 
-public class AircraftCarrier extends Naval implements Transport {
+public class AircraftCarrier extends NavalTransport {
 
-    private Unit carriedUnit;
+    private static final int DAILY_ENERGY_CONSUMPTION = 6;
+    private static final int CARRYING_CAPACITY = 2;
 
     /**
      * Constructeur d'une unite.
@@ -17,27 +17,29 @@ public class AircraftCarrier extends Naval implements Transport {
      * @param owner Proprietaire de l'unite
      */
     public AircraftCarrier(Player.Type owner) {
-        super(owner);
+        super(owner, AircraftCarrier.CARRYING_CAPACITY);
+        this.addWeapon(new HeavyMachineGun());
     }
 
     @Override
     public UnitType getType() {
-        return UnitType.DREADNOUGHT;
+        return UnitType.AIRCRAFT_CARRIER;
     }
 
     @Override
-    public Unit getCarriedUnit() {
-        return this.carriedUnit;
+    public String getFile(int frame) {
+
+        return PathUtil.getUnitIdleFacingPath(this.getType(), this.getOwner(), this.getFacing(), !this.hasPlayed(), frame);
+
+    }
+    @Override
+    public int getDailyEnergyConsumption() {
+        return AircraftCarrier.DAILY_ENERGY_CONSUMPTION;
     }
 
     @Override
-    public void setCarriedUnit(Unit carriedUnit) {
-        this.carriedUnit = carriedUnit;
-    }
-
-    @Override
-    public boolean isCarryingUnit() {
-        return carriedUnit != null;
+    public boolean accept(Unit unit) {
+        return unit instanceof Flying;
     }
 
 }

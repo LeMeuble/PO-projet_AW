@@ -21,12 +21,18 @@ public class GroundToAirMissile extends RangedWeapon {
         ON_INFANTRY(UnitType.INFANTRY, 0.0f),
         ON_BAZOOKA(UnitType.BAZOOKA, 0.0f),
         ON_TANK(UnitType.TANK, 0.0f),
-        ON_ANTIAIR(UnitType.ANTIAIR, 0.0f),
+        ON_ANTIAIR(UnitType.ANTI_AIR, 0.0f),
         ON_HELICOPTER(UnitType.HELICOPTER, 1.2f),
         ON_BOMBER(UnitType.BOMBER, 1.2f),
         ON_ARTILLERY(UnitType.ARTILLERY, 0.0f),
         ON_CONVOY(UnitType.CONVOY, 0.0f),
-        ON_SAMLAUNCHER(UnitType.SAMLAUNCHER, 0.0f);
+        ON_SAMLAUNCHER(UnitType.SAM_LAUNCHER, 0.0f),
+        ON_AIRCRAFT_CARRIER(UnitType.AIRCRAFT_CARRIER, 0f),
+        ON_CORVETTE(UnitType.CORVETTE, 0f),
+        ON_CRUISER(UnitType.CRUISER, 0f),
+        ON_DREADNOUGHT(UnitType.DREADNOUGHT, 0f),
+        ON_LANDINGSHIP(UnitType.LANDING_SHIP, 0f),
+        ON_SUBMARINE(UnitType.SUBMARINE, 0f);
 
 
         private final UnitType unitType;

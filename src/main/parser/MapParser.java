@@ -36,11 +36,13 @@ public class MapParser {
 
                         if (metadata != null) {
                             maps.add(metadata);
-                        } else {
+                        }
+                        else {
                             System.out.println("Error while parsing metadata file " + metadataFile.getAbsolutePath());
                         }
 
-                    } else {
+                    }
+                    else {
                         System.out.println("Missing map file for metadata file " + metadataFile.getAbsolutePath());
                     }
                 }
@@ -121,13 +123,14 @@ public class MapParser {
                 if (!foundHQ[j]) throw new IOException("Invalid map file : Missing HQ for player #" + (j + 1));
             }
 
-        } catch (IOException ignored) {
+        }
+        catch (IOException ignored) {
             System.out.println("Unable to parse map data from file: " + file.getAbsolutePath());
             return null;
         }
 
         return new Grid(grid);
-
+        //todo: check if map is higher than expected (mapHeight)
     }
 
     public static MapMetadata parseMetadata(File file, String mapPath) {
@@ -154,7 +157,8 @@ public class MapParser {
 
             }
 
-        } catch (FileNotFoundException ignored) {
+        }
+        catch (FileNotFoundException ignored) {
             System.out.println("Unable to parse metadata from file: " + file.getAbsolutePath());
             return null;
         }

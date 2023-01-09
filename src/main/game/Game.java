@@ -6,13 +6,22 @@ import main.control.Cursor;
 import main.map.Case;
 import main.map.Grid;
 import main.map.MapMetadata;
+import main.menu.MenuManager;
+import main.menu.model.BottomMenu;
 import main.parser.MapParser;
+import main.render.OverlayType;
+import main.render.Popup;
+import main.render.PopupRegistry;
+import main.terrain.Factory;
 import main.terrain.Property;
 import main.terrain.Terrain;
 import main.terrain.TerrainType;
+import main.terrain.type.FactoryTerrain;
 import main.terrain.type.HQ;
 import main.unit.Flying;
+import main.unit.Naval;
 import main.unit.Unit;
+import main.unit.type.Submarine;
 import main.util.Dijkstra;
 import main.weather.Weather;
 import main.weather.WeatherManager;
@@ -36,12 +45,14 @@ public class Game {
     private final GameView view;
     private final Map<Player.Type, Player> players;
     private final WeatherManager weatherManager;
+    private Dijkstra dijkstraResult;
     private Cursor cursor;
     private Movement movement;
     private Player.Type currentPlayer;
     private Case selectedCase;
 
-    private Set<Case> overlayedCases;
+    private volatile Set<Case> overlayCases;
+    private volatile OverlayType overlayType;
 
     /**
      * Constructeur de Game. Permet de creer une partie a partir des metadonnees de la carte.
@@ -61,11 +72,14 @@ public class Game {
         this.players = new HashMap<>();
         this.weatherManager = new WeatherManager();
         this.selectedCase = null;
-        this.overlayedCases = new HashSet<>();
+        this.overlayCases = new HashSet<>();
+        this.overlayType = OverlayType.MISC;
 
         for (int i = 1; i <= mapMetadata.getPlayerCount(); i++) {
             players.put(Player.Type.fromValue(i), new Player(Player.Type.values()[i]));
         }
+
+        MenuManager.getInstance().addMenu(new BottomMenu());
 
     }
 
@@ -89,6 +103,14 @@ public class Game {
      */
     public Grid getGrid() {
         return this.grid;
+    }
+
+    public void setDijkstraResult(Dijkstra dijkstraResult) {
+        this.dijkstraResult = dijkstraResult;
+    }
+
+    public Dijkstra getDijkstraResult() {
+        return this.dijkstraResult;
     }
 
     /**
@@ -172,10 +194,7 @@ public class Game {
 
     public boolean hasRemainingHQ(Player.Type player) {
 
-        return this.grid.getCases()
-                .stream()
-                .filter(c -> c.getTerrain() instanceof HQ)
-                .anyMatch(c -> ((HQ) c.getTerrain()).getOwner() == player);
+        return getRemainingHQ(player) != null;
 
     }
 
@@ -190,39 +209,48 @@ public class Game {
 
     }
 
-    public Set<Case> getOverlayedCases() {
-        return this.overlayedCases;
+    public synchronized Set<Case> getOverlayCases() {
+        return this.overlayCases;
     }
 
-    public void setOverlayedCases(Set<Case> overlayedCases) {
-        this.overlayedCases = overlayedCases;
+    public synchronized void setOverlayCases(Set<Case> overlayCases) {
+        this.overlayCases = overlayCases;
+    }
+
+    public synchronized void setOverlayType(OverlayType overlayType) {
+        this.overlayType = overlayType;
+    }
+
+    public synchronized OverlayType getOverlayType() {
+        return this.overlayType;
+    }
+
+    public synchronized void clearOverlayCases() {
+        this.overlayCases.clear();
     }
 
     public void nextTurn() {
 
-        // TODO: System de brouillard si actif
-
         this.weatherManager.clock();
         if (this.weatherManager.willChange()) {
 
-            System.out.println("Weather will change on next turn to " + this.weatherManager.getNextWeather().name());
+            PopupRegistry.getInstance().push(new Popup("Changement météo!", "La météo va changer ! (" + this.weatherManager.getNextWeather().getName() + ")"));
 
         }
-        System.out.println(weatherManager.getCurrentWeather());
 
         Player nextPlayer = this.nextPlayer();
         for (Case c : this.grid.getCases()) {
 
             Terrain terrain = c.getTerrain();
             Unit unit = c.getUnit();
-            c.setIsFoggy(true);
+            c.setFoggy(true);
 
             if (terrain instanceof Property) {
 
                 Property property = (Property) terrain;
 
                 if (property.getOwner() != Player.Type.NEUTRAL) {
-                    Player currentPlayer = getPlayerFromType(property.getOwner());
+                    Player currentPlayer = this.getPlayerFromType(property.getOwner());
                     currentPlayer.setMoney(currentPlayer.getMoney() + 1000);
                 }
 
@@ -239,10 +267,19 @@ public class Game {
 
             }
             if (unit != null) {
+
                 unit.setPlayed(false);
                 unit.setMoved(false);
 
-                if(unit instanceof Flying) {
+                if(unit instanceof Flying || unit instanceof Naval) {
+
+                    if(unit instanceof Submarine && ((Submarine) unit).isUnderwater()) {
+                        unit.setEnergy(unit.getEnergy() - unit.getDailyEnergyConsumption() * 2);
+                    }
+                    else {
+                        unit.setEnergy(unit.getEnergy() - unit.getDailyEnergyConsumption());
+                    }
+
                     if(!unit.hasEnergy()) c.setUnit(null);
                 }
 
@@ -251,13 +288,18 @@ public class Game {
         }
 
         this.view.focus(this.getRemainingHQ(nextPlayer.getType()));
-        this.grid.getCases().forEach(this.grid::updateFogOfWar);
+        this.cursor.setCoordinate(this.getRemainingHQ(nextPlayer.getType()).getCoordinate());
+        this.grid.getCases().forEach(c -> {
+            this.grid.updateFogOfWar(c, c.getUnit());
+        });
 
     }
 
     public void startGame() {
 
-        this.grid.getCases().forEach(this.grid::updateFogOfWar);
+        this.grid.getCases().forEach(c -> {
+            this.grid.updateFogOfWar(c, c.getUnit());
+        });
 
     }
 
@@ -411,6 +453,37 @@ public class Game {
 
         }
 
+    }
+
+    public boolean hasRemainingAction() {
+
+        Grid grid = MiniWars.getInstance().getCurrentGame().getGrid();
+        Player currentPlayer = MiniWars.getInstance().getCurrentGame().getCurrentPlayer();
+
+        for(Case c : grid) {
+
+            if(c.hasUnit() && c.getUnit().getOwner() == currentPlayer.getType()) {
+
+                if(!c.getUnit().hasPlayed()) {
+                    return true;
+                }
+
+            }
+
+            if(c.getTerrain() instanceof Factory) {
+
+                if(((Factory) c.getTerrain()).getOwner() == currentPlayer.getType()) {
+
+                    if(Factory.canCreateUnit(c)) {
+                        return true;
+                    }
+
+                }
+
+            }
+
+        }
+        return false;
     }
 
 }

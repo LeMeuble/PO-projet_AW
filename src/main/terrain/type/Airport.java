@@ -1,6 +1,9 @@
 package main.terrain.type;
 
+import main.MiniWars;
 import main.game.Player;
+import main.map.Case;
+import main.map.Grid;
 import main.terrain.Factory;
 import main.terrain.TerrainType;
 import main.unit.Flying;
@@ -21,6 +24,12 @@ public class Airport extends Factory {
     @Override
     public TerrainType getType() {
         return TerrainType.AIRPORT;
+    }
+
+    public static boolean canCreateUnit(Case currentCase) {
+
+        return !currentCase.hasUnit();
+
     }
 
 }

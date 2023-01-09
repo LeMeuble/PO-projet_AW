@@ -44,7 +44,7 @@ public class Coordinate implements Cloneable {
      */
     public double distance(Coordinate other) {
         return Math.abs(this.x - other.x) + Math.abs(this.y - other.y);
-    }
+    }//todo: double -> int (manhattan)
 
     @Override
     public Coordinate clone() {
@@ -54,6 +54,20 @@ public class Coordinate implements Cloneable {
             e.printStackTrace();
             return null;
         }
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == null) return false;
+        if(obj == this) return true;
+        if(!(obj instanceof Coordinate)) return false;
+        Coordinate other = (Coordinate) obj;
+        return this.x == other.x && this.y == other.y;
+    }
+
+    @Override
+    public String toString() {
+        return "(C: " + this.x + "," + this.y + ")";
     }
 
 }

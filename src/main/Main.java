@@ -1,15 +1,6 @@
 package main;
 
-import main.menu.MenuManager;
-import main.menu.model.FactoryActionMenu;
-import main.menu.model.MainMenu;
-import main.unit.Naval;
-import main.unit.UnitType;
-import main.weather.Weather;
-import main.weather.WeatherManager;
-
 import java.io.IOException;
-import java.util.Arrays;
 
 
 public class Main {

@@ -46,7 +46,7 @@ public abstract class Weapon {
         return ammo > 0;
     }
 
-    public void supply() {
+    public void reload() {
         this.ammo = this.getDefaultAmmo();
     }
 

@@ -3,12 +3,12 @@ package main.unit.type;
 import main.game.Player;
 import main.unit.Naval;
 import main.unit.UnitType;
-import main.weapon.MeleeWeapon;
-import main.weapon.Weapon;
 import main.weapon.type.Canon;
 import main.weapon.type.HeavyMachineGun;
 
 public class Cruiser extends Naval {
+
+    public static final int DAILY_ENERGY_CONSUMPTION = 5;
 
     /**
      * Constructeur d'une unite.
@@ -25,6 +25,11 @@ public class Cruiser extends Naval {
     @Override
     public UnitType getType() {
         return UnitType.CRUISER;
+    }
+
+    @Override
+    public int getDailyEnergyConsumption() {
+        return Cruiser.DAILY_ENERGY_CONSUMPTION;
     }
 
 }

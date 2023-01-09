@@ -9,17 +9,13 @@ import main.game.Game;
 import main.game.GameLoop;
 import main.game.GameState;
 import main.map.MapMetadata;
-import main.menu.Menu;
 import main.menu.MenuManager;
 import main.menu.MenuModel;
 import main.menu.model.MainMenu;
 import main.menu.model.MapSelectionMenu;
 import main.parser.MapParser;
 import main.render.Renderer;
-import main.unit.UnitType;
 import main.util.OptionSelector;
-import main.weather.Weather;
-import ressources.Config;
 
 /**
  * Classe principale du jeu Cette classe est le point d'entrée du programme Elle initialise les composants du jeu et

@@ -10,9 +10,9 @@ import main.terrain.TerrainType;
  */
 public class Obstacle extends AnimatedTerrain {
 
-    public static final double DEFENSE_MULTIPLIER = 0.1;
+    public static final float DEFENSE_MULTIPLIER = 0.1f;
 
-    public double GetTerrainCover() {
+    public float getTerrainCover() {
 
         return DEFENSE_MULTIPLIER;
 

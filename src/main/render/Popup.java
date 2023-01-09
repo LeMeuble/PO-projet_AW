@@ -28,7 +28,6 @@ public class Popup {
 
         List<String> lines = new ArrayList<>();
         String[] words = this.message.split(" ");
-        System.out.println(Arrays.toString(words));
 
         StringBuilder line = new StringBuilder();
         for (String word : words) {
@@ -37,6 +36,10 @@ public class Popup {
                 line = new StringBuilder();
             }
             line.append(word).append(" ");
+        }
+
+        if (line.length() > 0) {
+            lines.add(line.toString());
         }
 
         return lines;

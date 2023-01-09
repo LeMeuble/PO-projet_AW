@@ -18,15 +18,21 @@ public class DreadnoughtBattery extends RangedWeapon {
 
     private enum DamageMultiplier {
 
-        ON_INFANTRY(UnitType.INFANTRY, 0.4f),
-        ON_BAZOOKA(UnitType.BAZOOKA, 0.5f),
+        ON_INFANTRY(UnitType.INFANTRY, 0.8f),
+        ON_BAZOOKA(UnitType.BAZOOKA, 0.8f),
         ON_TANK(UnitType.TANK, 0.7f),
-        ON_ANTIAIR(UnitType.ANTIAIR, 0.7f),
+        ON_ANTIAIR(UnitType.ANTI_AIR, 0.7f),
         ON_HELICOPTER(UnitType.HELICOPTER, 0.0f),
         ON_BOMBER(UnitType.BOMBER, 0.0f),
         ON_ARTILLERY(UnitType.ARTILLERY, 0.7f),
         ON_CONVOY(UnitType.CONVOY, 0.7f),
-        ON_SAMLAUNCHER(UnitType.SAMLAUNCHER, 0.7f);
+        ON_SAMLAUNCHER(UnitType.SAM_LAUNCHER, 0.7f),
+        ON_AIRCRAFT_CARRIER(UnitType.AIRCRAFT_CARRIER, 1f),
+        ON_CORVETTE(UnitType.CORVETTE, 1.5f),
+        ON_CRUISER(UnitType.CRUISER, 1f),
+        ON_DREADNOUGHT(UnitType.DREADNOUGHT, 0.6f),
+        ON_LANDINGSHIP(UnitType.LANDING_SHIP, 2f),
+        ON_SUBMARINE(UnitType.SUBMARINE, 0.5f);
 
 
         private final UnitType unitType;

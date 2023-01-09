@@ -79,13 +79,13 @@ public class PopupRegistry {
             StdDraw.setFont(Config.FONT_20);
             StdDraw.setPenColor(StdDraw.BLACK);
 
-            StdDraw.textLeft(x - actualWidth / 10 + 8, y + 16, popup.getTitle());
-
+            StdDraw.textLeft(x - actualWidth / 10 + 8, y + 18, popup.getTitle());
+            StdDraw.setFont(Config.FONT_18);
             StdDraw.setPenColor(StdDraw.GRAY);
 
             int i = 0;
-            for (String line : popup.getMessage(16)) {
-                StdDraw.textLeft(x - actualWidth / 10 + 8, y - 4 - i * 20, line);
+            for (String line : popup.getMessage(22)) {
+                StdDraw.textLeft(x - actualWidth / 10 + 8, y - 2 - i * 20, line);
                 i++;
             }
 

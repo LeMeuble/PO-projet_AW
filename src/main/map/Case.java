@@ -1,6 +1,9 @@
 package main.map;
 
+import main.MiniWars;
 import main.animation.AnimationClock;
+import main.game.Game;
+import main.game.GameView;
 import main.terrain.AnimatedTerrain;
 import main.terrain.Property;
 import main.terrain.Terrain;
@@ -71,8 +74,13 @@ public class Case {
      * @param unit Une unite
      */
     public void setUnit(Unit unit) {
+
         this.unit = unit;
-        //TODO: Update unit position
+
+        if(unit != null) {
+            unit.setCoordinate(this.coordinate.clone());
+        }
+
     }
 
     /**
@@ -89,37 +97,49 @@ public class Case {
         return this.terrain;
     }
 
-    public boolean getIsFoggy() {
+    public boolean isFoggy() {
         return isFoggy;
     }
 
-    public void setIsFoggy(boolean isFoggy) {this.isFoggy = isFoggy;}
+    public void setFoggy(boolean isFoggy) {this.isFoggy = isFoggy;}
 
-    public void renderTerrain(int x, int y, int width, int height, Weather weather, AnimationClock terrainClockSync) {
+    public void render() {
+
+        final Game game = MiniWars.getInstance().getCurrentGame();
+
+        final int offsetX = game.getView().offsetX(this.coordinate.getX());
+        final int offsetY = game.getView().offsetY(this.coordinate.getY());
+
+        final double x = DisplayUtil.getCenterX(offsetX, game.getWidth());
+        final double y = DisplayUtil.getCenterX(offsetX, game.getWidth());
+
+    }
+
+    public void renderTerrain(double pixelX, double pixelY, Weather weather, int frame) {
 
         if (terrain instanceof AnimatedTerrain) {
-            DisplayUtil.drawPictureInCase(x, y, width, height, ((AnimatedTerrain) terrain).getFile(weather, this.isFoggy, terrainClockSync.getFrame()));
+            DisplayUtil.drawPicture(pixelX, pixelY, ((AnimatedTerrain) terrain).getFile(weather, this.isFoggy, frame), Config.PIXEL_PER_CASE, Config.PIXEL_PER_CASE);
         }
         else if (terrain instanceof Property) {
-            DisplayUtil.drawPictureInCase(x, y, width, height, 1, 2, terrain.getFile(weather, this.isFoggy));
+            DisplayUtil.drawPicture(pixelX, pixelY + Config.PIXEL_PER_CASE / 2, terrain.getFile(weather, this.isFoggy), Config.PIXEL_PER_CASE, Config.PIXEL_PER_CASE * 2);
         }
         else {
-            DisplayUtil.drawPictureInCase(x, y, width, height, terrain.getFile(weather, this.isFoggy));
+            DisplayUtil.drawPicture(pixelX, pixelY, terrain.getFile(weather, this.isFoggy), Config.PIXEL_PER_CASE, Config.PIXEL_PER_CASE);
         }
 
     }
 
-    public void renderUnit(int x, int y, int width, int height, AnimationClock unitClockSync) {
+    public void renderUnit(double pixelX, double pixelY, int frame) {
 
         if (this.hasUnit() && this.getUnit().isAlive()) {
 
             final Unit unit = this.getUnit();
 
-            DisplayUtil.drawPictureInCase(x, y, width, height, unit.getFile(unitClockSync.getFrame()));
+            DisplayUtil.drawPicture(pixelX, pixelY, unit.getFile(frame), Config.PIXEL_PER_CASE, Config.PIXEL_PER_CASE);
 
             double offsetDivider = (unit instanceof OnFoot) ? 4.0d : 5.0d;
-            double pixelX = DisplayUtil.getCenterX(x, width) + Config.PIXEL_PER_CASE / offsetDivider;
-            double pixelY = DisplayUtil.getCenterY(y, height) - Config.PIXEL_PER_CASE / offsetDivider;
+            double indicatorX = pixelX + Config.PIXEL_PER_CASE / offsetDivider;
+            double indicatorY = pixelY - Config.PIXEL_PER_CASE / offsetDivider;
 
             if (unit.getHealth() < Unit.MAX_HEALTH) {
 
@@ -132,7 +152,7 @@ public class Case {
             boolean noAmmo = unit.getWeapons().stream()
                     .allMatch(weapon -> weapon.getAmmo() == 0);
 
-            boolean displayLowAmmo = ((isLowAmmo && (unitClockSync.getFrame() % 2 == 0)) || noAmmo) && unit.hasAnyWeapon();
+            boolean displayLowAmmo = ((isLowAmmo && (frame % 2 == 0)) || noAmmo) && unit.hasAnyWeapon();
 
             if (displayLowAmmo) {
                 pixelY += Config.PIXEL_PER_CASE / 3;

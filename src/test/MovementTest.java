@@ -1,17 +1,5 @@
 package test;
 
-import main.game.Game;
-import main.game.Movement;
-import main.game.Player;
-import main.map.Case;
-import main.map.MapMetadata;
-import main.parser.MapParser;
-import main.terrain.Terrain;
-import main.terrain.TerrainType;
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 public class MovementTest {
 
 //    @Test

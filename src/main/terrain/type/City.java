@@ -12,9 +12,9 @@ import main.terrain.TerrainType;
  */
 public class City extends Property {
 
-    public static final double DEFENSE_MULTIPLIER = 0.3;
+    public static final float DEFENSE_MULTIPLIER = 0.3f;
 
-    public double GetTerrainCover() {
+    public float getTerrainCover() {
 
         return DEFENSE_MULTIPLIER;
 

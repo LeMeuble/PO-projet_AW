@@ -7,6 +7,8 @@ import main.weapon.type.DreadnoughtBattery;
 
 public class Dreadnought extends Naval {
 
+    public static final int DAILY_ENERGY_CONSUMPTION = 6;
+
     /**
      * Constructeur d'une unite.
      * Initialise toutes les valeurs par defaut,
@@ -21,6 +23,11 @@ public class Dreadnought extends Naval {
     @Override
     public UnitType getType() {
         return UnitType.DREADNOUGHT;
+    }
+
+    @Override
+    public int getDailyEnergyConsumption() {
+        return Dreadnought.DAILY_ENERGY_CONSUMPTION;
     }
 
 }

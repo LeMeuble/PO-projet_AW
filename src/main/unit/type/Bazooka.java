@@ -2,11 +2,9 @@ package main.unit.type;
 
 import main.game.Player;
 import main.unit.OnFoot;
-import main.unit.UnitAnimation;
 import main.unit.UnitType;
 import main.weapon.type.Canon;
 import main.weapon.type.LightMachineGun;
-import ressources.PathUtil;
 
 public class Bazooka extends OnFoot {
 

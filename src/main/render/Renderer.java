@@ -1,6 +1,7 @@
 package main.render;
 
 import librairies.StdDraw;
+import main.Logger;
 import main.animation.AnimationClock;
 import main.animation.MovementAnimation;
 import main.control.Cursor;
@@ -9,6 +10,7 @@ import main.game.GameState;
 import main.game.GameView;
 import main.game.Movement;
 import main.map.Case;
+import main.map.Coordinate;
 import main.menu.AnimatedMenu;
 import main.menu.Menu;
 import main.menu.MenuManager;
@@ -19,7 +21,6 @@ import ressources.Config;
 import ressources.DisplayUtil;
 import ressources.PathUtil;
 
-import javax.swing.Popup;
 import java.awt.*;
 import java.util.Set;
 
@@ -83,58 +84,69 @@ public class Renderer {
 
         synchronized (this) {
 
-            boolean copyBuffer = false;
-            this.clearBuffer();
+            try {
 
-            switch (gameState) {
+                boolean copyBuffer = false;
+                this.clearBuffer();
 
-                case MENU_MAP_SELECTION:
-                case MENU_TITLE_SCREEN:
-                    break;
-                case PLAYING_MOVING_UNIT:
-                    copyBuffer = this.renderMap(gameState, game, game.getCursor().needsRefresh());
-                    copyBuffer |= this.renderOverlay(game, copyBuffer);
-                    copyBuffer |= this.renderMovement(game, copyBuffer);
-                    copyBuffer |= this.renderCursor(game, gameState, copyBuffer);
-                    break;
-                case PLAYING_RENDERING_MOVING_UNIT:
+                switch (gameState) {
 
-                    copyBuffer = this.renderMap(gameState, game, game.getCursor().needsRefresh() || this.unitMovingClockSync.needsRefresh());
-                    copyBuffer |= this.renderMovementAnimation(game, copyBuffer);
+                    case MENU_MAP_SELECTION:
+                    case MENU_TITLE_SCREEN:
+                        break;
+                    case PLAYING_MOVING_UNIT:
+                        copyBuffer = this.renderMap(gameState, game, game.getCursor().needsRefresh());
+                        copyBuffer |= this.renderOverlay(game, copyBuffer);
+                        copyBuffer |= this.renderMovement(game, copyBuffer);
+                        copyBuffer |= this.renderCursor(game, gameState, copyBuffer);
+                        break;
+                    case PLAYING_RENDERING_MOVING_UNIT:
 
-                    break;
-                case PLAYING_ENDIND_SCREEN:
-                    clearBuffer();
-                    StdDraw.setPenColor(StdDraw.WHITE);
-                    StdDraw.text(150, 150, game.getWinner().getName());
-                    copyBuffer = true;
-                    break;
+                        copyBuffer = this.renderMap(gameState, game, game.getCursor().needsRefresh() || this.unitMovingClockSync.needsRefresh());
+                        copyBuffer |= this.renderMovementAnimation(game, copyBuffer);
 
-                default:
-                    copyBuffer = this.renderMap(gameState, game, game.getCursor().needsRefresh() || MenuManager.getInstance().anyMenuNeedsRefresh() || PopupRegistry.getInstance().needsRefresh());
-                    copyBuffer |= this.renderCursor(game, gameState, copyBuffer);
-                    break;
+                        break;
+                    case PLAYING_ENDIND_SCREEN:
+                        clearBuffer();
+                        StdDraw.setPenColor(StdDraw.WHITE);
+                        StdDraw.text(150, 150, game.getWinner().getName());
+                        copyBuffer = true;
+                        break;
+
+                    default:
+                        copyBuffer = this.renderMap(gameState, game, game.getCursor().needsRefresh() || MenuManager.getInstance().anyMenuNeedsRefresh() || PopupRegistry.getInstance().needsRefresh());
+                        copyBuffer |= this.renderOverlay(game, copyBuffer);
+                        copyBuffer |= this.renderCursor(game, gameState, copyBuffer);
+                        break;
+                }
+
+                for (Menu menu : MenuManager.getInstance().getMenus()) {
+                    copyBuffer |= this.renderMenu(menu, copyBuffer);
+                }
+
+                copyBuffer |= this.renderPopups(copyBuffer);
+
+                if (copyBuffer) {
+                    StdDraw.show();
+                    frames++;
+                }
+
+                if (System.currentTimeMillis() - previousFrameUpdate > 1000) {
+                    Logger.getInstanceGameLoop().log("FPS: " + frames);
+                    frames = 0;
+                    previousFrameUpdate = System.currentTimeMillis();
+                }
             }
-
-            for (Menu menu : MenuManager.getInstance().getMenus()) {
-                copyBuffer |= this.renderMenu(menu, copyBuffer);
-            }
-
-            copyBuffer |= this.renderPopups(copyBuffer);
-
-            if (copyBuffer) {
-                StdDraw.show();
-                frames++;
-            }
-
-            if (System.currentTimeMillis() - previousFrameUpdate > 1000) {
-                System.out.println("FPS: " + frames);
-                frames = 0;
-                previousFrameUpdate = System.currentTimeMillis();
+            catch (Exception e) {
+                Logger.getInstanceGameLoop().write(e);
             }
 
         }
 
+    }
+
+    public void addMovementAnimation(MovementAnimation movementAnimation) {
+        this.movementAnimation = movementAnimation;
     }
 
     private boolean renderPopups(boolean forceRender) {
@@ -147,10 +159,6 @@ public class Renderer {
         }
 
         return false;
-    }
-
-    public void addMovementAnimation(MovementAnimation movementAnimation) {
-        this.movementAnimation = movementAnimation;
     }
 
     private boolean renderMovementAnimation(Game game, boolean forceRender) {
@@ -192,21 +200,25 @@ public class Renderer {
 
     private boolean renderOverlay(Game game, boolean forceRender) {
 
-        //TODO: NullPointerException here apres l'activation de l'animation de mouvement
-        // probablement a cause de la synchronisation et du gamestate
-
         if (forceRender) {
 
-            final Set<Case> cases = game.getOverlayedCases();
-
-            StdDraw.setPenColor(StdDraw.BLUE);
+            final Set<Case> cases = game.getOverlayCases();
 
             for (Case c : cases) {
 
-                double x = DisplayUtil.getCenterX(c.getCoordinate().getX(), game.getWidth());
-                double y = DisplayUtil.getCenterY(c.getCoordinate().getY(), game.getHeight());
+                Coordinate coordinate = c.getCoordinate();
 
-                StdDraw.rectangle(x, y, (double) Config.PIXEL_PER_CASE / 3, (double) Config.PIXEL_PER_CASE / 3);
+                if (game.getView().isVisible(game.getGrid().getCase(coordinate.getX(), coordinate.getY()))) {
+
+                    int offsetX = game.getView().offsetX(coordinate.getX());
+                    int offsetY = game.getView().offsetY(coordinate.getY());
+
+                    double x = DisplayUtil.getCenterX(offsetX, game.getWidth());
+                    double y = DisplayUtil.getCenterY(offsetY, game.getHeight());
+
+                    DisplayUtil.drawPicture(x, y, PathUtil.getOverlayPath(game.getOverlayType().getTextureName()), Config.PIXEL_PER_CASE, Config.PIXEL_PER_CASE);
+
+                }
 
             }
 
@@ -265,10 +277,16 @@ public class Renderer {
 
             for (int i = 0; i < maxIterationX; i++) {
                 for (int j = maxIterationY; j >= 0; j--) {
-                    gameView.getCase(i, j).renderTerrain(i, j, mapWidth, mapHeight, weather, this.terrainClockSync);
-                    if (!gameView.getCase(i, j).getIsFoggy()) {
-                        gameView.getCase(i, j).renderUnit(i, j, mapWidth, mapHeight, this.unitClockSync);
+
+                    final double x = DisplayUtil.getCenterX(i, mapWidth);
+                    final double y = DisplayUtil.getCenterY(j, mapHeight);
+
+                    gameView.getCase(i, j).renderTerrain(x, y, weather, this.terrainClockSync.getFrame());
+
+                    if (!gameView.getCase(i, j).isFoggy()) {
+                        gameView.getCase(i, j).renderUnit(x, y, this.unitClockSync.getFrame());
                     }
+
                 }
             }
 
@@ -318,19 +336,17 @@ public class Renderer {
                     int y = gameView.offsetY(c.getCoordinate().getY());
 
                     DisplayUtil.drawPictureInCase(x, y, mapWidth, mapHeight, arrow.getPath(game.getCurrentPlayer().getType()));
-                    c.renderUnit(x, y, mapWidth, mapHeight, this.unitClockSync);
                 }
 
             }
 
-            // Rendre l'unite selectionne au-dessus de la fleche
-//            if (game.getView().isVisible(movement.getMovementHead())) {
-//
-//                int x = gameView.offsetX(movement.getMovementHead().getX());
-//                int y = gameView.offsetY(movement.getMovementHead().getY());
-//
-//                gameView.getCase(x, y).renderUnit(x, y, mapWidth, mapHeight, this.unitClockSync);
-//            }
+            if (game.getView().isVisible(movement.getMovementHead())) {
+
+                int x = gameView.offsetX(movement.getMovementHead().getCoordinate().getX());
+                int y = gameView.offsetY(movement.getMovementHead().getCoordinate().getY());
+
+                gameView.getCase(x, y).renderUnit(x, y, this.unitClockSync.getFrame());
+            }
 
             game.getMovement().needsRefresh(false);
 

@@ -3,6 +3,7 @@ package main.animation;
 import main.MiniWars;
 import main.game.Game;
 import main.game.Movement;
+import main.map.Grid;
 import main.unit.Unit;
 import main.unit.UnitAnimation;
 import main.unit.UnitFacing;
@@ -39,14 +40,6 @@ public class MovementAnimation {
             this.isFinished = false;
 
             this.direction = this.currentArrow.getTo();
-
-            if(this.direction == Movement.Direction.LEFT) {
-                unit.setFacing(UnitFacing.LEFT);
-                System.out.println("LEFT");
-            } else if(this.direction == Movement.Direction.RIGHT) {
-                unit.setFacing(UnitFacing.RIGHT);
-                System.out.println("RIGHT");
-            }
 
             this.gridX = movement.getMovementHead().getCoordinate().getX();
             this.gridY = movement.getMovementHead().getCoordinate().getY();
@@ -113,10 +106,21 @@ public class MovementAnimation {
                 return;
             }
 
+
             this.gridX += this.direction.getDx();
             this.gridY += this.direction.getDy();
             this.direction = this.currentArrow.getTo();
             this.step = 0;
+
+            if(this.direction == Movement.Direction.LEFT) {
+                unit.setFacing(UnitFacing.LEFT);
+            } else if(this.direction == Movement.Direction.RIGHT) {
+                unit.setFacing(UnitFacing.RIGHT);
+            }
+
+            this.unit.setCoordinate(this.gridX, this.gridY);
+            final Grid grid = MiniWars.getInstance().getCurrentGame().getGrid();
+            grid.updateFogOfWar(grid.getCase(this.gridX, this.gridY), this.unit);
 
         }
 

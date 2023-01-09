@@ -10,6 +10,7 @@ public final class Config {
         Font font1 = new Font("Arial", Font.BOLD, 30);
         Font font2 = new Font("Arial", Font.BOLD, 25);
         Font font3 = new Font("Arial", Font.BOLD, 18);
+        Font font4 = new Font("Arial", Font.BOLD, 16);
         try {
             font1 = Font.createFont(Font.TRUETYPE_FONT, new File(PathUtil.getUiComponentPath("fixedsys.ttf")))
                     .deriveFont(32f);
@@ -17,11 +18,14 @@ public final class Config {
                     .deriveFont(26f);
             font3 = Font.createFont(Font.TRUETYPE_FONT, new File(PathUtil.getUiComponentPath("fixedsys.ttf")))
                     .deriveFont(20f);
+            font4 = Font.createFont(Font.TRUETYPE_FONT, new File(PathUtil.getUiComponentPath("fixedsys.ttf")))
+                    .deriveFont(18f);
         } catch (Exception ignored) {}
 
         FONT_32 = font1;
         FONT_26 = font2;
         FONT_20 = font3;
+        FONT_18 = font4;
 
     }
 
@@ -40,6 +44,7 @@ public final class Config {
     public static final Font FONT_32;
     public static final Font FONT_26;
     public static final Font FONT_20;
+    public static final Font FONT_18;
 
     /*
     Config lie aux animations
@@ -85,7 +90,7 @@ public final class Config {
     /*
     Config lie a la meteo
      */
-    public static final double CHANGING_WEATHER = 0.2d;
+    public static final double CHANGING_WEATHER = 0.3d;
 
 
 }

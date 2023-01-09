@@ -44,9 +44,9 @@ public class UnitActionMenu extends ActionMenu<UnitAction> {
                 Unit selectedUnit = MiniWars.getInstance().getCurrentGame().getSelectedCase().getUnit();
                 if (selectedUnit instanceof Transport) {
 
-                    UnitType carriedUnit = ((Transport) selectedUnit).getCarriedUnit().getType();
+//                    UnitType carriedUnit = ((Transport) selectedUnit).getCarriedUnit().getType();
 
-                    DisplayUtil.drawPicture(x + 20, y, PathUtil.getUnitIdleFacingPath(carriedUnit, playerType, UnitFacing.RIGHT, true, 0), 38, 38);
+//                    DisplayUtil.drawPicture(x + 20, y, PathUtil.getUnitIdleFacingPath(carriedUnit, playerType, UnitFacing.RIGHT, true, 0), 38, 38);
 
                 }
 

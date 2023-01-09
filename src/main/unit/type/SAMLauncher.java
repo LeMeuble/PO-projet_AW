@@ -21,7 +21,7 @@ public class SAMLauncher extends Motorized {
     }
     @Override
     public UnitType getType() {
-        return UnitType.SAMLAUNCHER;
+        return UnitType.SAM_LAUNCHER;
     }
 
 }

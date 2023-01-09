@@ -11,9 +11,9 @@ import main.terrain.TerrainType;
  */
 public class Water extends AnimatedTerrain {
 
-    public static final double DEFENSE_MULTIPLIER = 0.0;
+    public static final float DEFENSE_MULTIPLIER = 0.0f;
 
-    public double GetTerrainCover() {
+    public float getTerrainCover() {
 
         return DEFENSE_MULTIPLIER;
 

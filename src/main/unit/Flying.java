@@ -2,12 +2,7 @@ package main.unit;
 
 import main.game.Player;
 import main.map.Case;
-import main.terrain.Terrain;
-import main.terrain.TerrainType;
 import main.weather.Weather;
-
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Classe abstraite representant une unite volante
@@ -35,9 +30,7 @@ public abstract class Flying extends Unit {
     public boolean canMoveTo(Case destination, Weather weather) {
 
         boolean canMoveParent = super.canMoveTo(destination, weather);
-
-        UnitMovementCost.Flying cost =  UnitMovementCost.Flying.fromTerrainAndWeather(destination.getTerrain().getType(), weather);
-        return canMoveParent && cost != null && cost.isAccessible();
+        return canMoveParent && UnitMovementCost.Flying.isAccessible(destination.getTerrain().getType(), weather);
 
     }
 

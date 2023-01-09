@@ -3,7 +3,6 @@ package main.terrain.type;
 import main.game.Player;
 import main.map.Case;
 import main.terrain.Factory;
-import main.terrain.Property;
 import main.terrain.TerrainType;
 import main.unit.Motorized;
 import main.unit.OnFoot;
@@ -31,18 +30,9 @@ public class FactoryTerrain extends Factory {
      *
      * @return true si l'unite peut apparaitre, false sinon
      */
-    public static boolean canCreateUnit(Case currentCase, Player currentPlayer) {
+    public static boolean canCreateUnit(Case currentCase) {
 
-        Property currentTerrain = (Property) currentCase.getTerrain();
-        // On verifie que le terrain appartient bien au joueur selectionne
-        if (currentTerrain.getOwner() == currentPlayer.getType()) {
-
-            // On verifie si il n'y a pas d'unite sur la case
-            return currentCase.getUnit() == null;
-
-        }
-
-        return false;
+        return !currentCase.hasUnit();
 
     }
 

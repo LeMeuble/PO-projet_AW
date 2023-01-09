@@ -1,11 +1,15 @@
 package main.unit;
 
 import com.sun.istack.internal.Nullable;
+import main.MiniWars;
 import main.game.Player;
 import main.map.Case;
+import main.map.Coordinate;
 import main.map.Grid;
 import main.map.MapMetadata;
 import main.terrain.Property;
+import main.unit.type.Cruiser;
+import main.unit.type.Submarine;
 import main.util.OptionSelector;
 import main.weapon.MeleeWeapon;
 import main.weapon.RangedWeapon;
@@ -47,6 +51,8 @@ public abstract class Unit {
     private boolean hasPlayed;
     private boolean hasMoved;
 
+    private Coordinate coordinate;
+
     /**
      * Constructeur d'une unite.
      * Initialise toutes les valeurs par defaut,
@@ -61,6 +67,8 @@ public abstract class Unit {
         this.health = Unit.MAX_HEALTH;
         this.hasPlayed = false;
         this.hasMoved = false;
+        this.coordinate = new Coordinate(-1, -1);
+        this.energy = this.getType().getEnergy();
 
     }
 
@@ -125,6 +133,20 @@ public abstract class Unit {
         return this.owner;
     }
 
+    public Coordinate getCoordinate() {
+        return this.coordinate.clone();
+    }
+
+    public void setCoordinate(Coordinate coordinate) {
+        this.coordinate.setX(coordinate.getX());
+        this.coordinate.setY(coordinate.getY());
+    }
+
+    public void setCoordinate(int x, int y) {
+        this.coordinate.setX(x);
+        this.coordinate.setY(y);
+    }
+
     /**
      * Obtenir la liste des armes de l'unite.
      *
@@ -168,6 +190,7 @@ public abstract class Unit {
     public boolean hasEnergy() {
         return this.energy > 0;
     }
+
     public int getEnergy() {
         return this.energy;
     }
@@ -223,27 +246,6 @@ public abstract class Unit {
     }
 
     /**
-     * Obtenir la portee maximale de l'unite en consideration toutes
-     * les armes qu'elle possede.
-     *
-     * @return La portee maximale de l'unite, ou -1 si elle n'a pas d'arme.
-     *
-     * @see Weapon#getMaxReach()
-     */
-    public int getMaxWeaponRange() {
-
-        int minRange = -1;
-        for (Weapon weapon : weapons) {
-            if (minRange == -1 || weapon.getMaxReach() < minRange) {
-                minRange = weapon.getMaxReach();
-            }
-        }
-
-        return minRange;
-
-    }
-
-    /**
      * Obtenir la portee minimale de l'unite en consideration toutes
      * les armes qu'elle possede.
      *
@@ -257,6 +259,27 @@ public abstract class Unit {
         for (Weapon weapon : weapons) {
             if (minRange == -1 || weapon.getMinReach() < minRange) {
                 minRange = weapon.getMinReach();
+            }
+        }
+
+        return minRange;
+
+    }
+
+    /**
+     * Obtenir la portee maximale de l'unite en consideration toutes
+     * les armes qu'elle possede.
+     *
+     * @return La portee maximale de l'unite, ou -1 si elle n'a pas d'arme.
+     *
+     * @see Weapon#getMaxReach()
+     */
+    public int getMaxWeaponRange() {
+
+        int minRange = -1;
+        for (Weapon weapon : weapons) {
+            if (minRange == -1 || weapon.getMaxReach() < minRange) {
+                minRange = weapon.getMaxReach();
             }
         }
 
@@ -301,11 +324,8 @@ public abstract class Unit {
     public int getMovementPoint(Weather weather) {
 
         final UnitMovementPoint unitMovementPoint = UnitMovementPoint.fromUnitAndWeather(this.getType(), weather);
-
         return unitMovementPoint != null ? unitMovementPoint.getMovementPoint() : 0;
     }
-
-    public abstract UnitType getType();
 
     /**
      * Permet a cette unite d'en attaquer une autre.
@@ -319,13 +339,21 @@ public abstract class Unit {
 
         if (bestWeapon != null) {
 
-            // Inflige les degats
-            target.damageBy(this.calculateDamage(bestWeapon.getMultiplierOn(target)));
+            Coordinate targetCoordinates = target.getCoordinate();
+            float terrainDefense = (float) MiniWars.getInstance().getCurrentGame().getGrid().getCase(targetCoordinates.getX(), targetCoordinates.getY()).getTerrain().getTerrainCover();  // Inflige les degats
+
+            if (target instanceof OnFoot || target instanceof Motorized) {
+                target.damageBy(this.calculateDamage(bestWeapon.getMultiplierOn(target)) * (1 - terrainDefense));
+            }
+            else {
+                target.damageBy(this.calculateDamage(bestWeapon.getMultiplierOn(target)));
+            }
+
             bestWeapon.setAmmo(bestWeapon.getAmmo() - 1);
 
             if (!(bestWeapon instanceof RangedWeapon)) {
 
-                if(target.isAlive()) {
+                if (target.isAlive()) {
 
                     Weapon targetBestWeapon = target.bestWeaponAgainst(this);
 
@@ -338,22 +366,54 @@ public abstract class Unit {
         }
     }
 
-    public boolean canAttack(Unit target) {
-
-        if(this.getOwner() == target.getOwner()) return false;
+    public void rangedAttack(Unit target) {
 
         final Weapon bestWeapon = this.bestWeaponAgainst(target);
-        System.out.println("bestWeapon = " + bestWeapon);
-        if (bestWeapon != null) {
 
-            if (bestWeapon.hasAmmo()) {
+        if (bestWeapon != null && bestWeapon instanceof RangedWeapon) {
 
-                return true;
+            Coordinate targetCoordinates = target.getCoordinate();
+            float terrainDefense = (float) MiniWars.getInstance().getCurrentGame().getGrid().getCase(targetCoordinates.getX(), targetCoordinates.getY()).getTerrain().getTerrainCover();  // Inflige les degats
 
+            float weatherModifier = 0;
+            if (MiniWars.getInstance().getCurrentGame().getWeather() == Weather.HEAVY_WIND) {
+                weatherModifier = 0.2f;
             }
 
+            if (target instanceof OnFoot || target instanceof Motorized) {
+                target.damageBy(this.calculateDamage(bestWeapon.getMultiplierOn(target)) * (1 - terrainDefense) * (1 - weatherModifier));
+            }
+            else {
+                target.damageBy(this.calculateDamage(bestWeapon.getMultiplierOn(target) * (1 - weatherModifier)));
+            }
+
+            bestWeapon.setAmmo(bestWeapon.getAmmo() - 1);
         }
 
+    }
+
+    public boolean canAttack(Unit target) {
+
+        // Pas d'attaque contre soi-meme
+        if (this.getOwner() == target.getOwner()) return false;
+
+        final Weapon bestWeapon = this.bestWeaponAgainst(target);
+
+        System.out.println("bestWeapon = " + bestWeapon);
+        if (bestWeapon != null) {
+            if (bestWeapon.hasAmmo()) {
+
+                if(target instanceof Submarine && ((Submarine) target).isUnderwater()) {
+                    if(this instanceof Submarine ||this instanceof Cruiser) {
+                        return true;
+                    }
+                }
+                else {
+                    return true;
+                }
+
+            }
+        }
         return false;
     }
 
@@ -381,20 +441,22 @@ public abstract class Unit {
     public Weapon bestWeaponAgainst(Unit unit) {
 
         Weapon bestWeapon = null;
-
+        final double d = this.coordinate.distance(unit.coordinate);
         // Cherche parmi toutes les armes de l'unite courante
         for (Weapon weapon : this.weapons) {
 
-            // Si l'arme est utilisable contre l'unite cible
-            if (weapon.canBeUsedOn(unit) && weapon.hasAmmo()) {
+            if (weapon instanceof RangedWeapon && d > 1 || weapon instanceof MeleeWeapon && d == 1) {
 
-                // Si l'arme est plus efficace que l'arme courante ou si l'arme courante n'est pas definie
-                if (bestWeapon == null || weapon.getMultiplierOn(unit) > bestWeapon.getMultiplierOn(unit)) {
-                    bestWeapon = weapon;
+                // Si l'arme est utilisable contre l'unite cible
+                if (weapon.canBeUsedOn(unit) && weapon.hasAmmo()) {
+
+                    // Si l'arme est plus efficace que l'arme courante ou si l'arme courante n'est pas definie
+                    if (bestWeapon == null || weapon.getMultiplierOn(unit) > bestWeapon.getMultiplierOn(unit)) {
+                        bestWeapon = weapon;
+                    }
+
                 }
-
             }
-
         }
         return bestWeapon;
     }
@@ -432,10 +494,10 @@ public abstract class Unit {
         return !this.weapons.isEmpty();
     }
 
-    public boolean hasRangeWeapon() {
+    public boolean hasMeleeWeapon() {
 
         for (Weapon weapon : weapons) {
-            if (weapon instanceof RangedWeapon) {
+            if (weapon instanceof MeleeWeapon) {
                 return true;
             }
         }
@@ -443,10 +505,10 @@ public abstract class Unit {
 
     }
 
-    public boolean hasMeleeWeapon() {
+    public boolean hasRangeWeapon() {
 
         for (Weapon weapon : weapons) {
-            if (weapon instanceof MeleeWeapon) {
+            if (weapon instanceof RangedWeapon) {
                 return true;
             }
         }
@@ -491,8 +553,8 @@ public abstract class Unit {
             }
         }
 
-        actions.addOption(UnitAction.ATTACK, adjacentEnemy);
-        actions.addOption(UnitAction.RANGED_ATTACK, inRangeEnemy && !this.hasMoved);
+        actions.addOption(UnitAction.ATTACK, adjacentEnemy && this.hasMeleeWeapon());
+        actions.addOption(UnitAction.RANGED_ATTACK, inRangeEnemy && !this.hasMoved && this.hasRangeWeapon());
 
         return actions;
 
@@ -511,7 +573,7 @@ public abstract class Unit {
     public void supply() {
 
         for (Weapon weapon : weapons) {
-            weapon.supply();
+            weapon.reload();
         }
 
         this.energy = this.getType().getEnergy();
@@ -567,6 +629,10 @@ public abstract class Unit {
     public void setFacing(UnitFacing facing) {
         this.facing = facing;
     }
+
+    public abstract UnitType getType();
+
+    public abstract int getDailyEnergyConsumption();
 
     public abstract int getMovementCostTo(Case destination, Weather weather);
 

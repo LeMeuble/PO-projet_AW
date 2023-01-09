@@ -5,7 +5,6 @@ import main.map.Case;
 import main.map.Grid;
 import main.unit.*;
 import main.util.OptionSelector;
-import ressources.PathUtil;
 
 import java.util.List;
 
@@ -15,13 +14,12 @@ import java.util.List;
  * @author Tristan LECONTE--DENIS
  * @author Lucien GRAVOT
  */
-public class Convoy extends Motorized implements Transport {
+public class Convoy extends MotorizedTransport {
 
-    private Unit carriedUnit;
+    private static final int CARRYING_CAPACITY = 1;
 
     public Convoy(Player.Type owner) {
-        super(owner);
-
+        super(owner, Convoy.CARRYING_CAPACITY);
     }
 
     /**
@@ -34,21 +32,9 @@ public class Convoy extends Motorized implements Transport {
         return UnitType.CONVOY;
     }
 
-    public Unit getCarriedUnit() {
-        return carriedUnit;
-    }
-
-    public void setCarriedUnit(Unit carriedUnit) {
-        this.carriedUnit = carriedUnit;
-    }
-
-    /**
-     * @return true si l'unite en transporte une autre, false sinon
-     */
-    public boolean isCarryingUnit() {
-
-        return this.carriedUnit != null;
-
+    @Override
+    public boolean accept(Unit unit) {
+        return unit instanceof OnFoot;
     }
 
     @Override
@@ -71,14 +57,6 @@ public class Convoy extends Motorized implements Transport {
         actions.addOption(UnitAction.DROP_UNIT, carryingUnit);
 
         return actions;
-    }
-
-    public String ToString() {
-
-        if (isCarryingUnit()) {
-            return "Carried unit : " + this.carriedUnit;
-        }
-        return "No unit carried";
     }
 
 }

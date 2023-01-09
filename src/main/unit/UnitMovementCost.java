@@ -10,25 +10,16 @@ public final class UnitMovementCost {
 
     public enum OnFoot {
 
-        ON_HQ_NORMAL(TerrainType.HQ, 1, Weather.CLEAR, Weather.RAINY, Weather.HEAVY_WIND),
-        ON_CITY_NORMAL(TerrainType.CITY, 1, Weather.CLEAR, Weather.RAINY, Weather.HEAVY_WIND),
-        ON_FACTORY_NORMAL(TerrainType.FACTORY, 1, Weather.CLEAR, Weather.RAINY, Weather.HEAVY_WIND),
-        ON_AIRPORT_NORMAL(TerrainType.AIRPORT, 1, Weather.CLEAR, Weather.RAINY, Weather.HEAVY_WIND),
-        ON_PORT_NORMAL(TerrainType.PORT, 1, Weather.CLEAR, Weather.RAINY, Weather.HEAVY_WIND),
-        ON_PLAIN_NORMAL(TerrainType.PLAIN, 1, Weather.CLEAR, Weather.RAINY, Weather.HEAVY_WIND),
-        ON_FOREST_NORMAL(TerrainType.FOREST, 1, Weather.CLEAR, Weather.RAINY, Weather.HEAVY_WIND),
-        ON_MOUNTAIN_NORMAL(TerrainType.MOUNTAIN, 2, Weather.CLEAR, Weather.RAINY, Weather.HEAVY_WIND),
-        ON_WATER_NORMAL(TerrainType.WATER, -1, Weather.CLEAR, Weather.RAINY, Weather.HEAVY_WIND),
+        ON_HQ_NORMAL(TerrainType.HQ, 1),
+        ON_CITY_NORMAL(TerrainType.CITY, 1),
+        ON_FACTORY_NORMAL(TerrainType.FACTORY, 1),
+        ON_AIRPORT_NORMAL(TerrainType.AIRPORT, 1),
+        ON_PORT_NORMAL(TerrainType.PORT, 1),
+        ON_PLAIN_NORMAL(TerrainType.PLAIN, 1),
+        ON_FOREST_NORMAL(TerrainType.FOREST, 1, Weather.CLEAR, Weather.HEAVY_WIND, Weather.RAINY),
+        ON_MOUNTAIN_NORMAL(TerrainType.MOUNTAIN, 2, Weather.CLEAR, Weather.HEAVY_WIND, Weather.RAINY),
 
-        ON_HQ_SNOWY(TerrainType.HQ, 1, Weather.SNOWY),
-        ON_CITY_SNOWY(TerrainType.CITY, 1, Weather.SNOWY),
-        ON_FACTORY_SNOWY(TerrainType.FACTORY, 1, Weather.SNOWY),
-        ON_AIRPORT_SNOWY(TerrainType.AIRPORT, 1, Weather.SNOWY),
-        ON_PORT_SNOWY(TerrainType.PORT, 1, Weather.SNOWY),
-        ON_PLAIN_SNOWY(TerrainType.PLAIN, 1, Weather.SNOWY),
-        ON_FOREST_SNOWY(TerrainType.FOREST, 2, Weather.SNOWY),
-        ON_MOUNTAIN_SNOWY(TerrainType.MOUNTAIN, -1, Weather.SNOWY),
-        ON_WATER_SNOWY(TerrainType.WATER, -1, Weather.SNOWY);
+        ON_FOREST_SNOWY(TerrainType.FOREST, 2, Weather.SNOWY);
 
         private final TerrainType terrainType;
         private final List<Weather> weather;
@@ -53,14 +44,14 @@ public final class UnitMovementCost {
 
         }
 
-        public int getCost() {
-            return this.cost;
+        public static boolean isAccessible(TerrainType terrainType, Weather weather) {
+
+            return OnFoot.fromTerrainAndWeather(terrainType, weather) != null;
 
         }
 
-        public boolean isAccessible() {
-
-            return this.cost != -1;
+        public int getCost() {
+            return this.cost;
 
         }
 
@@ -68,25 +59,16 @@ public final class UnitMovementCost {
 
     public enum Motorized {
 
-        ON_HQ_NORMAL(TerrainType.HQ, 1, Weather.CLEAR, Weather.RAINY, Weather.HEAVY_WIND),
-        ON_CITY_NORMAL(TerrainType.CITY, 1, Weather.CLEAR, Weather.RAINY, Weather.HEAVY_WIND),
-        ON_AIRPORT_NORMAL(TerrainType.AIRPORT, 1, Weather.CLEAR, Weather.RAINY, Weather.HEAVY_WIND),
-        ON_PORT_NORMAL(TerrainType.PORT, 1, Weather.CLEAR, Weather.RAINY, Weather.HEAVY_WIND),
-        ON_FACTORY_NORMAL(TerrainType.FACTORY, 1, Weather.CLEAR, Weather.RAINY, Weather.HEAVY_WIND),
-        ON_PLAIN_NORMAL(TerrainType.PLAIN, 1, Weather.CLEAR, Weather.RAINY, Weather.HEAVY_WIND),
-        ON_FOREST_NORMAL(TerrainType.FOREST, 2, Weather.CLEAR, Weather.RAINY, Weather.HEAVY_WIND),
-        ON_MOUNTAIN_NORMAL(TerrainType.MOUNTAIN, -1, Weather.CLEAR, Weather.RAINY, Weather.HEAVY_WIND),
-        ON_WATER_NORMAL(TerrainType.WATER, -1, Weather.CLEAR, Weather.RAINY, Weather.HEAVY_WIND),
+        ON_HQ_NORMAL(TerrainType.HQ, 1),
+        ON_CITY_NORMAL(TerrainType.CITY, 1),
+        ON_AIRPORT_NORMAL(TerrainType.AIRPORT, 1),
+        ON_PORT_NORMAL(TerrainType.PORT, 1),
+        ON_FACTORY_NORMAL(TerrainType.FACTORY, 1),
+        ON_PLAIN_NORMAL(TerrainType.PLAIN, 1, Weather.CLEAR, Weather.HEAVY_WIND, Weather.RAINY),
+        ON_FOREST_NORMAL(TerrainType.FOREST, 2, Weather.CLEAR, Weather.HEAVY_WIND, Weather.RAINY),
 
-        ON_HQ_SNOWY(TerrainType.HQ, 1, Weather.SNOWY),
-        ON_CITY_SNOWY(TerrainType.CITY, 1, Weather.SNOWY),
-        ON_FACTORY_SNOWY(TerrainType.FACTORY, 1, Weather.SNOWY),
-        ON_AIRPORT_SNOWY(TerrainType.AIRPORT, 1, Weather.SNOWY),
-        ON_PORT_SNOWY(TerrainType.PORT, 1, Weather.SNOWY),
         ON_PLAIN_SNOWY(TerrainType.PLAIN, 2, Weather.SNOWY),
-        ON_FOREST_SNOWY(TerrainType.FOREST, 3, Weather.SNOWY),
-        ON_MOUNTAIN_SNOWY(TerrainType.MOUNTAIN, -1, Weather.SNOWY),
-        ON_WATER_SNOWY(TerrainType.WATER, -1, Weather.SNOWY);
+        ON_FOREST_SNOWY(TerrainType.FOREST, 3, Weather.SNOWY);
 
 
         private final TerrainType terrainType;
@@ -112,14 +94,14 @@ public final class UnitMovementCost {
 
         }
 
-        public int getCost() {
-            return this.cost;
+        public static boolean isAccessible(TerrainType terrainType, Weather weather) {
+
+            return Motorized.fromTerrainAndWeather(terrainType, weather) != null;
 
         }
 
-        public boolean isAccessible() {
-
-            return this.cost != -1;
+        public int getCost() {
+            return this.cost;
 
         }
 
@@ -160,18 +142,57 @@ public final class UnitMovementCost {
 
         }
 
+        public static boolean isAccessible(TerrainType terrainType, Weather weather) {
+
+            return Flying.fromTerrainAndWeather(terrainType, weather) != null;
+
+        }
+
         public int getCost() {
             return this.cost;
 
         }
 
-        public boolean isAccessible() {
+    }
 
-            return this.cost != -1;
+    public enum Naval {
+
+        ON_WATER(TerrainType.WATER, 1);
+
+        private final TerrainType terrainType;
+        private final List<Weather> weather;
+        private final int cost;
+
+        Naval(TerrainType terrainType, int cost, Weather... weather) {
+
+            this.terrainType = terrainType;
+            this.cost = cost;
+            this.weather = Arrays.asList(weather);
+
+        }
+
+        public static Naval fromTerrainAndWeather(TerrainType terrainType, Weather weather) {
+
+            for (Naval cost : Naval.values()) {
+                if (cost.terrainType == terrainType && (cost.weather.contains(weather) || cost.weather.isEmpty())) {
+                    return cost;
+                }
+            }
+            return null;
+
+        }
+
+        public static boolean isAccessible(TerrainType terrainType, Weather weather) {
+
+            return Naval.fromTerrainAndWeather(terrainType, weather) != null;
+
+        }
+
+        public int getCost() {
+            return this.cost;
 
         }
 
     }
-
 
 }

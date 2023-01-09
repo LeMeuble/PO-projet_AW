@@ -7,15 +7,15 @@ import main.unit.*;
 import main.util.OptionSelector;
 import main.weapon.type.AirToGroundMissile;
 import main.weapon.type.HeavyMachineGun;
-import ressources.PathUtil;
 
-public class Helicopter extends Flying implements Transport {
+public class Helicopter extends FlyingTransport {
 
-    private Unit carriedUnit;
+    public static final int DAILY_ENERGY_CONSUMPTION = 2;
+    public static final int CARRYING_CAPACITY = 1;
 
 
     public Helicopter(Player.Type owner) {
-        super(owner);
+        super(owner, Helicopter.CARRYING_CAPACITY);
         this.addWeapon(new AirToGroundMissile());
         this.addWeapon(new HeavyMachineGun());
     }
@@ -25,21 +25,14 @@ public class Helicopter extends Flying implements Transport {
         return UnitType.HELICOPTER;
     }
 
-    public Unit getCarriedUnit() {
-        return carriedUnit;
+    @Override
+    public boolean accept(Unit unit) {
+        return unit instanceof OnFoot;
     }
 
-    public void setCarriedUnit(Unit carriedUnit) {
-        this.carriedUnit = carriedUnit;
-    }
-
-    /**
-     * @return true si l'unite en transporte une autre, false sinon
-     */
-    public boolean isCarryingUnit() {
-
-        return this.carriedUnit != null;
-
+    @Override
+    public int getDailyEnergyConsumption() {
+        return Helicopter.DAILY_ENERGY_CONSUMPTION;
     }
 
     @Override
@@ -52,14 +45,6 @@ public class Helicopter extends Flying implements Transport {
         actions.addOption(UnitAction.DROP_UNIT, carryingUnit);
 
         return actions;
-    }
-
-    public String ToString() {
-
-        if (isCarryingUnit()) {
-            return "Carried unit : " + this.carriedUnit;
-        }
-        return "No unit carried";
     }
 
 }

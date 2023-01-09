@@ -2,11 +2,10 @@ package main.unit;
 
 import main.game.Player;
 import main.map.Case;
+import main.terrain.type.Water;
 import main.weather.Weather;
 
 public abstract class Naval extends Unit {
-
-    public static final int MOVEMENT_COST_PER_CASE = 1;
 
     /**
      * Constructeur d'une unite.
@@ -18,10 +17,37 @@ public abstract class Naval extends Unit {
         super(owner);
     }
 
+    /**
+     * Verifie si l'unite peut se deplacer sur un terrain en fonction de la meteo
+     *
+     * @param destination La case de destination
+     * @param weather     La meteo courante
+     *
+     * @return true si le deplacement est possible, false sinon
+     */
     @Override
-    public int getMovementCostTo(Case destination, Weather weather) {
-        return Naval.MOVEMENT_COST_PER_CASE;
+    public boolean canMoveTo(Case destination, Weather weather) {
+
+        boolean canMoveParent = super.canMoveTo(destination, weather);
+        return canMoveParent && UnitMovementCost.Naval.isAccessible(destination.getTerrain().getType(), weather);
+
     }
+
+    /**
+     * Renvoie le cout de deplacement de l'unite vers un terrain, en fonction de la meteo
+     *
+     * @param destination La case de destination
+     * @param weather     La meteo courante
+     *
+     * @return Le cout de deplacement de l'unite vers une case, en fonction de la meteo
+     */
+    public int getMovementCostTo(Case destination, Weather weather) {
+
+        UnitMovementCost.Naval cost = UnitMovementCost.Naval.fromTerrainAndWeather(destination.getTerrain().getType(), weather);
+        return cost == null ? -1 : cost.getCost();
+
+    }
+
 
 
 }

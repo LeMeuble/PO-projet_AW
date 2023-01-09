@@ -80,4 +80,8 @@ public class Player {
         this.isAlive = isAlive;
     }
 
+    public boolean hasAutoTurnSkipping() {
+        return true;//todo faire le vrai truc
+    }
+
 }

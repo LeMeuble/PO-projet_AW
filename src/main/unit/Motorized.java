@@ -2,11 +2,7 @@ package main.unit;
 
 import main.game.Player;
 import main.map.Case;
-import main.terrain.TerrainType;
 import main.weather.Weather;
-
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Classe abstraite representant une unite motorisee
@@ -15,6 +11,8 @@ import java.util.List;
  * @author Lucien GRAVOT
  */
 public abstract class Motorized extends Unit {
+
+    public static final int DAILY_ENERGY_CONSUMPTION = 0;
 
     public Motorized(Player.Type owner) {
 
@@ -35,8 +33,7 @@ public abstract class Motorized extends Unit {
 
         boolean canMoveParent = super.canMoveTo(destination, weather);
 
-        UnitMovementCost.Motorized cost = UnitMovementCost.Motorized.fromTerrainAndWeather(destination.getTerrain().getType(), weather);
-        return canMoveParent && cost != null && cost.isAccessible();
+        return canMoveParent && UnitMovementCost.Motorized.isAccessible(destination.getTerrain().getType(), weather);
 
     }
 
@@ -48,11 +45,17 @@ public abstract class Motorized extends Unit {
      *
      * @return Le cout de deplacement de l'unite vers une case, en fonction de la meteo
      */
+    @Override
     public int getMovementCostTo(Case destination, Weather weather) {
 
         UnitMovementCost.Motorized cost = UnitMovementCost.Motorized.fromTerrainAndWeather(destination.getTerrain().getType(), weather);
         return cost == null ? -1 : cost.getCost();
 
+    }
+
+    @Override
+    public int getDailyEnergyConsumption() {
+        return Motorized.DAILY_ENERGY_CONSUMPTION;
     }
 
 }

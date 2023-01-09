@@ -5,7 +5,6 @@ import main.game.Player;
 import main.map.Case;
 import main.map.Grid;
 import main.terrain.Factory;
-import main.terrain.Property;
 import main.terrain.TerrainType;
 import main.unit.Naval;
 import main.unit.UnitType;
@@ -17,21 +16,13 @@ public class Port extends Factory {
         super(owner);
     }
 
-    public static boolean canCreateUnit(Case currentCase, Player currentPlayer) {
+    public static boolean canCreateUnit(Case currentCase) {
 
-        Property currentTerrain = (Property) currentCase.getTerrain();
-        // On verifie que le terrain appartient bien au joueur selectionne
-        if (currentTerrain.getOwner() == currentPlayer.getType()) {
+        Grid grid = MiniWars.getInstance().getCurrentGame().getGrid();
 
-            Grid grid = MiniWars.getInstance().getCurrentGame().getGrid();
-
-            if (grid.getAdjacentCases(currentCase).stream().anyMatch(c -> c.getTerrain() instanceof Water && !c.hasUnit())) {
-                return true;
-            }
-
-        }
-
-        return false;
+        return grid.getAdjacentCases(currentCase)
+                .stream()
+                .anyMatch(c -> c.getTerrain() instanceof Water && !c.hasUnit());
 
     }
 

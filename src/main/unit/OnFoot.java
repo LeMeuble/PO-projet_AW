@@ -5,7 +5,6 @@ import main.map.Case;
 import main.map.Grid;
 import main.terrain.Property;
 import main.terrain.Terrain;
-import main.terrain.type.HQ;
 import main.util.OptionSelector;
 import main.weather.Weather;
 
@@ -18,6 +17,8 @@ import java.util.List;
  * @author Lucien GRAVOT
  */
 public abstract class OnFoot extends Unit {
+
+    private static final int DAILY_ENERGY_CONSUMPTION = 0;
 
     public OnFoot(Player.Type owner) {
 
@@ -38,8 +39,7 @@ public abstract class OnFoot extends Unit {
 
         boolean canMoveParent = super.canMoveTo(destination, weather);
 
-        UnitMovementCost.OnFoot cost = UnitMovementCost.OnFoot.fromTerrainAndWeather(destination.getTerrain().getType(), weather);
-        return canMoveParent && cost != null && cost.isAccessible();
+        return canMoveParent && UnitMovementCost.OnFoot.isAccessible(destination.getTerrain().getType(), weather);
 
     }
 
@@ -51,11 +51,17 @@ public abstract class OnFoot extends Unit {
      *
      * @return Le cout de deplacement de l'unite vers une case, en fonction de la meteo
      */
+    @Override
     public int getMovementCostTo(Case destination, Weather weather) {
 
         UnitMovementCost.OnFoot cost = UnitMovementCost.OnFoot.fromTerrainAndWeather(destination.getTerrain().getType(), weather);
         return cost == null ? -1 : cost.getCost();
 
+    }
+
+    @Override
+    public int getDailyEnergyConsumption() {
+        return OnFoot.DAILY_ENERGY_CONSUMPTION;
     }
 
     @Override
@@ -67,8 +73,6 @@ public abstract class OnFoot extends Unit {
 
         boolean canCapture = currentTerrain instanceof Property && ((Property) currentTerrain).getOwner() != this.getOwner();
         boolean anyEmptyTransport = false;
-
-        System.out.println("Adjacent cases : " + adjacentCases);
 
         for (Case adjacentCase : adjacentCases) {
 

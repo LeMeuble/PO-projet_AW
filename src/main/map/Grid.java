@@ -4,18 +4,15 @@ import main.MiniWars;
 import main.game.Movement;
 import main.game.Player;
 import main.terrain.Property;
+import main.terrain.type.Forest;
 import main.terrain.type.Mountain;
-import main.terrain.type.Water;
 import main.unit.Flying;
-import main.unit.Motorized;
-import main.unit.OnFoot;
 import main.unit.Unit;
 import main.util.Dijkstra;
 import main.weather.Weather;
 
 import java.util.*;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 /**
  * Classe representant la grille du plateau de jeu sous forme d'un
@@ -42,12 +39,14 @@ public class Grid implements Iterable<Case> {
 
     public Set<Case> getReachableCases(Case center, Unit unit, Weather weather) {
 
-        List<Case> around = this.getCasesAround(center.getCoordinate().getX(), center.getCoordinate().getY(), 1, unit.getMovementPoint(weather));
+        final Coordinate srcCoordinate = center.getCoordinate();
+
+        List<Case> around = this.getCasesAround(srcCoordinate.getX(), srcCoordinate.getY(), 1, unit.getMovementPoint(weather));
         around.add(center);
 
         Dijkstra dijkstra = new Dijkstra(center, around, unit, weather);
 
-        return dijkstra.getReachables(unit.getMovementPoint(weather));
+        return dijkstra.getReachableCases(unit.getMovementPoint(weather));
 
     }
 
@@ -57,7 +56,7 @@ public class Grid implements Iterable<Case> {
     public void garbageUnit() {
 
         this.getCases().forEach(c -> {
-            if(c.hasUnit() && !c.getUnit().isAlive()) {
+            if (c.hasUnit() && !c.getUnit().isAlive()) {
                 c.setUnit(null);
             }
         });
@@ -114,7 +113,7 @@ public class Grid implements Iterable<Case> {
      * @return Une liste doublement chainee de Cases
      */
     public List<Case> getCasesAround(int x, int y, int minRadius, int maxRadius) {
-//todo : x, y -> case
+
         final List<Case> cases = new LinkedList<>();
 
         // On parcourt les cases du cercle seulement pour eviter de faire des calculs inutiles
@@ -165,89 +164,86 @@ public class Grid implements Iterable<Case> {
 //        destination.setUnit(source.getUnit());
 //        source.setUnit(null);
 
+        Player currentPlayer = MiniWars.getInstance().getCurrentGame().getCurrentPlayer();
+
         // Todo : De l'opti la dessus
         List<Case> movement = path.getCases();
-        for(Case mainCase : movement) {
+        for (Case mainCase : movement) {
             this.updateFogOfWar(mainCase, unit);
         }
 
     }
 
-    // updateForOfWar(c) -> updateForOfWar(c, null)
-    // updateForOfWar(c, u) -> updateForOfWar(c, u)
+    public void updateFogOfWarBuilding(Case c) {
 
-    public void updateFogOfWar(Case c) {
-        this.updateFogOfWar(c, null);
+        Player.Type p = MiniWars.getInstance().getCurrentGame().getCurrentPlayer().getType();
+
+        if (c.getTerrain() instanceof Property && ((Property) c.getTerrain()).getOwner() == p) {
+            for (Case caseAround : this.getCasesAround(c.getCoordinate().getX(), c.getCoordinate().getY(), 0, 2)) {
+                caseAround.setFoggy(false);
+            }
+        }
+
+    }
+
+    public void updateFogOfWarUnit(Case c, Unit unit) {
+
+        Player.Type p = MiniWars.getInstance().getCurrentGame().getCurrentPlayer().getType();
+
+        if (unit.getOwner() == p) {
+
+            if (c.getTerrain() instanceof Mountain || unit instanceof Flying) {
+
+                int weatherModifier = 0;
+                if(MiniWars.getInstance().getCurrentGame().getWeather() == Weather.RAINY) {
+                    weatherModifier = 2;
+                }
+
+                for (Case caseAround : this.getCasesAround(c.getCoordinate().getX(), c.getCoordinate().getY(), 0, 4-weatherModifier)) {
+                    updateFogOfWarCase(caseAround, unit);
+                }
+
+            }
+            else {
+                int weatherModifier = 0;
+                if(MiniWars.getInstance().getCurrentGame().getWeather() == Weather.RAINY) {
+                    weatherModifier = 1;
+                }
+
+                for (Case caseAround : this.getCasesAround(c.getCoordinate().getX(), c.getCoordinate().getY(), 0, 2 - weatherModifier)) {
+                    updateFogOfWarCase(caseAround, unit);
+                }
+            }
+        }
+
+    }
+
+    public void updateFogOfWarCase(Case c, Unit u) {
+
+        Player.Type p = MiniWars.getInstance().getCurrentGame().getCurrentPlayer().getType();
+
+        if ((c.getTerrain() instanceof Property && ((Property) c.getTerrain()).getOwner() != p) || c.getTerrain() instanceof Forest) {
+
+            if (c.getCoordinate().distance(u.getCoordinate()) == 1 || c.getCoordinate().equals(u.getCoordinate())) {
+                c.setFoggy(false);
+            }
+        }
+        else {
+            c.setFoggy(false);
+        }
     }
 
     public void updateFogOfWar(Case c, Unit unit) {
 
-        int distance;
-        Player.Type p = MiniWars.getInstance().getCurrentGame().getCurrentPlayer().getType();
-
-        if(unit == null) {
-
-            if(c.hasUnit() && c.getUnit().getOwner() == p) {
-
-                Unit u = c.getUnit();
-
-                if(u instanceof Flying) {
-                    for(Case caseAround : this.getCasesAround(c.getCoordinate().getX(), c.getCoordinate().getY(), 0, 4)) {
-                        caseAround.setIsFoggy(false);
-                    }
-                }
-                else {
-
-                    if(c.getTerrain() instanceof Mountain) {
-                        for (Case caseAround : this.getCasesAround(c.getCoordinate().getX(), c.getCoordinate().getY(), 0, 4)) {
-                            caseAround.setIsFoggy(false);
-                        }
-                    }
-
-                    else{
-                        for(Case caseAround : this.getCasesAround(c.getCoordinate().getX(), c.getCoordinate().getY(), 0, 2)) {
-                            caseAround.setIsFoggy(false);
-                        }
-                    }
-                }
-            }
-
-            else {
-
-                if(c.getTerrain() instanceof Property && ((Property) c.getTerrain()).getOwner() == p) {
-                    for(Case caseAround : this.getCasesAround(c.getCoordinate().getX(), c.getCoordinate().getY(), 0, 2)) {
-                        caseAround.setIsFoggy(false);
-                    }
-                }
-            }
-
+        if (unit == null) {
+            updateFogOfWarBuilding(c);
         }
-
-        else{
-
-            if(unit instanceof Flying) {
-                for(Case caseAround : this.getCasesAround(c.getCoordinate().getX(), c.getCoordinate().getY(), 0, 4)) {
-                    caseAround.setIsFoggy(false);
-                }
-            }
-            else {
-
-                if(c.getTerrain() instanceof Mountain) {
-                    for (Case caseAround : this.getCasesAround(c.getCoordinate().getX(), c.getCoordinate().getY(), 0, 4)) {
-                        caseAround.setIsFoggy(false);
-                    }
-                }
-
-                else{
-                    for(Case caseAround : this.getCasesAround(c.getCoordinate().getX(), c.getCoordinate().getY(), 0, 2)) {
-                        caseAround.setIsFoggy(false);
-                    }
-                }
-            }
-
+        else {
+            updateFogOfWarUnit(c, unit);
         }
 
     }
+
 
     @Override
     public Iterator<Case> iterator() {

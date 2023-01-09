@@ -3,7 +3,7 @@
 - [X] Riposte quand attaque de case adjacente
 - [X] Capture possible seulement pour les unités à pied
     - [X] Resistance = Res - pv attaquant (arrondi sup)
-    - [X] Il faut etre sur la case sinon annulation
+    - [X] Il faut être sur la case sinon annulation
     - [X] Capture => hasPlayed = true
 - [X] Fonction move (Case destination) pour les unités ?
 
@@ -21,6 +21,7 @@
         - [X] Une unité par tour par usine
         - [X] Pas d'unité sur l'usine
         - [X] Crédits
+- [ ] Bouger le move dans Grid#move
 
 # Non prioritaire :
 
@@ -33,29 +34,30 @@
 
 # Bonus
 - [ ] Animation de pluie
+- [ ] Animation de vent
 - [X] Animation de mouvement des unites
 - [X] Touche pour lister les unités encore utilisables (espace) 6.1
-- [ ] Cases de déplacement/d'attaques possibles 6.2
+- [X] Cases de déplacement/d'attaques possibles 6.2 (Verifier si c'est mis partout)
 - [X] Armes multiples 6.3
-- [ ] Attaques à distance (lance-missiles sol-air) 6.4
+- [X] Attaques à distance (lance-missiles sol-air) 6.4
   - [X] Faire un mortier
   - [X] Faire un missile sol-air
   - [X] Faire un lance-missiles sol-air
   - [X] Implémenter les dégâts infligés sur une artillerie
   - [X] Si unite ne s'est pas déplacé lors de ce tour
 
-- [ ] Ravitaillement et réparations 6.5
-  - [ ] Munitions
+- [X] Ravitaillement et réparations 6.5
+  - [X] Munitions
     - [X] Utilisation en attaque ou en riposte
     - [X] Mitrailleuse infinie ??? (9-10)
-        - [ ] Carburant
-    - [ ] pt de carburant = pt de déplacement
-    - [ ] aérienne (cout de déplacement + fixe par tour):
-    - [ ] hélico = 2 pt de carburant/tour
-    - [ ] bombardier = 5 pt de carburant/tour
-    - [ ] si aérien sans fuel, détruit
-    - [ ] indicateur low ammo/low fuel
-- [ ] Classe coordonnée
+  - [X] Carburant
+    - [X] pt de carburant = pt de déplacement
+    - [X] aérienne (cout de déplacement + fixe par tour):
+    - [X] hélico = 2 pt de carburant/tour
+    - [X] bombardier = 5 pt de carburant/tour
+    - [X] si aérien sans fuel, détruit
+    - [X] indicateur low ammo/low fuel
+- [X] Classe coordonnée
 
 - [X] Transport d'unité 6.6
     - [X] Une seule unite
@@ -64,28 +66,46 @@
     - [X] Pour l'instant seulement pour le Convoi, trouver le moyen de fix
 - [ ] Fin de tour automatique 6.7
     - [ ] Activable/désactivable (dans Player)
-    - [ ] Si plus d'action possible (tt unite en hasPlayed = true && factory occupés)
-- [ ] Couverture de terrain 6.8
-    - [ ] -20% foret/usine
-    - [ ] -30% ville
-    - [ ] -40% montagne/qg
-    - [ ] aérien : pas de couverture
+    - [X] Si plus d'action possible (tt unite en hasPlayed = true && factory occupés)
+- [X] Couverture de terrain 6.8
+    - [X] -20% foret/usine
+    - [X] -30% ville
+    - [X] -40% montagne/qg
+    - [X] aérien : pas de couverture
 - [ ] unite navale 6.9
-- [ ] brouillard de guerre 6.10
+  - [X] Implémenter les dégâts
+  - [X] Missiles anti-navire
+  - [ ] Porte-avions
+  - [ ] Sous-marin
+    - [ ] Plongée
+      - [X] Consommation de carburant en plongée 
+      - [ ] Invisible sauf si unité adjacente 
+    - [X] Surface
+    - [X] Si en plongée, ne peut être attaqué que par sous-marin/croiseurs
+
+- [X] brouillard de guerre 6.10
     - [ ] choisir si on le veut
-- [ ] Météo
-    - [ ] Pluie = -1 case de vision pour unités au sol, -2 cases de vision pour unités volantes/en montagne
-    - [ ] Neige = Vitesse des unités
-    - [ ] Vents violents = portée des attaques à distance -1 case, -20% de dégâts
-    - [ ] Météo aléatoire, soit en début de game, soit dynamique (% de changement chaque tour, +% par type de météo)
-    - [ ] Avertissement pour les joueurs
+    - [ ] Pause entre les tours 
+    - [ ] Tir à distance impossible si case non visible
+    - [ ] Unité lance-fusée
+      - [ ] Unité
+      - [ ] Arme lance-fusée
+    - [X] Piège d'une unité 
+      - [ ] Affichage de l'indicateur (Trapped)
+      
+- [X] Météo
+    - [X] Pluie = -1 case de vision pour unités au sol, -2 cases de vision pour unités volantes/en montagne
+    - [X] Neige = Vitesse des unités
+    - [X] Vents violents = portée des attaques à distance -1 case, -20% de dégâts
+    - [X] Météo aléatoire, soit en début de game, soit dynamique (% de changement chaque tour, +% par type de météo)
+    - [X] Avertissement pour les joueurs
 - [ ] Commandants
     - [ ] Option prendre le commandement
     - [ ] Différents bonus en fonction des commandants
     - [ ] Portée des bonus allant de 1 à 5 cases
     - [ ] Si unité détruite, commandant bat en retraite
 # Niveau pas de vie
-- [ ] Dijkstra
+- [X] Dijkstra
 - [ ] Bot
 # Readme :
 - [ ] UML
