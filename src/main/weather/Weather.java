@@ -8,7 +8,7 @@ public enum Weather {
     CLEAR("Beau temps", "clear", 0, 0.3, 0.1, 0.6),
     RAINY("Pluie", "rainy", 0.5, 0.4, 0.1, 0),
     SNOWY("Neige", "snowy", 0.7, 0, 0.1, 0.2),
-    HEAVY_WIND("Vente violent", "rainy", 0.1, 0.3, 0, 0.6);
+    HEAVY_WIND("Vent violent", "rainy", 0.1, 0.3, 0, 0.6);
 
     private final String name;
     private final String textureName;

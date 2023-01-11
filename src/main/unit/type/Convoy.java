@@ -39,12 +39,12 @@ public class Convoy extends MotorizedTransport {
 
     @Override
     public OptionSelector<UnitAction> getAvailableActions(Case currentCase, Grid contextGrid) {
+
         final OptionSelector<UnitAction> actions = super.getAvailableActions(currentCase, contextGrid);
 
         final List<Case> adjacentCases = contextGrid.getAdjacentCases(currentCase);
 
         boolean troopNearby = false;
-        boolean carryingUnit = this.isCarryingUnit();
 
         for (Case adjacentCase : adjacentCases) {
             Unit adjacentUnit = adjacentCase.getUnit();
@@ -54,9 +54,9 @@ public class Convoy extends MotorizedTransport {
         }
 
         actions.addOption(UnitAction.SUPPLY, troopNearby);
-        actions.addOption(UnitAction.DROP_UNIT, carryingUnit);
 
         return actions;
+
     }
 
 }

@@ -1,14 +1,24 @@
 package main.map;
 
 import main.MiniWars;
+import main.animation.MovementAnimation;
+import main.game.Game;
+import main.game.GameState;
 import main.game.Movement;
 import main.game.Player;
+import main.menu.MenuManager;
+import main.menu.model.UnitActionMenu;
+import main.render.Popup;
+import main.render.PopupRegistry;
+import main.render.Renderer;
 import main.terrain.Property;
 import main.terrain.type.Forest;
 import main.terrain.type.Mountain;
 import main.unit.Flying;
 import main.unit.Unit;
+import main.unit.UnitAction;
 import main.util.Dijkstra;
+import main.util.OptionSelector;
 import main.weather.Weather;
 
 import java.util.*;
@@ -157,20 +167,49 @@ public class Grid implements Iterable<Case> {
         return output;
     }
 
-    public void moveUnit(Case source, Case destination, Movement path) {
+    public void moveUnit(Movement path) {
 
-        Unit unit = destination.getUnit();
+        final Game game = MiniWars.getInstance().getCurrentGame();
+        final Movement untrappedPath = path.cutTrappedPath(game.getCurrentPlayer().getType());
+        final boolean trapped = path.isPathTrappedFor(game.getCurrentPlayer().getType());
 
-//        destination.setUnit(source.getUnit());
-//        source.setUnit(null);
+        final Case source = path.getMovementHead();
+        final Case destination = untrappedPath.getMovementTail();
 
-        Player currentPlayer = MiniWars.getInstance().getCurrentGame().getCurrentPlayer();
+        final Unit unit = source.getUnit();
+        unit.setMoved(true);
+        unit.setEnergy(unit.getEnergy() - untrappedPath.getCost(unit, game.getWeather()));
 
-        // Todo : De l'opti la dessus
-        List<Case> movement = path.getCases();
-        for (Case mainCase : movement) {
-            this.updateFogOfWar(mainCase, unit);
+        source.setUnit(null);
+
+        MiniWars.getInstance().setGameState(GameState.PLAYING_RENDERING_MOVING_UNIT); //todo a degager mais ca va casser le renderer
+        MovementAnimation animation = new MovementAnimation(unit, untrappedPath);
+
+        Renderer.getInstance().addMovementAnimation(animation);
+
+        animation.waitUntilFinished(); // bloque tout
+
+        destination.setUnit(unit);
+        game.setSelectedCase(destination);
+
+        if (trapped) {
+            PopupRegistry.getInstance().push(new Popup("Trapped !", "Your unit was trapped during their movement."));
+            unit.setPlayed(true);
+            MiniWars.getInstance().setGameState(GameState.PLAYING_SELECTING);
         }
+        else {
+            MiniWars.getInstance().setGameState(GameState.PLAYING_SELECTING_UNIT_ACTION);
+            OptionSelector<UnitAction> actions = destination.getUnit().getAvailableActions(destination, this);
+            MenuManager.getInstance().addMenu(new UnitActionMenu(actions));
+        }
+
+        this.updateFogOfWar(destination, unit);
+
+    }
+
+    public void resetFogOfWar(boolean foggy) {
+
+        this.getCases().forEach(c -> c.setFoggy(foggy));
 
     }
 
@@ -195,18 +234,18 @@ public class Grid implements Iterable<Case> {
             if (c.getTerrain() instanceof Mountain || unit instanceof Flying) {
 
                 int weatherModifier = 0;
-                if(MiniWars.getInstance().getCurrentGame().getWeather() == Weather.RAINY) {
+                if (MiniWars.getInstance().getCurrentGame().getWeather() == Weather.RAINY) {
                     weatherModifier = 2;
                 }
 
-                for (Case caseAround : this.getCasesAround(c.getCoordinate().getX(), c.getCoordinate().getY(), 0, 4-weatherModifier)) {
+                for (Case caseAround : this.getCasesAround(c.getCoordinate().getX(), c.getCoordinate().getY(), 0, 4 - weatherModifier)) {
                     updateFogOfWarCase(caseAround, unit);
                 }
 
             }
             else {
                 int weatherModifier = 0;
-                if(MiniWars.getInstance().getCurrentGame().getWeather() == Weather.RAINY) {
+                if (MiniWars.getInstance().getCurrentGame().getWeather() == Weather.RAINY) {
                     weatherModifier = 1;
                 }
 

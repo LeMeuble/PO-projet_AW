@@ -11,16 +11,17 @@ import main.terrain.type.*;
  */
 public enum TerrainType {
 
-    PLAIN('P', Plain.class),
-    FOREST('F', Forest.class),
-    MOUNTAIN('M', Mountain.class),
-    WATER('W', Water.class),
-    OBSTACLE('O', Obstacle.class),
+    AIRPORT('a', Airport.class),
+    BEACH('B', Beach.class),
     CITY('c', City.class),
-    HQ('h', HQ.class),
+    FOREST('F', Forest.class),
     FACTORY('f', FactoryTerrain.class),
+    HQ('h', HQ.class),
+    MOUNTAIN('M', Mountain.class),
+    OBSTACLE('O', Obstacle.class),
+    PLAIN('P', Plain.class),
     PORT('p', Port.class),
-    AIRPORT('a', Airport.class);
+    WATER('W', Water.class);
 
     private final char character;
     private final Class<? extends Terrain> terrainClass;

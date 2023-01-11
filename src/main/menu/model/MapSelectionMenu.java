@@ -1,9 +1,11 @@
 package main.menu.model;
 
 import librairies.StdDraw;
+import main.game.Settings;
 import main.map.MapMetadata;
 import main.menu.MenuModel;
 import main.menu.SelectionMenu;
+import main.parser.MapParser;
 import main.util.OptionSelector;
 import ressources.Config;
 import ressources.DisplayUtil;
@@ -14,11 +16,26 @@ import java.awt.*;
 public class MapSelectionMenu extends SelectionMenu<MapMetadata> {
 
     public static final int PRIORITY = 10;
-
     public static final double TOP_MARGIN = 0.05d;
+    public enum Field {
 
-    public MapSelectionMenu(OptionSelector<MapMetadata> mapSelector) {
-        super(PRIORITY, mapSelector);
+        MAP,
+        WEATHER,
+        FOG,
+        AUTO_SKIP_TURN;
+
+    }
+    private final Settings settings;
+    private Field field;
+
+    public MapSelectionMenu() {
+        super(PRIORITY, new OptionSelector<>(MapParser.listAvailableMaps()));
+        this.settings = new Settings();
+        this.field = Field.MAP;
+    }
+
+    public Settings getSettings() {
+        return this.settings;
     }
 
     @Override
@@ -50,7 +67,7 @@ public class MapSelectionMenu extends SelectionMenu<MapMetadata> {
 
             StdDraw.textLeft(x - 190, y + 106, name);
 
-            String description = map.getDescription().substring(0, Math.min(map.getDescription().length(), 70));
+            String description = map.getDescription().substring(0, Math.min(map.getDescription().length(), 100));
 
             if (map.getDescription().length() != description.length()) {
                 description += "...";
@@ -84,8 +101,59 @@ public class MapSelectionMenu extends SelectionMenu<MapMetadata> {
                 }
             }
 
-            DisplayUtil.drawPicture(Config.WIDTH - 44, Config.HEIGHT / 2 + 32, PathUtil.getGlobalGuiPath("left_arrow"), 64, 64);
-            DisplayUtil.drawPicture(44, Config.HEIGHT / 2 + 32, PathUtil.getGlobalGuiPath("right_arrow"), 64, 64);
+            y -= 5;
+
+            String fogOfWar = this.settings.isFogOfWar() ? "checked" : "notchecked";
+            String autoEndTurn = this.settings.isAutoEndTurn() ? "checked" : "notchecked";
+            String weather = this.settings.getWeatherMode().getName();
+
+            StdDraw.text(Config.WIDTH / 2d, y, weather);
+            StdDraw.textLeft(x - 100, y - 40, "Brouillard de guerre");
+            StdDraw.textLeft(x - 100, y - 80, "Fin de tour automatique");
+
+            DisplayUtil.drawPicture(x - 150, y, PathUtil.getGlobalGuiPath("selector_left"), 32, 32);
+            DisplayUtil.drawPicture(x + 150, y, PathUtil.getGlobalGuiPath("selector_right"), 32, 32);
+            DisplayUtil.drawPicture(x - 150, y - 40, PathUtil.getGlobalGuiPath(fogOfWar), 32, 32);
+            DisplayUtil.drawPicture(x - 150, y - 80, PathUtil.getGlobalGuiPath(autoEndTurn), 32, 32);
+
+            boolean rightLeft = this.field == Field.MAP || this.field == Field.WEATHER;
+            boolean space = this.field == Field.FOG || this.field == Field.AUTO_SKIP_TURN;
+
+            StdDraw.setPenColor(Color.WHITE);
+            StdDraw.setFont(Config.FONT_18);
+
+            if (this.field == Field.MAP) {
+
+                DisplayUtil.drawPicture(Config.WIDTH - 44, Config.HEIGHT / 2 + 32, PathUtil.getGlobalGuiPath("left_arrow"), 64, 64);
+                DisplayUtil.drawPicture(44, Config.HEIGHT / 2 + 32, PathUtil.getGlobalGuiPath("right_arrow"), 64, 64);
+
+                StdDraw.textRight(Config.WIDTH - 78, y - 55, "Carte");
+
+            } else {
+
+                double fingerY = y;
+
+                if(this.field == Field.FOG) fingerY = y - 40;
+                if(this.field == Field.AUTO_SKIP_TURN) fingerY = y - 80;
+
+                DisplayUtil.drawPicture(x - Config.WIDTH / 3d, fingerY, PathUtil.getGlobalGuiPath("finger"), 48, 48);
+
+            }
+
+            DisplayUtil.drawPicture(Config.WIDTH - 48, y - 5, PathUtil.getKeytipPath("enter"), 24, 24);
+            StdDraw.textRight(Config.WIDTH - 78, y - 5, "D\u00e9marrer");
+
+            if (space) {
+                DisplayUtil.drawPicture(Config.WIDTH - 48, y - 55, PathUtil.getKeytipPath("space"), 48, 24);
+                StdDraw.textRight(Config.WIDTH - 78, y - 55, "Changer");
+            }
+            else if (rightLeft) {
+                DisplayUtil.drawPicture(Config.WIDTH - 48, y - 55, PathUtil.getKeytipPath("left_right"), 48, 24);
+                if(this.field != Field.MAP) StdDraw.textRight(Config.WIDTH - 78, y - 55, "S\u00e9l\u00e9ct.");
+            }
+
+            DisplayUtil.drawPicture(Config.WIDTH - 48, y - 105, PathUtil.getKeytipPath("up_down"), 24, 48);
+            StdDraw.textRight(Config.WIDTH - 78, y - 105, "Options");
 
         }
         else {
@@ -94,6 +162,46 @@ public class MapSelectionMenu extends SelectionMenu<MapMetadata> {
 
     }
 
+    @Override
+    public void next() {
+        if (this.field == Field.MAP) {
+            super.next();
+        }
+        else if (this.field == Field.WEATHER) {
+            this.settings.nextWeatherMode();
+        }
+    }
+
+
+    @Override
+    public void previous() {
+        if (this.field == Field.MAP) {
+            super.previous();
+        }
+        else if (this.field == Field.WEATHER) {
+            this.settings.previousWeatherMode();
+        }
+    }
+
+    public void toggleCurrentField() {
+
+        if (this.field == Field.FOG)
+            this.settings.toggleFogOfWar();
+        else if (this.field == Field.AUTO_SKIP_TURN)
+            this.settings.toggleAutoEndTurn();
+
+    }
+
+
+    public void nextField() {
+        this.field = Field.values()[(this.field.ordinal() + 1) % Field.values().length];
+    }
+
+
+    public void previousField() {
+        System.out.println(this.field.ordinal());
+        this.field = Field.values()[(this.field.ordinal() - 1 + Field.values().length) % Field.values().length];
+    }
 
     public MenuModel getModel() {
         return MenuModel.MAP_SELECTION_MENU;

@@ -72,21 +72,8 @@ public abstract class OnFoot extends Unit {
         final Terrain currentTerrain = currentCase.getTerrain();
 
         boolean canCapture = currentTerrain instanceof Property && ((Property) currentTerrain).getOwner() != this.getOwner();
-        boolean anyEmptyTransport = false;
-
-        for (Case adjacentCase : adjacentCases) {
-
-            Unit adjacentUnit = adjacentCase.getUnit();
-            if (adjacentUnit != null && adjacentUnit.getOwner() == this.getOwner()) {
-                if (adjacentUnit instanceof Transport && !((Transport) adjacentUnit).isCarryingUnit()) {
-                    anyEmptyTransport = true;
-                }
-            }
-
-        }
 
         actions.addOption(UnitAction.CAPTURE, canCapture);
-        actions.addOption(UnitAction.GET_IN, anyEmptyTransport);
 
         return actions;
 

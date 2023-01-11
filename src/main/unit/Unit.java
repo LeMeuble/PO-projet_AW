@@ -1,6 +1,7 @@
 package main.unit;
 
 import com.sun.istack.internal.Nullable;
+import librairies.StdDraw;
 import main.MiniWars;
 import main.game.Player;
 import main.map.Case;
@@ -16,6 +17,7 @@ import main.weapon.RangedWeapon;
 import main.weapon.Weapon;
 import main.weather.Weather;
 import ressources.Config;
+import ressources.DisplayUtil;
 import ressources.PathUtil;
 
 import java.util.ArrayList;
@@ -196,7 +198,7 @@ public abstract class Unit {
     }
 
     public void setEnergy(int energy) {
-        this.energy = Math.max(energy, this.energy);
+        this.energy = Math.max(0, Math.min(energy, this.getType().getEnergy()));
     }
 
     /**
@@ -403,14 +405,23 @@ public abstract class Unit {
         if (bestWeapon != null) {
             if (bestWeapon.hasAmmo()) {
 
-                if(target instanceof Submarine && ((Submarine) target).isUnderwater()) {
-                    if(this instanceof Submarine ||this instanceof Cruiser) {
+                Grid grid = MiniWars.getInstance().getCurrentGame().getGrid();
+
+                int targetX = target.getCoordinate().getX();
+                int targetY = target.getCoordinate().getY();
+
+                if (!grid.getCase(targetX, targetY).isFoggy()) {
+
+                    if (target instanceof Submarine && ((Submarine) target).canSurface()) {
+                        if (this instanceof Submarine || this instanceof Cruiser) {
+                            return true;
+                        }
+                    }
+                    else {
                         return true;
                     }
                 }
-                else {
-                    return true;
-                }
+
 
             }
         }
@@ -555,6 +566,24 @@ public abstract class Unit {
 
         actions.addOption(UnitAction.ATTACK, adjacentEnemy && this.hasMeleeWeapon());
         actions.addOption(UnitAction.RANGED_ATTACK, inRangeEnemy && !this.hasMoved && this.hasRangeWeapon());
+        //Todo: a revoir (fog, bonne arme) (canAttack)
+
+        final List<Case> adjacentCases = contextGrid.getAdjacentCases(currentCase);
+        boolean anyEmptyTransport = false;
+
+
+        for (Case adjacentCase : adjacentCases) {
+
+            Unit adjacentUnit = adjacentCase.getUnit();
+            if (adjacentUnit != null && adjacentUnit.getOwner() == this.getOwner()) {
+                if (adjacentUnit instanceof Transport && !((Transport) adjacentUnit).isFull()) {
+                    anyEmptyTransport = ((Transport) adjacentUnit).accept(this);
+                }
+            }
+
+        }
+
+        actions.addOption(UnitAction.GET_IN, anyEmptyTransport);
 
         return actions;
 
@@ -628,6 +657,84 @@ public abstract class Unit {
 
     public void setFacing(UnitFacing facing) {
         this.facing = facing;
+    }
+
+    public int getTotalAmmo() {
+        int totalAmmo = 0;
+        for (Weapon weapon : weapons) {
+            totalAmmo += weapon.getAmmo();
+        }
+        return totalAmmo;
+    }
+
+    public void render(double pixelX, double pixelY, int frame, double width, double height, boolean displayIndicators) {
+
+        if (this.isAlive()) {
+
+            final Player player = MiniWars.getInstance().getCurrentGame().getCurrentPlayer();
+
+            final Grid grid = MiniWars.getInstance().getCurrentGame().getGrid();
+
+            if (this instanceof Submarine && ((Submarine) this).canSurface()) {
+
+                final Case center = grid.getCase(this.getCoordinate().getX(), this.getCoordinate().getY());
+
+                boolean display = this.getOwner() == player.getType();
+                display = display || grid.getAdjacentCases(center)
+                        .stream()
+                        .anyMatch(c -> c.hasUnit() && c.getUnit().getOwner() == player.getType());
+
+                if (display)
+                    DisplayUtil.drawPicture(pixelX, pixelY, this.getFile(frame), width, height);
+
+                StdDraw.setPenColor(StdDraw.RED);
+                StdDraw.rectangle(pixelX, pixelY, width / 2, height / 2);
+
+            }
+
+            else {
+                DisplayUtil.drawPicture(pixelX, pixelY, this.getFile(frame), width, height);
+            }
+
+            if (displayIndicators) {
+
+                double offsetDivider = (this instanceof OnFoot) ? 4.0d : 5.0d;
+                double indicatorX = pixelX + Config.PIXEL_PER_CASE / offsetDivider;
+                double indicatorY = pixelY - Config.PIXEL_PER_CASE / offsetDivider;
+
+                if (this.getHealth() < Unit.MAX_HEALTH) {
+
+                    DisplayUtil.drawPicture(indicatorX, indicatorY, PathUtil.getHealthPath((int) Math.floor(this.getHealth()), !this.hasPlayed()), width / 3, height / 3);
+
+                }
+
+                if(this.getOwner() == player.getType()) {
+
+                    boolean isLowAmmo = this.getWeapons().stream()
+                            .anyMatch(weapon -> weapon.getAmmo() <= weapon.getDefaultAmmo() * Config.UNIT_LOW_AMMO_THRESHOLD);
+                    boolean noAmmo = this.getWeapons().stream()
+                            .allMatch(weapon -> weapon.getAmmo() == 0);
+
+                    boolean displayLowAmmo = ((isLowAmmo && (frame % 2 == 0)) || noAmmo) && this.hasAnyWeapon();
+
+                    if (isLowAmmo) indicatorY += Config.PIXEL_PER_CASE / 3;
+                    if (displayLowAmmo) {
+
+                        DisplayUtil.drawPicture(indicatorX, indicatorY, PathUtil.getIndicatorPath("ammo"), width / 3, height / 3);
+                    }
+
+                    boolean isLowEnergy = this.getEnergy() <= this.getType().getEnergy() * Config.UNIT_LOW_FUEL_THRESHOLD;
+                    boolean noEnergy = this.getEnergy() == 0;
+
+                    boolean displayLowEnergy = (isLowEnergy && (frame % 2 == 0)) || noEnergy;
+
+                    if (displayLowEnergy) {
+                        indicatorY += Config.PIXEL_PER_CASE / 3;
+                        DisplayUtil.drawPicture(indicatorX, indicatorY, PathUtil.getIndicatorPath("fuel"), width / 3, height / 3);
+                    }
+                }
+            }
+        }
     }
 
     public abstract UnitType getType();

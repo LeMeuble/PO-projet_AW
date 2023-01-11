@@ -41,5 +41,9 @@ public abstract class Factory extends Property {
 
     }
 
+    public boolean anythingBuyable(int money) {
+        return this.getUnitSelector(money).hasAvailableOption();
+    }
+
     public abstract OptionSelector<UnitType> getUnitSelector(int money);
 }

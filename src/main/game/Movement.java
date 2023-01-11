@@ -1,6 +1,7 @@
 package main.game;
 
 
+import main.MiniWars;
 import main.map.Case;
 import main.render.Renderable;
 import main.unit.Unit;
@@ -194,22 +195,26 @@ public class Movement {
         return cost;
     }
 
-    public boolean pathTrapped(Unit unit) {
+    public boolean isPathTrappedFor(Player.Type playerType) {
+
+        return this.cases
+                .stream()
+                .anyMatch(c -> c.hasUnit() && c.getUnit().getOwner() != playerType);
+
+    }
+
+    public Movement cutTrappedPath(Player.Type playerType) {
+
+        final Movement cutPath = new Movement(this.startingPoint);
 
         for(Case c : this.cases) {
 
-            if (c.hasUnit() && c.getUnit().getOwner() != unit.getOwner()) {
-
-                int index = this.cases.indexOf(c);
-                this.cases.subList(index, this.cases.size()).clear();
-
-                return true;
-
-            }
+            if (c.hasUnit() && c.getUnit().getOwner() != playerType) break;
+            cutPath.update(c);
 
         }
 
-        return false;
+        return cutPath;
 
     }
 

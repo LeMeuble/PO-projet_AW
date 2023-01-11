@@ -35,6 +35,7 @@ public class PathUtil {
     public static final String PICTURE_UI_HP_FOLDER = PICTURE_UI_FOLDER + SEP + "hp";
     public static final String PICTURE_UI_ICON_FOLDER = PICTURE_UI_FOLDER + SEP + "icons";
     public static final String PICTURE_UI_INDICATOR_FOLDER = PICTURE_UI_FOLDER + SEP + "indicator";
+    public static final String PICTURE_UI_KEYTIP_FOLDER = PICTURE_UI_FOLDER + SEP + "keytip";
 
     public static String getDigitPath(String digit) {
 
@@ -72,7 +73,7 @@ public class PathUtil {
 
     public static String getUnitAnimationPath(UnitType unit, Player.Type player, UnitAnimation unitAnimation, int frame) {
 
-        return PICTURE_TROOPS_FOLDER + SEP + player.getName() + SEP + unit.getName() + SEP + unitAnimation.getName() + SEP + frame + ".png";
+        return PICTURE_TROOPS_FOLDER + SEP + player.getName() + SEP + unit.getTextureName() + SEP + unitAnimation.getName() + SEP + frame + ".png";
 
     }
 
@@ -81,7 +82,7 @@ public class PathUtil {
         String pose = isAvailable ? "idle" : "unavailable";
         String facing = unitFacing.getName();
 
-        return PICTURE_TROOPS_FOLDER + SEP + player.getName() + SEP + unit.getName() + SEP + pose + facing + SEP + frame + ".png";
+        return PICTURE_TROOPS_FOLDER + SEP + player.getName() + SEP + unit.getTextureName() + SEP + pose + facing + SEP + frame + ".png";
 
     }
 
@@ -116,6 +117,12 @@ public class PathUtil {
     public static String getIndicatorPath(String indicator) {
 
         return PICTURE_UI_INDICATOR_FOLDER + SEP + indicator + ".png";
+
+    }
+
+    public static String getKeytipPath(String keytip) {
+
+        return PICTURE_UI_KEYTIP_FOLDER + SEP + keytip + ".png";
 
     }
 

@@ -1,6 +1,6 @@
 name=Pipe World
-description=Large island in the middle of the lake
+description=In this world, there are pipes. That's it.
 width=20
 height=20
-players=5
+players=3
 icon=pictures/ui/backgrounds/clear/background_17.png

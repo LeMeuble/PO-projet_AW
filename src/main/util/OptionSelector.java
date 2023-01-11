@@ -1,5 +1,7 @@
 package main.util;
 
+import main.menu.model.PauseMenu;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -57,14 +59,10 @@ public class OptionSelector<T> {
 
     public OptionSelector<T> addOption(T value, boolean available) {
 
-        if (!this.contains(value)) {
+        this.options.add(new Option(value, available));
 
-            this.options.add(new Option(value, available));
-
-            if (this.selectedOption == -1 && available) {
-                this.selectedOption = this.getOptionsCount() - 1;
-            }
-
+        if (this.selectedOption == -1 && available) {
+            this.selectedOption = this.getOptionsCount() - 1;
         }
 
         return this;
