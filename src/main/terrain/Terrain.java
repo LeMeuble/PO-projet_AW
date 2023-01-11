@@ -2,6 +2,8 @@ package main.terrain;
 
 import main.game.Player;
 import main.weather.Weather;
+import ressources.Config;
+import ressources.DisplayUtil;
 import ressources.PathUtil;
 
 /**
@@ -101,6 +103,20 @@ public abstract class Terrain {
      */
     public String getFile(Weather weather, boolean isFoggy) {
         return PathUtil.getTerrainPath(weather, this.getType(), this.getTextureVariation(), isFoggy);
+    }
+
+    public void render(double pixelX, double pixelY, Weather weather, boolean isFoggy, int frame) {
+
+        if (this instanceof AnimatedTerrain) {
+            DisplayUtil.drawPicture(pixelX, pixelY, ((AnimatedTerrain) this).getFile(weather, isFoggy, frame), Config.PIXEL_PER_CASE, Config.PIXEL_PER_CASE);
+        }
+        else if (this instanceof Property) {
+            DisplayUtil.drawPicture(pixelX, pixelY + Config.PIXEL_PER_CASE / 2, this.getFile(weather, isFoggy), Config.PIXEL_PER_CASE, Config.PIXEL_PER_CASE * 2);
+        }
+        else {
+            DisplayUtil.drawPicture(pixelX, pixelY, this.getFile(weather, isFoggy), Config.PIXEL_PER_CASE, Config.PIXEL_PER_CASE);
+        }
+
     }
 
     public abstract TerrainType getType();

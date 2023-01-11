@@ -4,10 +4,7 @@
 package main;
 
 import main.control.KeystrokeListener;
-import main.game.ActionHandler;
-import main.game.Game;
-import main.game.GameLoop;
-import main.game.GameState;
+import main.game.*;
 import main.map.MapMetadata;
 import main.menu.MenuManager;
 import main.menu.MenuModel;
@@ -16,6 +13,7 @@ import main.menu.model.MapSelectionMenu;
 import main.parser.MapParser;
 import main.render.Renderer;
 import main.util.OptionSelector;
+import main.weather.WeatherManager;
 
 /**
  * Classe principale du jeu Cette classe est le point d'entrée du programme Elle initialise les composants du jeu et
@@ -28,11 +26,10 @@ public class MiniWars {
 
     private static MiniWars instance;
 
-    private final OptionSelector<MapMetadata> mapSelector;
     private final KeystrokeListener keystrokeListener;
     private final ActionHandler actionHandler;
     private final GameLoop gameLoop;
-    private Game currentGame;
+    private volatile Game currentGame;
     private GameState gameState;
     /**
      * Constructeur de MiniWars
@@ -43,8 +40,6 @@ public class MiniWars {
 
         this.currentGame = null;
         this.gameState = GameState.MENU_TITLE_SCREEN;
-
-        this.mapSelector = new OptionSelector<>(MapParser.listAvailableMaps());
 
         this.keystrokeListener = new KeystrokeListener();
         this.keystrokeListener.setHandler(this::handleKey);
@@ -84,6 +79,16 @@ public class MiniWars {
 
     public void handleKey(KeystrokeListener.KeyCodes keycode) {
         if (this.actionHandler.handle(keycode)) this.update();
+
+        if(this.isPlaying()) {
+
+            final Game game = this.getCurrentGame();
+            if(game.getSettings().isAutoEndTurn()) {
+                if(!game.hasRemainingAction()) {
+                    game.nextTurn();
+                }
+            }
+        }
     }
 
     public void update() {
@@ -97,14 +102,19 @@ public class MiniWars {
     /**
      * @return L'instance du jeu
      */
-    public Game getCurrentGame() {
+    public synchronized Game getCurrentGame() {
         return this.currentGame;
     }
 
-    public void newGame(MapMetadata mapMetadata) {
-        this.currentGame = new Game(mapMetadata);
+    public void newGame(MapMetadata mapMetadata, Settings settings) {
+
+        this.currentGame = new Game(mapMetadata, settings);
         this.currentGame.startGame();
         this.gameState = GameState.PLAYING_SELECTING;
+    }
+
+    public void endGame() {
+        this.currentGame = null;
     }
 
     public GameState getGameState() {
@@ -115,14 +125,10 @@ public class MiniWars {
         this.gameState = gameState;
     }
 
-    public OptionSelector<MapMetadata> getMapSelector() {
-        return this.mapSelector;
-    }
-
     private void registerDefaultMenus() {
 
         MenuManager.getInstance().addMenu(new MainMenu());
-        MenuManager.getInstance().addMenu(new MapSelectionMenu(this.mapSelector));
+        MenuManager.getInstance().addMenu(new MapSelectionMenu());
         MenuManager.getInstance().getMenu(MenuModel.MAP_SELECTION_MENU).setVisible(false);
 
     }

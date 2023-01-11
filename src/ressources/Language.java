@@ -11,5 +11,7 @@ public class Language {
     public static final String UNIT_ACTION_SUPPLY = "Ravitailler";
     public static final String UNIT_ACTION_GET_IN = "Monter a bord";
     public static final String UNIT_ACTION_DROP_UNIT = "Deposer";
+    public static final String UNIT_ACTION_DIVE = "Plonger";
+    public static final String UNIT_ACTION_SURFACE = "Faire surface";
 
 }

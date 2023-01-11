@@ -1,14 +1,15 @@
 package main.map;
 
+import librairies.StdDraw;
 import main.MiniWars;
-import main.animation.AnimationClock;
 import main.game.Game;
-import main.game.GameView;
+import main.game.Player;
 import main.terrain.AnimatedTerrain;
 import main.terrain.Property;
 import main.terrain.Terrain;
 import main.unit.OnFoot;
 import main.unit.Unit;
+import main.unit.type.Submarine;
 import main.weather.Weather;
 import ressources.Config;
 import ressources.DisplayUtil;
@@ -77,10 +78,14 @@ public class Case {
 
         this.unit = unit;
 
-        if(unit != null) {
+        if (unit != null) {
             unit.setCoordinate(this.coordinate.clone());
         }
 
+    }
+
+    public boolean hasAvailableAction(Player.Type type) {
+        return this.unit != null && this.unit.getOwner() == type && !this.unit.hasPlayed() || this.terrain instanceof Property && ((Property) this.terrain).getOwner() == type;
     }
 
     /**
@@ -103,76 +108,19 @@ public class Case {
 
     public void setFoggy(boolean isFoggy) {this.isFoggy = isFoggy;}
 
-    public void render() {
-
-        final Game game = MiniWars.getInstance().getCurrentGame();
-
-        final int offsetX = game.getView().offsetX(this.coordinate.getX());
-        final int offsetY = game.getView().offsetY(this.coordinate.getY());
-
-        final double x = DisplayUtil.getCenterX(offsetX, game.getWidth());
-        final double y = DisplayUtil.getCenterX(offsetX, game.getWidth());
-
-    }
-
     public void renderTerrain(double pixelX, double pixelY, Weather weather, int frame) {
-
-        if (terrain instanceof AnimatedTerrain) {
-            DisplayUtil.drawPicture(pixelX, pixelY, ((AnimatedTerrain) terrain).getFile(weather, this.isFoggy, frame), Config.PIXEL_PER_CASE, Config.PIXEL_PER_CASE);
-        }
-        else if (terrain instanceof Property) {
-            DisplayUtil.drawPicture(pixelX, pixelY + Config.PIXEL_PER_CASE / 2, terrain.getFile(weather, this.isFoggy), Config.PIXEL_PER_CASE, Config.PIXEL_PER_CASE * 2);
-        }
-        else {
-            DisplayUtil.drawPicture(pixelX, pixelY, terrain.getFile(weather, this.isFoggy), Config.PIXEL_PER_CASE, Config.PIXEL_PER_CASE);
-        }
-
+        this.terrain.render(pixelX, pixelY, weather, this.isFoggy, frame);
     }
 
     public void renderUnit(double pixelX, double pixelY, int frame) {
-
-        if (this.hasUnit() && this.getUnit().isAlive()) {
-
-            final Unit unit = this.getUnit();
-
-            DisplayUtil.drawPicture(pixelX, pixelY, unit.getFile(frame), Config.PIXEL_PER_CASE, Config.PIXEL_PER_CASE);
-
-            double offsetDivider = (unit instanceof OnFoot) ? 4.0d : 5.0d;
-            double indicatorX = pixelX + Config.PIXEL_PER_CASE / offsetDivider;
-            double indicatorY = pixelY - Config.PIXEL_PER_CASE / offsetDivider;
-
-            if (unit.getHealth() < Unit.MAX_HEALTH) {
-
-                DisplayUtil.drawPicture(pixelX, pixelY, PathUtil.getHealthPath((int) Math.floor(unit.getHealth()), !unit.hasPlayed()), Config.PIXEL_PER_CASE / 3, Config.PIXEL_PER_CASE / 3);
-
-            }
-
-            boolean isLowAmmo = unit.getWeapons().stream()
-                    .anyMatch(weapon -> weapon.getAmmo() <= weapon.getDefaultAmmo() * Config.UNIT_LOW_AMMO_THRESHOLD);
-            boolean noAmmo = unit.getWeapons().stream()
-                    .allMatch(weapon -> weapon.getAmmo() == 0);
-
-            boolean displayLowAmmo = ((isLowAmmo && (frame % 2 == 0)) || noAmmo) && unit.hasAnyWeapon();
-
-            if (displayLowAmmo) {
-                pixelY += Config.PIXEL_PER_CASE / 3;
-                DisplayUtil.drawPicture(pixelX, pixelY, PathUtil.getIndicatorPath("low_ammo"), Config.PIXEL_PER_CASE / 3, Config.PIXEL_PER_CASE / 3);
-            }
-
-//            boolean displayLowFuel = false;
-//
-//            if(unit instanceof Motorized) {
-//
-//                Motorized motorized = (Motorized) unit;
-//                displayLowFuel = motorized.getFuel() <= motorized.getf() * Config.UNIT_LOW_FUEL_THRESHOLD;
-//
-//            }
-//
-//
-//            DisplayUtil.drawPicture(pixelX, pixelY, PathUtil.getIndicatorPath((int) unit.getHealth() - 1, !unit.hasPlayed()), Config.PIXEL_PER_CASE / 3, Config.PIXEL_PER_CASE / 3);
-
-        }
+        this.renderUnit(pixelX, pixelY, frame, Config.PIXEL_PER_CASE, Config.PIXEL_PER_CASE, true);
     }
+
+    public void renderUnit(double pixelX, double pixelY, int frame, double width, double height, boolean displayIndicators) {
+
+        if (this.hasUnit()) this.getUnit().render(pixelX, pixelY, frame, width, height, displayIndicators);
+    }
+
 
     /**
      * @return Les coordonnee de la case, sous le format d'un tuple

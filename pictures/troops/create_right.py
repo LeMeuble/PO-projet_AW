@@ -9,25 +9,26 @@ def rec_righizer(path):
 
 		abs_path = os.path.abspath(os.path.normpath(os.path.join(path, file)))
 
-		if os.path.isdir(abs_path) and file == "unavailable":
+		if os.path.isdir(abs_path) and file == "unavailableleft":
 
-			newFolder = os.path.join(path, "unavailableright")
+			if "aircraft_carrier" in abs_path or "corvette" in abs_path:
 
-			if not os.path.exists(newFolder):
-				os.mkdir(newFolder)
+				newFolder = os.path.join(path, "unavailableright")
 
-			for frame in os.listdir(abs_path):
+				if not os.path.exists(newFolder):
+					os.mkdir(newFolder)
 
-				if frame.endswith(".png"):
 
-					im = Image.open(os.path.join(abs_path, frame))
-					im = im.transpose(Image.Transpose.FLIP_LEFT_RIGHT)
+				for frame in os.listdir(abs_path):
 
-					im.save(os.path.join(newFolder, frame))
+					if frame.endswith(".png"):
 
-					print("TRANPOSED " + frame + " from " + abs_path + " to " + newFolder)
+						im = Image.open(os.path.join(abs_path, frame))
+						im = im.transpose(Image.Transpose.FLIP_LEFT_RIGHT)
 
-			os.rename(abs_path, os.path.normpath(os.path.join(path, "unavailableleft")))
+						im.save(os.path.join(newFolder, frame))
+
+						print("TRANPOSED " + frame + " from " + abs_path + " to " + newFolder)
 
 		elif os.path.isdir(abs_path):
 			rec_righizer(abs_path)

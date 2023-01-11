@@ -126,6 +126,7 @@ public class MapParser {
         }
         catch (IOException ignored) {
             System.out.println("Unable to parse map data from file: " + file.getAbsolutePath());
+            ignored.printStackTrace();
             return null;
         }
 

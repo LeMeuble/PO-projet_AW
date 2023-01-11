@@ -12,9 +12,11 @@ public enum MenuModel {
     MAIN_MENU(true),
     MAP_SELECTION_MENU(true),
     UNIT_ACTION_MENU(false),
+    DROP_UNIT_MENU(false),
     FACTORY_ACTION_MENU(false),
     BOTTOM_MENU(true),
-    PAUSE_MENU(false);
+    PAUSE_MENU(false),
+    NEXT_TURN_MENU(false);
 
     private final boolean isPersistent;
 

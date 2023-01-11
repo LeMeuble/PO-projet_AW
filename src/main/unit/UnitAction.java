@@ -30,7 +30,13 @@ public enum UnitAction implements ActionMenu.Text {
     GET_IN(Language.UNIT_ACTION_GET_IN),
 
     // Action : Deposer
-    DROP_UNIT(Language.UNIT_ACTION_DROP_UNIT);
+    DROP_UNIT(Language.UNIT_ACTION_DROP_UNIT),
+
+    // Action : Plonger
+    DIVE(Language.UNIT_ACTION_DIVE),
+
+    // Action : Faire surface
+    SURFACE(Language.UNIT_ACTION_SURFACE);
 
     private final String text;
 

@@ -3,6 +3,7 @@ package test;
 import main.util.OptionSelector;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.List;
 
@@ -165,5 +166,6 @@ public class OptionSelectorTest {
         assertEquals(0, testLastFalse.getSelectedValue());
 
     }
+
 
 }

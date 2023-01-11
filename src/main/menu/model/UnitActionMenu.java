@@ -3,6 +3,8 @@ package main.menu.model;
 import librairies.StdDraw;
 import main.MiniWars;
 import main.game.Player;
+import main.map.Case;
+import main.map.Coordinate;
 import main.menu.ActionMenu;
 import main.menu.MenuModel;
 import main.unit.*;
@@ -44,9 +46,18 @@ public class UnitActionMenu extends ActionMenu<UnitAction> {
                 Unit selectedUnit = MiniWars.getInstance().getCurrentGame().getSelectedCase().getUnit();
                 if (selectedUnit instanceof Transport) {
 
-//                    UnitType carriedUnit = ((Transport) selectedUnit).getCarriedUnit().getType();
+                    int carriedUnits = ((Transport) selectedUnit).getCarriedUnits().size();
 
-//                    DisplayUtil.drawPicture(x + 20, y, PathUtil.getUnitIdleFacingPath(carriedUnit, playerType, UnitFacing.RIGHT, true, 0), 38, 38);
+                    if(carriedUnits > 1) {
+
+                        DisplayUtil.drawPicture(x + 20, y, PathUtil.getIconPath("drop_unit"), 28, 28);
+
+                    } else {
+
+                        Unit carriedUnit = ((Transport) selectedUnit).getCarriedUnits().get(0);
+                        carriedUnit.render(x + 16, y, 0, 38, 38, true);
+
+                    }
 
                 }
 

@@ -180,22 +180,31 @@ public class DisplayUtil {
 
     }
 
-    public static void drawIntegerValue(double x, double y, int value, int digitSize) {
+    public static void drawIntegerValue(double x, double y, String value, int digitSize, String align) {
 
         double cx = x - digitSize / 2d;
 
-        String[] digits = String.valueOf(value).split("");
+        String[] digits = value.split("");
 
-        for (int i = digits.length - 1; i >= 0; i--) {
+        int iStart = align.equals("right") ? digits.length - 1 : 0;
+        int iIncr = align.equals("right") ? -1 : 1;
 
-            String digit = digits[i];
+        for (int i = iStart; i >= 0 && i < digits.length; i += iIncr) {
 
-            drawPicture(cx, y, PathUtil.getDigitPath(digit), digitSize, digitSize);
-            cx -= digitSize;
+            final String digit = digits[i];
+
+            if(digit.equals("/")) {
+                drawPicture(cx, y, PathUtil.getDigitPath("slash"), digitSize, digitSize);
+            }
+            else if (digit.equals("%")) {
+                drawPicture(cx, y, PathUtil.getDigitPath("percent"), digitSize, digitSize);
+            }
+            else
+                drawPicture(cx, y, PathUtil.getDigitPath(digit), digitSize, digitSize);
+            cx += digitSize * iIncr;
 
         }
 
     }
-
 
 }

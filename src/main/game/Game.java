@@ -1,7 +1,6 @@
 package main.game;
 
 import com.sun.istack.internal.Nullable;
-import main.MiniWars;
 import main.control.Cursor;
 import main.map.Case;
 import main.map.Grid;
@@ -16,12 +15,12 @@ import main.terrain.Factory;
 import main.terrain.Property;
 import main.terrain.Terrain;
 import main.terrain.TerrainType;
-import main.terrain.type.FactoryTerrain;
 import main.terrain.type.HQ;
+import main.terrain.type.Port;
 import main.unit.Flying;
 import main.unit.Naval;
+import main.unit.Transport;
 import main.unit.Unit;
-import main.unit.type.Submarine;
 import main.util.Dijkstra;
 import main.weather.Weather;
 import main.weather.WeatherManager;
@@ -41,6 +40,7 @@ public class Game {
 
 
     private final MapMetadata mapMetadata;
+    private final Settings settings;
     private final Grid grid;
     private final GameView view;
     private final Map<Player.Type, Player> players;
@@ -61,8 +61,9 @@ public class Game {
      *
      * @see MapMetadata
      */
-    public Game(MapMetadata mapMetadata) {
+    public Game(MapMetadata mapMetadata, Settings settings) {
 
+        this.settings = settings;
         this.cursor = new Cursor(mapMetadata.getWidth(), mapMetadata.getHeight());
         this.movement = null;
         this.currentPlayer = Player.Type.RED;
@@ -74,6 +75,8 @@ public class Game {
         this.selectedCase = null;
         this.overlayCases = new HashSet<>();
         this.overlayType = OverlayType.MISC;
+
+        settings.configureWeatherManager(weatherManager);
 
         for (int i = 1; i <= mapMetadata.getPlayerCount(); i++) {
             players.put(Player.Type.fromValue(i), new Player(Player.Type.values()[i]));
@@ -94,6 +97,10 @@ public class Game {
         return this.mapMetadata;
     }
 
+    public Settings getSettings() {
+        return this.settings;
+    }
+
     /**
      * Obtenir la grille de la carte.
      *
@@ -105,12 +112,12 @@ public class Game {
         return this.grid;
     }
 
-    public void setDijkstraResult(Dijkstra dijkstraResult) {
-        this.dijkstraResult = dijkstraResult;
-    }
-
     public Dijkstra getDijkstraResult() {
         return this.dijkstraResult;
+    }
+
+    public void setDijkstraResult(Dijkstra dijkstraResult) {
+        this.dijkstraResult = dijkstraResult;
     }
 
     /**
@@ -217,12 +224,12 @@ public class Game {
         this.overlayCases = overlayCases;
     }
 
-    public synchronized void setOverlayType(OverlayType overlayType) {
-        this.overlayType = overlayType;
-    }
-
     public synchronized OverlayType getOverlayType() {
         return this.overlayType;
+    }
+
+    public synchronized void setOverlayType(OverlayType overlayType) {
+        this.overlayType = overlayType;
     }
 
     public synchronized void clearOverlayCases() {
@@ -232,55 +239,77 @@ public class Game {
     public void nextTurn() {
 
         this.weatherManager.clock();
-        if (this.weatherManager.willChange()) {
-
+        if (this.weatherManager.willChange())
             PopupRegistry.getInstance().push(new Popup("Changement météo!", "La météo va changer ! (" + this.weatherManager.getNextWeather().getName() + ")"));
 
-        }
+        final Player.Type previousPlayer = this.currentPlayer;
+        final Player nextPlayer = this.nextPlayer();
+        final boolean newDay = previousPlayer.ordinal() > nextPlayer.getType().ordinal();
 
-        Player nextPlayer = this.nextPlayer();
+        this.grid.resetFogOfWar(settings.isFogOfWar());
+
         for (Case c : this.grid.getCases()) {
 
-            Terrain terrain = c.getTerrain();
-            Unit unit = c.getUnit();
-            c.setFoggy(true);
+            final Terrain terrain = c.getTerrain();
+            final Unit unit = c.getUnit();
 
-            if (terrain instanceof Property) {
 
-                Property property = (Property) terrain;
+            if (newDay) {
 
-                if (property.getOwner() != Player.Type.NEUTRAL) {
-                    Player currentPlayer = this.getPlayerFromType(property.getOwner());
-                    currentPlayer.setMoney(currentPlayer.getMoney() + 1000);
-                }
+                if (unit != null) {
 
-                if (unit == null) {
-
-                    property.setDefense(property.getDefense() + Config.PROPERTY_DEFAULT_RECOVERY);
+                    if ((unit instanceof Flying || unit instanceof Naval)) {
+                        unit.setEnergy(unit.getEnergy() - unit.getDailyEnergyConsumption());
+                    }
 
                 }
-                else if (unit.getOwner() == property.getOwner()) {
 
-                    unit.supply();
+                if (terrain instanceof Property) {
+
+                    final Property property = (Property) terrain;
+
+                    if (property.getOwner() != Player.Type.NEUTRAL) {
+                        final Player owner = this.getPlayerFromType(property.getOwner());
+                        owner.setMoney(owner.getMoney() + 1000);
+                    }
+                    if (unit == null) property.setDefense(property.getDefense() + Config.PROPERTY_DEFAULT_RECOVERY);
+
+                    if (property.getOwner() == currentPlayer) {
+
+                        int supplyMaxRadius = property instanceof Port ? 1 : 0;
+
+                        int caseX = c.getCoordinate().getX();
+                        int caseY = c.getCoordinate().getY();
+
+                        for (Unit u : this.grid.getUnitsAround(this.grid.getCasesAround(caseX, caseY, 0, supplyMaxRadius))) {
+                            if (u.getOwner() == currentPlayer) {
+                                if (u instanceof Naval || u.getCoordinate().distance(c.getCoordinate()) == 0) {
+                                    u.supply();
+                                    System.out.println("Supplied " + u);
+                                }
+                            }
+                        }
+
+                    }
 
                 }
 
             }
-            if (unit != null) {
+
+            if(unit != null) {
 
                 unit.setPlayed(false);
                 unit.setMoved(false);
 
-                if(unit instanceof Flying || unit instanceof Naval) {
+                if ((unit instanceof Flying || unit instanceof Naval) && newDay) {
+                    if (!unit.hasEnergy()) c.setUnit(null);
+                }
 
-                    if(unit instanceof Submarine && ((Submarine) unit).isUnderwater()) {
-                        unit.setEnergy(unit.getEnergy() - unit.getDailyEnergyConsumption() * 2);
+                if (unit instanceof Transport) {
+                    for (Unit u : ((Transport) unit).getCarriedUnits()) {
+                        u.setPlayed(false);
+                        u.setMoved(false);
                     }
-                    else {
-                        unit.setEnergy(unit.getEnergy() - unit.getDailyEnergyConsumption());
-                    }
-
-                    if(!unit.hasEnergy()) c.setUnit(null);
                 }
 
             }
@@ -297,6 +326,7 @@ public class Game {
 
     public void startGame() {
 
+        this.grid.resetFogOfWar(settings.isFogOfWar());
         this.grid.getCases().forEach(c -> {
             this.grid.updateFogOfWar(c, c.getUnit());
         });
@@ -457,31 +487,25 @@ public class Game {
 
     public boolean hasRemainingAction() {
 
-        Grid grid = MiniWars.getInstance().getCurrentGame().getGrid();
-        Player currentPlayer = MiniWars.getInstance().getCurrentGame().getCurrentPlayer();
+        for (Case c : this.grid.getCases()) {
 
-        for(Case c : grid) {
+            if (c.hasUnit() && c.getUnit().getOwner() == this.currentPlayer) {
 
-            if(c.hasUnit() && c.getUnit().getOwner() == currentPlayer.getType()) {
-
-                if(!c.getUnit().hasPlayed()) {
-                    return true;
-                }
+                if (!c.getUnit().hasPlayed()) return true;
 
             }
+            if (c.getTerrain() instanceof Factory) {
 
-            if(c.getTerrain() instanceof Factory) {
+                final Factory factory = (Factory) c.getTerrain();
 
-                if(((Factory) c.getTerrain()).getOwner() == currentPlayer.getType()) {
-
-                    if(Factory.canCreateUnit(c)) {
-                        return true;
+                if (factory.getOwner() == this.currentPlayer) {
+                    if (Factory.canCreateUnit(c)) {
+                        if (factory.anythingBuyable(this.getPlayerFromType(this.currentPlayer).getMoney())) {
+                            return true;
+                        }
                     }
-
                 }
-
             }
-
         }
         return false;
     }

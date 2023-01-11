@@ -21,7 +21,7 @@
         - [X] Une unité par tour par usine
         - [X] Pas d'unité sur l'usine
         - [X] Crédits
-- [ ] Bouger le move dans Grid#move
+- [X] Bouger le move dans Grid#move
 
 # Non prioritaire :
 
@@ -64,8 +64,8 @@
     - [X] Monter à bord (case adjacente)
     - [X] Dépoter (//)
     - [X] Pour l'instant seulement pour le Convoi, trouver le moyen de fix
-- [ ] Fin de tour automatique 6.7
-    - [ ] Activable/désactivable (dans Player)
+- [X] Fin de tour automatique 6.7
+    - [X] Activable/désactivable (dans Player)
     - [X] Si plus d'action possible (tt unite en hasPlayed = true && factory occupés)
 - [X] Couverture de terrain 6.8
     - [X] -20% foret/usine
@@ -75,23 +75,21 @@
 - [ ] unite navale 6.9
   - [X] Implémenter les dégâts
   - [X] Missiles anti-navire
-  - [ ] Porte-avions
+  - [X] Porte-avions
   - [ ] Sous-marin
-    - [ ] Plongée
+    - [X] Plongée
       - [X] Consommation de carburant en plongée 
-      - [ ] Invisible sauf si unité adjacente 
+      - [X] Invisible sauf si unité adjacente
+      - [ ] Icône
     - [X] Surface
     - [X] Si en plongée, ne peut être attaqué que par sous-marin/croiseurs
 
 - [X] brouillard de guerre 6.10
-    - [ ] choisir si on le veut
+    - [X] choisir si on le veut
     - [ ] Pause entre les tours 
-    - [ ] Tir à distance impossible si case non visible
-    - [ ] Unité lance-fusée
-      - [ ] Unité
-      - [ ] Arme lance-fusée
+    - [X] Tir à distance impossible si case non visible
     - [X] Piège d'une unité 
-      - [ ] Affichage de l'indicateur (Trapped)
+      - [X] Affichage de l'indicateur (Trapped)
       
 - [X] Météo
     - [X] Pluie = -1 case de vision pour unités au sol, -2 cases de vision pour unités volantes/en montagne
@@ -99,11 +97,13 @@
     - [X] Vents violents = portée des attaques à distance -1 case, -20% de dégâts
     - [X] Météo aléatoire, soit en début de game, soit dynamique (% de changement chaque tour, +% par type de météo)
     - [X] Avertissement pour les joueurs
+
 - [ ] Commandants
     - [ ] Option prendre le commandement
     - [ ] Différents bonus en fonction des commandants
     - [ ] Portée des bonus allant de 1 à 5 cases
     - [ ] Si unité détruite, commandant bat en retraite
+
 # Niveau pas de vie
 - [X] Dijkstra
 - [ ] Bot

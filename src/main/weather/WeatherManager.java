@@ -18,8 +18,8 @@ public class WeatherManager {
         this.randomMode = true;
     }
 
-    public void toggleRandomMode() {
-        this.randomMode = !this.randomMode;
+    public void setRandomMode(boolean randomMode) {
+        this.randomMode = randomMode;
     }
 
     public Weather getCurrentWeather() {
@@ -28,6 +28,10 @@ public class WeatherManager {
 
     public Weather getNextWeather() {
         return this.nextWeather;
+    }
+
+    public void setCurrentWeather(Weather weather) {
+        this.currentWeather = weather;
     }
 
 

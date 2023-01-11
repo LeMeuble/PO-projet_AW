@@ -1,13 +1,19 @@
 package main.unit.type;
 
 import main.game.Player;
-import main.unit.Naval;
-import main.unit.UnitType;
+import main.map.Case;
+import main.map.Grid;
+import main.unit.*;
+import main.util.OptionSelector;
 import main.weapon.type.Torpedo;
+import main.weather.Weather;
+
+import java.util.List;
 
 public class Submarine extends Naval {
 
     public static final int DAILY_ENERGY_CONSUMPTION = 2;
+
     private boolean underwater;
 
     /**
@@ -30,16 +36,13 @@ public class Submarine extends Naval {
         this.underwater = false;
     }
 
-    public boolean isUnderwater() {
-        return this.underwater;
-    }
 
     public boolean canDive() {
-        return !underwater;
+        return !this.underwater;
     }
 
     public boolean canSurface() {
-        return underwater;
+        return this.underwater;
     }
 
 
@@ -50,7 +53,27 @@ public class Submarine extends Naval {
 
     @Override
     public int getDailyEnergyConsumption() {
-        return Submarine.DAILY_ENERGY_CONSUMPTION;
+        return Submarine.DAILY_ENERGY_CONSUMPTION * (this.underwater ? 2 : 1);
     }
+
+    @Override
+    public OptionSelector<UnitAction> getAvailableActions(Case currentCase, Grid contextGrid) {
+
+        final OptionSelector<UnitAction> actions = super.getAvailableActions(currentCase, contextGrid);
+        actions.addOption(UnitAction.DIVE, this.canDive());
+        actions.addOption(UnitAction.SURFACE, this.canSurface());
+
+        return actions;
+
+    }
+
+    @Override
+    public int getMovementCostTo(Case destination, Weather weather) {
+
+        if(this.underwater) return super.getMovementCostTo(destination, weather) * 2;
+        else return super.getMovementCostTo(destination, weather);
+
+    }
+
 
 }

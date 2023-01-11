@@ -2,19 +2,15 @@ package main.game;
 
 import main.Logger;
 import main.MiniWars;
-import main.animation.MovementAnimation;
 import main.control.Cursor;
 import main.control.KeystrokeListener;
 import main.map.Case;
 import main.map.Coordinate;
 import main.map.Grid;
-import main.menu.ActionMenu;
-import main.menu.Menu;
-import main.menu.MenuManager;
-import main.menu.MenuModel;
-import main.menu.model.FactoryActionMenu;
-import main.menu.model.UnitActionMenu;
+import main.menu.*;
+import main.menu.model.*;
 import main.render.OverlayType;
+import main.render.PopupRegistry;
 import main.render.Renderer;
 import main.terrain.Factory;
 import main.terrain.Property;
@@ -89,34 +85,23 @@ public class ActionHandler {
 
         }
 
-        if (this.instance.getCurrentGame().getCurrentPlayer().hasAutoTurnSkipping()) {
-
-            if (!this.instance.getCurrentGame().hasRemainingAction()) {
-
-                this.instance.getCurrentGame().nextTurn();
-
-            }
-
-        }
-
         return false;
 
     }
 
     public boolean keyD(GameState gameState) {
 
-        this.instance.getCurrentGame().getCurrentPlayer().setMoney(this.instance.getCurrentGame().getCurrentPlayer().getMoney() + (int) (Math.random() * 1000));
+        switch (gameState) {
+            case PLAYING_SELECTING:
+                this.instance.getCurrentGame().nextTurn();
+                break;
 
-//        switch (gameState) {
-//            case PLAYING_SELECTING:
-//                this.instance.getCurrentGame().nextTurn();
-//                break;
-//            case PLAYING_SELECTING_UNIT_ACTION:
-//                this.instance.getCurrentGame().getSelectedCase().getUnit().getWeapons().forEach(w -> {
-//                    System.out.println(w.getClass() + " " + w.getAmmo());
-//                });
-//                break;
-//        }
+            //Todo : virer cette option
+            case PLAYING_SELECTING_FACTORY_UNIT:
+                this.instance.getCurrentGame().getCurrentPlayer().setMoney(this.instance.getCurrentGame().getCurrentPlayer().getMoney() + (int) (Math.random() * 1000));
+
+                break;
+        }
 
         return true;
 
@@ -138,6 +123,14 @@ public class ActionHandler {
         final Cursor cursor = this.instance.isPlaying() ? game.getCursor() : null;
 
         switch (gameState) {
+
+            case MENU_MAP_SELECTION: {
+
+                MapSelectionMenu mapSelectionMenu = (MapSelectionMenu) MenuManager.getInstance().getMenu(MenuModel.MAP_SELECTION_MENU);
+                mapSelectionMenu.previousField();
+                mapSelectionMenu.needsRefresh(true);
+
+            }
 
             case PLAYING_SELECTING:
             case PLAYING_SELECTING_DROP_ZONE:
@@ -161,19 +154,21 @@ public class ActionHandler {
                 return true;
             }
 
+            case MENU_PAUSE:
+            case PLAYING_SELECTING_DROPPED_UNIT:
             case PLAYING_SELECTING_FACTORY_UNIT:
             case PLAYING_SELECTING_UNIT_ACTION: {
 
-                Logger.getInstanceActionHandler().log("up@PLAYING_SELECTING_UNIT_ACTION");
+                System.out.println("up@PLAYING_SELECTING_UNIT_ACTION");
 
-                List<Menu> menus = MenuManager.getInstance().getMenus();
-                for (Menu menu : menus) {
-                    if (menu instanceof ActionMenu) {
-                        ((ActionMenu) menu).previous();
-                        menu.needsRefresh(true);
-                    }
-                }
-                return false;
+                Logger.getInstanceActionHandler().log("down@PLAYING_SELECTING_UNIT_ACTION");
+
+                MenuManager.getInstance().getMenus().stream().filter(m -> m instanceof SelectionMenu).filter(Menu::isVisible).forEach(m -> {
+                    ((SelectionMenu<?>) m).previous();
+                    m.needsRefresh(true);
+                    System.out.println(m);
+                });
+                return true;
             }
 
         }
@@ -198,6 +193,14 @@ public class ActionHandler {
 
         switch (gameState) {
 
+            case MENU_MAP_SELECTION: {
+
+                MapSelectionMenu mapSelectionMenu = (MapSelectionMenu) MenuManager.getInstance().getMenu(MenuModel.MAP_SELECTION_MENU);
+                mapSelectionMenu.nextField();
+                mapSelectionMenu.needsRefresh(true);
+
+            }
+
             case PLAYING_SELECTING:
             case PLAYING_SELECTING_DROP_ZONE:
             case PLAYING_SELECTING_TRANSPORT:
@@ -220,13 +223,15 @@ public class ActionHandler {
                 return true;
             }
 
+            case MENU_PAUSE:
+            case PLAYING_SELECTING_DROPPED_UNIT:
             case PLAYING_SELECTING_FACTORY_UNIT:
             case PLAYING_SELECTING_UNIT_ACTION: {
 
                 Logger.getInstanceActionHandler().log("down@PLAYING_SELECTING_UNIT_ACTION");
 
-                MenuManager.getInstance().getMenus().stream().filter(m -> m instanceof ActionMenu).forEach(m -> {
-                    ((ActionMenu) m).next();
+                MenuManager.getInstance().getMenus().stream().filter(m -> m instanceof SelectionMenu).filter(Menu::isVisible).forEach(m -> {
+                    ((SelectionMenu<?>) m).next();
                     m.needsRefresh(true);
                 });
                 return true;
@@ -247,6 +252,7 @@ public class ActionHandler {
      * @return true si le jeu doit actualiser l'ecran
      */
     private boolean left(GameState gameState) {
+
         Logger.getInstanceActionHandler().log("Entering ActionHandler#left");
         final Game game = this.instance.getCurrentGame();
         final Cursor cursor = this.instance.isPlaying() ? game.getCursor() : null;
@@ -254,10 +260,12 @@ public class ActionHandler {
         switch (gameState) {
 
             case MENU_MAP_SELECTION: {
+
                 Logger.getInstanceActionHandler().log("left@MENU_MAP_SELECTION");
-                Renderer.getInstance().clearBuffer();
-                this.instance.getMapSelector().previous();
-                MenuManager.getInstance().getMenu(MenuModel.MAP_SELECTION_MENU).needsRefresh(true);
+
+                MapSelectionMenu mapSelectionMenu = (MapSelectionMenu) MenuManager.getInstance().getMenu(MenuModel.MAP_SELECTION_MENU);
+                mapSelectionMenu.previous();
+                mapSelectionMenu.needsRefresh(true);
                 return true;
             }
 
@@ -301,10 +309,12 @@ public class ActionHandler {
         switch (gameState) {
 
             case MENU_MAP_SELECTION: {
-                Logger.getInstanceActionHandler().log("right@MENU_MAP_SELECTION");
-                Renderer.getInstance().clearBuffer();
-                this.instance.getMapSelector().next();
-                MenuManager.getInstance().getMenu(MenuModel.MAP_SELECTION_MENU).needsRefresh(true);
+
+                Logger.getInstanceActionHandler().log("left@MENU_MAP_SELECTION");
+
+                MapSelectionMenu mapSelectionMenu = (MapSelectionMenu) MenuManager.getInstance().getMenu(MenuModel.MAP_SELECTION_MENU);
+                mapSelectionMenu.next();
+                mapSelectionMenu.needsRefresh(true);
                 return true;
             }
 
@@ -355,9 +365,10 @@ public class ActionHandler {
         final int y = cursor != null ? cursor.getCoordinate().getY() : 0;
 
         final Case currentCase = grid != null ? grid.getCase(x, y) : null;
-        final Case selectedCase = grid != null ? game.getSelectedCase() : null;
-
         final Unit currentUnit = grid != null ? currentCase.getUnit() : null;
+
+        final Case selectedCase = grid != null ? game.getSelectedCase() : null;
+        final Unit selectedUnit = selectedCase != null ? selectedCase.getUnit() : null;
 
         Logger.getInstanceActionHandler().log("enter@default");
 
@@ -365,22 +376,49 @@ public class ActionHandler {
 
             switch (gameState) {
 
+                case MENU_PAUSE: {
+
+                    final PauseMenu pauseMenu = (PauseMenu) menuManagerInstance.getMenu(MenuModel.PAUSE_MENU);
+                    final PauseMenu.Action action = pauseMenu.getSelectedValue();
+
+                    if(action == PauseMenu.Action.RESUME) {
+                        this.instance.setGameState(GameState.PLAYING_SELECTING);
+                        menuManagerInstance.clearNonPersistent();
+                        return true;
+                    } else if(action == PauseMenu.Action.QUIT) {
+                        this.instance.setGameState(GameState.MENU_MAP_SELECTION);
+                        PopupRegistry.getInstance().clear();
+                        menuManagerInstance.clearNonPersistent();
+                        menuManagerInstance.getMenu(MenuModel.MAP_SELECTION_MENU).setVisible(true);
+                        menuManagerInstance.removeMenu(MenuModel.BOTTOM_MENU);
+                        this.instance.endGame();
+                        System.out.println("Quitting game");
+                        return true;
+                    }
+
+                    return false;
+
+                }
+
                 case MENU_TITLE_SCREEN: {
                     Logger.getInstanceActionHandler().log("enter@MENU_TITLE_SCREEN");
-                    rendererInstance.clearBuffer();
                     this.instance.setGameState(GameState.MENU_MAP_SELECTION);
+                    rendererInstance.clearBuffer();
                     menuManagerInstance.getMenu(MenuModel.MAIN_MENU).setVisible(false);
                     menuManagerInstance.getMenu(MenuModel.MAP_SELECTION_MENU).setVisible(true);
-
                     return true;
                 }
 
                 case MENU_MAP_SELECTION: {
+
                     Logger.getInstanceActionHandler().log("enter@MENU_MAP_SELECTION");
+
+                    MapSelectionMenu mapSelectionMenu = (MapSelectionMenu) MenuManager.getInstance().getMenu(MenuModel.MAP_SELECTION_MENU);
+
                     rendererInstance.clearBuffer();
-                    if (this.instance.getMapSelector().getSelectedOption() != null) {
-                        this.instance.newGame(this.instance.getMapSelector().getSelectedValue());
-                        menuManagerInstance.getMenu(MenuModel.MAP_SELECTION_MENU).setVisible(false);
+                    if (mapSelectionMenu.getSelectedValue() != null) {
+                        this.instance.newGame(mapSelectionMenu.getSelectedValue(), mapSelectionMenu.getSettings());
+                        mapSelectionMenu.setVisible(false);
                     }
                     return true;
                 }
@@ -455,6 +493,7 @@ public class ActionHandler {
                         final Unit unit = selectedCase.getUnit();
 
                         if (action == UnitAction.MOVE) {
+
                             Logger.getInstanceActionHandler().log("Action = move");
                             final Dijkstra dijkstra = new Dijkstra(currentCase, grid, unit, game.getWeather());
                             game.setSelectedCase(currentCase);
@@ -475,6 +514,7 @@ public class ActionHandler {
                             Logger.getInstanceActionHandler().log("Action = Attack or RangedAttack");
 
                             if (currentCase.hasUnit()) {
+
                                 Logger.getInstanceActionHandler().log("Case has unit");
                                 List<Weapon> weapons = unit.getWeapons().stream().filter(w -> {
                                     if (action == UnitAction.ATTACK) return w instanceof MeleeWeapon;
@@ -487,10 +527,11 @@ public class ActionHandler {
 
                                 List<Case> casesAround = grid.getCasesAround(x, y, minRange, maxRange);
 
-                                game.setOverlayCases(new HashSet<>(casesAround));
-                                game.setOverlayType(OverlayType.WEAPON);
-
-                                casesAround = casesAround.stream().filter(c -> c.hasUnit()).filter(c -> unit.isDistanceReachable(c.distance(currentCase))).filter(c -> unit.canAttack(c.getUnit())).collect(Collectors.toList());
+                                casesAround = casesAround.stream()
+                                        .filter(c -> c.hasUnit())
+                                        .filter(c -> unit.isDistanceReachable(c.distance(currentCase)))
+                                        .filter(c -> unit.canAttack(c.getUnit()))
+                                        .collect(Collectors.toList());
 
                                 List<Unit> unitsAround = grid.getUnitsAround(casesAround);
 
@@ -512,12 +553,17 @@ public class ActionHandler {
                                 else if (unitsAround.size() >= 2) {
                                     Logger.getInstanceActionHandler().log("Case : more than one unit around");
                                     System.out.println("OK: There are multiple units in range");
+                                    game.setOverlayCases(new HashSet<>(casesAround));
+                                    game.setOverlayType(OverlayType.WEAPON);
                                     this.instance.setGameState(GameState.PLAYING_SELECTING_TARGET);
                                     menuManagerInstance.getMenu(MenuModel.UNIT_ACTION_MENU).setVisible(false);
 
                                 }
-                                else System.out.println("Warn: Not unit in range");
-                                Logger.getInstanceActionHandler().log("No unit in range");
+                                else {
+                                    System.out.println("Warn: Not unit in range");
+                                    Logger.getInstanceActionHandler().log("No unit in range");
+                                }
+
                             }
 
                         }
@@ -571,15 +617,21 @@ public class ActionHandler {
                         }
                         else if (action == UnitAction.GET_IN) {
 
-                            List<Case> adjacentCase = grid.getAdjacentCases(game.getSelectedCase());
-                            List<Unit> adjacentUnit = grid.getUnitsAround(adjacentCase);
+                            final List<Case> adjacentCase = grid.getAdjacentCases(game.getSelectedCase());
 
-                            List<Transport> adjacentTransport = adjacentUnit.stream().filter(u -> u instanceof Transport).filter(u -> u.getOwner() == currentPlayer.getType()).map(u -> (Transport) u).filter(u -> !((Transport) u).isCarryingUnit()).collect(Collectors.toList());
+                            final List<Transport> adjacentTransport = adjacentCase
+                                    .stream()
+                                    .filter(c -> c.getUnit() instanceof Transport)
+                                    .filter(c -> c.hasUnit() && c.getUnit().getOwner() == currentPlayer.getType())
+                                    .map(u -> (Transport) u.getUnit())
+                                    .filter(t -> !t.isFull())
+                                    .collect(Collectors.toList());
 
                             if (adjacentTransport.size() == 1) {
 
-//                                adjacentTransport.get(0).setCarriedUnit(unit);
-                                game.getSelectedCase().setUnit(null);
+                                unit.setPlayed(true);
+                                adjacentTransport.get(0).addCarriedUnit(unit);
+                                selectedCase.setUnit(null);
                                 this.instance.setGameState(GameState.PLAYING_SELECTING);
                                 menuManagerInstance.clearNonPersistent();
 
@@ -595,25 +647,42 @@ public class ActionHandler {
                         }
                         else if (action == UnitAction.DROP_UNIT) {
 
-                            List<Case> adjacentCase = grid.getAdjacentCases(currentCase).stream().filter(c -> !c.hasUnit()).collect(Collectors.toList());
+                            final int carriedCount = ((Transport) unit).getCarriedUnits().size();
 
-                            if (adjacentCase.size() == 1) {
+                            if (carriedCount == 1) {
 
-//                                adjacentCase.get(0).setUnit(((Transport) unit).getCarriedUnit());
-                                this.instance.setGameState(GameState.PLAYING_SELECTING);
+                                final Unit carriedUnit = ((Transport) unit).getCarriedUnits().get(0);
 
-                                menuManagerInstance.clearNonPersistent();
-//                                ((Transport) unit).setCarriedUnit(null);
+                                List<Case> adjacentCase = grid.getAdjacentCases(selectedCase)
+                                        .stream()
+                                        .filter(c -> !c.hasUnit())
+                                        .filter(c -> carriedUnit.canMoveTo(c, game.getWeather()))
+                                        .collect(Collectors.toList());
 
+                                if (adjacentCase.size() == 1) {
 
+                                    adjacentCase.get(0).setUnit(carriedUnit);
+                                    ((Transport) unit).removeCarriedUnit(carriedUnit);
+                                    this.instance.setGameState(GameState.PLAYING_SELECTING);
+                                    menuManagerInstance.clearNonPersistent();
+
+                                }
+                                else if (adjacentCase.size() >= 2) {
+
+                                    game.setSelectedCase(currentCase);
+                                    this.instance.setGameState(GameState.PLAYING_SELECTING_DROP_ZONE);
+                                    menuManagerInstance.clearNonPersistent();
+                                    game.setOverlayType(OverlayType.MISC);
+                                    game.setOverlayCases(new HashSet<>(adjacentCase));
+
+                                }
                             }
-                            else if (adjacentCase.size() >= 2) {
+                            else {
 
                                 game.setSelectedCase(currentCase);
-                                this.instance.setGameState(GameState.PLAYING_SELECTING_DROP_ZONE);
+                                this.instance.setGameState(GameState.PLAYING_SELECTING_DROPPED_UNIT);
                                 menuManagerInstance.clearNonPersistent();
-                                game.setOverlayType(OverlayType.MISC);
-                                game.setOverlayCases(new HashSet<>(adjacentCase));
+                                menuManagerInstance.addMenu(new DropUnitMenu(new OptionSelector<>(((Transport) unit).getCarriedUnits())));
 
                             }
 
@@ -648,6 +717,16 @@ public class ActionHandler {
                             else System.out.println("Warn: No unit to reload");
                             Logger.getInstanceActionHandler().log("Warn: No unit to reload");
 
+                        }
+                        else if (action == UnitAction.DIVE) {
+                            ((Submarine) unit).dive();
+                            this.instance.setGameState(GameState.PLAYING_SELECTING);
+                            menuManagerInstance.clearNonPersistent();
+                        }
+                        else if (action == UnitAction.SURFACE) {
+                            ((Submarine) unit).surface();
+                            this.instance.setGameState(GameState.PLAYING_SELECTING);
+                            menuManagerInstance.clearNonPersistent();
                         }
                         else {
                             System.out.println("Warn: Unknown action");
@@ -684,50 +763,47 @@ public class ActionHandler {
 
                 case PLAYING_MOVING_UNIT: {
 
-                    Case source = selectedCase;
-                    boolean trapped = game.getMovement().pathTrapped(source.getUnit());
-                    Case destination = game.getMovement().getMovementTail();
+                    if (grid == null) break;
+
+                    final Case destination = game.getMovement().getMovementTail();
 
                     if (!destination.hasUnit()) {
 
-                        Unit u = source.getUnit();
-                        u.setMoved(true);
-
-                        if (u instanceof Submarine && ((Submarine) u).isUnderwater()) {
-                            u.setEnergy(u.getEnergy() - game.getMovement().getCost(u, game.getWeather()) * 2);
-                        }
-                        else {
-                            u.setEnergy(u.getEnergy() - game.getMovement().getCost(u, game.getWeather()));
-                        }
-
-                        source.setUnit(null);
-
-
-                        MiniWars.getInstance().setGameState(GameState.PLAYING_RENDERING_MOVING_UNIT);
-                        MovementAnimation animation = new MovementAnimation(u, game.getMovement());
-
-                        rendererInstance.addMovementAnimation(animation);
-
-                        // boolean piégé
-                        animation.waitUntilFinished();
-                        System.out.println("trapped: " + trapped);
-                        // dire que l'unité est piégé
-
-                        destination.setUnit(u);
-                        grid.moveUnit(source, destination, game.getMovement());
-
-                        game.setSelectedCase(destination);
-                        System.out.println("selected case: " + selectedCase);
-
+                        grid.moveUnit(game.getMovement());
                         game.clearOverlayCases();
-                        this.instance.setGameState(GameState.PLAYING_SELECTING_UNIT_ACTION);
-
-                        OptionSelector<UnitAction> actions = destination.getUnit().getAvailableActions(destination, grid);
-                        menuManagerInstance.addMenu(new UnitActionMenu(actions));
 
                     }
 
                     return true;
+                }
+
+                case PLAYING_SELECTING_DROPPED_UNIT: {
+
+                    final DropUnitMenu menu = (DropUnitMenu) menuManagerInstance.getMenu(MenuModel.DROP_UNIT_MENU);
+                    final Unit droppedUnit = menu.getSelectedValue();
+
+                    List<Case> adjacentCase = grid.getAdjacentCases(currentCase)
+                            .stream()
+                            .filter(c -> !c.hasUnit())
+                            .filter(c -> droppedUnit.canMoveTo(c, game.getWeather()))
+                            .collect(Collectors.toList());
+
+                    if (adjacentCase.size() == 1) {
+
+                        adjacentCase.get(0).setUnit(droppedUnit);
+                        ((Transport) selectedUnit).removeCarriedUnit(droppedUnit);
+                        this.instance.setGameState(GameState.PLAYING_SELECTING);
+                        menuManagerInstance.clearNonPersistent();
+
+                    }
+                    else if (adjacentCase.size() >= 2) {
+
+                        this.instance.setGameState(GameState.PLAYING_SELECTING_DROP_ZONE);
+                        game.setOverlayType(OverlayType.MISC);
+                        game.setOverlayCases(new HashSet<>(adjacentCase));
+
+                    }
+
                 }
 
                 case PLAYING_SELECTING_DROP_ZONE: {
@@ -736,13 +812,16 @@ public class ActionHandler {
                     if (grid == null) break;
                     if (currentCase == null) break;
 
-                    if (!currentCase.hasUnit() && currentCase.isAdjacent(selectedCase)) {
+                    final DropUnitMenu menu = (DropUnitMenu) menuManagerInstance.getMenu(MenuModel.DROP_UNIT_MENU);
 
-//                        Unit carriedUnit = ((Transport) game.getSelectedCase().getUnit()).getCarriedUnit();
+                    final Unit dropUnit = menu != null ? menu.getSelectedValue() : ((Transport) selectedUnit).getCarriedUnits().get(0);
 
-//                        currentCase.setUnit(carriedUnit);
-//                        ((Transport) game.getSelectedCase().getUnit()).setCarriedUnit(null);
+                    if (!currentCase.hasUnit() && currentCase.isAdjacent(selectedCase) && dropUnit.canMoveTo(currentCase, game.getWeather())) {
+
+                        currentCase.setUnit(dropUnit);
+                        ((Transport) selectedUnit).removeCarriedUnit(dropUnit);
                         this.instance.setGameState(GameState.PLAYING_SELECTING);
+                        menuManagerInstance.clearNonPersistent();
                         game.clearOverlayCases();
 
                     }
@@ -755,17 +834,20 @@ public class ActionHandler {
 
                     if (cursor == null) break;
                     if (grid == null) break;
-                    if (currentCase == null) break;
+                    if (currentPlayer == null) break;
+                    if (selectedCase == null) break;
 
                     if (currentCase.isAdjacent(selectedCase)) {
 
                         if (currentUnit instanceof Transport) {
 
-                            if (currentUnit.getOwner() == currentPlayer.getType()) {
+                            final Transport transport = (Transport) currentUnit;
 
-                                if (!((Transport) currentUnit).isCarryingUnit()) {
+                            if (!transport.isFull() && transport.accept(selectedUnit)) {
 
-//                                    ((Transport) transportUnit).setCarriedUnit(game.getSelectedCase().getUnit());
+                                if (currentUnit.getOwner() == currentPlayer.getType()) {
+
+                                    transport.addCarriedUnit(selectedUnit);
                                     selectedCase.setUnit(null);
                                     this.instance.setGameState(GameState.PLAYING_SELECTING);
 
@@ -777,34 +859,49 @@ public class ActionHandler {
 
                     }
 
+                    return true;
+
                 }
 
                 case PLAYING_SELECTING_FACTORY_UNIT: {
 
                     final FactoryActionMenu factoryActionMenu = (FactoryActionMenu) menuManagerInstance.getMenu(MenuModel.FACTORY_ACTION_MENU);
-                    final UnitType unitToCreate = factoryActionMenu.getSelectedOption().getValue();
-                    final Unit newUnit = unitToCreate.newInstance(currentPlayer.getType());
-//                    newUnit.setPlayed(true);
-//todo remettre ct pour un dbug
-                    if(currentCase.getTerrain() instanceof Port) {
+                    final OptionSelector<UnitType>.Option option = factoryActionMenu.getSelectedOption();
 
-                        Case c = grid.getAdjacentCases(currentCase).stream().filter(cs -> cs.getTerrain() instanceof Water && !cs.hasUnit()).findFirst().orElse(null);
-                        if(c != null) {
+                    if (option != null) {
 
-                            c.setUnit(newUnit);
+                        final UnitType unitToCreate = option.getValue();
+                        final Unit newUnit = unitToCreate.newInstance(currentPlayer.getType());
 
-                        } else System.out.println("ERROR! Impossible de creer l'unite navale!");
+                        newUnit.setPlayed(true);
+
+                        if (currentCase.getTerrain() instanceof Port) {
+
+                            Case c = grid.getAdjacentCases(currentCase)
+                                    .stream()
+                                    .filter(cs -> cs.getTerrain() instanceof Water && !cs.hasUnit())
+                                    .findFirst()
+                                    .orElse(null);
+
+                            if (c != null) {
+
+                                c.setUnit(newUnit);
+                                currentPlayer.setMoney(currentPlayer.getMoney() - unitToCreate.getPrice());
+
+                            }
+                            else System.out.println("ERROR! Impossible de creer l'unite navale!");
+
+                        }
+                        else {
+                            currentCase.setUnit(newUnit);
+                            currentPlayer.setMoney(currentPlayer.getMoney() - unitToCreate.getPrice());
+                        }
+
+                        this.instance.setGameState(GameState.PLAYING_SELECTING);
+                        menuManagerInstance.clearNonPersistent();
 
                     }
-                    else {
-                        currentCase.setUnit(newUnit);
-                    }
-
-                    this.instance.setGameState(GameState.PLAYING_SELECTING);
-                    menuManagerInstance.clearNonPersistent();
-
                 }
-
             }
         }
         catch (Exception e) {
@@ -833,6 +930,9 @@ public class ActionHandler {
 
             switch (gameState) {
 
+                case MENU_TITLE_SCREEN:
+                    break;
+
                 case MENU_MAP_SELECTION:
                     Logger.getInstanceActionHandler().log("escape@MENU_MAP_SELECTION");
                     this.instance.setGameState(GameState.MENU_TITLE_SCREEN);
@@ -843,14 +943,15 @@ public class ActionHandler {
                 case PLAYING_SELECTING:
                     Logger.getInstanceActionHandler().log("escape@PLAYING_SELECTING");
                     this.instance.setGameState(GameState.MENU_PAUSE);
+                    MenuManager.getInstance().addMenu(new PauseMenu());
                     break;
 
-                case PLAYING_SELECTING_DROP_ZONE:
-                case PLAYING_SELECTING_TRANSPORT:
-                case MENU_PAUSE:
-                    Logger.getInstanceActionHandler().log("escape@MENU_PAUSE");
-                    this.instance.setGameState(GameState.PLAYING_SELECTING);
-                    break;
+//                case PLAYING_SELECTING_DROP_ZONE:
+//                case PLAYING_SELECTING_TRANSPORT:
+//                case MENU_PAUSE:
+//                    Logger.getInstanceActionHandler().log("escape@MENU_PAUSE");
+//                    this.instance.setGameState(GameState.PLAYING_SELECTING);
+//                    break;
 
                 default:
                     Logger.getInstanceActionHandler().log("escape@default");
@@ -905,12 +1006,23 @@ public class ActionHandler {
                     index = (index + 1) % playerUnitsCases.size();
 
                     cursor.setCoordinate(playerUnitsCases.get(index).getCoordinate());
+                    game.getView().focus(playerUnitsCases.get(index));
 
                 }
                 else if (playerUnitsCases.size() != 0) {
                     cursor.setCoordinate(playerUnitsCases.get(0).getCoordinate());
+                    game.getView().focus(playerUnitsCases.get(0));
                 }
+
             }
+            else if (gameState == GameState.MENU_MAP_SELECTION) {
+
+                MapSelectionMenu mapSelectionMenu = (MapSelectionMenu) MenuManager.getInstance().getMenu(MenuModel.MAP_SELECTION_MENU);
+                mapSelectionMenu.toggleCurrentField();
+                mapSelectionMenu.needsRefresh(true);
+
+            }
+
         }
         catch (Exception e) {
             Logger.getInstanceActionHandler().write(e);

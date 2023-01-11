@@ -19,16 +19,12 @@ import main.render.Renderable;
 public abstract class Menu implements Comparable<Menu>, Renderable {
 
     private final int priority;
-    private boolean isVisible;
+    private volatile boolean isVisible;
     private volatile boolean needsRefresh;
 
     /**
      * Constructeur d'un menu
      *
-     * @param x        La position x du centre du menu
-     * @param y        La position y du centre du menu
-     * @param width    La largeur du menu
-     * @param height   La hauteur du menu
      * @param priority La priorite d'affichage du menu
      */
     public Menu(int priority) {
@@ -53,7 +49,7 @@ public abstract class Menu implements Comparable<Menu>, Renderable {
      *
      * @return true si le menu est visible, false sinon
      */
-    public boolean isVisible() {
+    public synchronized boolean isVisible() {
         return this.isVisible;
     }
 
@@ -62,7 +58,7 @@ public abstract class Menu implements Comparable<Menu>, Renderable {
      *
      * @param isVisible true si le menu est visible, false sinon
      */
-    public void setVisible(boolean isVisible) {
+    public synchronized void setVisible(boolean isVisible) {
         this.isVisible = isVisible;
         this.needsRefresh = true;
     }
@@ -85,7 +81,7 @@ public abstract class Menu implements Comparable<Menu>, Renderable {
      *
      * @see Renderable
      */
-    public void needsRefresh(boolean needsRefresh) {
+    public synchronized void needsRefresh(boolean needsRefresh) {
         this.needsRefresh = needsRefresh;
     }
 

@@ -86,16 +86,19 @@ public class Renderer {
 
             try {
 
-                boolean copyBuffer = false;
+                boolean copyBuffer;
                 this.clearBuffer();
 
                 switch (gameState) {
 
                     case MENU_MAP_SELECTION:
                     case MENU_TITLE_SCREEN:
+                        this.clearBuffer();
+                        copyBuffer = MenuManager.getInstance().anyMenuNeedsRefresh();
+                        if(copyBuffer) System.out.println("Rendering menu");
                         break;
                     case PLAYING_MOVING_UNIT:
-                        copyBuffer = this.renderMap(gameState, game, game.getCursor().needsRefresh());
+                        copyBuffer = this.renderMap(gameState, game, game.getCursor().needsRefresh() || MenuManager.getInstance().anyMenuNeedsRefresh());
                         copyBuffer |= this.renderOverlay(game, copyBuffer);
                         copyBuffer |= this.renderMovement(game, copyBuffer);
                         copyBuffer |= this.renderCursor(game, gameState, copyBuffer);
@@ -107,7 +110,7 @@ public class Renderer {
 
                         break;
                     case PLAYING_ENDIND_SCREEN:
-                        clearBuffer();
+                        this.clearBuffer();
                         StdDraw.setPenColor(StdDraw.WHITE);
                         StdDraw.text(150, 150, game.getWinner().getName());
                         copyBuffer = true;
@@ -132,12 +135,13 @@ public class Renderer {
                 }
 
                 if (System.currentTimeMillis() - previousFrameUpdate > 1000) {
-                    Logger.getInstanceGameLoop().log("FPS: " + frames);
+//                    System.out.println("FPS: " + frames);
                     frames = 0;
                     previousFrameUpdate = System.currentTimeMillis();
                 }
             }
             catch (Exception e) {
+                e.printStackTrace();
                 Logger.getInstanceGameLoop().write(e);
             }
 
@@ -342,10 +346,13 @@ public class Renderer {
 
             if (game.getView().isVisible(movement.getMovementHead())) {
 
-                int x = gameView.offsetX(movement.getMovementHead().getCoordinate().getX());
-                int y = gameView.offsetY(movement.getMovementHead().getCoordinate().getY());
+                int offsetX = gameView.offsetX(movement.getMovementHead().getCoordinate().getX());
+                int offsetY = gameView.offsetY(movement.getMovementHead().getCoordinate().getY());
 
-                gameView.getCase(x, y).renderUnit(x, y, this.unitClockSync.getFrame());
+                final double x = DisplayUtil.getCenterX(offsetX, mapWidth);
+                final double y = DisplayUtil.getCenterY(offsetY, mapHeight);
+
+                gameView.getCase(offsetX, offsetY).renderUnit(x, y, this.unitClockSync.getFrame());
             }
 
             game.getMovement().needsRefresh(false);

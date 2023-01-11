@@ -16,6 +16,7 @@ public final class UnitMovementCost {
         ON_AIRPORT_NORMAL(TerrainType.AIRPORT, 1),
         ON_PORT_NORMAL(TerrainType.PORT, 1),
         ON_PLAIN_NORMAL(TerrainType.PLAIN, 1),
+        ON_BEACH_NORMAL(TerrainType.BEACH, 1),
         ON_FOREST_NORMAL(TerrainType.FOREST, 1, Weather.CLEAR, Weather.HEAVY_WIND, Weather.RAINY),
         ON_MOUNTAIN_NORMAL(TerrainType.MOUNTAIN, 2, Weather.CLEAR, Weather.HEAVY_WIND, Weather.RAINY),
 
@@ -65,6 +66,7 @@ public final class UnitMovementCost {
         ON_PORT_NORMAL(TerrainType.PORT, 1),
         ON_FACTORY_NORMAL(TerrainType.FACTORY, 1),
         ON_PLAIN_NORMAL(TerrainType.PLAIN, 1, Weather.CLEAR, Weather.HEAVY_WIND, Weather.RAINY),
+        ON_BEACH_NORMAL(TerrainType.BEACH, 2),
         ON_FOREST_NORMAL(TerrainType.FOREST, 2, Weather.CLEAR, Weather.HEAVY_WIND, Weather.RAINY),
 
         ON_PLAIN_SNOWY(TerrainType.PLAIN, 2, Weather.SNOWY),
@@ -115,6 +117,8 @@ public final class UnitMovementCost {
         ON_AIRPORT(TerrainType.AIRPORT, 1),
         ON_PORT(TerrainType.PORT, 1),
         ON_PLAIN(TerrainType.PLAIN, 1),
+        ON_OBSTACLE(TerrainType.OBSTACLE, 1),
+        ON_BEACH(TerrainType.BEACH, 1),
         ON_FOREST(TerrainType.FOREST, 1),
         ON_MOUNTAIN(TerrainType.MOUNTAIN, 1),
         ON_WATER(TerrainType.WATER, 1);
