@@ -26,8 +26,6 @@ public class FactoryTerrain extends Factory {
      * Verifie si la case passee en parametre peut faire apparaitre une unite
      *
      * @param currentCase   La case sur laquelle on veut faire apparaitre l'unite
-     * @param currentPlayer Le joueur proprietaire de l'unite/de la case
-     *
      * @return true si l'unite peut apparaitre, false sinon
      */
     public static boolean canCreateUnit(Case currentCase) {
@@ -50,21 +48,6 @@ public class FactoryTerrain extends Factory {
     @Override
     public TerrainType getType() {
         return TerrainType.FACTORY;
-    }
-
-    /**
-     * Cree une unite sur la case
-     *
-     * @param unit
-     * @param c
-     * @param owner
-     */
-    public void createUnit(Unit unit, Case c, Player owner) {
-
-        int price = unit.getType().getPrice();
-        c.setUnit(unit);
-        owner.setMoney(owner.getMoney() - price);
-
     }
 
 }

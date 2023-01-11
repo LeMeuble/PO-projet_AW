@@ -20,7 +20,7 @@ public interface Renderable {
      *
      * @see Renderer
      */
-    void render();
+    default void render() {}
 
     /**
      * Indique si l'objet qui implement {@link Renderable}

@@ -22,7 +22,6 @@ import main.util.OptionSelector;
 import main.weather.Weather;
 
 import java.util.*;
-import java.util.function.Consumer;
 
 /**
  * Classe representant la grille du plateau de jeu sous forme d'un
@@ -31,7 +30,7 @@ import java.util.function.Consumer;
  * @author LECONTE--DENIS Tristan
  * @author GRAVOT Lucien
  */
-public class Grid implements Iterable<Case> {
+public class Grid {
 
     private final Case[][] grid;
 
@@ -51,7 +50,7 @@ public class Grid implements Iterable<Case> {
 
         final Coordinate srcCoordinate = center.getCoordinate();
 
-        List<Case> around = this.getCasesAround(srcCoordinate.getX(), srcCoordinate.getY(), 1, unit.getMovementPoint(weather));
+        List<Case> around = this.getCasesAround(srcCoordinate, 1, unit.getMovementPoint(weather));
         around.add(center);
 
         Dijkstra dijkstra = new Dijkstra(center, around, unit, weather);
@@ -74,19 +73,26 @@ public class Grid implements Iterable<Case> {
     }
 
     /**
-     * Renvoie la Case correspondante pour des coordonnees x et y.
+     * Renvoie la Case correspondante pour des coordonnees
      *
-     * @param x La coordonnee x sur la carte
-     * @param y La coordonnee y sur la carte
+     * @param coordinate L'instance de coordonnee sur la carte
      *
-     * @return La Case presente en x:y
+     * @return La case presente en x:y
+     *
+     * @see Coordinate
      */
-    public Case getCase(int x, int y) {
+    public Case getCase(Coordinate coordinate) {
 
-        return grid[y][x];
+        return grid[coordinate.getY()][coordinate.getX()];
 
     }
 
+    /**
+     * Obtenir la liste des cases en reduisant la grille a deux dimensions sous
+     * forme d'une liste a une dimension.
+     *
+     * @return La liste des cases
+     */
     public List<Case> getCases() {
 
         List<Case> cases = new LinkedList<>();
@@ -115,16 +121,18 @@ public class Grid implements Iterable<Case> {
     /**
      * Renvoie les cases presentes dans un cercle autour d'une coordonnee
      *
-     * @param x         La coordonnee x sur la carte
-     * @param y         La coordonnee y sur la carte
-     * @param minRadius Le rayon minimum du cercle
-     * @param maxRadius La rayon maximum du cercle
+     * @param coordinate Les coordonnees du centre du cercle
+     * @param minRadius  Le rayon minimum du cercle
+     * @param maxRadius  La rayon maximum du cercle
      *
      * @return Une liste doublement chainee de Cases
      */
-    public List<Case> getCasesAround(int x, int y, int minRadius, int maxRadius) {
+    public List<Case> getCasesAround(Coordinate coordinate, int minRadius, int maxRadius) {
 
         final List<Case> cases = new LinkedList<>();
+
+        final int x = coordinate.getX();
+        final int y = coordinate.getY();
 
         // On parcourt les cases du cercle seulement pour eviter de faire des calculs inutiles
         final int minX = Math.max(x - maxRadius, 0);
@@ -141,7 +149,7 @@ public class Grid implements Iterable<Case> {
 
                 if (d >= minRadius && d <= maxRadius) {
 
-                    cases.add(this.getCase(i, j));
+                    cases.add(this.getCase(new Coordinate(i, j)));
 
                 }
 
@@ -208,9 +216,7 @@ public class Grid implements Iterable<Case> {
     }
 
     public void resetFogOfWar(boolean foggy) {
-
         this.getCases().forEach(c -> c.setFoggy(foggy));
-
     }
 
     public void updateFogOfWarBuilding(Case c) {
@@ -218,7 +224,7 @@ public class Grid implements Iterable<Case> {
         Player.Type p = MiniWars.getInstance().getCurrentGame().getCurrentPlayer().getType();
 
         if (c.getTerrain() instanceof Property && ((Property) c.getTerrain()).getOwner() == p) {
-            for (Case caseAround : this.getCasesAround(c.getCoordinate().getX(), c.getCoordinate().getY(), 0, 2)) {
+            for (Case caseAround : this.getCasesAround(c.getCoordinate(), 0, 2)) {
                 caseAround.setFoggy(false);
             }
         }
@@ -238,7 +244,7 @@ public class Grid implements Iterable<Case> {
                     weatherModifier = 2;
                 }
 
-                for (Case caseAround : this.getCasesAround(c.getCoordinate().getX(), c.getCoordinate().getY(), 0, 4 - weatherModifier)) {
+                for (Case caseAround : this.getCasesAround(c.getCoordinate(), 0, 4 - weatherModifier)) {
                     updateFogOfWarCase(caseAround, unit);
                 }
 
@@ -249,7 +255,7 @@ public class Grid implements Iterable<Case> {
                     weatherModifier = 1;
                 }
 
-                for (Case caseAround : this.getCasesAround(c.getCoordinate().getX(), c.getCoordinate().getY(), 0, 2 - weatherModifier)) {
+                for (Case caseAround : this.getCasesAround(c.getCoordinate(), 0, 2 - weatherModifier)) {
                     updateFogOfWarCase(caseAround, unit);
                 }
             }
@@ -281,22 +287,6 @@ public class Grid implements Iterable<Case> {
             updateFogOfWarUnit(c, unit);
         }
 
-    }
-
-
-    @Override
-    public Iterator<Case> iterator() {
-        return this.getCases().iterator();
-    }
-
-    @Override
-    public void forEach(Consumer<? super Case> action) {
-        this.getCases().forEach(action);
-    }
-
-    @Override
-    public Spliterator<Case> spliterator() {
-        return Iterable.super.spliterator();
     }
 
 }

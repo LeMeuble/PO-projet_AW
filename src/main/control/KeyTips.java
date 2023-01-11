@@ -7,9 +7,15 @@ import main.map.Case;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiPredicate;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+/**
+ * Classe representant les indicateurs de touches et leurs conditions
+ * d'affichages.
+ *
+ * @author LECONTE--DENIS Tristan
+ * @author GRAVOT Lucien
+ */
 public enum KeyTips {
 
     SELECTING_MOVE("arrows", 48d, 32d, "D\u00e9placer", GameState.PLAYING_SELECTING),
@@ -30,6 +36,16 @@ public enum KeyTips {
     private final BiPredicate<Case, Player.Type> condition;
     private final GameState[] associatedState;
 
+
+    /**
+     * Constructeur de l'enumeration.
+     *
+     * @param texture         Le nom de la texture a afficher (dans le dossier des textures)
+     * @param textureWidth    La largeur de la texture
+     * @param textureHeight   La hauteur de la texture
+     * @param text            Texte a afficher
+     * @param associatedState Les etats de jeu associes a l'indicateur
+     */
     KeyTips(String texture, double textureWidth, double textureHeight, String text, GameState... associatedState) {
 
         this.texture = texture;
@@ -41,6 +57,16 @@ public enum KeyTips {
 
     }
 
+    /**
+     * Constructeur de l'enumeration avec condition.
+     *
+     * @param texture         Le nom de la texture a afficher (dans le dossier des textures)
+     * @param textureWidth    La largeur de la texture
+     * @param textureHeight   La hauteur de la texture
+     * @param text            Texte a afficher
+     * @param condition       Condition d'affichage dependante de {@link Case} et {@link Player.Type}
+     * @param associatedState Les etats de jeu associes a l'indicateur
+     */
     KeyTips(String texture, double textureWidth, double textureHeight, String text, BiPredicate<Case, Player.Type> condition, GameState... associatedState) {
 
         this.texture = texture;
@@ -52,27 +78,60 @@ public enum KeyTips {
 
     }
 
-    public String getTexture() {
-        return this.texture;
-    }
-
-    public double getTextureWidth() {
-        return this.textureWidth;
-    }
-
-    public double getTextureHeight() {
-        return this.textureHeight;
-    }
-
-    public String getText() {
-        return this.text;
-    }
-
+    /**
+     * Obtenir la liste des indicateurs associes a un etat de jeu, une case et une joueur.
+     *
+     * @param state Etat de jeu actuel.
+     * @param currentCase Case actuelle.
+     * @param player Joueur actuel.
+     *
+     * @return Liste des indicateurs associes a un etat de jeu, une case et une joueur.
+     *
+     * @see GameState
+     * @see Case
+     * @see Player.Type
+     */
     public static List<KeyTips> getAssociatedKeyTips(GameState state, Case currentCase, Player.Type player) {
         return Arrays.stream(KeyTips.values())
                 .filter(keyTip -> Arrays.asList(keyTip.associatedState).contains(state) || keyTip.associatedState.length == 0)
                 .filter(keyTip -> keyTip.condition.test(currentCase, player))
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * Obtenir la texture de l'indicateur.
+     *
+     * @return La texture de l'indicateur
+     */
+    public String getTexture() {
+        return this.texture;
+    }
+
+    /**
+     * Obtenir la largeur de la texture de l'indicateur.
+     *
+     * @return La largeur de la texture de l'indicateur
+     */
+    public double getTextureWidth() {
+        return this.textureWidth;
+    }
+
+    /**
+     * Obtenir la hauteur de la texture de l'indicateur.
+     *
+     * @return La hauteur de la texture de l'indicateur
+     */
+    public double getTextureHeight() {
+        return this.textureHeight;
+    }
+
+    /**
+     * Obtenir le texte de l'indicateur.
+     *
+     * @return Le texte de l'indicateur
+     */
+    public String getText() {
+        return this.text;
     }
 
 }

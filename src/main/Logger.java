@@ -1,42 +1,102 @@
 package main;
 
+import ressources.PathUtil;
+
 import java.io.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Logger {
 
-    public static Logger instanceGameLoop = new Logger("logs-gameloop.txt");
-    public static Logger instanceMain = new Logger("logs-main.txt");
-    public static Logger instanceActionHandler = new Logger("logs-handler.txt");
+    private static final String LOG_DIR = PathUtil.ROOT_FOLDER + PathUtil.SEP + "logs";
 
-    private final String output;
+    public enum Level {
+        DEBUG,
+        INFO,
+        WARNING,
+        ERROR
+    }
 
-    public Logger(String output) {
+    private static class InstanceHolder {
 
-        this.output = output;
+        private static final Map<String, Logger> loggers = new HashMap<>();
+
+        private static Logger getLogger(String name) {
+            if (!loggers.containsKey(name)) {
+                loggers.put(name, new Logger(name));
+            }
+            return loggers.get(name);
+        }
 
     }
 
-    public static Logger getInstanceGameLoop() {
-        return instanceGameLoop;
+    static {
+
+        final File directory = new File(LOG_DIR);
+        if (!directory.exists()) {
+            directory.mkdir();
+        }
+
     }
 
-    public static Logger getInstanceMain() {
-        return instanceMain;
+    private final String name;
+    private BufferedWriter writer;
+    private boolean isInitialized = false;
+
+    public Logger(String name) {
+
+        this.name = name;
+        this.initWriter();
+
     }
 
-    public static Logger getInstanceActionHandler() {
-        return instanceActionHandler;
+    public static void closeAll() {
+        InstanceHolder.loggers.values().forEach(Logger::close);
+    }
+
+    public static Logger getLogger() {
+
+        return InstanceHolder.getLogger(Thread.currentThread().getName().toLowerCase());
+
+    }
+
+    public void initWriter() {
+        try {
+            this.writer = new BufferedWriter(new FileWriter(LOG_DIR + PathUtil.SEP + name + ".log", true), 512);
+            this.isInitialized = true;
+        }
+        catch (IOException ignored) {
+            ignored.printStackTrace();
+            this.writer = null;
+            this.isInitialized = false;
+        }
+
+    }
+
+    public String getDatetime() {
+
+        return DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(LocalDateTime.now());
+
     }
 
     public void log(String message) {
+        this.log(Level.INFO, message);
+    }
+
+    public void log(Level level, String message) {
 
         try {
 
-            BufferedWriter writer = new BufferedWriter(new FileWriter(output, true));
-            writer.write(message + "\n");
-            writer.close();
+            if (!this.isInitialized) {
+                this.initWriter();
+            }
 
-        } catch (Exception e) {
+            this.writer.write("[" + this.getDatetime() + "]" + " (" + level.name() + ") " + message + "\n");
+
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -46,18 +106,33 @@ public class Logger {
 
         try {
 
-            BufferedWriter writer = new BufferedWriter(new FileWriter(output, true));
-            StringWriter sw = new StringWriter();
-            PrintWriter pw = new PrintWriter(sw);
-            exception.printStackTrace(pw);
-            writer.write(sw.toString());
-            writer.close();
+            if (!this.isInitialized) {
+                this.initWriter();
+            }
 
-        } catch (Exception e) {
+            final StringWriter sw = new StringWriter();
+            final PrintWriter pw = new PrintWriter(sw);
+            exception.printStackTrace(pw);
+
+            String[] lines = sw.toString().split(System.getProperty("line.separator"));
+            for (String line : lines) {
+                this.writer.write("[" + this.getDatetime() + "]" + " (" + Level.ERROR.name() + ") " + line + "\n");
+            }
+
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }
 
+    }
 
+    private void close() {
+        try {
+            this.writer.close();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

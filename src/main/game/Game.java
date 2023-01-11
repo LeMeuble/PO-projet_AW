@@ -30,8 +30,15 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Classe representant une partie dans une carte. Une partie est caracterisee par / contient : - Une carte (La grille) -
- * Une metadonnee de carte - Le joueur courant - Les joueurs - Le curseur de selection - Le temps (météo)
+ * Classe representant une partie dans une carte.
+ * Une partie est caracterisee par / contient :
+ * - Une carte (La grille)
+ * - Une metadonnee de carte
+ * - Le joueur courant
+ * - Les joueurs
+ * - Le curseur de selection
+ * - Le temps (météo)
+ * - etc (autres donnees utilitaires, ex: resultat des calculs de Dijkstra)
  *
  * @author LECONTE--DENIS Tristan
  * @author GRAVOT Lucien
@@ -39,17 +46,18 @@ import java.util.stream.Collectors;
 public class Game {
 
 
-    private final MapMetadata mapMetadata;
-    private final Settings settings;
     private final Grid grid;
     private final GameView view;
-    private final Map<Player.Type, Player> players;
+    private final Cursor cursor;
+    private final Settings settings;
+    private final MapMetadata mapMetadata;
     private final WeatherManager weatherManager;
-    private Dijkstra dijkstraResult;
-    private Cursor cursor;
+    private final Map<Player.Type, Player> players;
+    private int day;
     private Movement movement;
-    private Player.Type currentPlayer;
     private Case selectedCase;
+    private Dijkstra dijkstraResult;
+    private Player.Type currentPlayer;
 
     private volatile Set<Case> overlayCases;
     private volatile OverlayType overlayType;
@@ -63,6 +71,7 @@ public class Game {
      */
     public Game(MapMetadata mapMetadata, Settings settings) {
 
+        this.day = 1;
         this.settings = settings;
         this.cursor = new Cursor(mapMetadata.getWidth(), mapMetadata.getHeight());
         this.movement = null;
@@ -97,6 +106,13 @@ public class Game {
         return this.mapMetadata;
     }
 
+    /**
+     * Obtenir les parametres de la partie.
+     *
+     * @return Les parametres de la partie
+     *
+     * @see Settings
+     */
     public Settings getSettings() {
         return this.settings;
     }
@@ -112,10 +128,25 @@ public class Game {
         return this.grid;
     }
 
+    /**
+     * Obtenir l'instance Dijkstra enregistree dans la partie.
+     *
+     * @return Instance de Dijkstra enregistree dans la partie.
+     *
+     * @see Dijkstra
+     */
+    @Nullable
     public Dijkstra getDijkstraResult() {
         return this.dijkstraResult;
     }
 
+    /**
+     * Definir une instance de Dijkstra a enregister.
+     * Cette methode de faire en quelque sorte de stocker le resultat d'un
+     * calcul Dijkstra en "cache".
+     *
+     * @param dijkstraResult Instance de Dijkstra a enregistrer.
+     */
     public void setDijkstraResult(Dijkstra dijkstraResult) {
         this.dijkstraResult = dijkstraResult;
     }
@@ -193,66 +224,125 @@ public class Game {
         return this.players.get(currentPlayer);
     }
 
+    /**
+     * Obtenir l'instance du joueur a partir de son type.
+     * @param playerType Type du joueur a obtenir.
+     *
+     * @return Instance du joueur. Ou null si le joueur n'existe pas.
+     */
+    @Nullable
     public Player getPlayerFromType(Player.Type playerType) {
 
         return this.players.get(playerType);
 
     }
 
+    /**
+     * Determiner si un joueur a un QG restant.
+     *
+     * @param player Type du joueur a verifier.
+     *
+     * @return true si le joueur a un QG restant, false sinon.
+     */
     public boolean hasRemainingHQ(Player.Type player) {
 
         return getRemainingHQ(player) != null;
 
     }
 
+    /**
+     * Obtenir le premier QG restant trouve d'un joueur.
+     *
+     * @param player Type du joueur a verifier.
+     *
+     * @return Instance du QG restant. Ou null si le joueur n'a plus de QG.
+     */
     public Case getRemainingHQ(Player.Type player) {
 
         return this.grid.getCases()
                 .stream()
-                .filter(c -> c.getTerrain() instanceof HQ)
-                .filter(c -> ((HQ) c.getTerrain()).getOwner() == player)
+                .filter(c -> c.getTerrain() instanceof HQ).filter(c -> ((HQ) c.getTerrain()).getOwner() == player)
                 .findFirst()
                 .orElse(null);
 
     }
 
+    /**
+     * Obtenir la liste des cases a surligner.
+     *
+     * @return Set des cases a surligner.
+     *
+     * @implNote Thread-safe.
+     */
     public synchronized Set<Case> getOverlayCases() {
         return this.overlayCases;
     }
 
+    /**
+     * Definir une liste de cases a surligner.
+     *
+     * @param overlayCases Set des cases a surligner.
+     *
+     * @implNote Thread-safe.
+     */
     public synchronized void setOverlayCases(Set<Case> overlayCases) {
         this.overlayCases = overlayCases;
     }
 
+    /**
+     * Obtenir le type de surlignage a utiliser.
+     *
+     * @return Type de surlignage a utiliser.
+     *
+     * @implNote Thread-safe.
+     */
     public synchronized OverlayType getOverlayType() {
         return this.overlayType;
     }
 
+    /**
+     * Definir le type de surlignage a utiliser.
+     *
+     * @param overlayType Type de surlignage a utiliser.
+     *
+     * @implNote Thread-safe.
+     */
     public synchronized void setOverlayType(OverlayType overlayType) {
         this.overlayType = overlayType;
     }
 
+    /**
+     * Effacer les cases en surbrilance.
+     */
     public synchronized void clearOverlayCases() {
         this.overlayCases.clear();
     }
 
+    /**
+     * Cette methode passe la partie au tour suivant.
+     * Plusieurs elements sont modifies lors de ce changement de tour :
+     * - Le joueur courant est change.
+     *
+     */
     public void nextTurn() {
 
         this.weatherManager.clock();
         if (this.weatherManager.willChange())
-            PopupRegistry.getInstance().push(new Popup("Changement météo!", "La météo va changer ! (" + this.weatherManager.getNextWeather().getName() + ")"));
+            PopupRegistry.getInstance()
+                    .push(new Popup("Changement m\u00e9t\u00e9o!", "La m\u00e9t\u00e9o va changer ! (" + this.weatherManager.getNextWeather().getName() + ")"));
 
         final Player.Type previousPlayer = this.currentPlayer;
-        final Player nextPlayer = this.nextPlayer();
-        final boolean newDay = previousPlayer.ordinal() > nextPlayer.getType().ordinal();
+        final Player.Type nextPlayer = this.nextPlayer().getType();
 
-        this.grid.resetFogOfWar(settings.isFogOfWar());
+        // Il s'agit d'un nouveau jour, si l'on a fait une "rotation" complete des joueurs.
+        final boolean newDay = previousPlayer.ordinal() > nextPlayer.ordinal();
+
+        this.grid.resetFogOfWar(this.settings.isFogOfWar());
 
         for (Case c : this.grid.getCases()) {
 
             final Terrain terrain = c.getTerrain();
             final Unit unit = c.getUnit();
-
 
             if (newDay) {
 
@@ -278,10 +368,7 @@ public class Game {
 
                         int supplyMaxRadius = property instanceof Port ? 1 : 0;
 
-                        int caseX = c.getCoordinate().getX();
-                        int caseY = c.getCoordinate().getY();
-
-                        for (Unit u : this.grid.getUnitsAround(this.grid.getCasesAround(caseX, caseY, 0, supplyMaxRadius))) {
+                        for (Unit u : this.grid.getUnitsAround(this.grid.getCasesAround(c.getCoordinate(), 0, supplyMaxRadius))) {
                             if (u.getOwner() == currentPlayer) {
                                 if (u instanceof Naval || u.getCoordinate().distance(c.getCoordinate()) == 0) {
                                     u.supply();
@@ -296,7 +383,7 @@ public class Game {
 
             }
 
-            if(unit != null) {
+            if (unit != null) {
 
                 unit.setPlayed(false);
                 unit.setMoved(false);
@@ -316,8 +403,8 @@ public class Game {
 
         }
 
-        this.view.focus(this.getRemainingHQ(nextPlayer.getType()));
-        this.cursor.setCoordinate(this.getRemainingHQ(nextPlayer.getType()).getCoordinate());
+        this.view.focus(this.getRemainingHQ(nextPlayer));
+        this.cursor.setCoordinate(this.getRemainingHQ(nextPlayer).getCoordinate());
         this.grid.getCases().forEach(c -> {
             this.grid.updateFogOfWar(c, c.getUnit());
         });
@@ -347,12 +434,7 @@ public class Game {
     public Player.Type getWinner() {
         //todo remove this
         Player.Type winner = null;
-        List<HQ> hqs =
-                this.grid.getCases()
-                        .stream()
-                        .filter(c -> c.getTerrain().getType() == TerrainType.HQ)
-                        .map(c -> (HQ) c.getTerrain())
-                        .collect(Collectors.toList());
+        List<HQ> hqs = this.grid.getCases().stream().filter(c -> c.getTerrain().getType() == TerrainType.HQ).map(c -> (HQ) c.getTerrain()).collect(Collectors.toList());
 
         for (HQ hq : hqs) {
 
@@ -374,7 +456,7 @@ public class Game {
 
             do {
 
-                int nextPlayer = this.currentPlayer.getValue() + 1 > this.getPlayerCount() ? 1 : this.currentPlayer.getValue() + 1;
+                final int nextPlayer = this.currentPlayer.getValue() + 1 > this.getPlayerCount() ? 1 : this.currentPlayer.getValue() + 1;
                 this.currentPlayer = Player.Type.fromValue(nextPlayer);
 
             } while (!this.getCurrentPlayer().isAlive());

@@ -3,6 +3,7 @@ package main.animation;
 import main.MiniWars;
 import main.game.Game;
 import main.game.Movement;
+import main.map.Coordinate;
 import main.map.Grid;
 import main.unit.Unit;
 import main.unit.UnitAnimation;
@@ -12,12 +13,23 @@ import ressources.DisplayUtil;
 
 import java.util.LinkedList;
 
+/**
+ * Classe representant une animation de deplacement pour
+ * les unites.
+ *
+ * @author LECONTE--DENIS Tristan
+ * @author GRAVOT Lucien
+ *
+ * @see Movement
+ * @see UnitAnimation
+ * @see Unit
+ */
 public class MovementAnimation {
 
     private static final int ANIMATION_STEP_PER_CASE = 4;
 
     private final Unit unit;
-    private final LinkedList<Movement.Arrow> arrowPath;
+    private final LinkedList<Movement.Arrow> path;
 
     private int step;
     private int gridX;
@@ -29,14 +41,20 @@ public class MovementAnimation {
 
     private boolean isFinished;
 
+    /**
+     * Creer une nouvelle animation de deplacement pour une unite
+     *
+     * @param unit L'unite concernee par l'animation
+     * @param movement Le mouvement a effectuer
+     */
     public MovementAnimation(Unit unit, Movement movement) {
 
         this.unit = unit;
-        this.arrowPath = (LinkedList<Movement.Arrow>) movement.toDirectionalArrows();
+        this.path = (LinkedList<Movement.Arrow>) movement.toDirectionalArrows();
 
-        if (!this.arrowPath.isEmpty()) {
+        if (!this.path.isEmpty()) {
             this.step = 0;
-            this.currentArrow = this.arrowPath.pollFirst();
+            this.currentArrow = this.path.pollFirst();
             this.isFinished = false;
 
             this.direction = this.currentArrow.getTo();
@@ -51,10 +69,21 @@ public class MovementAnimation {
 
     }
 
+    /**
+     * Determiner si l'animation de mouvement est terminee
+     *
+     * @return true si l'animation est terminee, false sinon
+     */
     public boolean isFinished() {
         return this.isFinished;
     }
 
+    /**
+     * Permet de mettre en pause la {@link Thread} courante, jusqu'a la fin de l'animation
+     *
+     * @implNote Cette methode est bloquante jusqu'a ce que l'animation soit terminee
+     */
+    @SuppressWarnings("BusyWait")
     public void waitUntilFinished() {
 
         while (!this.isFinished) {
@@ -99,7 +128,7 @@ public class MovementAnimation {
 
         if (this.step == ANIMATION_STEP_PER_CASE) {
 
-            this.currentArrow = this.arrowPath.pollFirst();
+            this.currentArrow = this.path.pollFirst();
 
             if (this.currentArrow == null || this.currentArrow.getTo() == Movement.Direction.END) {
                 this.isFinished = true;
@@ -120,7 +149,7 @@ public class MovementAnimation {
 
             this.unit.setCoordinate(this.gridX, this.gridY);
             final Grid grid = MiniWars.getInstance().getCurrentGame().getGrid();
-            grid.updateFogOfWar(grid.getCase(this.gridX, this.gridY), this.unit);
+            grid.updateFogOfWar(grid.getCase(new Coordinate(this.gridX, this.gridY)), this.unit);
 
         }
 

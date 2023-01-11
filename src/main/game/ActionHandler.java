@@ -117,7 +117,7 @@ public class ActionHandler {
      */
     public boolean up(GameState gameState) {
 
-        Logger.getInstanceActionHandler().log("Entered ActionHandler#up");
+        Logger.getLogger().log("Entered ActionHandler#up");
 
         final Game game = this.instance.getCurrentGame();
         final Cursor cursor = this.instance.isPlaying() ? game.getCursor() : null;
@@ -136,7 +136,7 @@ public class ActionHandler {
             case PLAYING_SELECTING_DROP_ZONE:
             case PLAYING_SELECTING_TRANSPORT:
             case PLAYING_SELECTING_TARGET: {
-                Logger.getInstanceActionHandler().log("up@PLAYING_SELECTING_TARGET");
+                Logger.getLogger().log("up@PLAYING_SELECTING_TARGET");
 
                 if (cursor == null) break;
 
@@ -148,7 +148,7 @@ public class ActionHandler {
 
             case PLAYING_MOVING_UNIT: {
 
-                Logger.getInstanceActionHandler().log("up@PLAYING_MOVING_UNIT");
+                Logger.getLogger().log("up@PLAYING_MOVING_UNIT");
 
                 if (cursor != null) this.updateMovement(cursor::up);
                 return true;
@@ -161,7 +161,7 @@ public class ActionHandler {
 
                 System.out.println("up@PLAYING_SELECTING_UNIT_ACTION");
 
-                Logger.getInstanceActionHandler().log("down@PLAYING_SELECTING_UNIT_ACTION");
+                Logger.getLogger().log("down@PLAYING_SELECTING_UNIT_ACTION");
 
                 MenuManager.getInstance().getMenus().stream().filter(m -> m instanceof SelectionMenu).filter(Menu::isVisible).forEach(m -> {
                     ((SelectionMenu<?>) m).previous();
@@ -186,7 +186,7 @@ public class ActionHandler {
      */
     private boolean down(GameState gameState) {
 
-        Logger.getInstanceActionHandler().log("Entered ActionHandler#down");
+        Logger.getLogger().log("Entered ActionHandler#down");
 
         final Game game = this.instance.getCurrentGame();
         final Cursor cursor = this.instance.isPlaying() ? game.getCursor() : null;
@@ -206,7 +206,7 @@ public class ActionHandler {
             case PLAYING_SELECTING_TRANSPORT:
             case PLAYING_SELECTING_TARGET: {
 
-                Logger.getInstanceActionHandler().log("down@PLAYING_SELECTING_TARGET");
+                Logger.getLogger().log("down@PLAYING_SELECTING_TARGET");
 
                 if (cursor == null) break;
 
@@ -217,7 +217,7 @@ public class ActionHandler {
             }
 
             case PLAYING_MOVING_UNIT: {
-                Logger.getInstanceActionHandler().log("down@PLAYING_MOVING_UNIT");
+                Logger.getLogger().log("down@PLAYING_MOVING_UNIT");
 
                 if (cursor != null) this.updateMovement(cursor::down);
                 return true;
@@ -228,7 +228,7 @@ public class ActionHandler {
             case PLAYING_SELECTING_FACTORY_UNIT:
             case PLAYING_SELECTING_UNIT_ACTION: {
 
-                Logger.getInstanceActionHandler().log("down@PLAYING_SELECTING_UNIT_ACTION");
+                Logger.getLogger().log("down@PLAYING_SELECTING_UNIT_ACTION");
 
                 MenuManager.getInstance().getMenus().stream().filter(m -> m instanceof SelectionMenu).filter(Menu::isVisible).forEach(m -> {
                     ((SelectionMenu<?>) m).next();
@@ -253,7 +253,7 @@ public class ActionHandler {
      */
     private boolean left(GameState gameState) {
 
-        Logger.getInstanceActionHandler().log("Entering ActionHandler#left");
+        Logger.getLogger().log("Entering ActionHandler#left");
         final Game game = this.instance.getCurrentGame();
         final Cursor cursor = this.instance.isPlaying() ? game.getCursor() : null;
 
@@ -261,7 +261,7 @@ public class ActionHandler {
 
             case MENU_MAP_SELECTION: {
 
-                Logger.getInstanceActionHandler().log("left@MENU_MAP_SELECTION");
+                Logger.getLogger().log("left@MENU_MAP_SELECTION");
 
                 MapSelectionMenu mapSelectionMenu = (MapSelectionMenu) MenuManager.getInstance().getMenu(MenuModel.MAP_SELECTION_MENU);
                 mapSelectionMenu.previous();
@@ -273,7 +273,7 @@ public class ActionHandler {
             case PLAYING_SELECTING_DROP_ZONE:
             case PLAYING_SELECTING_TRANSPORT:
             case PLAYING_SELECTING_TARGET: {
-                Logger.getInstanceActionHandler().log("left@PLAYING_SELECTING_TARGET");
+                Logger.getLogger().log("left@PLAYING_SELECTING_TARGET");
                 if (cursor == null) break;
 
                 boolean updateDisplay = cursor.left();
@@ -283,7 +283,7 @@ public class ActionHandler {
             }
 
             case PLAYING_MOVING_UNIT: {
-                Logger.getInstanceActionHandler().log("left@PLAYING_MOVING_UNIT");
+                Logger.getLogger().log("left@PLAYING_MOVING_UNIT");
                 if (cursor != null) this.updateMovement(cursor::left);
                 return true;
             }
@@ -302,7 +302,7 @@ public class ActionHandler {
      * @return true si le jeu doit actualiser l'ecran
      */
     private boolean right(GameState gameState) {
-        Logger.getInstanceActionHandler().log("Entering ActionHandler#right");
+        Logger.getLogger().log("Entering ActionHandler#right");
         final Game game = this.instance.getCurrentGame();
         final Cursor cursor = this.instance.isPlaying() ? game.getCursor() : null;
 
@@ -310,7 +310,7 @@ public class ActionHandler {
 
             case MENU_MAP_SELECTION: {
 
-                Logger.getInstanceActionHandler().log("left@MENU_MAP_SELECTION");
+                Logger.getLogger().log("left@MENU_MAP_SELECTION");
 
                 MapSelectionMenu mapSelectionMenu = (MapSelectionMenu) MenuManager.getInstance().getMenu(MenuModel.MAP_SELECTION_MENU);
                 mapSelectionMenu.next();
@@ -322,7 +322,7 @@ public class ActionHandler {
             case PLAYING_SELECTING_DROP_ZONE:
             case PLAYING_SELECTING_TRANSPORT:
             case PLAYING_SELECTING_TARGET: {
-                Logger.getInstanceActionHandler().log("right@PLAYING_SELECTING_TARGET");
+                Logger.getLogger().log("right@PLAYING_SELECTING_TARGET");
                 if (cursor == null) break;
 
                 boolean updateDisplay = cursor.right();
@@ -332,7 +332,7 @@ public class ActionHandler {
             }
 
             case PLAYING_MOVING_UNIT: {
-                Logger.getInstanceActionHandler().log("right@PLAYING_MOVING_UNIT");
+                Logger.getLogger().log("right@PLAYING_MOVING_UNIT");
                 if (cursor != null) this.updateMovement(cursor::right);
                 return true;
             }
@@ -361,16 +361,13 @@ public class ActionHandler {
 
         final Player currentPlayer = this.instance.isPlaying() ? game.getCurrentPlayer() : null;
 
-        final int x = cursor != null ? cursor.getCoordinate().getX() : 0;
-        final int y = cursor != null ? cursor.getCoordinate().getY() : 0;
-
-        final Case currentCase = grid != null ? grid.getCase(x, y) : null;
+        final Case currentCase = grid != null ? grid.getCase(cursor.getCoordinate()) : null;
         final Unit currentUnit = grid != null ? currentCase.getUnit() : null;
 
         final Case selectedCase = grid != null ? game.getSelectedCase() : null;
         final Unit selectedUnit = selectedCase != null ? selectedCase.getUnit() : null;
 
-        Logger.getInstanceActionHandler().log("enter@default");
+        Logger.getLogger().log("enter@default");
 
         try {
 
@@ -401,7 +398,7 @@ public class ActionHandler {
                 }
 
                 case MENU_TITLE_SCREEN: {
-                    Logger.getInstanceActionHandler().log("enter@MENU_TITLE_SCREEN");
+                    Logger.getLogger().log("enter@MENU_TITLE_SCREEN");
                     this.instance.setGameState(GameState.MENU_MAP_SELECTION);
                     rendererInstance.clearBuffer();
                     menuManagerInstance.getMenu(MenuModel.MAIN_MENU).setVisible(false);
@@ -411,7 +408,7 @@ public class ActionHandler {
 
                 case MENU_MAP_SELECTION: {
 
-                    Logger.getInstanceActionHandler().log("enter@MENU_MAP_SELECTION");
+                    Logger.getLogger().log("enter@MENU_MAP_SELECTION");
 
                     MapSelectionMenu mapSelectionMenu = (MapSelectionMenu) MenuManager.getInstance().getMenu(MenuModel.MAP_SELECTION_MENU);
 
@@ -478,7 +475,7 @@ public class ActionHandler {
 
                 case PLAYING_SELECTING_UNIT_ACTION: {
 
-                    Logger.getInstanceActionHandler().log("enter@PLAYING_SELECTING_UNIT_ACTION");
+                    Logger.getLogger().log("enter@PLAYING_SELECTING_UNIT_ACTION");
 
                     if (cursor == null) break;
                     if (grid == null) break;
@@ -488,13 +485,13 @@ public class ActionHandler {
                     final UnitActionMenu menu = (UnitActionMenu) menuManagerInstance.getMenu(MenuModel.UNIT_ACTION_MENU);
 
                     if (menu != null) {
-                        Logger.getInstanceActionHandler().log("No menu");
+                        Logger.getLogger().log("No menu");
                         final UnitAction action = menu.getSelectedValue();
                         final Unit unit = selectedCase.getUnit();
 
                         if (action == UnitAction.MOVE) {
 
-                            Logger.getInstanceActionHandler().log("Action = move");
+                            Logger.getLogger().log("Action = move");
                             final Dijkstra dijkstra = new Dijkstra(currentCase, grid, unit, game.getWeather());
                             game.setSelectedCase(currentCase);
                             game.setMovement(new Movement(currentCase));
@@ -511,11 +508,11 @@ public class ActionHandler {
                         }
                         else if (action == UnitAction.ATTACK || action == UnitAction.RANGED_ATTACK) {
 
-                            Logger.getInstanceActionHandler().log("Action = Attack or RangedAttack");
+                            Logger.getLogger().log("Action = Attack or RangedAttack");
 
                             if (currentCase.hasUnit()) {
 
-                                Logger.getInstanceActionHandler().log("Case has unit");
+                                Logger.getLogger().log("Case has unit");
                                 List<Weapon> weapons = unit.getWeapons().stream().filter(w -> {
                                     if (action == UnitAction.ATTACK) return w instanceof MeleeWeapon;
                                     return w instanceof RangedWeapon;
@@ -525,7 +522,7 @@ public class ActionHandler {
 
                                 final int maxRange = weapons.stream().mapToInt(Weapon::getMaxReach).max().orElse(0);
 
-                                List<Case> casesAround = grid.getCasesAround(x, y, minRange, maxRange);
+                                List<Case> casesAround = grid.getCasesAround(currentCase.getCoordinate(), minRange, maxRange);
 
                                 casesAround = casesAround.stream()
                                         .filter(c -> c.hasUnit())
@@ -537,7 +534,7 @@ public class ActionHandler {
 
                                 if (unitsAround.size() == 1) {
 
-                                    Logger.getInstanceActionHandler().log("Case : one unit around");
+                                    Logger.getLogger().log("Case : one unit around");
 
                                     System.out.println("OK: There is one unit in range");
                                     if (unit.canAttack(unitsAround.get(0))) {
@@ -551,7 +548,7 @@ public class ActionHandler {
 
                                 }
                                 else if (unitsAround.size() >= 2) {
-                                    Logger.getInstanceActionHandler().log("Case : more than one unit around");
+                                    Logger.getLogger().log("Case : more than one unit around");
                                     System.out.println("OK: There are multiple units in range");
                                     game.setOverlayCases(new HashSet<>(casesAround));
                                     game.setOverlayType(OverlayType.WEAPON);
@@ -561,7 +558,7 @@ public class ActionHandler {
                                 }
                                 else {
                                     System.out.println("Warn: Not unit in range");
-                                    Logger.getInstanceActionHandler().log("No unit in range");
+                                    Logger.getLogger().log("No unit in range");
                                 }
 
                             }
@@ -570,7 +567,7 @@ public class ActionHandler {
 
                         else if (action == UnitAction.CAPTURE) {
 
-                            Logger.getInstanceActionHandler().log("Action = Capture");
+                            Logger.getLogger().log("Action = Capture");
 
                             if (currentCase.getTerrain() instanceof Property) {
 
@@ -581,7 +578,7 @@ public class ActionHandler {
 
                                 if (currentCase.getTerrain() instanceof HQ) {
 
-                                    Logger.getInstanceActionHandler().log("It was an HQ!");
+                                    Logger.getLogger().log("It was an HQ!");
 
                                     if (!game.hasRemainingHQ(propertyOwner)) {
 
@@ -715,7 +712,7 @@ public class ActionHandler {
                                 menuManagerInstance.clearNonPersistent();
                             }
                             else System.out.println("Warn: No unit to reload");
-                            Logger.getInstanceActionHandler().log("Warn: No unit to reload");
+                            Logger.getLogger().log("Warn: No unit to reload");
 
                         }
                         else if (action == UnitAction.DIVE) {
@@ -730,7 +727,7 @@ public class ActionHandler {
                         }
                         else {
                             System.out.println("Warn: Unknown action");
-                            Logger.getInstanceActionHandler().log("Warn: Unknown action");
+                            Logger.getLogger().log("Warn: Unknown action");
                         }
                     }
 
@@ -905,7 +902,7 @@ public class ActionHandler {
             }
         }
         catch (Exception e) {
-            Logger.getInstanceActionHandler().write(e);
+            Logger.getLogger().write(e);
             e.printStackTrace();
         }
 
@@ -922,7 +919,7 @@ public class ActionHandler {
      */
     private boolean escape(GameState gameState) {
 
-        Logger.getInstanceActionHandler().log("Entering ActionHandler#escape");
+        Logger.getLogger().log("Entering ActionHandler#escape");
 
         final Game game = this.instance.getCurrentGame();
 
@@ -934,14 +931,14 @@ public class ActionHandler {
                     break;
 
                 case MENU_MAP_SELECTION:
-                    Logger.getInstanceActionHandler().log("escape@MENU_MAP_SELECTION");
+                    Logger.getLogger().log("escape@MENU_MAP_SELECTION");
                     this.instance.setGameState(GameState.MENU_TITLE_SCREEN);
                     MenuManager.getInstance().getMenu(MenuModel.MAIN_MENU).setVisible(true);
                     MenuManager.getInstance().getMenu(MenuModel.MAP_SELECTION_MENU).setVisible(false);
                     break;
 
                 case PLAYING_SELECTING:
-                    Logger.getInstanceActionHandler().log("escape@PLAYING_SELECTING");
+                    Logger.getLogger().log("escape@PLAYING_SELECTING");
                     this.instance.setGameState(GameState.MENU_PAUSE);
                     MenuManager.getInstance().addMenu(new PauseMenu());
                     break;
@@ -949,12 +946,12 @@ public class ActionHandler {
 //                case PLAYING_SELECTING_DROP_ZONE:
 //                case PLAYING_SELECTING_TRANSPORT:
 //                case MENU_PAUSE:
-//                    Logger.getInstanceActionHandler().log("escape@MENU_PAUSE");
+//                    Logger.getLogger().log("escape@MENU_PAUSE");
 //                    this.instance.setGameState(GameState.PLAYING_SELECTING);
 //                    break;
 
                 default:
-                    Logger.getInstanceActionHandler().log("escape@default");
+                    Logger.getLogger().log("escape@default");
                     instance.setGameState(GameState.PLAYING_SELECTING);
                     MenuManager.getInstance().clearNonPersistent();
                     game.resetMovement();
@@ -965,7 +962,7 @@ public class ActionHandler {
             game.clearOverlayCases();
         }
         catch (Exception e) {
-            Logger.getInstanceActionHandler().write(e);
+            Logger.getLogger().write(e);
         }
         return true;
 
@@ -980,17 +977,17 @@ public class ActionHandler {
      */
     private boolean space(GameState gameState) {
 
-        Logger.getInstanceActionHandler().log("Entering ActionHandler#space");
+        Logger.getLogger().log("Entering ActionHandler#space");
 
         final Game game = this.instance.getCurrentGame();
         final Grid grid = this.instance.isPlaying() ? game.getGrid() : null;
         final Cursor cursor = this.instance.isPlaying() ? game.getCursor() : null;
-        final Case currentCase = grid != null ? grid.getCase(cursor.getCoordinate().getX(), cursor.getCoordinate().getY()) : null;
+        final Case currentCase = grid != null ? grid.getCase(cursor.getCoordinate()) : null;
 
         try {
 
             if (gameState == GameState.PLAYING_SELECTING) {
-                Logger.getInstanceActionHandler().log("space@PLAYING_SELECTING");
+                Logger.getLogger().log("space@PLAYING_SELECTING");
                 if (grid == null) return false;
 
                 final List<Case> playerUnitsCases = grid.getCases()
@@ -1025,7 +1022,7 @@ public class ActionHandler {
 
         }
         catch (Exception e) {
-            Logger.getInstanceActionHandler().write(e);
+            Logger.getLogger().write(e);
         }
 
         return false;
@@ -1039,7 +1036,7 @@ public class ActionHandler {
      */
     private void updateMovement(Runnable movement) {
 
-        Logger.getInstanceActionHandler().log("updateMovement@default");
+        Logger.getLogger().log("updateMovement@default");
 
         try {
 
@@ -1051,7 +1048,7 @@ public class ActionHandler {
             movement.run();
 
             final Coordinate destination = game.getCursor().getCoordinate();
-            final Case destinationCase = game.getGrid().getCase(destination.getX(), destination.getY());
+            final Case destinationCase = game.getGrid().getCase(destination);
 
             final int point = Math.min(unit.getEnergy(), unit.getMovementPoint(game.getWeather()));
 
@@ -1063,7 +1060,7 @@ public class ActionHandler {
 
         }
         catch (Exception e) {
-            Logger.getInstanceActionHandler().write(e);
+            Logger.getLogger().write(e);
         }
     }
 

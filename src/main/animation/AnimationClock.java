@@ -57,6 +57,7 @@ public class AnimationClock {
      *
      * @deprecated
      */
+    @Deprecated
     public void setFrame(int frame) {
         this.frame = frame;
     }
@@ -87,7 +88,6 @@ public class AnimationClock {
             this.previousFrameTime = System.currentTimeMillis();
 
         }
-
 
     }
 
