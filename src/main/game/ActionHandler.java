@@ -102,17 +102,13 @@ public class ActionHandler {
             // Si le jeu est en mode "selection"
             case PLAYING_SELECTING:
                 // Passe le tour
-                this.instance.getCurrentGame().nextTurn();
-                break;
+                MenuManager.getInstance().addMenu(new NextTurnMenu.AskMenu());
+                this.instance.setGameState(GameState.PLAYING_SELECTING_SKIP_TURN_ACTION);
+                return true;
 
-//            //Todo : virer cette option
-//            case PLAYING_SELECTING_FACTORY_UNIT:
-//                this.instance.getCurrentGame().getCurrentPlayer().setMoney(this.instance.getCurrentGame().getCurrentPlayer().getMoney() + (int) (Math.random() * 1000));
-//
-//                break;
         }
 
-        return true;
+        return false;
 
     }
 
@@ -170,6 +166,7 @@ public class ActionHandler {
 
             // Si le jeu est en mode "pause", "selection de l'unite a deposer", "selection de l'unite a creer dans une usine" ou "selection d'une action d'unite"
             case MENU_PAUSE:
+            case PLAYING_SELECTING_SKIP_TURN_ACTION:
             case PLAYING_SELECTING_DROPPED_UNIT:
             case PLAYING_SELECTING_FACTORY_UNIT:
             case PLAYING_SELECTING_UNIT_ACTION: {
@@ -239,6 +236,7 @@ public class ActionHandler {
             }
 
             case MENU_PAUSE:
+            case PLAYING_SELECTING_SKIP_TURN_ACTION:
             case PLAYING_SELECTING_DROPPED_UNIT:
             case PLAYING_SELECTING_FACTORY_UNIT:
             case PLAYING_SELECTING_UNIT_ACTION: {
@@ -374,9 +372,11 @@ public class ActionHandler {
 
         final Player currentPlayer = this.instance.isPlaying() ? game.getCurrentPlayer() : null;
 
+        // La case ou se situe le curseur
         final Case currentCase = grid != null ? grid.getCase(cursor.getCoordinate()) : null;
         final Unit currentUnit = grid != null ? currentCase.getUnit() : null;
 
+        // Case selectionne = la derniere case ou l'utilisateur a appuye sur ENTER
         final Case selectedCase = grid != null ? game.getSelectedCase() : null;
         final Unit selectedUnit = selectedCase != null ? selectedCase.getUnit() : null;
 
@@ -385,6 +385,52 @@ public class ActionHandler {
         try {
 
             switch (gameState) {
+
+                case PLAYING_SELECTING_SKIP_TURN_APPROVAL: {
+                    
+                    NextTurnMenu turnMenu = (NextTurnMenu) menuManagerInstance.getMenu(MenuModel.NEXT_TURN_MENU);
+
+                    turnMenu.fadeOut();
+
+                    menuManagerInstance.clearNonPersistent();
+
+                    this.instance.setGameState(GameState.PLAYING_SELECTING);
+                    return true;
+
+                }
+
+                // Si le jeu est dans le menu "Passer le tour"
+                case PLAYING_SELECTING_SKIP_TURN_ACTION: {
+
+                    NextTurnMenu.AskMenu askMenu = (NextTurnMenu.AskMenu) menuManagerInstance.getMenu(MenuModel.NEXT_TURN_ASK_MENU);
+
+                    if (askMenu.getSelectedValue() == NextTurnMenu.Action.YES) {
+
+                        menuManagerInstance.clearNonPersistent();
+
+                        NextTurnMenu menu = new NextTurnMenu();
+                        menuManagerInstance.addMenu(menu);
+
+                        menu.fadeIn();
+                        game.nextTurn();
+
+                        this.instance.setGameState(GameState.PLAYING_SELECTING_SKIP_TURN_APPROVAL);
+                        return true;
+
+                    }
+                    else {
+
+                        // Le jeu retourne dans le mode "selection"
+                        this.instance.setGameState(GameState.PLAYING_SELECTING);
+
+                        // On supprime les menus non persistants de l'ecran
+                        menuManagerInstance.clearNonPersistent();
+
+                        return true;
+
+                    }
+
+                }
 
                 // Si le jeu est en mode "pause"
                 case MENU_PAUSE: {
@@ -487,8 +533,10 @@ public class ActionHandler {
                                 // Le jeu passe en mode "selection de l'action d'une unite"
                                 this.instance.setGameState(GameState.PLAYING_SELECTING_UNIT_ACTION);
 
-                            } else System.out.println("Warn: Unit has already played");
-                        } else System.out.println("Warn: Unit not owned by current player");
+                            }
+                            else System.out.println("Warn: Unit has already played");
+                        }
+                        else System.out.println("Warn: Unit not owned by current player");
                     }
 
                     // Sinon, si la case courante est une usine (de n'importe quel type)
@@ -511,11 +559,14 @@ public class ActionHandler {
                                 // Le jeu passe en mode "Selection d'une unitee dans une usine"
                                 this.instance.setGameState(GameState.PLAYING_SELECTING_FACTORY_UNIT);
 
-                            } else System.out.println("Warn: There is already a unit here / u can't!");
+                            }
+                            else System.out.println("Warn: There is already a unit here / u can't!");
 
-                        } else System.out.println("Warn: Factory not owned by current player");
+                        }
+                        else System.out.println("Warn: Factory not owned by current player");
 
-                    } else System.out.println("Warn: There is nothing to do here");
+                    }
+                    else System.out.println("Warn: There is nothing to do here");
 
                     return true;
 
@@ -622,40 +673,48 @@ public class ActionHandler {
                                     // On affiche un overlay au dessus des cases avec une unite attaquable
                                     game.setOverlayCases(new HashSet<>(casesAround));
                                     game.setOverlayType(OverlayType.WEAPON);
+                                    // Le jeu passe en mode "selection de cible", et on supprime le menu d'action de l'unite
                                     this.instance.setGameState(GameState.PLAYING_SELECTING_TARGET);
                                     menuManagerInstance.getMenu(MenuModel.UNIT_ACTION_MENU).setVisible(false);
 
-                                } else {
+                                }
+                                else {
                                     System.out.println("Warn: Not unit in range");
                                     Logger.getLogger().log("No unit in range");
                                 }
 
                             }
-
-                        } else if (action == UnitAction.CAPTURE) {
+                        }
+                        // Sinon, si l'action est de capturer
+                        else if (action == UnitAction.CAPTURE) {
 
                             Logger.getLogger().log("Action = Capture");
 
+                            // Si la case courante est une propriete
                             if (currentCase.getTerrain() instanceof Property) {
 
                                 Player.Type propertyOwner = ((Property) currentCase.getTerrain()).getOwner();
+                                // L'unite courante capture la propriete, cela compte comme une fin de tour pour elle
                                 currentUnit.capture((Property) currentCase.getTerrain());
-
                                 unit.setPlayed(true);
 
+                                // Si cette case de terrain était un QG
                                 if (currentCase.getTerrain() instanceof HQ) {
 
                                     Logger.getLogger().log("It was an HQ!");
 
+                                    // Si le proprietaire du QG n'en a plus
                                     if (!game.hasRemainingHQ(propertyOwner)) {
 
                                         Player p = game.getPlayerFromType(propertyOwner);
-
+                                        // On tue ce joueur
                                         p.setAlive(false);
                                         game.endPlayer(p);
 
+                                        // Si la partie a un gagnant (le dernier joueur avec au moins 1 QG)
                                         if (game.hasWinner()) {
 
+                                            // On termine la partie, et le jeu passe en mode "ecran de fin de partie"
                                             game.endGame();
                                             this.instance.setGameState(GameState.PLAYING_ENDIND_SCREEN);
                                             return true;
@@ -668,19 +727,26 @@ public class ActionHandler {
 
                             }
 
+                            // Le jeu repasse en mode "selection", et on supprime le menu d'action de l'unite
                             this.instance.setGameState(GameState.PLAYING_SELECTING);
                             menuManagerInstance.getMenu(MenuModel.UNIT_ACTION_MENU).setVisible(false);
 
-                        } else if (action == UnitAction.WAIT) {
+                        }
+                        // Sinon, si l'action est d'attendre
+                        else if (action == UnitAction.WAIT) {
 
                             unit.setPlayed(true);
                             this.instance.setGameState(GameState.PLAYING_SELECTING);
                             menuManagerInstance.removeMenu(MenuModel.UNIT_ACTION_MENU);
 
-                        } else if (action == UnitAction.GET_IN) {
+                        }
+                        // Sinon, si l'action est de rentrer dans un vehicule de transport
+                        else if (action == UnitAction.GET_IN) {
 
+                            // On recupere les cases adjacentes a la case selectionnee
                             final List<Case> adjacentCase = grid.getAdjacentCases(game.getSelectedCase());
 
+                            // On en extrait tous les transports ayant au moins une place de libre, appartenant au joueur courant
                             final List<Transport> adjacentTransport = adjacentCase
                                     .stream()
                                     .filter(c -> c.getUnit() instanceof Transport)
@@ -689,74 +755,99 @@ public class ActionHandler {
                                     .filter(t -> !t.isFull())
                                     .collect(Collectors.toList());
 
+                            // Si il n'y a qu'un seul transport autour
                             if (adjacentTransport.size() == 1) {
 
+                                // On ajoute l'unite courante a l'interieur du transport, cela compte comme une action pour elle
                                 unit.setPlayed(true);
                                 adjacentTransport.get(0).addCarriedUnit(unit);
                                 selectedCase.setUnit(null);
                                 this.instance.setGameState(GameState.PLAYING_SELECTING);
                                 menuManagerInstance.clearNonPersistent();
 
-                            } else if (adjacentTransport.size() >= 2) {
+                            }
+                            // Sinon, si il y a 2 transports ou plus
+                            else if (adjacentTransport.size() >= 2) {
 
+                                // Le jeu passe en mode "selection de transport"
                                 game.setSelectedCase(currentCase);
                                 this.instance.setGameState(GameState.PLAYING_SELECTING_TRANSPORT);
                                 menuManagerInstance.clearNonPersistent();
 
                             }
 
-                        } else if (action == UnitAction.DROP_UNIT) {
+                        }
+                        // Sinon, si l'action est de deposer une unite
+                        else if (action == UnitAction.DROP_UNIT) {
 
                             final int carriedCount = ((Transport) unit).getCarriedUnits().size();
 
+                            // Si il n'y a qu'une seule unite de transportee dans le vehicule
                             if (carriedCount == 1) {
 
                                 final Unit carriedUnit = ((Transport) unit).getCarriedUnits().get(0);
 
+                                // On fait une liste des cases adjacentes, qui n'ont pas d'unite et sur lesquelles l'unite transportee peut se deplacer
                                 List<Case> adjacentCase = grid.getAdjacentCases(selectedCase)
                                         .stream()
                                         .filter(c -> !c.hasUnit())
                                         .filter(c -> carriedUnit.canMoveTo(c, game.getWeather()))
                                         .collect(Collectors.toList());
 
+                                // Si une ceule de ces cases existe
                                 if (adjacentCase.size() == 1) {
 
+                                    // On supprime l'unite du transport, et on la pose sur ladite case
                                     adjacentCase.get(0).setUnit(carriedUnit);
                                     ((Transport) unit).removeCarriedUnit(carriedUnit);
                                     this.instance.setGameState(GameState.PLAYING_SELECTING);
                                     menuManagerInstance.clearNonPersistent();
 
-                                } else if (adjacentCase.size() >= 2) {
+                                }
+                                // Sinon, si il y a plus d'une case
+                                else if (adjacentCase.size() >= 2) {
 
+                                    // Le jeu passe en mode "selection de zone de depot d'une unite"
                                     game.setSelectedCase(currentCase);
                                     this.instance.setGameState(GameState.PLAYING_SELECTING_DROP_ZONE);
                                     menuManagerInstance.clearNonPersistent();
+                                    // On affiche un overlay au dessus des cases ou le depot est possible
                                     game.setOverlayType(OverlayType.MISC);
                                     game.setOverlayCases(new HashSet<>(adjacentCase));
 
                                 }
-                            } else {
+                            }
+                            // Si il y a plus d'une unite dans le transport
+                            else {
 
                                 game.setSelectedCase(currentCase);
                                 this.instance.setGameState(GameState.PLAYING_SELECTING_DROPPED_UNIT);
                                 menuManagerInstance.clearNonPersistent();
+                                // On affiche un menu de selection de l'unite a deposer
                                 menuManagerInstance.addMenu(new DropUnitMenu(new OptionSelector<>(((Transport) unit).getCarriedUnits())));
 
                             }
 
-                        } else if (action == UnitAction.SUPPLY) {
+                        }
+                        // Sinon, si l'action est de ravitailler
+                        else if (action == UnitAction.SUPPLY) {
 
+                            // On recupere toutes les cases adjacentes, ainsi que toutes les unites adjacentes a la case courante
                             List<Case> adjacentCase = grid.getAdjacentCases(currentCase);
                             List<Unit> adjacentUnits = grid.getUnitsAround(adjacentCase);
 
                             boolean hasSupplied = false;
 
+                            // Si il y a des unites autour de la case courante
                             if (!adjacentUnits.isEmpty()) {
 
+                                // Pour chaque unite adjacente
                                 for (Unit u : adjacentUnits) {
 
+                                    // Si l'unite appartient au joueur courant
                                     if (u.getOwner() == currentPlayer.getType()) {
 
+                                        // On ravitaille l'unite
                                         u.supply();
                                         hasSupplied = true;
 
@@ -766,22 +857,30 @@ public class ActionHandler {
 
                             }
 
+                            // Si l'unite courante a ravitaille
                             if (hasSupplied) {
+                                // Cela compte comme une action
                                 unit.setPlayed(true);
                                 this.instance.setGameState(GameState.PLAYING_SELECTING);
                                 menuManagerInstance.clearNonPersistent();
-                            } else System.out.println("Warn: No unit to reload");
-                            Logger.getLogger().log("Warn: No unit to reload");
+                            }
 
-                        } else if (action == UnitAction.DIVE) {
+                        }
+                        // Sinon, si l'action est de plonger (sous-marin)
+                        else if (action == UnitAction.DIVE) {
+                            // On fait plonger le sous-marin
                             ((Submarine) unit).dive();
                             this.instance.setGameState(GameState.PLAYING_SELECTING);
                             menuManagerInstance.clearNonPersistent();
-                        } else if (action == UnitAction.SURFACE) {
+                        }
+                        // Sinon, si l'action est de faire surface (sous-marin)
+                        else if (action == UnitAction.SURFACE) {
                             ((Submarine) unit).surface();
                             this.instance.setGameState(GameState.PLAYING_SELECTING);
                             menuManagerInstance.clearNonPersistent();
-                        } else {
+                        }
+                        // Sinon, l'action est inconnue
+                        else {
                             System.out.println("Warn: Unknown action");
                             Logger.getLogger().log("Warn: Unknown action");
                         }
@@ -789,20 +888,27 @@ public class ActionHandler {
 
                     return true;
                 }
+
+                // Si le jeu est en mode "selection d'une cible"
                 case PLAYING_SELECTING_TARGET: {
 
                     if (cursor == null) break;
                     if (grid == null) break;
 
+                    // Si la case courante a une unite (la cible)
                     if (currentCase.hasUnit()) {
 
+                        // On selectionne la cible qui est sur la case selectionne (l'unite du joueur courant)
                         Unit current = selectedCase.getUnit();
 
+                        // Si cette unite peut attaquer la cible
                         if (current.canAttack(currentUnit)) {
 
+                            // L'unite attaque la cible, cela compte comme une action
                             current.attack(currentUnit);
                             current.setPlayed(true);
                             this.instance.setGameState(GameState.PLAYING_SELECTING);
+                            // On supprime les unites mortes de la carte
                             grid.garbageUnit();
                             game.clearOverlayCases();
 
@@ -814,14 +920,18 @@ public class ActionHandler {
                     return true;
                 }
 
+                // Si le jeu est en mode "deplacement d'une unite"
                 case PLAYING_MOVING_UNIT: {
 
                     if (grid == null) break;
 
+                    // On recupere la derniere case du mouvement
                     final Case destination = game.getMovement().getMovementTail();
 
+                    // Si la destination n'a pas d'unite
                     if (!destination.hasUnit()) {
 
+                        // On deplace notre unite courante sur cette case
                         grid.moveUnit(game.getMovement());
                         game.clearOverlayCases();
 
@@ -830,26 +940,35 @@ public class ActionHandler {
                     return true;
                 }
 
+                // Si le jeu est en mode "selection d'une unite a deposer"
                 case PLAYING_SELECTING_DROPPED_UNIT: {
 
+                    // On ouvre un menu de selection de l'unite a deposer
                     final DropUnitMenu menu = (DropUnitMenu) menuManagerInstance.getMenu(MenuModel.DROP_UNIT_MENU);
+                    // On recupere l'unite a deposer
                     final Unit droppedUnit = menu.getSelectedValue();
 
+                    // On liste les cases adjacentes sur lesquelles il n'y a pas d'unite, et ou l'unite a deposer peut se deplacer
                     List<Case> adjacentCase = grid.getAdjacentCases(currentCase)
                             .stream()
                             .filter(c -> !c.hasUnit())
                             .filter(c -> droppedUnit.canMoveTo(c, game.getWeather()))
                             .collect(Collectors.toList());
 
+                    // Si il n'y a qu'une seule case valide
                     if (adjacentCase.size() == 1) {
 
+                        // On deplace l'unite du convoi vers la case
                         adjacentCase.get(0).setUnit(droppedUnit);
                         ((Transport) selectedUnit).removeCarriedUnit(droppedUnit);
                         this.instance.setGameState(GameState.PLAYING_SELECTING);
                         menuManagerInstance.clearNonPersistent();
 
-                    } else if (adjacentCase.size() >= 2) {
+                    }
+                    // Sinon, si il y a plus d'une case valide
+                    else if (adjacentCase.size() >= 2) {
 
+                        // Le jeu passe en mode "selection de zone de depot", et on affiche un overlay sur les cases ou le depot est possible
                         this.instance.setGameState(GameState.PLAYING_SELECTING_DROP_ZONE);
                         game.setOverlayType(OverlayType.MISC);
                         game.setOverlayCases(new HashSet<>(adjacentCase));
@@ -858,18 +977,25 @@ public class ActionHandler {
 
                 }
 
+                // Si le jeu est en mode " selection d'une zone de depot"
                 case PLAYING_SELECTING_DROP_ZONE: {
 
                     if (cursor == null) break;
                     if (grid == null) break;
                     if (currentCase == null) break;
 
+                    // On affiche un menu de selection de l'unite a deposer
                     final DropUnitMenu menu = (DropUnitMenu) menuManagerInstance.getMenu(MenuModel.DROP_UNIT_MENU);
 
+                    // L'unite a deposer est :
+                        // Si un menu de depot existe, l'unite selectionne
+                        // Sinon, l'unique unite du transport
                     final Unit dropUnit = menu != null ? menu.getSelectedValue() : ((Transport) selectedUnit).getCarriedUnits().get(0);
 
+                    // Si la case courante n'a pas d'unite, qu'elle est adjacente a la case selectionne, et que l'unite a deposer peut se deplacer sur celle ci
                     if (!currentCase.hasUnit() && currentCase.isAdjacent(selectedCase) && dropUnit.canMoveTo(currentCase, game.getWeather())) {
 
+                        // On depose l'unite  sur la case
                         currentCase.setUnit(dropUnit);
                         ((Transport) selectedUnit).removeCarriedUnit(dropUnit);
                         this.instance.setGameState(GameState.PLAYING_SELECTING);
@@ -882,6 +1008,7 @@ public class ActionHandler {
 
                 }
 
+                // Si le jeu est en mode "selection de transport"
                 case PLAYING_SELECTING_TRANSPORT: {
 
                     if (cursor == null) break;
@@ -889,16 +1016,21 @@ public class ActionHandler {
                     if (currentPlayer == null) break;
                     if (selectedCase == null) break;
 
+                    // Si la case courante est adjacente a la case selectionne
                     if (currentCase.isAdjacent(selectedCase)) {
 
+                        // Si l'unite est un transport
                         if (currentUnit instanceof Transport) {
 
                             final Transport transport = (Transport) currentUnit;
 
+                            // Si ce transport n'est pas plein, et qu'il peut faire rentrer l'unite selectionne
                             if (!transport.isFull() && transport.accept(selectedUnit)) {
 
+                                // Si le transport appartient au joueur courant
                                 if (currentUnit.getOwner() == currentPlayer.getType()) {
 
+                                    // L'unite rentre dans le transport
                                     transport.addCarriedUnit(selectedUnit);
                                     selectedCase.setUnit(null);
                                     this.instance.setGameState(GameState.PLAYING_SELECTING);
@@ -915,34 +1047,45 @@ public class ActionHandler {
 
                 }
 
+                // Si le jeu est en mode "selection d'une unite dans une usine"
                 case PLAYING_SELECTING_FACTORY_UNIT: {
 
+                    // On ouvre un menu de selection d'une unite dans une usine
                     final FactoryActionMenu factoryActionMenu = (FactoryActionMenu) menuManagerInstance.getMenu(MenuModel.FACTORY_ACTION_MENU);
                     final OptionSelector<UnitType>.Option option = factoryActionMenu.getSelectedOption();
 
+                    // Si une option a ete selectionnee
                     if (option != null) {
 
+                        // On cree une nouvelle unstance de cette unite, qui est consideree comme ayant deja joue
                         final UnitType unitToCreate = option.getValue();
                         final Unit newUnit = unitToCreate.newInstance(currentPlayer.getType());
 
                         newUnit.setPlayed(true);
 
+                        // Si la case courante est un port
                         if (currentCase.getTerrain() instanceof Port) {
 
+                            // On cherche la premiere case d'eau adjacente au port
                             Case c = grid.getAdjacentCases(currentCase)
                                     .stream()
                                     .filter(cs -> cs.getTerrain() instanceof Water && !cs.hasUnit())
                                     .findFirst()
                                     .orElse(null);
 
+                            // Si une telle case existe
                             if (c != null) {
 
+                                // On fait apparaitre l'unite, et on deduit le prix de l'unite a l'argent du joueur courant
                                 c.setUnit(newUnit);
                                 currentPlayer.setMoney(currentPlayer.getMoney() - unitToCreate.getPrice());
 
-                            } else System.out.println("ERROR! Impossible de creer l'unite navale!");
+                            }
 
-                        } else {
+                        }
+                        // Sinon (si la case est une usine ou un aeroport)
+                        else {
+                            // On fait apparaitre l'unite, et on deduit le prix de l'unite a l'argent du joueur courant
                             currentCase.setUnit(newUnit);
                             currentPlayer.setMoney(currentPlayer.getMoney() - unitToCreate.getPrice());
                         }
@@ -979,31 +1122,32 @@ public class ActionHandler {
 
             switch (gameState) {
 
+                // Si le jeu est en mode "menu principal", ne fait rien
                 case MENU_TITLE_SCREEN:
                     break;
 
+                // Si le jeu est en mode "selection d'une carte"
                 case MENU_MAP_SELECTION:
                     Logger.getLogger().log("escape@MENU_MAP_SELECTION");
+                    // On revient au menu principal
                     this.instance.setGameState(GameState.MENU_TITLE_SCREEN);
                     MenuManager.getInstance().getMenu(MenuModel.MAIN_MENU).setVisible(true);
                     MenuManager.getInstance().getMenu(MenuModel.MAP_SELECTION_MENU).setVisible(false);
                     break;
-
+                    
+                // Si le jeu est en mode "selection"
                 case PLAYING_SELECTING:
                     Logger.getLogger().log("escape@PLAYING_SELECTING");
+                    // Le jeu passe en mode "menu pause"
                     this.instance.setGameState(GameState.MENU_PAUSE);
                     MenuManager.getInstance().addMenu(new PauseMenu());
                     break;
 
-//                case PLAYING_SELECTING_DROP_ZONE:
-//                case PLAYING_SELECTING_TRANSPORT:
-//                case MENU_PAUSE:
-//                    Logger.getLogger().log("escape@MENU_PAUSE");
-//                    this.instance.setGameState(GameState.PLAYING_SELECTING);
-//                    break;
 
                 default:
+                    // Dans tous les autres cas
                     Logger.getLogger().log("escape@default");
+                    // Le jeu revient en mode "selection"
                     instance.setGameState(GameState.PLAYING_SELECTING);
                     MenuManager.getInstance().clearNonPersistent();
                     game.resetMovement();
@@ -1055,7 +1199,8 @@ public class ActionHandler {
                     cursor.setCoordinate(playerUnitsCases.get(index).getCoordinate());
                     game.getView().focus(playerUnitsCases.get(index));
 
-                } else if (playerUnitsCases.size() != 0) {
+                }
+                else if (playerUnitsCases.size() != 0) {
                     cursor.setCoordinate(playerUnitsCases.get(0).getCoordinate());
                     game.getView().focus(playerUnitsCases.get(0));
                 }

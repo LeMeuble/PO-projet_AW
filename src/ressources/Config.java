@@ -11,6 +11,7 @@ public final class Config {
         Font font2 = new Font("Arial", Font.BOLD, 25);
         Font font3 = new Font("Arial", Font.BOLD, 18);
         Font font4 = new Font("Arial", Font.BOLD, 16);
+        Font title = new Font("Arial", Font.BOLD, 46);
         try {
             font1 = Font.createFont(Font.TRUETYPE_FONT, new File(PathUtil.getUiComponentPath("fixedsys.ttf")))
                     .deriveFont(32f);
@@ -20,8 +21,11 @@ public final class Config {
                     .deriveFont(20f);
             font4 = Font.createFont(Font.TRUETYPE_FONT, new File(PathUtil.getUiComponentPath("fixedsys.ttf")))
                     .deriveFont(18f);
+            title = Font.createFont(Font.TRUETYPE_FONT, new File(PathUtil.getUiComponentPath("fixedsys.ttf")))
+                    .deriveFont(18f);
         } catch (Exception ignored) {}
 
+        FONT_46 = title;
         FONT_32 = font1;
         FONT_26 = font2;
         FONT_20 = font3;
@@ -41,6 +45,7 @@ public final class Config {
     public static final String TITLE = "MiniWars";
     public static final String ICON_PATH = PathUtil.getUiComponentPath("icon.png");
 
+    public static final Font FONT_46;
     public static final Font FONT_32;
     public static final Font FONT_26;
     public static final Font FONT_20;

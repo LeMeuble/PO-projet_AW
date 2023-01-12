@@ -1,3 +1,13 @@
+# A faire demain
+- [ ] Pluie, vent
+- [ ] Ajouter unité sur les maps
+- [ ] Icon sous-marin, convoi
+- [ ] Icon map selecteur, nombre de joueur
+- [ ] Dernière vérification + rendu
+- [ ] Test grandeur nature
+- [ ] Fini les keyboards tips
+- [ ] Ecran de fin de partie
+
 # Prioritaire :
 - [ ] Les logs en fait
 - [X] Riposte quand attaque de case adjacente

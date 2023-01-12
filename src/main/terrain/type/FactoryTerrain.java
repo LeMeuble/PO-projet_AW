@@ -6,7 +6,6 @@ import main.terrain.Factory;
 import main.terrain.TerrainType;
 import main.unit.Motorized;
 import main.unit.OnFoot;
-import main.unit.Unit;
 import main.unit.UnitType;
 import main.util.OptionSelector;
 

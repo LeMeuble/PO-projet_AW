@@ -40,7 +40,6 @@ public enum Weather {
 
         for (int i = 0; i < probabilities.length; i++) {
             if(random >= previous && random < previous + probabilities[i]) {
-                System.out.println("Next weather is " + Weather.values()[i].getTextureName());
                 return Weather.values()[i];
             }
             previous += probabilities[i];

@@ -44,25 +44,10 @@ public abstract class AnimatedMenu extends Menu {
         return this.isVisible() && (super.needsRefresh() || this.animationClock.needsRefresh());
     }
 
-    /**
-     * Obtenir la frame d'animation courante
-     *
-     * @return La frame d'animation courante
-     *
-     * @see AnimationClock#getFrame()
-     */
     public int getFrame() {
         return this.animationClock.getFrame();
     }
 
-    /**
-     * Effectuer le passage a la frame suivante.
-     * Cette methode doit etre appelee a chaque frame pour que l'horloge
-     * fonctionne correctement, ou alternativement, a chaque fois que la valeur
-     * de {@link #needsRefresh()} est vraie.
-     *
-     * @see AnimationClock#nextFrame()
-     */
     public void nextFrame() {
         this.animationClock.nextFrame();
     }

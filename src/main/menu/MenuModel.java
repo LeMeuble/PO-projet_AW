@@ -16,7 +16,8 @@ public enum MenuModel {
     FACTORY_ACTION_MENU(false),
     BOTTOM_MENU(true),
     PAUSE_MENU(false),
-    NEXT_TURN_MENU(false);
+    NEXT_TURN_MENU(false),
+    NEXT_TURN_ASK_MENU(false);
 
     private final boolean isPersistent;
 

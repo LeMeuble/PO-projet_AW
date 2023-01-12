@@ -1,7 +1,6 @@
 package main.game;
 
 
-import main.MiniWars;
 import main.map.Case;
 import main.render.Renderable;
 import main.unit.Unit;

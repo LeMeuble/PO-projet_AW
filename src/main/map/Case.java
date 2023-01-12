@@ -1,19 +1,11 @@
 package main.map;
 
-import librairies.StdDraw;
-import main.MiniWars;
-import main.game.Game;
 import main.game.Player;
-import main.terrain.AnimatedTerrain;
 import main.terrain.Property;
 import main.terrain.Terrain;
-import main.unit.OnFoot;
 import main.unit.Unit;
-import main.unit.type.Submarine;
 import main.weather.Weather;
 import ressources.Config;
-import ressources.DisplayUtil;
-import ressources.PathUtil;
 
 /**
  * Classe representant une Case

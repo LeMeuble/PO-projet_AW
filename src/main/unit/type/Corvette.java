@@ -1,7 +1,10 @@
 package main.unit.type;
 
 import main.game.Player;
-import main.unit.*;
+import main.unit.NavalTransport;
+import main.unit.OnFoot;
+import main.unit.Unit;
+import main.unit.UnitType;
 import main.weapon.type.AntiShipMissile;
 
 public class Corvette extends NavalTransport {

@@ -95,6 +95,12 @@ public class Game {
 
     }
 
+
+    public int getDay() {
+
+        return this.day;
+
+    }
     /**
      * Obtenir les metadonnees de la carte.
      *
@@ -336,6 +342,8 @@ public class Game {
 
         // Il s'agit d'un nouveau jour, si l'on a fait une "rotation" complete des joueurs.
         final boolean newDay = previousPlayer.ordinal() > nextPlayer.ordinal();
+
+        if(newDay) this.day++;
 
         this.grid.resetFogOfWar(this.settings.isFogOfWar());
 

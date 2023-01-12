@@ -1,7 +1,6 @@
 package main.terrain.type;
 
 import main.terrain.AnimatedTerrain;
-import main.terrain.Terrain;
 import main.terrain.TerrainType;
 
 public class Beach extends AnimatedTerrain {

@@ -1,7 +1,10 @@
 package main.unit.type;
 
 import main.game.Player;
-import main.unit.*;
+import main.unit.Flying;
+import main.unit.NavalTransport;
+import main.unit.Unit;
+import main.unit.UnitType;
 import main.weapon.type.HeavyMachineGun;
 import ressources.PathUtil;
 

@@ -2,7 +2,6 @@ package main.unit;
 
 import main.game.Player;
 import main.map.Case;
-import main.terrain.type.Water;
 import main.weather.Weather;
 
 public abstract class Naval extends Unit {

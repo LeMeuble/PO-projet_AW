@@ -93,8 +93,9 @@ public class WeatherManager {
             }
             else if (Math.random() < WEATHER_CHANGE_CHANCE) {
 
-                this.willChange = true;
-                this.nextWeather = this.currentWeather.next();
+                final Weather nextWeather = this.currentWeather.next();
+                this.willChange = nextWeather != this.currentWeather;
+                this.nextWeather = nextWeather;
 
             }
         }

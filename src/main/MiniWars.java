@@ -10,10 +10,7 @@ import main.menu.MenuManager;
 import main.menu.MenuModel;
 import main.menu.model.MainMenu;
 import main.menu.model.MapSelectionMenu;
-import main.parser.MapParser;
 import main.render.Renderer;
-import main.util.OptionSelector;
-import main.weather.WeatherManager;
 
 /**
  * Classe principale du jeu Cette classe est le point d'entrée du programme Elle initialise les composants du jeu et

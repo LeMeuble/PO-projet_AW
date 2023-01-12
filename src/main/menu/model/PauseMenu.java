@@ -1,8 +1,6 @@
 package main.menu.model;
 
-import com.sun.org.apache.bcel.internal.generic.Select;
 import librairies.StdDraw;
-import main.menu.Menu;
 import main.menu.MenuModel;
 import main.menu.SelectionMenu;
 import main.util.OptionSelector;

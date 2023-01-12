@@ -27,6 +27,10 @@ public enum GameState {
     PLAYING_SELECTING,
     // Selection d'une action pour une unite
     PLAYING_SELECTING_UNIT_ACTION,
+
+    PLAYING_SELECTING_SKIP_TURN_ACTION,
+    
+    PLAYING_SELECTING_SKIP_TURN_APPROVAL,
     // Deplacement d'une unite (fleche)
     PLAYING_MOVING_UNIT,
     // Selection d'une cible

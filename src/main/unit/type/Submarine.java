@@ -3,12 +3,12 @@ package main.unit.type;
 import main.game.Player;
 import main.map.Case;
 import main.map.Grid;
-import main.unit.*;
+import main.unit.Naval;
+import main.unit.UnitAction;
+import main.unit.UnitType;
 import main.util.OptionSelector;
 import main.weapon.type.Torpedo;
 import main.weather.Weather;
-
-import java.util.List;
 
 public class Submarine extends Naval {
 
