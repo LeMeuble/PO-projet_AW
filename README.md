@@ -18,8 +18,9 @@
    1. [Base du jeu](#report-base)
    2. [Bonus | Choix d'ajouts](#report-bonus)
    2. [Liste des bonus réalises](#report-bonus-list)
-5. [Texture du jeu](#texture)
-6[Crédits](#credits)
+5. [Texture du jeu](#change-texture)
+6. [Création de map](#map-creation)
+7. [Crédits](#credits)
 
 Pour la lecture de ce rapport, il est préférable de le lire sur Github afin d'avoir les accès rapides aux classes et
 méthodes.
@@ -109,7 +110,7 @@ Voici la liste des terrains implémentés dans le jeu :
 | Usine    | Factory     | Produit des unités terrestres. Peut être capturé.   | ![factory](./pictures/buildings/clear/red/factory.png)              |
 | Ville    | Property    | Donne de l'argent à chaque tour. Peut être capturé. | ![city](./pictures/buildings/clear/red/city.png)                    |
 | QG       | Property    | Propriété la plus importante! A défendre!           | ![hq](./pictures/buildings/clear/red/hq.png)                        |
-| Plage    | Terrain     | Permet aux barges d'accoster                        | ![beach](./pictures/terrains/clear/normal/beach/frame0/1.png)       |
+| Plage    | Terrain     | Permet aux barges d'accoster.                       | ![beach](./pictures/terrains/clear/normal/beach/frame0/1.png)       |
 | Forêt    | Terrain     |                                                     | ![forest](./pictures/terrains/clear/normal/forest/0.png)            |
 | Montagne | Terrain     |                                                     | ![mountain](./pictures/terrains/clear/normal/mountain/0.png)        |
 | Obstacle | Terrain     | Infranchissable mais survolable.                    | ![obstacle](./pictures/terrains/clear/normal/obstacle/frame0/1.png) |
@@ -122,7 +123,7 @@ Voici la liste des terrains implémentés dans le jeu :
 
 ---
 
-Concernant les unités, nous avons de faire une structure avec plusieurs classes abstraites. Ainsi nous avons une classe
+Concernant les unités, nous avons dû faire une structure avec plusieurs classes abstraites. Ainsi, nous avons une classe
 mère abstraite [`Unit`](./src/main/unit/Unit.java) qui est étendue par les
 classes [`Naval`](./src/main/unit/Naval.java), [`OnFoot`](./src/main/unit/OnFoot.java), [`Flying`](./src/main/unit/Flying.java)
 et [`Motorized`](./src/main/unit/Motorized.java). Ces dernières sont
@@ -163,9 +164,9 @@ l'interface [`Transport`](./src/main/unit/Transport.java) qui permet de définir
 
 ---
 
-Nous avons créé une classe [`Weapon`](./src/main/game/Movement.java), qui contient 2 classes
+Nous avons créé une classe [`Movement`](./src/main/game/Movement.java), qui contient 2 classes
 internes : [`Weapon.Direction`](./src/main/game/Movement.java) (énumération des directions
-possibles : up, left, begin, etc...) et [`Weapon.Arrow`](./src/main/game/Movement.java). Cette dernière
+possibles : up, left, begin, etc...) et [`Movement.Arrow`](./src/main/game/Movement.java). Cette dernière
 représente une flèche dans une case, par son bord d'entrée et son bord de sortie. Le système de flèche est complètement
 différent de celui demandé dans le sujet. (voir [Bonus | Choix d'ajouts](#2-bonus--choix-dajouts))
 
@@ -207,7 +208,7 @@ faire regagner 5 points de santé par tour à la propriété, plutôt que 20 d'u
 
 Les propriétés sont représentées par la classe abstraite [`Property`](./src/main/terrain/Property.java). Cependant, il
 peut y avoir plus de 2 QG, pour
-faire des parties avec jusqu'à 5 joueurs, voir [Bonus | Choix d'ajouts](#2-bonus--choix-dajouts). Un joueur qui capture
+faire des parties jusqu'à 5 joueurs, voir [Bonus | Choix d'ajouts](#2-bonus--choix-dajouts). Un joueur qui capture
 un QG en devient ainsi le
 propriétaire. De ce fait, un joueur est considéré comme éliminé s'il n'a plus aucun QG disponible.
 
@@ -223,11 +224,11 @@ avoir des terrains qui sont des usines (peuvent produire des unités) mais égal
 possédées par
 un joueur).
 
-Puis, nous avons créé le type de terrain [`Property`](./src/main/terrain/type/FactoryTerrain.java), représentant une
+Puis, nous avons créé le type de terrain [`FactoryTerrain`](./src/main/terrain/type/FactoryTerrain.java), représentant une
 usine terrestre. (En anticipation des ports
-et des aéroports, voir [Bonus | Choix d'ajouts](#report-bonus).
+et des aéroports, voir [Bonus | Choix d'ajouts](#report-bonus).)
 
-Pour les crédits, nous avons ajouté 1000 crédits à chaque joueur, par propriétés qu'il possède, à chaque fois que tous
+Pour les crédits, nous avons ajouté 1000 crédits à chaque joueur pour chaque propriété qu'il possède, à chaque fois que tous
 les joueurs de la partie ont joué leur tour (passage au jour suivant).
 
 <a name="report-bonus"></a>
@@ -261,14 +262,14 @@ en [`MapParser`](./src/main/map/Grid.java). Ainsi, nous avons dans le fichier de
 
 Concernant les déplacements, nous avions dans un premier temps implémenté un système de flèche qui se basait sur le
 système complet indiqué
-dans le sujet. Par la suite, voyant le projet évolué, nous avons décidé d'opter pour un nouveau système de déplacement
-qui ne permettrait plus les noeuds,
+dans le sujet. Par la suite, voyant le projet évoluer, nous avons décidé d'opter pour un nouveau système de déplacement
+qui ne permettrait plus les nœuds,
 et qui choisirait (comme dans la version officielle du jeu) automatiquement le chemin le plus court selon les coûts de
 déplacement de chaque terrain, les cases
 inaccessibles, etc. Pour ce faire, nous avons utilisé l'algorithme Dijkstra pour trouver le chemin le plus court entre
-deux cases. Pour cette algorithme nous nous sommes basés
+deux cases. Pour cet algorithme, nous nous sommes basés
 sur l'implémentation connue du site [Rosetta Code](http://rosettacode.org/wiki/Dijkstra%27s_algorithm#Java). En se
-basant sur l'algorithme présenté, nous avons créer une version
+basant sur l'algorithme présenté, nous avons créé une version
 adaptée au projet.
 
 #### Météo
@@ -306,7 +307,7 @@ qui donne les directives d'implémentation des menus.
 
 ---
 
-Afin d'animer les textures du jeu, il a été nécessaire de paralléliser le jeu en 2et  parties : la boucle d'écoute des touches et 
+Afin d'animer les textures du jeu, il a été nécessaire de paralléliser le jeu en deux parties : la boucle d'écoute des touches et 
 la boucle d'affichage.
 
 La première thread permet l'écoute asynchrone des touches tout en passant les frappes de clavier à la méthode [`ActionHandler#handle`](src/main/game/ActionHandler.java)
@@ -326,7 +327,7 @@ La deuxième thread ([`GameLoop`](src/main/game/GameLoop.java)) s'occupe de l'af
 - [X] Affichage des déplacements et attaques possibles d'une unité
 - [X] Armes multiples
 - [X] Attaques à distance
-    -[X] Artillerie
+    - [X] Artillerie
     - [X] Mortier
     - [X] Lance-missile sol-air
 - [X] Ravitaillement et réparations
@@ -363,7 +364,7 @@ La deuxième thread ([`GameLoop`](src/main/game/GameLoop.java)) s'occupe de l'af
   de pathfinding de type Dijkstra
 
 
-<a name="credits"></a>
+<a name="change-texture"></a>
 
 ## V. Textures du jeu
 
@@ -380,7 +381,21 @@ textures et de les organiser.
 L'ensemble des textures utilisées sont libres de droit pour tout projet à but non lucratif. Pour plus d'informations, voir directement
 sur le site : [FAQ Copyright Spriters Ressource](https://www.spriters-resource.com/page/faq/)
 
-## VI. Crédits
+<a name="map-creation"></a>
+## VI. Création de maps
+
+--- 
+
+Nous avons ajouté quelques map supplémentaires au jeu. Pour cela, nous avons utilisé un outil de création de map
+([`Tiled`](https://www.mapeditor.org)) qui permet de créer des maps à partir de tuiles. Il permet d'exporter les maps sous forme d'un fichier CSV, que nous avons
+ensuite converti en fichier `.acwdmap` à l'aide d'un script python.
+
+Quelques images du logiciel :
+
+<img alt="Tiled Screenshot" src="https://imgur.com/9HwqMZN.png" width="500"/>
+
+<a name="credits"></a>
+## VII. Crédits
 
 - [Yohann COURTAND](https://github.com/maYayoh) : Extraction complète des textures
   de [Spriters Resource](https://www.spriters-resource.com/game_boy_advance/advancewars2blackholerising/) et création de
