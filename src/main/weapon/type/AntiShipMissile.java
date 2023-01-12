@@ -19,7 +19,7 @@ public class AntiShipMissile extends RangedWeapon {
         ON_HELICOPTER(UnitType.HELICOPTER, 0.0f),
         ON_BOMBER(UnitType.BOMBER, 0.0f),
         ON_ARTILLERY(UnitType.ARTILLERY, 0.0f),
-        ON_CONVOY(UnitType.CONVOY, 0.7f),
+        ON_CONVOY(UnitType.CONVOY, 0.0f),
         ON_SAMLAUNCHER(UnitType.SAM_LAUNCHER, 0.0f),
         ON_AIRCRAFT_CARRIER(UnitType.AIRCRAFT_CARRIER, 1f),
         ON_CORVETTE(UnitType.CORVETTE, 1.5f),

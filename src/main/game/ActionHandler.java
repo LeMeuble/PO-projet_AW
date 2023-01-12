@@ -10,6 +10,7 @@ import main.map.Grid;
 import main.menu.*;
 import main.menu.model.*;
 import main.render.OverlayType;
+import main.render.Popup;
 import main.render.PopupRegistry;
 import main.render.Renderer;
 import main.terrain.Factory;
@@ -1059,7 +1060,12 @@ public class ActionHandler {
                     game.getView().focus(playerUnitsCases.get(0));
                 }
 
-            } else if (gameState == GameState.MENU_MAP_SELECTION) {
+                else {
+                    PopupRegistry.getInstance().push(new Popup("Avertissement !", "Toutes vos unit\u00e9s ont d\u00e9j\u00e0 jou\u00e9 !"));
+                }
+
+            }
+            else if (gameState == GameState.MENU_MAP_SELECTION) {
 
                 MapSelectionMenu mapSelectionMenu = (MapSelectionMenu) MenuManager.getInstance().getMenu(MenuModel.MAP_SELECTION_MENU);
                 mapSelectionMenu.toggleCurrentField();
