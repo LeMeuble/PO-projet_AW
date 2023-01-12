@@ -6,13 +6,14 @@ import main.render.Renderable;
 
 /**
  * Classe representant le curseur de selection
- * Le curseur est represente par deux coordonnees
+ * Le curseur est represente par un objet {@link Coordinate} ayant pour coordonnees
  * (x et y) pouvant aller respectivement de :
  * x : 0 a mapWidth - 1
  * y : 0 a mapHeight - 1
  *
  * @author Tristan LECONTE--DENIS
  * @author Lucien GRAVOT
+ * @see Coordinate
  * @see Renderable
  */
 public class Cursor {
@@ -38,21 +39,33 @@ public class Cursor {
 
     }
 
-    public void setCoordinate(Coordinate coordinate) {
-
-        this.coordinate.setX(coordinate.getX());
-        this.coordinate.setY(coordinate.getY());
-
-    }
-
+    /**
+     * Obtenir une instance des coordonnees du curseur.
+     *
+     * @return Une instance des coordonnees du curseur, independante de celle
+     * du curseur.
+     */
     public Coordinate getCoordinate() {
         return this.coordinate.clone();
     }
 
     /**
-     * Fait bouger le curseur d'une case vers le haut
+     * Modifier les coordonnees du curseur aux nouvelles coordonnes
+     * passees en parametre.
      *
-     * @return true si la position du curseur a ete modifiee, false sinon
+     * @param coordinate Nouvelles coordonnees du curseur.
+     */
+    public void setCoordinate(Coordinate coordinate) {
+
+        this.coordinate.setX(Math.min(coordinate.getX(), this.maxWidth - 1));
+        this.coordinate.setY(Math.min(coordinate.getY(), this.maxHeight - 1));
+
+    }
+
+    /**
+     * Fait bouger le curseur d'une case vers le haut.
+     *
+     * @return true si la position du curseur a ete modifiee, false sinon.
      */
     public boolean up() {
 
@@ -66,9 +79,9 @@ public class Cursor {
     }
 
     /**
-     * Fait bouger le curseur d'une case vers le bas
+     * Fait bouger le curseur d'une case vers le bas.
      *
-     * @return true si la position du curseur a ete modifiee, false sinon
+     * @return true si la position du curseur a ete modifiee, false sinon.
      */
     public boolean down() {
 
@@ -82,9 +95,9 @@ public class Cursor {
     }
 
     /**
-     * Fait bouger le curseur d'une case vers la droite
+     * Fait bouger le curseur d'une case vers la droite.
      *
-     * @return true si la position du curseur a ete modifiee, false sinon
+     * @return true si la position du curseur a ete modifiee, false sinon.
      */
     public boolean right() {
 
@@ -98,9 +111,9 @@ public class Cursor {
     }
 
     /**
-     * Fait bouger le curseur d'une case vers la gauche
+     * Fait bouger le curseur d'une case vers la gauche.
      *
-     * @return true si la position du curseur a ete modifiee, false sinon
+     * @return true si la position du curseur a ete modifiee, false sinon.
      */
     public boolean left() {
 
@@ -114,10 +127,10 @@ public class Cursor {
     }
 
     /**
-     * Determine si le curseur a besoin d'etre rafraichi
+     * Determine si le curseur a besoin d'etre rafraichi.
      * a l'ecran
      *
-     * @return True si il faut rafraichir l'ecran, false sinon
+     * @return True si il faut rafraichir l'ecran, false sinon.
      *
      * @see Renderable#needsRefresh()
      */
@@ -126,10 +139,10 @@ public class Cursor {
     }
 
     /**
-     * Stipule qu'on n'a plus besoin de rafraichir l'ecran
+     * Stipule qu'on n'a plus besoin de rafraichir l'ecran.
      *
      * @param needsRefresh true si on a besoin de rafraichir le curseur
-     *                     à l'ecran, false sinon
+     *                     à l'ecran, false sinon.
      *
      * @see Renderable#needsRefresh(boolean)
      */

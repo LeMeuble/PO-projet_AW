@@ -142,7 +142,7 @@ public class Renderer {
             }
             catch (Exception e) {
                 e.printStackTrace();
-                Logger.getInstanceGameLoop().write(e);
+                Logger.getLogger().write(e);
             }
 
         }
@@ -179,7 +179,7 @@ public class Renderer {
             final int gridX = this.movementAnimation.getGridX();
             final int gridY = this.movementAnimation.getGridY();
 
-            game.getView().focus(game.getGrid().getCase(gridX, gridY));
+            game.getView().focus(game.getGrid().getCase(new Coordinate(gridX, gridY))); //todo: full coordinate
 
             final double x = this.movementAnimation.getPixelX();
             final double y = this.movementAnimation.getPixelY() + Config.PIXEL_PER_CASE / 8;
@@ -212,7 +212,7 @@ public class Renderer {
 
                 Coordinate coordinate = c.getCoordinate();
 
-                if (game.getView().isVisible(game.getGrid().getCase(coordinate.getX(), coordinate.getY()))) {
+                if (game.getView().isVisible(game.getGrid().getCase(coordinate))) {
 
                     int offsetX = game.getView().offsetX(coordinate.getX());
                     int offsetY = game.getView().offsetY(coordinate.getY());

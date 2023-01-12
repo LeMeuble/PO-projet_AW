@@ -66,7 +66,7 @@ public class MiniWars {
 
     public static MiniWars getInstance() {
 
-        return instance;
+        return MiniWars.instance;
 
     }
 
@@ -136,6 +136,7 @@ public class MiniWars {
     public void end() {
         this.keystrokeListener.stop();
         this.gameLoop.stop();
+        Logger.closeAll();
     }
 
 }

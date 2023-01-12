@@ -35,7 +35,7 @@ public class BottomMenu extends AnimatedMenu {
         final Game game = MiniWars.getInstance().getCurrentGame();
         final Player.Type currentPlayer = game.getCurrentPlayer().getType();
         final Coordinate cursor = game.getCursor().getCoordinate();
-        final Case selectedCase = game.getGrid().getCase(cursor.getX(), cursor.getY());
+        final Case selectedCase = game.getGrid().getCase(cursor);
         final GameState gameState = MiniWars.getInstance().getGameState();
 
         DisplayUtil.drawPicture(Config.WIDTH / 2d, 1.75d * Config.PIXEL_PER_CASE, PathUtil.getBottomGuiPath(game.getCurrentPlayer().getType()), Config.WIDTH, 3 * Config.PIXEL_PER_CASE + 0.5 * Config.PIXEL_PER_CASE);

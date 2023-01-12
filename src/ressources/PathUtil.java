@@ -13,7 +13,7 @@ public class PathUtil {
 
     // Dossier lie au jeu
     public static final String SEP = File.separator;
-    public static final String ROOT_FOLDER = ".";
+    public static final String ROOT_FOLDER = "."; // Peut etre remplacer par un chemin absolu en cas de probleme
     public static final String MAPS_FOLDER = ROOT_FOLDER + SEP + "maps";
     public static final String MAP_EXTENSION = ".awdcmap";
 

@@ -15,8 +15,6 @@ public abstract class Weapon {
 
     /**
      * Constructeur de Weapon
-     *
-     * @param ammo Le nombre de munitions de l'arme
      */
     public Weapon() {
         this.ammo = this.getDefaultAmmo();

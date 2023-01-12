@@ -107,6 +107,10 @@ public class KeystrokeListener {
 
     }
 
+    /**
+     * Arrete le thread d'ecoute des touches
+     * Si le thread est deja arrete, ne fait rien
+     */
     public void stop() {
 
         this.isRunning = false;
@@ -147,7 +151,7 @@ public class KeystrokeListener {
 
                 }
 
-                // Optimisation : Eviter la jvm de tourner le plus vite possible
+                // Optimisation : Eviter a la JVM de tourner le plus vite possible
                 Thread.sleep(5);
             }
 

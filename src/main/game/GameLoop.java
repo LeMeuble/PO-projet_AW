@@ -17,6 +17,8 @@ public class GameLoop {
         };
         this.isRunning = false;
 
+        Runtime.getRuntime().addShutdownHook(new Thread(Logger::closeAll));
+
     }
 
     public void setHandler(Runnable handler) {

@@ -1,5 +1,5 @@
 # Prioritaire :
-
+- [ ] Les logs en fait
 - [X] Riposte quand attaque de case adjacente
 - [X] Capture possible seulement pour les unités à pied
     - [X] Resistance = Res - pv attaquant (arrondi sup)

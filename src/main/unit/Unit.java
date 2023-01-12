@@ -342,7 +342,7 @@ public abstract class Unit {
         if (bestWeapon != null) {
 
             Coordinate targetCoordinates = target.getCoordinate();
-            float terrainDefense = (float) MiniWars.getInstance().getCurrentGame().getGrid().getCase(targetCoordinates.getX(), targetCoordinates.getY()).getTerrain().getTerrainCover();  // Inflige les degats
+            float terrainDefense = (float) MiniWars.getInstance().getCurrentGame().getGrid().getCase(targetCoordinates).getTerrain().getTerrainCover();  // Inflige les degats
 
             if (target instanceof OnFoot || target instanceof Motorized) {
                 target.damageBy(this.calculateDamage(bestWeapon.getMultiplierOn(target)) * (1 - terrainDefense));
@@ -375,7 +375,7 @@ public abstract class Unit {
         if (bestWeapon != null && bestWeapon instanceof RangedWeapon) {
 
             Coordinate targetCoordinates = target.getCoordinate();
-            float terrainDefense = (float) MiniWars.getInstance().getCurrentGame().getGrid().getCase(targetCoordinates.getX(), targetCoordinates.getY()).getTerrain().getTerrainCover();  // Inflige les degats
+            float terrainDefense = (float) MiniWars.getInstance().getCurrentGame().getGrid().getCase(targetCoordinates).getTerrain().getTerrainCover();  // Inflige les degats
 
             float weatherModifier = 0;
             if (MiniWars.getInstance().getCurrentGame().getWeather() == Weather.HEAVY_WIND) {
@@ -407,10 +407,7 @@ public abstract class Unit {
 
                 Grid grid = MiniWars.getInstance().getCurrentGame().getGrid();
 
-                int targetX = target.getCoordinate().getX();
-                int targetY = target.getCoordinate().getY();
-
-                if (!grid.getCase(targetX, targetY).isFoggy()) {
+                if (!grid.getCase(target.getCoordinate()).isFoggy()) {
 
                     if (target instanceof Submarine && ((Submarine) target).canSurface()) {
                         if (this instanceof Submarine || this instanceof Cruiser) {
@@ -542,7 +539,7 @@ public abstract class Unit {
         final int minRange = this.getMinWeaponRange();
         final int maxRange = this.getMaxWeaponRange();
 
-        List<Case> cases = contextGrid.getCasesAround(currentCase.getCoordinate().getX(), currentCase.getCoordinate().getY(), minRange, maxRange);
+        List<Case> cases = contextGrid.getCasesAround(currentCase.getCoordinate(), minRange, maxRange);
 
         boolean adjacentEnemy = false;
         boolean inRangeEnemy = false;
@@ -570,7 +567,6 @@ public abstract class Unit {
 
         final List<Case> adjacentCases = contextGrid.getAdjacentCases(currentCase);
         boolean anyEmptyTransport = false;
-
 
         for (Case adjacentCase : adjacentCases) {
 
@@ -677,7 +673,7 @@ public abstract class Unit {
 
             if (this instanceof Submarine && ((Submarine) this).canSurface()) {
 
-                final Case center = grid.getCase(this.getCoordinate().getX(), this.getCoordinate().getY());
+                final Case center = grid.getCase(this.getCoordinate());
 
                 boolean display = this.getOwner() == player.getType();
                 display = display || grid.getAdjacentCases(center)

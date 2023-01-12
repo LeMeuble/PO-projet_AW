@@ -64,7 +64,7 @@ public class GameView {
      * @see Case
      */
     public Case getCase(int x, int y) {
-        return this.grid.getCase(x + this.offsetX, y + this.offsetY);
+        return this.grid.getCase(new Coordinate(x + this.offsetX, y + this.offsetY));
     }
 
     /**
