@@ -141,7 +141,7 @@ Voici la liste des unités implémentées dans le jeu :
 | Convoi      | ![convoy](./pictures/troops/red/convoy/idleleft/0.png)                     | 
 | Corvette    | ![corvette](./pictures/troops/red/corvette/idleleft/0.png)                 | 
 | Croiseur    | ![cruiser](./pictures/troops/red/cruiser/idleleft/0.png)                   | 
-| Dreadnought | ![dreadnought](./pictures/troops/red/dreadnought/idleleft/0.png)           | 
+| Cuirassé    | ![cuirassé](./pictures/troops/red/dreadnought/idleleft/0.png)              | 
 | Hélicoptère | ![helicopter](./pictures/troops/red/helicopter/idleleft/0.png)             | 
 | Infanterie  | ![infantry](./pictures/troops/red/infantry/idleleft/0.png)                 | 
 | Barge       | ![landing_ship](./pictures/troops/red/landing_ship/idleleft/0.png)         | 

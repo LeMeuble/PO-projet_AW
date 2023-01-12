@@ -10,6 +10,7 @@ import main.map.Grid;
 import main.menu.*;
 import main.menu.model.*;
 import main.render.OverlayType;
+import main.render.Popup;
 import main.render.PopupRegistry;
 import main.render.Renderer;
 import main.terrain.Factory;
@@ -1009,6 +1010,10 @@ public class ActionHandler {
                 else if (playerUnitsCases.size() != 0) {
                     cursor.setCoordinate(playerUnitsCases.get(0).getCoordinate());
                     game.getView().focus(playerUnitsCases.get(0));
+                }
+
+                else {
+                    PopupRegistry.getInstance().push(new Popup("Avertissement !", "Toutes vos unit\u00e9s ont d\u00e9j\u00e0 jou\u00e9 !"));
                 }
 
             }
