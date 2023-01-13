@@ -71,7 +71,7 @@ public class NextTurnMenu extends FadeMenu {
     private boolean textShown;
 
     public NextTurnMenu() {
-        super(10, 50);
+        super(10, 20);
         this.textAlpha = 0;
         this.textShown = false;
     }

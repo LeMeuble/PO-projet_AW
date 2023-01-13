@@ -11,7 +11,7 @@ public class Settings {
         CLEAR(Weather.CLEAR),
         RAINY(Weather.RAINY),
         SNOWY(Weather.SNOWY),
-        WIND(Weather.RAINY);
+        WIND(Weather.HEAVY_WIND);
 
         private final String name;
         private final Weather weather;
@@ -72,6 +72,7 @@ public class Settings {
     }
 
     public void configureWeatherManager(WeatherManager manager) {
+        System.out.println("mode" + this.weatherMode);
         if (this.weatherMode == WeatherMode.AUTO) {
             manager.setRandomMode(true);
         }

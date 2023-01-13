@@ -47,11 +47,10 @@ public class OptionSelectorTest {
         test.addOption(1);
         test.addOption(1, false);
 
-        assertEquals(1, test.getOptionsCount());
+        assertEquals(2, test.getOptionsCount());
         assertEquals(1, test.getAvailableOptionsCount());
 
         assertTrue(test.getValues().contains(1));
-
         assertFalse(test.getValues().contains(2));
     }
 

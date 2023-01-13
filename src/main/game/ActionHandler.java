@@ -821,6 +821,8 @@ public class ActionHandler {
 
                                 // Le jeu passe en mode "selection de transport"
                                 game.setSelectedCase(currentCase);
+                                game.setOverlayCases(new HashSet<>(adjacentCase));
+                                game.setOverlayType(OverlayType.MISC);
                                 this.instance.setGameState(GameState.PLAYING_SELECTING_TRANSPORT);
                                 menuManagerInstance.clearNonPersistent();
 
@@ -1083,6 +1085,7 @@ public class ActionHandler {
                                     // L'unite rentre dans le transport
                                     transport.addCarriedUnit(selectedUnit);
                                     selectedCase.setUnit(null);
+                                    game.clearOverlayCases();
                                     this.instance.setGameState(GameState.PLAYING_SELECTING);
 
                                 }

@@ -293,6 +293,8 @@ public class Renderer {
                 }
             }
 
+            System.out.println(weather);
+
             if(weather == Weather.RAINY) {
 
                 DisplayUtil.drawPicture(Config.WIDTH / 2, Config.HEIGHT / 2 + Config.BOTTOM_MENU_MARGIN, PathUtil.getWeatherOverlayPath(weather, this.terrainClockSync.getFrame()), Config.WIDTH, Config.HEIGHT);

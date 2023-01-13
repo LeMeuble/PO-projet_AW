@@ -4,6 +4,7 @@ import main.game.Player;
 import main.menu.ActionMenu;
 import main.unit.type.*;
 import main.util.OptionSelector;
+import ressources.Language;
 
 /**
  * Enumeration de tous les types d'unites possibles
@@ -11,21 +12,21 @@ import main.util.OptionSelector;
  */
 public enum UnitType implements ActionMenu.Text {
 
-    INFANTRY('i', "Infanterie", Infantry.class, 1000, 99),
-    BAZOOKA('z', "Bazooka", Bazooka.class, 3000, 70),
-    CONVOY('c', "Convoi", Convoy.class, 5000, 99),
-    ARTILLERY('a', "Artillerie", Artillery.class, 6000, 50),
-    TANK('t', "Tank", Tank.class, 7000, 70),
-    CORVETTE('e', "Corvette", Corvette.class, 7500, 99),
-    ANTI_AIR('d', "Anti Air", AntiAir.class, 8000, 60),
-    HELICOPTER('h', "Helicopt\u00e8re", Helicopter.class, 9000, 99),
-    LANDING_SHIP('l', "Barge", LandingShip.class, 12000, 99),
-    SAM_LAUNCHER('s', "SAM Launcher", SAMLauncher.class, 12000, 50),
-    CRUISER('r', "Croiseur", Cruiser.class, 18000, 99),
-    BOMBER('b', "Bombardier", Bomber.class, 20000, 99),
-    SUBMARINE('u', "Sous-marin", Submarine.class, 20000, 60),
-    DREADNOUGHT('n', "Dreadnought", Dreadnought.class, 28000, 99),
-    AIRCRAFT_CARRIER('f', "Porte avion", AircraftCarrier.class, 30000, 99);
+    INFANTRY('i', Language.UNIT_INFANTRY, Infantry.class, 1000, 99),
+    BAZOOKA('z', Language.UNIT_BAZOOKA, Bazooka.class, 3000, 70),
+    CONVOY('c', Language.UNIT_CONVOY, Convoy.class, 5000, 99),
+    ARTILLERY('a', Language.UNIT_ARTILLERY, Artillery.class, 6000, 50),
+    TANK('t', Language.UNIT_TANK, Tank.class, 7000, 70),
+    CORVETTE('e', Language.UNIT_CORVETTE, Corvette.class, 7500, 99),
+    ANTI_AIR('d', Language.UNIT_ANTI_AIR, AntiAir.class, 8000, 60),
+    HELICOPTER('h', Language.UNIT_HELICOPTER, Helicopter.class, 9000, 99),
+    LANDING_SHIP('l', Language.UNIT_LANDING_SHIP, LandingShip.class, 12000, 99),
+    SAM_LAUNCHER('s', Language.UNIT_SAM_LAUNCHER, SAMLauncher.class, 12000, 50),
+    CRUISER('r', Language.UNIT_CRUISER, Cruiser.class, 18000, 99),
+    BOMBER('b', Language.UNIT_BOMBER, Bomber.class, 20000, 99),
+    SUBMARINE('u', Language.UNIT_SUBMARINE, Submarine.class, 20000, 60),
+    DREADNOUGHT('n', Language.UNIT_DREADNOUGHT, Dreadnought.class, 28000, 99),
+    AIRCRAFT_CARRIER('f', Language.UNIT_AIRCRAFT_CARRIER, AircraftCarrier.class, 30000, 99);
 
     private final char character;
     private final String name;

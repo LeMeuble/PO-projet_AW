@@ -29,6 +29,7 @@ public class MiniWars {
     private final GameLoop gameLoop;
     private volatile Game currentGame;
     private GameState gameState;
+
     /**
      * Constructeur de MiniWars
      * Initialise les instances gerant les entrees clavier, la boucle du jeu
@@ -78,11 +79,11 @@ public class MiniWars {
     public void handleKey(KeystrokeListener.KeyCodes keycode) {
         if (this.actionHandler.handle(keycode)) this.update();
 
-        if(this.isPlaying()) {
+        if (this.isPlaying()) {
 
             final Game game = this.getCurrentGame();
-            if(game.getSettings().isAutoEndTurn()) {
-                if(!game.hasRemainingAction()) {
+            if (game.getSettings().isAutoEndTurn()) {
+                if (!game.hasRemainingAction()) {
 
                     NextTurnMenu menu = new NextTurnMenu();
                     MenuManager.getInstance().addMenu(menu);
@@ -130,18 +131,18 @@ public class MiniWars {
         this.gameState = gameState;
     }
 
+    public void end() {
+        this.keystrokeListener.stop();
+        this.gameLoop.stop();
+        Logger.closeAll();
+    }
+
     private void registerDefaultMenus() {
 
         MenuManager.getInstance().addMenu(new MainMenu());
         MenuManager.getInstance().addMenu(new MapSelectionMenu());
         MenuManager.getInstance().getMenu(MenuModel.MAP_SELECTION_MENU).setVisible(false);
 
-    }
-
-    public void end() {
-        this.keystrokeListener.stop();
-        this.gameLoop.stop();
-        Logger.closeAll();
     }
 
 }

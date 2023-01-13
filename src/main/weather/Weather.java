@@ -1,14 +1,16 @@
 package main.weather;
 
+import ressources.Language;
+
 /**
  * Enumeration de tous les types de meteo
  */
 public enum Weather {
 
-    CLEAR("Beau temps", "clear", 0, 0.3, 0.1, 0.6),
-    RAINY("Pluie", "rainy", 0.5, 0.4, 0.1, 0),
-    SNOWY("Neige", "snowy", 0.7, 0, 0.1, 0.2),
-    HEAVY_WIND("Vent violent", "rainy", 0.1, 0.3, 0, 0.6);
+    CLEAR(Language.WEATHER_CLEAR, "clear", 0, 0.3, 0.1, 0.6),
+    RAINY(Language.WEATHER_RAINY, "rainy", 0.5, 0.4, 0.1, 0),
+    SNOWY(Language.WEATHER_SNOWY, "snowy", 0.7, 0, 0.1, 0.2),
+    HEAVY_WIND(Language.WEATHER_HEAVY_WIND, "rainy", 0.1, 0.3, 0, 0.6);
 
     private final String name;
     private final String textureName;

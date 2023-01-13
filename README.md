@@ -20,7 +20,8 @@
    2. [Liste des bonus réalises](#report-bonus-list)
 5. [Texture du jeu](#change-texture)
 6. [Création de map](#map-creation)
-7. [Crédits](#credits)
+7. [Tests unitaires](#tests)
+8. [Crédits](#credits)
 
 Pour la lecture de ce rapport, il est préférable de le lire sur Github afin d'avoir les accès rapides aux classes et
 méthodes.
@@ -394,8 +395,18 @@ Quelques images du logiciel :
 
 <img alt="Tiled Screenshot" src="https://imgur.com/9HwqMZN.png" width="500"/>
 
+
+<a name="tests"></a>
+## VII. Tests unitaires
+
+--- 
+
+Il s'agit ici d'un projet qui est difficile à tester. La plupart des méthodes étant lié plus ou moins à l'affichage, il nous est difficile
+de les tester. Cependant certaines classes/méthodes ont le droit à quelques tests unitaires. Les tests sont disponibles dans le dossier
+[`src/test`](./src/test) du projet.
+
 <a name="credits"></a>
-## VII. Crédits
+## VIII. Crédits
 
 - [Yohann COURTAND](https://github.com/maYayoh) : Extraction complète des textures
   de [Spriters Resource](https://www.spriters-resource.com/game_boy_advance/advancewars2blackholerising/) et création de

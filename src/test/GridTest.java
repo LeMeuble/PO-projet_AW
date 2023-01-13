@@ -5,6 +5,11 @@ import main.map.Coordinate;
 import main.map.Grid;
 import main.terrain.type.Plain;
 import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class GridTest {
@@ -30,12 +35,12 @@ public class GridTest {
     @Test
     public void getCase() {
 
-        Grid grid = new Grid(GridTest.grid);
+        final Grid grid = new Grid(GridTest.grid);
 
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                assertEquals(i, grid.getCase(i, j).getX());
-                assertEquals(j, grid.getCase(i, j).getY());
+        for (int y = 0; y < 3; y++) {
+            for (int x = 0; x < 3; x++) {
+                assertEquals(y, grid.getCase(new Coordinate(x, y)).getCoordinate().getY());
+                assertEquals(x, grid.getCase(new Coordinate(x, y)).getCoordinate().getX());
             }
         }
 
@@ -44,13 +49,13 @@ public class GridTest {
     @Test
     public void getCasesAround() {
 
-        Grid grid = new Grid(GridTest.grid);
-        List<Case> expected = new ArrayList<>(Arrays.asList(grid.getCase(1, 2), grid.getCase(2, 1), grid.getCase(1, 0), grid.getCase(0, 1)));
-        List<Case> cases = grid.getCasesAround(1, 1, 1, 1);
+        final Grid grid = new Grid(GridTest.grid);
+        List<Coordinate> expected = new ArrayList<>(Arrays.asList(new Coordinate(0, 1), new Coordinate(2, 1), new Coordinate(1, 2), new Coordinate(1, 0)));
+        List<Case> cases = grid.getCasesAround(new Coordinate(1, 1), 1, 1);
 
         for (Case c : cases) {
-            assertTrue(expected.contains(c));
-            expected.remove(c);
+            assertTrue(expected.contains(c.getCoordinate()));
+            expected.remove(c.getCoordinate());
         }
 
         assertTrue(expected.isEmpty());
