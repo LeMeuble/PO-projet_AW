@@ -38,13 +38,13 @@ public class CursorTest {
 
         Cursor cursor = new Cursor(5, 5);
 
-        // Test deplacement vers le haut
+        // Test deplacement vers la droite
         for (int i = 0; i < 5; i++) {
             assertEquals(i, cursor.getCoordinate().getX());
             cursor.right();
         }
 
-        // Test de depacement vers le bas
+        // Test de depacement vers la droite
         cursor.right();
         assertEquals(4, cursor.getCoordinate().getX());
 
@@ -60,13 +60,13 @@ public class CursorTest {
         Cursor cursor = new Cursor(5, 5);
         cursor.setCoordinate(new Coordinate(0, 4));
 
-        // Test deplacement vers le haut
+        // Test deplacement vers le bas
         for (int i = 0; i < 5; i++) {
             assertEquals(4 - i, cursor.getCoordinate().getY());
             cursor.down();
         }
 
-        // Test de depacement vers le bas
+        // Test deplacement vers le bas
         cursor.down();
         assertEquals(0, cursor.getCoordinate().getY());
 
