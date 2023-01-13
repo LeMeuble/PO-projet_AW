@@ -132,23 +132,23 @@ elles-mêmes
 étendues par des classes les classes propres à chaque type d'unité.
 Voici la liste des unités implémentées dans le jeu :
 
-| Unité       | Texture                                                                    |
-|-------------|----------------------------------------------------------------------------|
-| Porte-avion | ![aircraft_carrier](./pictures/troops/red/aircraft_carrier/idleleft/0.png) | 
-| Anti air    | ![anti_air](./pictures/troops/red/anti_air/idleleft/0.png)                 | 
-| Artillerie  | ![artillery](./pictures/troops/red/artillery/idleleft/0.png)               | 
-| Bazooka     | ![bazooka](./pictures/troops/red/bazooka/idleleft/0.png)                   | 
-| Bombardier  | ![bomber](./pictures/troops/red/bomber/idleleft/0.png)                     | 
-| Convoi      | ![convoy](./pictures/troops/red/convoy/idleleft/0.png)                     | 
-| Corvette    | ![corvette](./pictures/troops/red/corvette/idleleft/0.png)                 | 
-| Croiseur    | ![cruiser](./pictures/troops/red/cruiser/idleleft/0.png)                   | 
-| Cuirassé    | ![cuirassé](./pictures/troops/red/dreadnought/idleleft/0.png)              | 
-| Hélicoptère | ![helicopter](./pictures/troops/red/helicopter/idleleft/0.png)             | 
-| Infanterie  | ![infantry](./pictures/troops/red/infantry/idleleft/0.png)                 | 
-| Barge       | ![landing_ship](./pictures/troops/red/landing_ship/idleleft/0.png)         | 
-| Lancer SAM  | ![sam_launcher](./pictures/troops/red/sam_launcher/idleleft/0.png)         | 
-| Sous-marin  | ![submarine](./pictures/troops/red/submarine/idleleft/0.png)               | 
-| Tank        | ![tank](./pictures/troops/red/tank/idleleft/0.png)                         | 
+| Unité       |                    | Texture                                                                    |
+|-------------|--------------------|----------------------------------------------------------------------------|
+| Porte-avion | NavalTransport     | ![aircraft_carrier](./pictures/troops/red/aircraft_carrier/idleleft/0.png) | 
+| Anti air    | Motorized          | ![anti_air](./pictures/troops/red/anti_air/idleleft/0.png)                 | 
+| Artillerie  | Motorized          | ![artillery](./pictures/troops/red/artillery/idleleft/0.png)               | 
+| Bazooka     | OnFoot             | ![bazooka](./pictures/troops/red/bazooka/idleleft/0.png)                   | 
+| Bombardier  | Flying             | ![bomber](./pictures/troops/red/bomber/idleleft/0.png)                     | 
+| Convoi      | MotorizedTransport | ![convoy](./pictures/troops/red/convoy/idleleft/0.png)                     | 
+| Corvette    | NavalTransport     | ![corvette](./pictures/troops/red/corvette/idleleft/0.png)                 | 
+| Croiseur    | Naval              | ![cruiser](./pictures/troops/red/cruiser/idleleft/0.png)                   | 
+| Cuirassé    | Naval              | ![cuirassé](./pictures/troops/red/dreadnought/idleleft/0.png)              | 
+| Hélicoptère | FlyingTransport    | ![helicopter](./pictures/troops/red/helicopter/idleleft/0.png)             | 
+| Infanterie  | OnFoot             | ![infantry](./pictures/troops/red/infantry/idleleft/0.png)                 | 
+| Barge       | NavalTransport     | ![landing_ship](./pictures/troops/red/landing_ship/idleleft/0.png)         | 
+| Lancer SAM  | Motorized          | ![sam_launcher](./pictures/troops/red/sam_launcher/idleleft/0.png)         | 
+| Sous-marin  | Naval              | ![submarine](./pictures/troops/red/submarine/idleleft/0.png)               | 
+| Tank        | Motorized          | ![tank](./pictures/troops/red/tank/idleleft/0.png)                         | 
 
 Toutes ces unités sont déclinées en 5 couleurs, pour les 5 joueurs différents (
 voir [Bonus | Choix d'ajouts](#2-bonus--choix-dajouts))
