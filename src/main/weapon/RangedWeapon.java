@@ -8,6 +8,9 @@ package main.weapon;
  */
 public abstract class RangedWeapon extends Weapon {
 
+    /**
+     * Constructeur d'une arme a distance
+     */
     public RangedWeapon() {
         super();
     }

@@ -3,6 +3,12 @@ package main.map;
 import java.io.File;
 import java.util.Map;
 
+/**
+ * Classe representant des metadonnes d'une carte
+ *
+ * @author Tristan LECONTE--DENIS
+ * @author Lucien GRAVOT
+ */
 public class MapMetadata {
 
     private final String name;
@@ -14,6 +20,16 @@ public class MapMetadata {
     private final String mapPath;
 
 
+    /**
+     * Constructeur d'une metadonnee
+     * @param name        Le nom de la carte
+     * @param description La description de la carte
+     * @param playerCount Le nombre de joueurs presents sur la carte
+     * @param width       La largeur de la carte
+     * @param height      La hauteur de la carte
+     * @param icon        Le chemin vers l'icone de la carte
+     * @param mapPath     Le chemin vers la carte
+     */
     public MapMetadata(String name, String description, int playerCount, int width, int height, String icon, String mapPath) {
 
         this.name = name;
@@ -26,7 +42,13 @@ public class MapMetadata {
 
     }
 
-
+    /**
+     * Methode statique
+     * Genere un nouvel objet Metadata, a partir d'une Map representant des metadonnes
+     * @param metadata Une map representant une metadonnee
+     * @param mapPath Le chemin d'une carte
+     * @return Un nouvel objet Metadata
+     */
     public static MapMetadata fromMap(Map<String, String> metadata, String mapPath) {
 
         if(!validateMetadata(metadata)) return null;
@@ -42,6 +64,12 @@ public class MapMetadata {
 
     }
 
+    /**
+     * Methode statique
+     * Verifie si une Map representant une metadonnee est valide
+     * @param metadata La map a tester
+     * @return true si metadata est valide, false sinon
+     */
     private static boolean validateMetadata(Map<String, String> metadata) {
 
         if (metadata == null) return false;

@@ -25,6 +25,7 @@ import ressources.PathUtil;
 import java.awt.*;
 import java.util.Set;
 
+// Todo
 public class Renderer {
 
     private static Renderer instance;

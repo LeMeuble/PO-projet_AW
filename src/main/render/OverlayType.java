@@ -1,5 +1,11 @@
 package main.render;
 
+/**
+ * Enumeration des types d'overlay
+ *
+ * @author Tristan LECONTE--DENIS
+ * @author Lucien GRAVOT
+ */
 public enum OverlayType {
 
     MOVE,

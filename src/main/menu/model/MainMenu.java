@@ -8,6 +8,12 @@ import ressources.Config;
 import ressources.DisplayUtil;
 import ressources.PathUtil;
 
+/**
+ * Classe representant le menu principal (ecran d'accueil)
+ *
+ * @author Tristan LECONTE--DENIS
+ * @author Lucien GRAVOT
+ */
 public class MainMenu extends AnimatedMenu {
 
     private static final int PRIORITY = 10;
@@ -19,7 +25,9 @@ public class MainMenu extends AnimatedMenu {
     private final int id;
     private final Weather weather;
 
-
+    /**
+     * Constructeur du menu principal
+     */
     public MainMenu() {
         super(PRIORITY, new AnimationClock(Config.MAIN_MENU_ANIMATION_FRAME_COUNT, Config.MAIN_MENU_ANIMATION_FRAME_DURATION));
         this.id = (int) (Math.random() * Config.MAIN_MENU_BACKGROUND_VARIATION_COUNT);
@@ -27,6 +35,9 @@ public class MainMenu extends AnimatedMenu {
     }
 
 
+    /**
+     * Methode gerant l'affichage du menu principal
+     */
     @Override
     public void render() {
 
@@ -35,6 +46,7 @@ public class MainMenu extends AnimatedMenu {
         final String backgroundPath = PathUtil.getBackgroundPath(this.weather, this.id);
         final String title = PathUtil.getUiComponentPath("title_screen_" + frame + ".png");
 
+        // Affiche l'immage du menu, avec le titre du jeu
         DisplayUtil.drawPicture(CENTER_X, CENTER_Y, backgroundPath, WIDTH, HEIGHT);
         DisplayUtil.drawPicture(CENTER_X, 0.18d * Config.HEIGHT, title);
 

@@ -10,13 +10,17 @@ import main.unit.UnitType;
 import main.util.OptionSelector;
 
 /**
- * Classe representant une usine
+ * Classe representant une usine (la case de terrain)
  *
  * @author Tristan LECONTE--DENIS
  * @author GRAVOT Lucien
  */
 public class FactoryTerrain extends Factory {
 
+    /**
+     * Constructeur de l'usine
+     * @param owner Le joueur proprietaire
+     */
     public FactoryTerrain(Player.Type owner) {
         super(owner);
     }
@@ -33,9 +37,16 @@ public class FactoryTerrain extends Factory {
 
     }
 
+
+    /**
+     * Renvoie les options disponibles pour cette case, en fonction d'une quantite d'argent
+     * @param money L'argent
+     * @return Un selecteur d'option
+     */
     @Override
     public OptionSelector<UnitType> getUnitSelector(int money) {
         OptionSelector<UnitType> selector = new OptionSelector<>();
+        // Ajoute au selecteur les unites a pied ou mecanisee que l'argent donne permet de produire
         for (UnitType type : UnitType.values()) {
             if (type.instanceOf(OnFoot.class) || type.instanceOf(Motorized.class)) {
                 selector.addOption(type, type.getPrice() <= money);

@@ -31,6 +31,11 @@ public enum TerrainType {
         this.terrainClass = terrainClass;
     }
 
+    /**
+     * Renvoie un objet representant un type de terrain, contenant un caractere et une classe associee, en fonction d'un caractere d'entree
+     * @param character Un caractere
+     * @return Un objet TerrainType
+     */
     public static TerrainType fromCharacter(char character) {
 
         for (TerrainType type : TerrainType.values()) {
@@ -42,9 +47,15 @@ public enum TerrainType {
 
     }
 
+    /**
+     * Cree une nouvelle instance de terrain, appartenant a un joueur
+     * @param p Le joueur proprietaire
+     * @return Une nouvelle instance d'un terrain
+     */
     public Terrain newInstance(Player.Type p) {
 
         try {
+            // Si le terrain est constructible depuis une classe propriete
             if (Property.class.isAssignableFrom(this.terrainClass)) {
                 return p != null ? this.terrainClass.getConstructor(Player.Type.class).newInstance(p) : null;
             } else {

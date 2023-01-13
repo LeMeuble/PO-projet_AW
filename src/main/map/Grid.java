@@ -102,6 +102,12 @@ public class Grid {
         return cases;
     }
 
+    /**
+     * Renvoie une liste des cases adjacentes a une case passee en parametre
+     * La liste ne contient pas la case passee en parametre
+     * @param c Un case
+     * @return Une liste de Case
+     */
     public List<Case> getAdjacentCases(Case c) {
 
         List<Case> adjacentCases = new ArrayList<>();
@@ -161,6 +167,11 @@ public class Grid {
 
     }
 
+    /**
+     * A partir d'une liste de cases, renvoie une liste des unites contenues dans ces cases
+     * @param casesAround Une liste de case
+     * @return Une liste d'unites
+     */
     public List<Unit> getUnitsAround(List<Case> casesAround) {
 
         List<Unit> output = new LinkedList<>();
@@ -175,9 +186,14 @@ public class Grid {
         return output;
     }
 
+    /**
+     * Deplace une unite, en suivant un chemin
+     * @param path Le chemin a suivre
+     */
     public void moveUnit(Movement path) {
 
         final Game game = MiniWars.getInstance().getCurrentGame();
+        // On coupe le chemin, si jamais il y a une unite ennemie sur ce dernier
         final Movement untrappedPath = path.cutTrappedPath(game.getCurrentPlayer().getType());
         final boolean trapped = path.isPathTrappedFor(game.getCurrentPlayer().getType());
 
@@ -211,19 +227,30 @@ public class Grid {
             MenuManager.getInstance().addMenu(new UnitActionMenu(actions));
         }
 
+        // On actualise le brouillard de guerre pour toutes les cases entre l'unite et la destination
         this.updateFogOfWar(destination, unit);
 
     }
 
+    /**
+     * Redefinit toutes les cases comme etant dans un certain etat de brouillard de guerre
+     * @param foggy L'etat de brouillard de guerre a definir
+     */
     public void resetFogOfWar(boolean foggy) {
         this.getCases().forEach(c -> c.setFoggy(foggy));
     }
 
+    /**
+     * Actualise le brouillard de guerre pour les batiments, a partir d'une case
+     * @param c La case
+     */
     public void updateFogOfWarBuilding(Case c) {
 
         Player.Type p = MiniWars.getInstance().getCurrentGame().getCurrentPlayer().getType();
 
+        // Si la case est une propriete appartenant au joueur courant
         if (c.getTerrain() instanceof Property && ((Property) c.getTerrain()).getOwner() == p) {
+            // On enleve le brouillard de toutes les cases autour (elle meme comprise)
             for (Case caseAround : this.getCasesAround(c.getCoordinate(), 0, 2)) {
                 caseAround.setFoggy(false);
             }
@@ -231,6 +258,11 @@ public class Grid {
 
     }
 
+    /**
+     * Actualise le brouillard de guerre pour une unite
+     * @param c La case a actualiser
+     * @param unit L'unite
+     */
     public void updateFogOfWarUnit(Case c, Unit unit) {
 
         Player.Type p = MiniWars.getInstance().getCurrentGame().getCurrentPlayer().getType();
@@ -263,10 +295,16 @@ public class Grid {
 
     }
 
+    /**
+     * Actualise le brouillard de guerre en fonction d'une case et d'une unite
+     * @param c Une case
+     * @param u Une unite
+     */
     public void updateFogOfWarCase(Case c, Unit u) {
 
         Player.Type p = MiniWars.getInstance().getCurrentGame().getCurrentPlayer().getType();
 
+        // Condition pour permettre aux proprietes ennemies et aux forets de bloquer le champ de vision des unites du joueur courant
         if ((c.getTerrain() instanceof Property && ((Property) c.getTerrain()).getOwner() != p) || c.getTerrain() instanceof Forest) {
 
             if (c.getCoordinate().distance(u.getCoordinate()) == 1 || c.getCoordinate().equals(u.getCoordinate())) {
@@ -278,6 +316,11 @@ public class Grid {
         }
     }
 
+    /**
+     * Actualise le brouillard de guerre
+     * @param c Une case
+     * @param unit Une unite
+     */
     public void updateFogOfWar(Case c, Unit unit) {
 
         if (unit == null) {

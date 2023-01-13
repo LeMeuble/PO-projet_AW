@@ -16,6 +16,12 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Classe representant un ecran de fin de partie
+ *
+ * @author Tristan LECONTE--DENIS
+ * @author Lucien GRAVOT
+ */
 public class EndingMenu extends FadeMenu {
 
 
@@ -33,6 +39,9 @@ public class EndingMenu extends FadeMenu {
         this.textShown = false;
     }
 
+    /**
+     * Methode gerant l'affichage du menu de fin de partie
+     */
     @Override
     public void render() {
 

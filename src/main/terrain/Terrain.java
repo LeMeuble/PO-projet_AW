@@ -37,6 +37,7 @@ public abstract class Terrain {
 
     }
 
+    // Todo
     public static Terrain parse(String t) {
 
         if (t == null) return null;
@@ -109,6 +110,7 @@ public abstract class Terrain {
         return PathUtil.getTerrainPath(weather, this.getType(), this.getTextureVariation(), isFoggy);
     }
 
+    // Todo
     public void render(double pixelX, double pixelY, Weather weather, boolean isFoggy, int frame) {
 
         if (!MiniWars.getInstance().isPlaying()) return;

@@ -14,26 +14,41 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * Classe servant a parser une carte
+ *
+ * @author Tristan LECONTE--DENIS
+ * @author Lucien GRAVOT
+ */
 public class MapParser {
 
-
+    /**
+     * @return Une liste de toutes les cartes disponibles
+     */
     public static List<MapMetadata> listAvailableMaps() {
 
         final List<MapMetadata> maps = new ArrayList<>();
         final File[] metadataFiles = new File(PathUtil.MAPS_FOLDER).listFiles();
 
+        // S'il existe au moins un fichier dans le dossier
         if (metadataFiles != null) {
 
+            // Pour chaque fichier
             for (File metadataFile : metadataFiles) {
 
+                // Si ce fichier existe, et que c'est un fichier avec l'extension ".meta"
                 if (metadataFile.exists() && metadataFile.isFile() && metadataFile.getName().endsWith(".meta")) {
 
+                    // On recupere le chemin de ce fichier
                     final String mapPath = metadataFile.getAbsolutePath().substring(0, metadataFile.getAbsolutePath().length() - 5) + PathUtil.MAP_EXTENSION;
 
+                    // Si ce chemin existe
                     if (new File(mapPath).exists()) {
 
+                        // On parse ses metadonnees
                         final MapMetadata metadata = parseMetadata(metadataFile, mapPath);
 
+                        // Si les metadonnees existent, on les ajoute a la liste des cartes
                         if (metadata != null) {
                             maps.add(metadata);
                         }
@@ -54,6 +69,12 @@ public class MapParser {
 
     }
 
+    /**
+     * Methode statique
+     * Parse une carte. Cree la grille de jeu, y ajoute toutes les cases, ainsi que les unites qu'elles contiennent
+     * @param mapMetadata La map a construire
+     * @return une grille de jeu
+     */
     public static Grid parseMap(MapMetadata mapMetadata) {
 
         final File file = new File(mapMetadata.getMapPath());
@@ -132,6 +153,13 @@ public class MapParser {
         //todo: check if map is higher than expected (mapHeight)
     }
 
+    /**
+     * Methode statique
+     * Parse les metadonnees d'un fichier
+     * @param file
+     * @param mapPath
+     * @return
+     */
     public static MapMetadata parseMetadata(File file, String mapPath) {
 
         if (!file.getName().endsWith(".meta")) return null;
@@ -139,14 +167,15 @@ public class MapParser {
         final Map<String, String> metadataParsing = new HashMap<>();
 
         try (Scanner sc = new Scanner(file)) {
-
+            // Tant que le fichier n'est pas termine
             while (sc.hasNextLine()) {
 
+                // On coupe la ligne au niveau du "="
                 String line = sc.nextLine().trim();
                 String[] split = line.split("=");
 
                 if (split.length == 2) {
-
+                    // Les 2 morceau de ligne seront la cle et la valeur dans la map
                     String key = split[0].trim();
                     String value = split[1].trim();
 

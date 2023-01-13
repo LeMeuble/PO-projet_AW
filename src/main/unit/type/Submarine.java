@@ -62,6 +62,12 @@ public class Submarine extends Naval {
         return Submarine.DAILY_ENERGY_CONSUMPTION * (this.underwater ? 2 : 1);
     }
 
+    /**
+     * Renvoie les actions possibles pour le sous-marin, en plus des options de ses classes meres
+     * @param currentCase La case courante
+     * @param contextGrid La grille dans laquelle l'unite peut evoluer
+     * @return
+     */
     @Override
     public OptionSelector<UnitAction> getAvailableActions(Case currentCase, Grid contextGrid) {
 

@@ -11,12 +11,25 @@ import ressources.Config;
 
 import java.awt.*;
 
+/**
+ * Classe representant un menu de depot d'unite
+ *
+ * @author Tristan LECONTE--DENIS
+ * @author Lucien GRAVOT
+ */
 public class DropUnitMenu extends ActionMenu<Unit> {
 
+    /**
+     * Constructeur du menu de depot d'unite
+     * @param optionSelector Un selecteur d'options, contenant les unites qu'il est possible de deposer
+     */
     public DropUnitMenu(OptionSelector<Unit> optionSelector) {
         super(optionSelector, false);
     }
 
+    /**
+     * Methode gerant l'affichage du menu de depot d'unite
+     */
     @Override
     public void render() {
 

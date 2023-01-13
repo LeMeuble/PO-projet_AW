@@ -14,15 +14,27 @@ import ressources.PathUtil;
 
 import java.awt.*;
 
+/**
+ * Classe representantun menu d'action d'usine
+ *
+ * @author Tristan LECONTE--DENIS
+ * @author Lucien GRAVOT
+ */
 public class FactoryActionMenu extends ActionMenu<UnitType> {
 
-
+    /**
+     * Constructeur d'un menu d'action d'usine
+     * @param optionSelector Les options disponibles pour cette usine
+     */
     public FactoryActionMenu(OptionSelector<UnitType> optionSelector) {
 
         super(optionSelector, true);
 
     }
 
+    /**
+     * Methode gerant l'affichage du menu d'action d'usine
+     */
     @Override
     public void render() {
 
@@ -43,7 +55,7 @@ public class FactoryActionMenu extends ActionMenu<UnitType> {
         StdDraw.setFont(Config.FONT_20);
 
         Player.Type playerType = MiniWars.getInstance().getCurrentGame().getCurrentPlayer().getType();
-
+        // Pour chaque option disponible, affiche le texte, ainsi qu'une icone de la couleur du joueur courant
         for (OptionSelector<UnitType>.Option option : this.getOptions()) {
 
             DisplayUtil.drawPicture(x + 20, y, PathUtil.getUnitIdleFacingPath(option.getValue(), playerType, UnitFacing.RIGHT, option.isAvailable(), 0), 38, 38);

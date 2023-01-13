@@ -12,6 +12,10 @@ public enum UnitFacing {
         return this.name().toLowerCase();
     }
 
+    /**
+     * @return Une direction aleatoire
+     * @see Unit constructor (used when creating a new map)
+     */
     public static UnitFacing random() {
         return UnitFacing.values()[(int) (Math.random() * UnitFacing.values().length)];
     }

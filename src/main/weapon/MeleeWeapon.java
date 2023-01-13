@@ -11,6 +11,9 @@ public abstract class MeleeWeapon extends Weapon {
     public static final int MIN_REACH = 1;
     public static final int MAX_REACH = 1;
 
+    /**
+     * Constructeur d'une arme de corps a corps
+     */
     public MeleeWeapon() {
         super();
     }

@@ -3,6 +3,12 @@ package main.render;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Classe representant une popup
+ *
+ * @author Tristan LECONTE--DENIS
+ * @author Lucien GRAVOT
+ */
 public class Popup {
 
     private static final int DURATION = 3000;
@@ -11,6 +17,11 @@ public class Popup {
     private final String message;
     private final long creationTime;
 
+    /**
+     * Constructeur de la popup
+     * @param title   Le titre de la popup
+     * @param message Le message de la popup
+     */
     public Popup(String title, String message) {
 
         this.title = title;
@@ -23,6 +34,7 @@ public class Popup {
         return this.title;
     }
 
+    // Todo
     public List<String> getMessage(int maxLineLength) {
 
         List<String> lines = new ArrayList<>();

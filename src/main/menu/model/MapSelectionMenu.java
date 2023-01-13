@@ -14,6 +14,12 @@ import ressources.PathUtil;
 
 import java.awt.*;
 
+/**
+ * Classe representant un menu de selection de carte
+ *
+ * @author Tristan LECONTE--DENIS
+ * @author Lucien GRAVOT
+ */
 public class MapSelectionMenu extends SelectionMenu<MapMetadata> {
 
     public static final int PRIORITY = 9;
@@ -29,6 +35,9 @@ public class MapSelectionMenu extends SelectionMenu<MapMetadata> {
     private final Settings settings;
     private Field field;
 
+    /**
+     * Constructeur du menu de selection de carte
+     */
     public MapSelectionMenu() {
         super(PRIORITY, new OptionSelector<>(MapParser.listAvailableMaps()));
         this.settings = new Settings();
@@ -39,6 +48,9 @@ public class MapSelectionMenu extends SelectionMenu<MapMetadata> {
         return this.settings;
     }
 
+    /**
+     * Methode gerant l'affichage du menu
+     */
     @Override
     public void render() {
 
@@ -54,6 +66,7 @@ public class MapSelectionMenu extends SelectionMenu<MapMetadata> {
 
         StdDraw.setPenColor(Color.BLACK);
         StdDraw.setFont(Config.FONT_32);
+        // Si une carte a ete selectionnee
         if (map != null) {
 
             DisplayUtil.drawPicture(x, y - 12, map.getIcon(), 896 / 2.05d - 46, 1088 / 2.05d - 70);
@@ -61,6 +74,7 @@ public class MapSelectionMenu extends SelectionMenu<MapMetadata> {
 
             double playerIconX = x + 180;
 
+            // Affiche les personnages, representants le nombre de joueurs jouables sur cette carte
             for (int i = map.getPlayerCount(); i >= 1; i--) {
 
                 Player.Type player = Player.Type.fromValue(i);

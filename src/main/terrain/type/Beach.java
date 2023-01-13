@@ -3,6 +3,12 @@ package main.terrain.type;
 import main.terrain.AnimatedTerrain;
 import main.terrain.TerrainType;
 
+/**
+ * Classe representant une plage
+ *
+ * @author Tristan LECONTE--DENIS
+ * @author Lucien GRAVOT
+ */
 public class Beach extends AnimatedTerrain {
 
     public static final float DEFENSE_MULTIPLIER = 0.0f;

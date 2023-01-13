@@ -7,8 +7,14 @@ import ressources.PathUtil;
 
 import java.util.*;
 
+/**
+ * Classe listant/gerant les popups
+ *
+ * @author Tristan LECONTE--DENIS
+ * @author Lucien GRAVOT
+ */
 public class PopupRegistry {
-
+    // Todo
     public static final int MAX_POPUPS = 5;
 
     private static final class InstanceHolder {

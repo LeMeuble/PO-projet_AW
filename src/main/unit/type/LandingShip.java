@@ -61,6 +61,14 @@ public class LandingShip extends NavalTransport {
 
     }
 
+    /**
+     * Retourne le cout de mouvement pour se deplacer sur une case
+     * Prend en compte les plages, normalement non valides pour les unites navales
+     * @param destination La case de destination
+     * @param weather     La meteo courante
+     *
+     * @return Le cout de mouvement
+     */
     public int getMovementCostTo(Case destination, Weather weather) {
 
         int parentCost = super.getMovementCostTo(destination, weather);

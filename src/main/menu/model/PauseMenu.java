@@ -11,8 +11,17 @@ import ressources.PathUtil;
 import java.awt.*;
 import java.util.Arrays;
 
+/**
+ * Classe representant un menu pause
+ *
+ * @author Tristan LECONTE--DENIS
+ * @author Lucien GRAVOT
+ */
 public class PauseMenu extends SelectionMenu<PauseMenu.Action> {
 
+    /**
+     * Enumeration des actions possibles pour un menu pause
+     */
     public enum Action {
         RESUME("Continuer"),
         QUIT("Quitter la partie");
@@ -25,12 +34,18 @@ public class PauseMenu extends SelectionMenu<PauseMenu.Action> {
 
     }
 
+    /**
+     * Constructeur du menu pause
+     */
     public PauseMenu() {
 
         super(10, new OptionSelector<>(Arrays.asList(Action.values())));
 
     }
 
+    /**
+     * Fonction gerant l'affichage du menu pause
+     */
     @Override
     public void render() {
 
@@ -48,6 +63,10 @@ public class PauseMenu extends SelectionMenu<PauseMenu.Action> {
 
         y -= Config.HEIGHT / 8;
 
+        /**
+         * Pour chaque action disponible (celles de l'enumeration)
+         * @see PauseMenu.Action
+         */
         for (Action action : this.getAvailableValues()) {
 
             if(action == this.getSelectedValue()) {

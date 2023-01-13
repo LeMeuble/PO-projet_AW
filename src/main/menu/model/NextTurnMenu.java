@@ -14,9 +14,17 @@ import ressources.PathUtil;
 import java.awt.*;
 import java.util.Arrays;
 
+/**
+ * Classe representant un menu de passage de tour
+ *
+ * @author Tristan LECONTE--DENIS
+ * @author Lucien GRAVOT
+ */
 public class NextTurnMenu extends FadeMenu {
 
-
+    /**
+     * Enumeration des actions possibles pour le passage de tour
+     */
     public enum Action implements ActionMenu.Text {
 
         YES("Passer le tour"),
@@ -35,6 +43,7 @@ public class NextTurnMenu extends FadeMenu {
 
     }
 
+     //Todo
     public static class AskMenu extends ActionMenu<Action> {
 
         public AskMenu() {

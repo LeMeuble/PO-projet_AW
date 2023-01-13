@@ -52,7 +52,7 @@ public class UnitCarrier {
     }
 
     /**
-     * @return Une lsite des unites transportees
+     * @return Une liste des unites transportees
      */
     public List<Unit> getCarriedUnits() {
         return new ArrayList<>(this.carriedUnits);

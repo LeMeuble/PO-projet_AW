@@ -7,15 +7,26 @@ import ressources.Config;
 
 import java.awt.*;
 
+/**
+ * Classe representant un menu avec un fondu entrant
+ *
+ * @author Tristan LECONTE--DENIS
+ * @author Lucien GRAVOT
+ */
 public class SimpleFadeInOutMenu extends FadeMenu {
 
-
+    /**
+     * Constructeur du menu
+     */
     public SimpleFadeInOutMenu() {
 
         super(20, 20);
 
     }
 
+    /**
+     * Methode gerant l'affichage du menu
+     */
     @Override
     public void render() {
 

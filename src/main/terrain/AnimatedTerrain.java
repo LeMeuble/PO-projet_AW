@@ -3,6 +3,9 @@ package main.terrain;
 import main.weather.Weather;
 import ressources.PathUtil;
 
+/**
+ * Classe abstraite representant du terrain anime
+ */
 public abstract class AnimatedTerrain extends Terrain {
 
     @Override

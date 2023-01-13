@@ -15,14 +15,28 @@ import ressources.PathUtil;
 
 import java.awt.*;
 
+/**
+ * Classe representant un menu d'action d'unite
+ *
+ * @author Tristan LECONTE--DENIS
+ * @author Lucien GRAVOT
+ */
 public class UnitActionMenu extends ActionMenu<UnitAction> {
 
+    /**
+     *  Constructeur du menu d'action de l'unite
+     * @param optionSelector Les options disponibles pour cette unite
+     */
     public UnitActionMenu(OptionSelector<UnitAction> optionSelector) {
 
         super(optionSelector, false);
 
     }
 
+    /**
+     * Methode gerant l'affichage du menu
+     * @see ActionMenu#render()
+     */
     @Override
     public void render() {
 
@@ -35,8 +49,10 @@ public class UnitActionMenu extends ActionMenu<UnitAction> {
         StdDraw.setFont(Config.FONT_20);
         Player.Type playerType = MiniWars.getInstance().getCurrentGame().getCurrentPlayer().getType();
 
+        // Pour chaque action possible
         for (UnitAction action : this.getAvailableValues()) {
 
+            // On affiche la bonne case, au bon endroit sur l'ecran
             if (action == UnitAction.MOVE) {
 
                 DisplayUtil.drawPicture(x + 20, y, PathUtil.getArrowPath(playerType, "left", "end"), 28, 28);

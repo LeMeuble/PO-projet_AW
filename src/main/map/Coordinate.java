@@ -1,14 +1,28 @@
 package main.map;
 
+/**
+ * Classe representant des coordonnees
+ *
+ * @author Tristan LECONTE--DENIS
+ * @author Lucien GRAVOT
+ */
 public class Coordinate implements Cloneable {
 
     private int x;
     private int y;
 
+    /**
+     * Constructeur d'une coordonnee, initialisee a 0:0
+     */
     public Coordinate() {
         this(0, 0);
     }
 
+    /**
+     * Constructeur d'une coordonnee, initialisee a x:y
+     * @param x
+     * @param y
+     */
     public Coordinate(int x, int y) {
         this.x = x;
         this.y = y;

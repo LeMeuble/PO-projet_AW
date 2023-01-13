@@ -19,6 +19,12 @@ import ressources.PathUtil;
 
 import java.util.List;
 
+/**
+ * Classe representant le menu informatif au bas de l'ecran
+ *
+ * @author Tristan LECONTE--DENIS
+ * @author Lucien GRAVOT
+ */
 public class BottomMenu extends AnimatedMenu {
 
 
@@ -29,6 +35,9 @@ public class BottomMenu extends AnimatedMenu {
         super(8, new AnimationClock(2, 1500));
     }
 
+    /**
+     * Methode gerant l'affichage du menu
+     */
     @Override
     public void render() {
 
@@ -44,10 +53,12 @@ public class BottomMenu extends AnimatedMenu {
 
         DisplayUtil.drawIntegerValue(Config.WIDTH - 12, 3 * Config.PIXEL_PER_CASE + 2, String.valueOf(game.getCurrentPlayer().getMoney()), 18, "right");
 
+        // Affiche la case courante en bas a gauche
         selectedCase.renderTerrain(40, 60, game.getWeather(), 0);
         DisplayUtil.drawPicture(82, 86, PathUtil.getIndicatorPath("defense"), 20, 20);
         DisplayUtil.drawIntegerValue(82 + 32, 86, (int) (selectedCase.getTerrain().getTerrainCover() * 100) + "%", 14, "left");
 
+        // En plus d'informations sur les proprietes
         if (selectedCase.getTerrain() instanceof Property) {
 
             DisplayUtil.drawPicture(82, 60, PathUtil.getIndicatorPath("health"), 20, 20);
@@ -55,6 +66,7 @@ public class BottomMenu extends AnimatedMenu {
 
         }
 
+        // Et sur l'unite presente dans la case
         if (selectedCase.hasUnit() && !selectedCase.isFoggy()) {
 
             selectedCase.renderUnit(250, 60, 0, 64, 64, false);
@@ -64,7 +76,7 @@ public class BottomMenu extends AnimatedMenu {
             DisplayUtil.drawIntegerValue(290 + 32, 60, String.valueOf(selectedCase.getUnit().getEnergy()), 14, "left");
 
             String ammo = "";
-
+            // Affiche les munitions de l'unite
             for (Weapon w : selectedCase.getUnit().getWeapons()) {
                 ammo += w.getAmmo() + "/";
             }
@@ -86,6 +98,7 @@ public class BottomMenu extends AnimatedMenu {
         double y = 84;
         StdDraw.setPenColor(StdDraw.BLACK);
 
+        // Affiche les raccourcis clavier
         for (int i = offsetI; i < keyTips.size() && i < offsetI + tipsPerPage; i++) {
 
             final KeyTips keyTip = keyTips.get(i);

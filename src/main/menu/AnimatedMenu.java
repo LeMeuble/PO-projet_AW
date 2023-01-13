@@ -44,10 +44,16 @@ public abstract class AnimatedMenu extends Menu {
         return this.isVisible() && (super.needsRefresh() || this.animationClock.needsRefresh());
     }
 
+    /**
+     * @return La frame courante de l'animation
+     */
     public int getFrame() {
         return this.animationClock.getFrame();
     }
 
+    /**
+     * La frame suivante de l'animation
+     */
     public void nextFrame() {
         this.animationClock.nextFrame();
     }
