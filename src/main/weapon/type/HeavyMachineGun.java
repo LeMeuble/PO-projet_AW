@@ -8,6 +8,9 @@ public class HeavyMachineGun extends MeleeWeapon {
 
     private static final int DEFAULT_AMMO = 7;
 
+    /**
+     * Enumeration du multiplicateur de degats en fonction de l'unite
+     */
     private enum DamageMultiplier {
 
         ON_INFANTRY(UnitType.INFANTRY, 1f),
@@ -36,6 +39,11 @@ public class HeavyMachineGun extends MeleeWeapon {
 
         }
 
+        /**
+         * Renvoie le multiplicateur de degats en fonction de l'unite cible
+         * @param unit L'unite cible
+         * @return Le multiplicateur des degats infliges a cette unite
+         */
         public static DamageMultiplier fromUnit(UnitType unit) {
 
             for (DamageMultiplier d : DamageMultiplier.values()) {
@@ -55,10 +63,11 @@ public class HeavyMachineGun extends MeleeWeapon {
 
     }
 
+    /**
+     * Constructeur de HeavyMachineGun
+     */
     public HeavyMachineGun() {
-
         super();
-
     }
 
     @Override
@@ -66,6 +75,11 @@ public class HeavyMachineGun extends MeleeWeapon {
         return HeavyMachineGun.DEFAULT_AMMO;
     }
 
+    /**
+     * Renvoie le multiplicateur de degats infliges a une unite cible
+     * @param unit L'unite cible
+     * @return Un multiplicateur de degats, ou 0 si l'unite n'existe pas dans l'enumeration
+     */
     @Override
     public float getMultiplierOn(Unit unit) {
         DamageMultiplier damage = DamageMultiplier.fromUnit(unit.getType());

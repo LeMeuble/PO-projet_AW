@@ -45,6 +45,11 @@ public class Bombs extends MeleeWeapon {
 
         }
 
+        /**
+         * Renvoie le multiplicateur de degats en fonction de l'unite cible
+         * @param unit L'unite cible
+         * @return Le multiplicateur des degats infliges a cette unite
+         */
         public static DamageMultiplier fromUnit(UnitType unit) {
 
             for (DamageMultiplier d : DamageMultiplier.values()) {
@@ -68,9 +73,7 @@ public class Bombs extends MeleeWeapon {
      * Constructeur de Bombs
      */
     public Bombs() {
-
         super();
-
     }
 
     @Override
@@ -79,11 +82,9 @@ public class Bombs extends MeleeWeapon {
     }
 
     /**
-     * Renvoie le multiplicateur de degats d'une bombe en fonction d'une unite cible
-     *
-     * @param unit Le type de l'unite cible
-     *
-     * @return Le multiplicateur de degats
+     * Renvoie le multiplicateur de degats infliges a une unite cible
+     * @param unit L'unite cible
+     * @return Un multiplicateur de degats, ou 0 si l'unite n'existe pas dans l'enumeration
      */
     @Override
     public float getMultiplierOn(Unit unit) {

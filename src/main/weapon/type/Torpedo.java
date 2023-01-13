@@ -8,6 +8,9 @@ public class Torpedo extends MeleeWeapon {
 
     private static final int DEFAULT_AMMO = 2;
 
+    /**
+     * Enumeration du multiplicateur de degats en fonction de l'unite
+     */
     private enum DamageMultiplier {
 
         ON_INFANTRY(UnitType.INFANTRY, 0.0f),
@@ -55,10 +58,11 @@ public class Torpedo extends MeleeWeapon {
 
     }
 
+    /**
+     * Constructeur de Torpedo
+     */
     public Torpedo() {
-
         super();
-
     }
 
     @Override

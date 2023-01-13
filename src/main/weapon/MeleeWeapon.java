@@ -1,5 +1,11 @@
 package main.weapon;
 
+/**
+ * Classe abstraite representant une arme de corps a corps (arme ayant une portee d'une case)
+ *
+ * @author Tristan LECONTE--DENIS
+ * @author Lucien GRAVOT
+ */
 public abstract class MeleeWeapon extends Weapon {
 
     public static final int MIN_REACH = 1;

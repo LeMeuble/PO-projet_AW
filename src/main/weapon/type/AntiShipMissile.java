@@ -10,6 +10,9 @@ public class AntiShipMissile extends RangedWeapon {
     private static final int MIN_REACH = 1;
     private static final int MAX_REACH = 2;
 
+    /**
+     * Enumeration du multiplicateur de degats en fonction de l'unite
+     */
     private enum DamageMultiplier {
 
         ON_INFANTRY(UnitType.INFANTRY, 0.0f),
@@ -39,6 +42,11 @@ public class AntiShipMissile extends RangedWeapon {
 
         }
 
+        /**
+         * Renvoie le multiplicateur de degats en fonction de l'unite cible
+         * @param unit L'unite cible
+         * @return Le multiplicateur des degats infliges a cette unite
+         */
         public static AntiShipMissile.DamageMultiplier fromUnit(UnitType unit) {
 
             for (AntiShipMissile.DamageMultiplier d : AntiShipMissile.DamageMultiplier.values()) {
@@ -58,6 +66,13 @@ public class AntiShipMissile extends RangedWeapon {
 
     }
 
+    /**
+     * Constructeur de AntiShipMissile
+     */
+    public AntiShipMissile()  {
+        super();
+    }
+
     @Override
     public int getMinReach() {
         return MIN_REACH;
@@ -73,6 +88,11 @@ public class AntiShipMissile extends RangedWeapon {
         return DEFAULT_AMMO;
     }
 
+    /**
+     * Renvoie le multiplicateur de degats infliges a une unite cible
+     * @param unit L'unite cible
+     * @return Un multiplicateur de degats, ou 0 si l'unite n'existe pas dans l'enumeration
+     */
     @Override
     public float getMultiplierOn(Unit unit) {
         AntiShipMissile.DamageMultiplier damage = AntiShipMissile.DamageMultiplier.fromUnit(unit.getType());

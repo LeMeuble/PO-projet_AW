@@ -16,6 +16,9 @@ public class Mortar extends RangedWeapon {
     private static final int MIN_REACH = 2;
     private static final int MAX_REACH = 3;
 
+    /**
+     * Enumeration du multiplicateur de degats en fonction de l'unite
+     */
     private enum DamageMultiplier {
 
         ON_INFANTRY(UnitType.INFANTRY, 0.4f),
@@ -45,6 +48,11 @@ public class Mortar extends RangedWeapon {
 
         }
 
+        /**
+         * Renvoie le multiplicateur de degats en fonction de l'unite cible
+         * @param unit L'unite cible
+         * @return Le multiplicateur des degats infliges a cette unite
+         */
         public static Mortar.DamageMultiplier fromUnit(UnitType unit) {
 
             for (Mortar.DamageMultiplier d : Mortar.DamageMultiplier.values()) {
@@ -64,6 +72,9 @@ public class Mortar extends RangedWeapon {
 
     }
 
+    /**
+     * Constructeur de Mortar
+     */
     public Mortar() {
         super();
     }
@@ -83,6 +94,11 @@ public class Mortar extends RangedWeapon {
         return Mortar.DEFAULT_AMMO;
     }
 
+    /**
+     * Renvoie le multiplicateur de degats infliges a une unite cible
+     * @param unit L'unite cible
+     * @return Un multiplicateur de degats, ou 0 si l'unite n'existe pas dans l'enumeration
+     */
     @Override
     public float getMultiplierOn(Unit unit) {
         DamageMultiplier damage = DamageMultiplier.fromUnit(unit.getType());

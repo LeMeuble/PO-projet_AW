@@ -16,6 +16,9 @@ public class DreadnoughtBattery extends RangedWeapon {
     private static final int MIN_REACH = 3;
     private static final int MAX_REACH = 5;
 
+    /**
+     * Enumeration du multiplicateur de degats en fonction de l'unite
+     */
     private enum DamageMultiplier {
 
         ON_INFANTRY(UnitType.INFANTRY, 0.8f),
@@ -45,6 +48,11 @@ public class DreadnoughtBattery extends RangedWeapon {
 
         }
 
+        /**
+         * Renvoie le multiplicateur de degats en fonction de l'unite cible
+         * @param unit L'unite cible
+         * @return Le multiplicateur des degats infliges a cette unite
+         */
         public static DreadnoughtBattery.DamageMultiplier fromUnit(UnitType unit) {
 
             for (DreadnoughtBattery.DamageMultiplier d : DreadnoughtBattery.DamageMultiplier.values()) {
@@ -64,6 +72,9 @@ public class DreadnoughtBattery extends RangedWeapon {
 
     }
 
+    /**
+     * Constructeur de DreadnoughtBattery
+     */
     public DreadnoughtBattery() {
         super();
     }
@@ -83,6 +94,11 @@ public class DreadnoughtBattery extends RangedWeapon {
         return DreadnoughtBattery.DEFAULT_AMMO;
     }
 
+    /**
+     * Renvoie le multiplicateur de degats infliges a une unite cible
+     * @param unit L'unite cible
+     * @return Un multiplicateur de degats, ou 0 si l'unite n'existe pas dans l'enumeration
+     */
     @Override
     public float getMultiplierOn(Unit unit) {
         DamageMultiplier damage = DamageMultiplier.fromUnit(unit.getType());

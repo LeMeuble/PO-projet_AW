@@ -131,7 +131,7 @@ public class ActionHandler {
             // Si le jeu est en mode "selection d'une carte"
             case MENU_MAP_SELECTION: {
 
-                // Cree un nouveau menu de selection, et actualise l'ecran
+                // Cree un nouveau menu de selection de carte, recupere le champ situe au dessus de ce menu et actualise l'ecran
                 MapSelectionMenu mapSelectionMenu = (MapSelectionMenu) MenuManager.getInstance().getMenu(MenuModel.MAP_SELECTION_MENU);
                 mapSelectionMenu.previousField();
                 mapSelectionMenu.needsRefresh(true);
@@ -159,7 +159,7 @@ public class ActionHandler {
             case PLAYING_MOVING_UNIT: {
 
                 Logger.getLogger().log("up@PLAYING_MOVING_UNIT");
-                // Si le curseur n'est pas nul, actualise la fleche de deplacement vers le haut
+                // Si un curseur existe, actualise la fleche de deplacement vers le haut
                 if (cursor != null) this.updateMovement(cursor::up);
                 return true;
             }
@@ -205,14 +205,17 @@ public class ActionHandler {
 
         switch (gameState) {
 
+            // Si le jeu est en mode "selection d'une carte"
             case MENU_MAP_SELECTION: {
 
+                // Cree un nouveau menu de selection de carte, recupere le champ situe en dessous de ce menu et actualise l'ecran
                 MapSelectionMenu mapSelectionMenu = (MapSelectionMenu) MenuManager.getInstance().getMenu(MenuModel.MAP_SELECTION_MENU);
                 mapSelectionMenu.nextField();
                 mapSelectionMenu.needsRefresh(true);
 
             }
 
+            // Si le jeu est en mode "selection", "selection d'une zone de depot", "selection d'un transport" ou "selection d'une cible"
             case PLAYING_SELECTING:
             case PLAYING_SELECTING_DROP_ZONE:
             case PLAYING_SELECTING_TRANSPORT:
@@ -222,19 +225,23 @@ public class ActionHandler {
 
                 if (cursor == null) break;
 
+                // On deplace le cureur vers le bas, et on ajuste le decalage de l'ecran
                 boolean updateDisplay = cursor.down();
                 updateDisplay |= game.getView().adjustOffset();
 
                 return updateDisplay;
             }
 
+            // Si le jeu est en mode "deplacement d'une unite"
             case PLAYING_MOVING_UNIT: {
                 Logger.getLogger().log("down@PLAYING_MOVING_UNIT");
 
+                // Si un curseur existe, actualise la fleche de deplacement vers le bas
                 if (cursor != null) this.updateMovement(cursor::down);
                 return true;
             }
 
+            // Si le jeu est en mode "pause", "selection de passage de tour", "selection de l'unite a deposer", "selection d'action d'usine" ou "selection d'une action d'unite"
             case MENU_PAUSE:
             case PLAYING_SELECTING_SKIP_TURN_ACTION:
             case PLAYING_SELECTING_DROPPED_UNIT:
@@ -243,6 +250,7 @@ public class ActionHandler {
 
                 Logger.getLogger().log("down@PLAYING_SELECTING_UNIT_ACTION");
 
+                // On passe au prochain menu
                 MenuManager.getInstance().getMenus().stream().filter(m -> m instanceof SelectionMenu).filter(Menu::isVisible).forEach(m -> {
                     ((SelectionMenu<?>) m).next();
                     m.needsRefresh(true);
@@ -271,16 +279,19 @@ public class ActionHandler {
 
         switch (gameState) {
 
+            // Si le jeu est en mode "selection d'une carte"
             case MENU_MAP_SELECTION: {
 
                 Logger.getLogger().log("left@MENU_MAP_SELECTION");
 
+                // Cree un nouveau menu de selection de carte, recupere la carte precedente et actualise l'ecran
                 MapSelectionMenu mapSelectionMenu = (MapSelectionMenu) MenuManager.getInstance().getMenu(MenuModel.MAP_SELECTION_MENU);
                 mapSelectionMenu.previous();
                 mapSelectionMenu.needsRefresh(true);
                 return true;
             }
 
+            // Si le jeu est en mode "selection", "selection d'une zone de depot", "selection d'un transport" ou "selection d'une cible"
             case PLAYING_SELECTING:
             case PLAYING_SELECTING_DROP_ZONE:
             case PLAYING_SELECTING_TRANSPORT:
@@ -288,14 +299,17 @@ public class ActionHandler {
                 Logger.getLogger().log("left@PLAYING_SELECTING_TARGET");
                 if (cursor == null) break;
 
+                // Le curseur se deplace vers la gauche, en ajustant le decalage
                 boolean updateDisplay = cursor.left();
                 updateDisplay |= game.getView().adjustOffset();
 
                 return updateDisplay;
             }
 
+            // Si le jeu est en mode "deplacement d'une unite"
             case PLAYING_MOVING_UNIT: {
                 Logger.getLogger().log("left@PLAYING_MOVING_UNIT");
+                // Si le curseur exsite, on deplace la fleche vers la gauche
                 if (cursor != null) this.updateMovement(cursor::left);
                 return true;
             }
@@ -319,16 +333,19 @@ public class ActionHandler {
 
         switch (gameState) {
 
+            // Si le jeu est en mode "selection d'une carte"
             case MENU_MAP_SELECTION: {
 
                 Logger.getLogger().log("left@MENU_MAP_SELECTION");
 
+                // Cree un nouveau menu de selection de carte, recupere la carte precedente et actualise l'ecran
                 MapSelectionMenu mapSelectionMenu = (MapSelectionMenu) MenuManager.getInstance().getMenu(MenuModel.MAP_SELECTION_MENU);
                 mapSelectionMenu.next();
                 mapSelectionMenu.needsRefresh(true);
                 return true;
             }
 
+            // Si le jeu est en mode "selection", "selection d'une zone de depot", "selection d'un transport" ou "selection d'une cible"
             case PLAYING_SELECTING:
             case PLAYING_SELECTING_DROP_ZONE:
             case PLAYING_SELECTING_TRANSPORT:
@@ -336,14 +353,17 @@ public class ActionHandler {
                 Logger.getLogger().log("right@PLAYING_SELECTING_TARGET");
                 if (cursor == null) break;
 
+                // on deplace le curseur vers la droite, et on ajuste le decalage
                 boolean updateDisplay = cursor.right();
                 updateDisplay |= game.getView().adjustOffset();
 
                 return updateDisplay;
             }
 
+            // Si le jeu est en mode "deplacement d'une unite"
             case PLAYING_MOVING_UNIT: {
                 Logger.getLogger().log("right@PLAYING_MOVING_UNIT");
+                // Si le curseur existe, on actualise la fleche de deplacement vers la droite
                 if (cursor != null) this.updateMovement(cursor::right);
                 return true;
             }
@@ -1180,10 +1200,12 @@ public class ActionHandler {
 
         try {
 
+            // Si le jeu est dans l'etat "selection"
             if (gameState == GameState.PLAYING_SELECTING) {
                 Logger.getLogger().log("space@PLAYING_SELECTING");
                 if (grid == null) return false;
 
+                // On liste toutes les cases contenant des unites n'ayant pas joue, et appartenant au joueur courant
                 final List<Case> playerUnitsCases = grid.getCases()
                         .stream()
                         .filter(Case::hasUnit)
@@ -1191,8 +1213,10 @@ public class ActionHandler {
                         .filter(c -> !c.getUnit().hasPlayed())
                         .collect(Collectors.toList());
 
+                // Si la case courante est l'une de ces cases
                 if (playerUnitsCases.contains(currentCase)) {
 
+                    // Le jeu se centre sur la case suivante dans la liste
                     int index = playerUnitsCases.indexOf(currentCase);
                     index = (index + 1) % playerUnitsCases.size();
 
@@ -1200,7 +1224,9 @@ public class ActionHandler {
                     game.getView().focus(playerUnitsCases.get(index));
 
                 }
+                // Sinon, si il y a des cases dans la liste
                 else if (playerUnitsCases.size() != 0) {
+                    // On centre le jeu sur la premiere case de la liste
                     cursor.setCoordinate(playerUnitsCases.get(0).getCoordinate());
                     game.getView().focus(playerUnitsCases.get(0));
                 }
@@ -1210,8 +1236,10 @@ public class ActionHandler {
                 }
 
             }
+            // Sinon, si le jeu est en mode "selection de carte"
             else if (gameState == GameState.MENU_MAP_SELECTION) {
 
+                // On actualise le champ courant (ex : Passage de tour automatique)
                 MapSelectionMenu mapSelectionMenu = (MapSelectionMenu) MenuManager.getInstance().getMenu(MenuModel.MAP_SELECTION_MENU);
                 mapSelectionMenu.toggleCurrentField();
                 mapSelectionMenu.needsRefresh(true);

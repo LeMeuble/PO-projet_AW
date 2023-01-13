@@ -5,6 +5,9 @@ import main.weather.Weather;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Enumeration representant les points de mouvement maximaux des unites
+ */
 public enum UnitMovementPoint {
 
     AIRCRAFT_CARRIER_NORMAL(UnitType.AIRCRAFT_CARRIER, 5),
@@ -36,6 +39,12 @@ public enum UnitMovementPoint {
         this.weather = Arrays.asList(weather);
     }
 
+    /**
+     * Renvoie les points de mouvement d'une unite, en fonction de la meteo
+     * @param unitType Le type de l'unite
+     * @param weather La meteo
+     * @return Un object UnitMovementPoint
+     */
     public static UnitMovementPoint fromUnitAndWeather(UnitType unitType, Weather weather) {
         for (UnitMovementPoint u : UnitMovementPoint.values()) {
             if (u.unitType == unitType && (u.weather.contains(weather) || u.weather.isEmpty())) {

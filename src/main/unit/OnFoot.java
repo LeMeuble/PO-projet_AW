@@ -20,6 +20,10 @@ public abstract class OnFoot extends Unit {
 
     private static final int DAILY_ENERGY_CONSUMPTION = 0;
 
+    /**
+     * Constructeur de OnFoot
+     * @param owner Le joueur proprietaire de l'unite
+     */
     public OnFoot(Player.Type owner) {
 
         super(owner);
@@ -64,15 +68,22 @@ public abstract class OnFoot extends Unit {
         return OnFoot.DAILY_ENERGY_CONSUMPTION;
     }
 
+    /**
+     * Renvoie un selecteur des actions possibles par l'unite
+     * @param currentCase La case courante
+     * @param contextGrid La grille dans laquelle l'unite peut evoluer
+     * @return Un selecteur contenant les actions possibles de la classe mere, plus celle d'une unite a pied
+     */
     @Override
     public OptionSelector<UnitAction> getAvailableActions(Case currentCase, Grid contextGrid) {
 
+        // Options disponibles pour la classe mere (Unit)
         final OptionSelector<UnitAction> actions = super.getAvailableActions(currentCase, contextGrid);
         final List<Case> adjacentCases = contextGrid.getAdjacentCases(currentCase);
         final Terrain currentTerrain = currentCase.getTerrain();
 
         boolean canCapture = currentTerrain instanceof Property && ((Property) currentTerrain).getOwner() != this.getOwner();
-
+        // Si disponible, ajoute l'option capture
         actions.addOption(UnitAction.CAPTURE, canCapture);
 
         return actions;

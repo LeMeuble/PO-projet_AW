@@ -16,6 +16,9 @@ public class GroundToAirMissile extends RangedWeapon {
     private static final int MIN_REACH = 3;
     private static final int MAX_REACH = 6;
 
+    /**
+     * Enumeration du multiplicateur de degats en fonction de l'unite
+     */
     private enum DamageMultiplier {
 
         ON_INFANTRY(UnitType.INFANTRY, 0.0f),
@@ -45,6 +48,11 @@ public class GroundToAirMissile extends RangedWeapon {
 
         }
 
+        /**
+         * Renvoie le multiplicateur de degats en fonction de l'unite cible
+         * @param unit L'unite cible
+         * @return Le multiplicateur des degats infliges a cette unite
+         */
         public static GroundToAirMissile.DamageMultiplier fromUnit(UnitType unit) {
 
             for (GroundToAirMissile.DamageMultiplier d : GroundToAirMissile.DamageMultiplier.values()) {
@@ -64,10 +72,11 @@ public class GroundToAirMissile extends RangedWeapon {
 
     }
 
+    /**
+     * Constructeur de GroundToAirMissile
+     */
     public GroundToAirMissile() {
-
         super();
-
     }
 
     @Override
@@ -85,6 +94,11 @@ public class GroundToAirMissile extends RangedWeapon {
         return GroundToAirMissile.DEFAULT_AMMO;
     }
 
+    /**
+     * Renvoie le multiplicateur de degats infliges a une unite cible
+     * @param unit L'unite cible
+     * @return Un multiplicateur de degats, ou 0 si l'unite n'existe pas dans l'enumeration
+     */
     @Override
     public float getMultiplierOn(Unit unit) {
         DamageMultiplier damage = DamageMultiplier.fromUnit(unit.getType());

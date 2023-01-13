@@ -40,14 +40,25 @@ public abstract class Weapon {
         this.ammo = ammo;
     }
 
+    /**
+     * @return true si l'arme a des munitions
+     */
     public boolean hasAmmo() {
         return ammo > 0;
     }
 
+    /**
+     * Reinitialise les munitions de l'arme a sa valeur par defaut
+     */
     public void reload() {
         this.ammo = this.getDefaultAmmo();
     }
 
+    /**
+     * Verifie si l'arme peut etre utilisee sur l'unite cible
+     * @param unit L'unite cible
+     * @return true si l'arme va infliger des degats a cette unite
+     */
     public boolean canBeUsedOn(Unit unit) {
         return this.getMultiplierOn(unit) > 0.0f;
     }

@@ -135,15 +135,27 @@ public abstract class Unit {
         return this.owner;
     }
 
+    /**
+     * @return Les coordonnees de l'unite
+     */
     public Coordinate getCoordinate() {
         return this.coordinate.clone();
     }
 
+    /**
+     * Redefinit les coordonnees de l'unite, a l'aide d'un objet coordonnee
+     * @param coordinate Les nouvelles coordonnees
+     */
     public void setCoordinate(Coordinate coordinate) {
         this.coordinate.setX(coordinate.getX());
         this.coordinate.setY(coordinate.getY());
     }
 
+    /**
+     * Redefinit les coordonnees de l'unite, a l'aide de deux entiers
+     * @param x La coordonnee X
+     * @param y La coordonnee Y
+     */
     public void setCoordinate(int x, int y) {
         this.coordinate.setX(x);
         this.coordinate.setY(y);
@@ -289,6 +301,11 @@ public abstract class Unit {
 
     }
 
+    /**
+     * Verifie si une la distance se situe a portee de l'arme de l'unite
+     * @param distance La distance
+     * @return true si la distance est a portee, false sinon
+     */
     public boolean isDistanceReachable(double distance) {
 
         for (Weapon weapon : weapons) {
@@ -339,12 +356,15 @@ public abstract class Unit {
 
         final Weapon bestWeapon = this.bestWeaponAgainst(target);
 
+        // S'il existe une arme pouvant toucher la cible
         if (bestWeapon != null) {
 
             Coordinate targetCoordinates = target.getCoordinate();
-            float terrainDefense = (float) MiniWars.getInstance().getCurrentGame().getGrid().getCase(targetCoordinates).getTerrain().getTerrainCover();  // Inflige les degats
+            float terrainDefense = MiniWars.getInstance().getCurrentGame().getGrid().getCase(targetCoordinates).getTerrain().getTerrainCover();  // Inflige les degats
 
+            // Si la cible est une unite terrestre
             if (target instanceof OnFoot || target instanceof Motorized) {
+                // On actualise les degats en fonction de la defense du terrain
                 target.damageBy(this.calculateDamage(bestWeapon.getMultiplierOn(target)) * (1 - terrainDefense));
             }
             else {
@@ -353,8 +373,10 @@ public abstract class Unit {
 
             bestWeapon.setAmmo(bestWeapon.getAmmo() - 1);
 
+            // Si l'arme est une arme de corps a corps
             if (!(bestWeapon instanceof RangedWeapon)) {
 
+                // La cible riposte si elle est toujours en vie (et si elle en a la possibilite)
                 if (target.isAlive()) {
 
                     Weapon targetBestWeapon = target.bestWeaponAgainst(this);
@@ -368,21 +390,29 @@ public abstract class Unit {
         }
     }
 
+    /**
+     * Permet a cette unite d'en attaquer une autre.
+     * Choisit automatiquement l'arme a distance la plus efficace contre la cible
+     * @param target La cible a attaquer
+     */
     public void rangedAttack(Unit target) {
 
         final Weapon bestWeapon = this.bestWeaponAgainst(target);
 
+        // Si il existe une arme a distance pouvant toucher la cible
         if (bestWeapon != null && bestWeapon instanceof RangedWeapon) {
 
             Coordinate targetCoordinates = target.getCoordinate();
-            float terrainDefense = (float) MiniWars.getInstance().getCurrentGame().getGrid().getCase(targetCoordinates).getTerrain().getTerrainCover();  // Inflige les degats
+            float terrainDefense = MiniWars.getInstance().getCurrentGame().getGrid().getCase(targetCoordinates).getTerrain().getTerrainCover();  // Inflige les degats
 
             float weatherModifier = 0;
             if (MiniWars.getInstance().getCurrentGame().getWeather() == Weather.HEAVY_WIND) {
                 weatherModifier = 0.2f;
             }
 
+            // Si la cible est une unite terrestre
             if (target instanceof OnFoot || target instanceof Motorized) {
+                // On actualise les degats en fonction de la defense du terrain et de la meteo
                 target.damageBy(this.calculateDamage(bestWeapon.getMultiplierOn(target)) * (1 - terrainDefense) * (1 - weatherModifier));
             }
             else {
@@ -390,10 +420,16 @@ public abstract class Unit {
             }
 
             bestWeapon.setAmmo(bestWeapon.getAmmo() - 1);
+            // La cible ne peut pas riposter
         }
 
     }
 
+    /**
+     * Verifie si l'unite
+     * @param target
+     * @return
+     */
     public boolean canAttack(Unit target) {
 
         // Pas d'attaque contre soi-meme
@@ -401,19 +437,24 @@ public abstract class Unit {
 
         final Weapon bestWeapon = this.bestWeaponAgainst(target);
 
-        System.out.println("bestWeapon = " + bestWeapon);
+        // Si une arme peut toucher la cible
         if (bestWeapon != null) {
+            // Si cette arme a des munitions
             if (bestWeapon.hasAmmo()) {
 
                 Grid grid = MiniWars.getInstance().getCurrentGame().getGrid();
 
+                // Si la case de la cible n'est pas dans le brouillard de guerre
                 if (!grid.getCase(target.getCoordinate()).isFoggy()) {
 
+                    // Si cette unite est un sous-marin en plongee
                     if (target instanceof Submarine && ((Submarine) target).canSurface()) {
+                        // Si l'unite courante est un autre sous-marin ou un croiseur, elle peut toucher ce sous-marin
                         if (this instanceof Submarine || this instanceof Cruiser) {
                             return true;
                         }
                     }
+                    // Sinon, l'unite courante peut toucher la cible
                     else {
                         return true;
                     }
@@ -438,8 +479,6 @@ public abstract class Unit {
 
     /**
      * Choisir la meilleure arme de l'unite courante contre l'unite cible
-     *
-     * @param unitType Le type de l'unite cible
      *
      * @return La meilleure arme utilisable
      *
@@ -498,10 +537,16 @@ public abstract class Unit {
 
     }
 
+    /**
+     * @return true si la liste d'armes de l'unite n'est pas vide
+     */
     public boolean hasAnyWeapon() {
         return !this.weapons.isEmpty();
     }
 
+    /**
+     * @return true si l'unite a au moins une arme de corps a corps
+     */
     public boolean hasMeleeWeapon() {
 
         for (Weapon weapon : weapons) {
@@ -513,6 +558,9 @@ public abstract class Unit {
 
     }
 
+    /**
+     * @return true si l'unite a au moins une arme de distance
+     */
     public boolean hasRangeWeapon() {
 
         for (Weapon weapon : weapons) {
@@ -530,6 +578,12 @@ public abstract class Unit {
 
     }
 
+    /**
+     * Renvoie un selecteur d'options, contenant les options disponibles pour l'unite
+     * @param currentCase La case courante
+     * @param contextGrid La grille dans laquelle l'unite peut evoluer
+     * @return Un selecteur d'options
+     */
     public OptionSelector<UnitAction> getAvailableActions(Case currentCase, Grid contextGrid) {
 
         final OptionSelector<UnitAction> actions = new OptionSelector<>();
@@ -544,16 +598,21 @@ public abstract class Unit {
         boolean adjacentEnemy = false;
         boolean inRangeEnemy = false;
 
+        // On verifie la presence d'ennemis sur les cases adjacentes a l'unite
         for (Case aCase : cases) {
 
             Unit unit = aCase.getUnit();
             if (unit != null) {
                 if (unit.getOwner() != this.getOwner()) {
                     double d = aCase.distance(currentCase);
+                    // Si la case n'est qu'a une case de distance
                     if (d == 1) {
+                        // On verifie si l'unite a une arme de corps a corps
                         adjacentEnemy = this.hasMeleeWeapon();
                     }
+                    // Si la case est a portee
                     else if (d >= minRange && d <= maxRange) {
+                        // On verifie si l'unite a une arme de distance, pouvant toucher l'unite cible
                         inRangeEnemy = this.hasRangeWeapon() && this.isDistanceReachable(d);
                     }
                 }
@@ -561,6 +620,7 @@ public abstract class Unit {
             }
         }
 
+        // On ajoute les possibilites d'attaque
         actions.addOption(UnitAction.ATTACK, adjacentEnemy && this.hasMeleeWeapon());
         actions.addOption(UnitAction.RANGED_ATTACK, inRangeEnemy && !this.hasMoved && this.hasRangeWeapon());
         //Todo: a revoir (fog, bonne arme) (canAttack)
@@ -568,6 +628,7 @@ public abstract class Unit {
         final List<Case> adjacentCases = contextGrid.getAdjacentCases(currentCase);
         boolean anyEmptyTransport = false;
 
+        // On liste les transports allies, non pleins et acceptant notre unite, autour de nous
         for (Case adjacentCase : adjacentCases) {
 
             Unit adjacentUnit = adjacentCase.getUnit();
@@ -585,16 +646,21 @@ public abstract class Unit {
 
     }
 
+    /**
+     * Verifie si l'unite peut se deplacer vers la case, en focntion de la meteo
+     * @param c La case de destination
+     * @param w La meteo
+     * @return true si l'unite peut se deplacer, false sinon
+     */
     public boolean canMoveTo(Case c, Weather w) {
 
-        if (!c.hasUnit() || (c.hasUnit() && c.getUnit().getOwner() == this.getOwner())) {
-            return true;
-        }
-
-        return false;
+        return !c.hasUnit() || (c.hasUnit() && c.getUnit().getOwner() == this.getOwner());
 
     }
 
+    /**
+     * Ravitaille cette unite, en reinitialisant : les munitions et l'energie
+     */
     public void supply() {
 
         for (Weapon weapon : weapons) {
@@ -647,20 +713,19 @@ public abstract class Unit {
 
     }
 
+    /**
+     * @return La direction dans laquelle l'unite regarde
+     */
     public UnitFacing getFacing() {
         return this.facing;
     }
 
+    /**
+     * Definit la direction dans laquelle l'unite regarde
+     * @param facing Une direction
+     */
     public void setFacing(UnitFacing facing) {
         this.facing = facing;
-    }
-
-    public int getTotalAmmo() {
-        int totalAmmo = 0;
-        for (Weapon weapon : weapons) {
-            totalAmmo += weapon.getAmmo();
-        }
-        return totalAmmo;
     }
 
     public void render(double pixelX, double pixelY, int frame, double width, double height, boolean displayIndicators) {

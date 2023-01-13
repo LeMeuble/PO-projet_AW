@@ -6,8 +6,17 @@ import main.weather.Weather;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Classe representant les couts de mouvement pour rentrer sur une case
+ *
+ * @author Tristan LECONTE--DENIS
+ * @author Lucien GRAVOT
+ */
 public final class UnitMovementCost {
 
+    /**
+     * Enumeration des couts de mouvement pour rentrer sur une case pour les unites a pied
+     */
     public enum OnFoot {
 
         ON_HQ_NORMAL(TerrainType.HQ, 1),
@@ -34,6 +43,12 @@ public final class UnitMovementCost {
 
         }
 
+        /**
+         * Renvoie le cout d'entree sur un terrain, en fonction de la meteo
+         * @param terrainType Le type de terrain
+         * @param weather La meteo
+         * @return Un objet contenant le type du terrain et le cout pour y entrer
+         */
         public static OnFoot fromTerrainAndWeather(TerrainType terrainType, Weather weather) {
 
             for (OnFoot cost : OnFoot.values()) {
@@ -45,6 +60,12 @@ public final class UnitMovementCost {
 
         }
 
+        /**
+         * Verifie si une unite peut se deplacer vers le terrain cible
+         * @param terrainType Le type de terrain
+         * @param weather La meteo
+         * @return true si le couple Type de Terrain/Meteo existe, false sinon
+         */
         public static boolean isAccessible(TerrainType terrainType, Weather weather) {
 
             return OnFoot.fromTerrainAndWeather(terrainType, weather) != null;
@@ -58,6 +79,9 @@ public final class UnitMovementCost {
 
     }
 
+    /**
+     * Enumeration des couts de mouvement pour rentrer sur une case pour les unites motorisees
+     */
     public enum Motorized {
 
         ON_HQ_NORMAL(TerrainType.HQ, 1),
@@ -85,6 +109,12 @@ public final class UnitMovementCost {
 
         }
 
+        /**
+         * Renvoie le cout d'entree sur un terrain, en fonction de la meteo
+         * @param terrainType Le type de terrain
+         * @param weather La meteo
+         * @return Un objet contenant le type du terrain et le cout pour y entrer
+         */
         public static Motorized fromTerrainAndWeather(TerrainType terrainType, Weather weather) {
 
             for (Motorized cost : Motorized.values()) {
@@ -96,6 +126,12 @@ public final class UnitMovementCost {
 
         }
 
+        /**
+         * Verifie si une unite peut se deplacer vers le terrain cible
+         * @param terrainType Le type de terrain
+         * @param weather La meteo
+         * @return true si le couple Type de Terrain/Meteo existe, false sinon
+         */
         public static boolean isAccessible(TerrainType terrainType, Weather weather) {
 
             return Motorized.fromTerrainAndWeather(terrainType, weather) != null;
@@ -109,6 +145,9 @@ public final class UnitMovementCost {
 
     }
 
+    /**
+     * Enumeration des couts de mouvement pour rentrer dans une case pour les unites aeriennes
+     */
     public enum Flying {
 
         ON_HQ(TerrainType.HQ, 1),
@@ -135,6 +174,12 @@ public final class UnitMovementCost {
 
         }
 
+        /**
+         * Renvoie le cout d'entree sur un terrain, en fonction de la meteo
+         * @param terrainType Le type de terrain
+         * @param weather La meteo
+         * @return Un objet contenant le type du terrain et le cout pour y entrer
+         */
         public static Flying fromTerrainAndWeather(TerrainType terrainType, Weather weather) {
 
             for (Flying cost : Flying.values()) {
@@ -146,6 +191,12 @@ public final class UnitMovementCost {
 
         }
 
+        /**
+         * Verifie si une unite peut se deplacer vers le terrain cible
+         * @param terrainType Le type de terrain
+         * @param weather La meteo
+         * @return true si le couple Type de Terrain/Meteo existe, false sinon
+         */
         public static boolean isAccessible(TerrainType terrainType, Weather weather) {
 
             return Flying.fromTerrainAndWeather(terrainType, weather) != null;
@@ -159,6 +210,9 @@ public final class UnitMovementCost {
 
     }
 
+    /**
+     * Enumeration des couts de mouvement pour rentrer dans une case pour les unites navales
+     */
     public enum Naval {
 
         ON_WATER(TerrainType.WATER, 1);
@@ -175,6 +229,12 @@ public final class UnitMovementCost {
 
         }
 
+        /**
+         * Renvoie le cout d'entree sur un terrain, en fonction de la meteo
+         * @param terrainType Le type de terrain
+         * @param weather La meteo
+         * @return Un objet contenant le type du terrain et le cout pour y entrer
+         */
         public static Naval fromTerrainAndWeather(TerrainType terrainType, Weather weather) {
 
             for (Naval cost : Naval.values()) {
@@ -186,6 +246,12 @@ public final class UnitMovementCost {
 
         }
 
+        /**
+         * Verifie si une unite peut se deplacer vers le terrain cible
+         * @param terrainType Le type de terrain
+         * @param weather La meteo
+         * @return true si le couple Type de Terrain/Meteo existe, false sinon
+         */
         public static boolean isAccessible(TerrainType terrainType, Weather weather) {
 
             return Naval.fromTerrainAndWeather(terrainType, weather) != null;
