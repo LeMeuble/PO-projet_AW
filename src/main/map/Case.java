@@ -46,7 +46,7 @@ public class Case {
      *
      * @return La distance entre les deux cases
      */
-    public double distance(Case other) {
+    public int distance(Case other) {
         return this.coordinate.distance(other.coordinate);
     }
 

@@ -190,7 +190,7 @@ public class Grid {
 
         source.setUnit(null);
 
-        MiniWars.getInstance().setGameState(GameState.PLAYING_RENDERING_MOVING_UNIT); //todo a degager mais ca va casser le renderer
+        MiniWars.getInstance().setGameState(GameState.PLAYING_RENDERING_MOVING_UNIT);
         MovementAnimation animation = new MovementAnimation(unit, untrappedPath);
 
         Renderer.getInstance().addMovementAnimation(animation);

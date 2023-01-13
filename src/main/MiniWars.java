@@ -101,7 +101,7 @@ public class MiniWars {
         Renderer.getInstance().render(this.gameState, this.currentGame);
     }
 
-    public boolean isPlaying() {
+    public synchronized boolean isPlaying() {
         return this.currentGame != null;
     }
 

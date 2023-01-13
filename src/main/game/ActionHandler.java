@@ -64,8 +64,6 @@ public class ActionHandler {
 
         final GameState gameState = this.instance.getGameState();
 
-        System.out.println("gameState = " + gameState);
-
         switch (code) {
 
             case UP:

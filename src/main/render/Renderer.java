@@ -97,7 +97,6 @@ public class Renderer {
                     case MENU_TITLE_SCREEN:
                         this.clearBuffer();
                         copyBuffer = MenuManager.getInstance().anyMenuNeedsRefresh();
-                        if (copyBuffer) System.out.println("Rendering menu");
                         break;
                     case PLAYING_MOVING_UNIT:
                         copyBuffer = this.renderMap(gameState, game, game.getCursor().needsRefresh() || MenuManager.getInstance().anyMenuNeedsRefresh());
@@ -113,7 +112,7 @@ public class Renderer {
                         break;
 
                     default:
-                        if (MiniWars.getInstance().isPlaying()) {
+                        if (MiniWars.getInstance().isPlaying() && game != null)  {
 
                             copyBuffer = this.renderMap(gameState, game, game.getCursor().needsRefresh() || MenuManager.getInstance().anyMenuNeedsRefresh() || PopupRegistry.getInstance().needsRefresh());
                             copyBuffer |= this.renderOverlay(game, copyBuffer);
@@ -179,7 +178,7 @@ public class Renderer {
             final int gridX = this.movementAnimation.getGridX();
             final int gridY = this.movementAnimation.getGridY();
 
-            game.getView().focus(game.getGrid().getCase(new Coordinate(gridX, gridY))); //todo: full coordinate
+            game.getView().focus(game.getGrid().getCase(new Coordinate(gridX, gridY)));
 
             final double x = this.movementAnimation.getPixelX();
             final double y = this.movementAnimation.getPixelY() + Config.PIXEL_PER_CASE / 8;

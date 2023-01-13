@@ -4,10 +4,14 @@ import main.control.Cursor;
 import main.map.Coordinate;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class CursorTest {
 
+
+    /**
+     * Test de la methode up
+     */
     @Test
     public void up() {
 
@@ -25,6 +29,31 @@ public class CursorTest {
 
     }
 
+
+    /**
+     * Test de la methode right
+     */
+    @Test
+    public void right() {
+
+        Cursor cursor = new Cursor(5, 5);
+
+        // Test deplacement vers le haut
+        for (int i = 0; i < 5; i++) {
+            assertEquals(i, cursor.getCoordinate().getX());
+            cursor.right();
+        }
+
+        // Test de depacement vers le bas
+        cursor.right();
+        assertEquals(4, cursor.getCoordinate().getX());
+
+    }
+
+
+    /**
+     * Test de la methode down
+     */
     @Test
     public void down() {
 
@@ -43,23 +72,9 @@ public class CursorTest {
 
     }
 
-    @Test
-    public void right() {
-
-        Cursor cursor = new Cursor(5, 5);
-
-        // Test deplacement vers le haut
-        for (int i = 0; i < 5; i++) {
-            assertEquals(i, cursor.getCoordinate().getX());
-            cursor.right();
-        }
-
-        // Test de depacement vers le bas
-        cursor.right();
-        assertEquals(4, cursor.getCoordinate().getX());
-
-    }
-
+    /**
+     * Test de la methode left
+     */
     @Test
     public void left() {
 
@@ -78,6 +93,9 @@ public class CursorTest {
 
     }
 
+    /**
+     * Test d'un mouvement dans plusieurs direction
+     */
     @Test
     public void multiDirection() {
 

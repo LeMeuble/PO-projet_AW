@@ -4,6 +4,12 @@ import main.game.Player;
 import main.map.Case;
 import main.weather.Weather;
 
+/**
+ * Classe abstraite representant une unite navale
+ *
+ * @author Tristan LECONTE--DENIS
+ * @author Lucien GRAVOT
+ */
 public abstract class Naval extends Unit {
 
     /**

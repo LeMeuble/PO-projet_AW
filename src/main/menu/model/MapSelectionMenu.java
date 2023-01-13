@@ -214,7 +214,6 @@ public class MapSelectionMenu extends SelectionMenu<MapMetadata> {
 
 
     public void previousField() {
-        System.out.println(this.field.ordinal());
         this.field = Field.values()[(this.field.ordinal() - 1 + Field.values().length) % Field.values().length];
     }
 

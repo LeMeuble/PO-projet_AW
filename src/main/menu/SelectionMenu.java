@@ -120,10 +120,4 @@ public abstract class SelectionMenu<T> extends Menu {
         return this.optionSelector.getAvailableValues();
     }
 
-    public OptionSelector<T> getOptionSelector() {
-        return this.optionSelector;
-    }
-
-    //Todo : replace everything by getOptionSelector()
-
 }

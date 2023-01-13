@@ -1,6 +1,7 @@
 package main.game;
 
 import com.sun.istack.internal.Nullable;
+import main.MiniWars;
 import main.control.Cursor;
 import main.map.Case;
 import main.map.Grid;
@@ -93,7 +94,6 @@ public class Game {
 
         for (int i = 1; i <= mapMetadata.getPlayerCount(); i++) {
             players.put(Player.Type.fromValue(i), new Player(Player.Type.values()[i]));
-            players.get(Player.Type.fromValue(i)).setMoney(508408);//fixme
         }
 
         MenuManager.getInstance().addMenu(new BottomMenu());
@@ -347,6 +347,7 @@ public class Game {
             PopupRegistry.getInstance()
                     .push(new Popup("Changement m\u00e9t\u00e9o!", "La m\u00e9t\u00e9o va changer ! (" + this.weatherManager.getNextWeather().getName() + ")"));
 
+        final Player currentPlayer = MiniWars.getInstance().getCurrentGame().getCurrentPlayer();
         final Player.Type previousPlayer = this.currentPlayer;
         final Player.Type nextPlayer = this.nextPlayer().getType();
 
@@ -382,23 +383,35 @@ public class Game {
                     }
                     if (unit == null) property.setDefense(property.getDefense() + Config.PROPERTY_DEFAULT_RECOVERY);
 
-                    if (property.getOwner() == currentPlayer) {
+                    if (property.getOwner() == this.currentPlayer) {
 
                         int supplyMaxRadius = property instanceof Port ? 1 : 0;
 
-                        for (Unit u : this.grid.getUnitsAround(this.grid.getCasesAround(c.getCoordinate(), 0, supplyMaxRadius))) {
-                            if (u.getOwner() == currentPlayer) {
+                        final List<Unit> unitsArounds = this.grid.getUnitsAround(this.grid.getCasesAround(c.getCoordinate(), 0, supplyMaxRadius));
+
+                        for (Unit u : unitsArounds) {
+
+                            if (u.getOwner() == this.currentPlayer) {
+
                                 if (u instanceof Naval || u.getCoordinate().distance(c.getCoordinate()) == 0) {
                                     u.supply();
-                                    System.out.println("Supplied " + u);
+
+                                    for (int i = 0; i < 2; i++) {
+
+                                        if(u.getHealth() < Config.UNIT_MAX_HEALTH) {
+
+                                            if(currentPlayer.getMoney() >= u.getRepairCost()) {
+
+                                                u.repair(1);
+                                                currentPlayer.setMoney(currentPlayer.getMoney() - u.getRepairCost());
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
-
                     }
-
                 }
-
             }
 
             if (unit != null) {

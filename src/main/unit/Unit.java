@@ -488,7 +488,7 @@ public abstract class Unit {
     public Weapon bestWeaponAgainst(Unit unit) {
 
         Weapon bestWeapon = null;
-        final double d = this.coordinate.distance(unit.coordinate);
+        final int d = this.coordinate.distance(unit.coordinate);
         // Cherche parmi toutes les armes de l'unite courante
         for (Weapon weapon : this.weapons) {
 
@@ -604,7 +604,7 @@ public abstract class Unit {
             Unit unit = aCase.getUnit();
             if (unit != null) {
                 if (unit.getOwner() != this.getOwner()) {
-                    double d = aCase.distance(currentCase);
+                    int d = aCase.distance(currentCase);
                     // Si la case n'est qu'a une case de distance
                     if (d == 1) {
                         // On verifie si l'unite a une arme de corps a corps
@@ -674,26 +674,9 @@ public abstract class Unit {
     /**
      * Repare l'unite courante entre 0 et {@link Config#UNIT_MAX_HEALTH_RECOVERY} points de vie
      */
-    public void repair() {
-
-        // TODO: Voir les cas limites
-
-        int addedHealth = (int) Math.min(Config.UNIT_MAX_HEALTH_RECOVERY, Unit.MAX_HEALTH - this.getHealth());
-        this.repair(addedHealth);
-
-    }
-
-    /**
-     * Repare l'unite courante d'un certain nombre de points de vie
-     *
-     * @param amount Le nombre de points de vie a ajouter
-     */
     public void repair(int amount) {
-
         this.setHealth(this.getHealth() + amount);
-
     }
-
     /**
      * Retourne le prix de reparation d'un point de vie d'une unite
      *
@@ -703,7 +686,7 @@ public abstract class Unit {
      */
     public int getRepairCost() {
 
-        return (int) Math.floor(this.getType().getPrice() * Config.UNIT_HEALTH_PRICE_RATIO);
+        return (int) Math.floor(this.getType().getPrice() * (1d / Config.UNIT_MAX_HEALTH));
 
     }
 

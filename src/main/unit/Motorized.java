@@ -14,10 +14,12 @@ public abstract class Motorized extends Unit {
 
     public static final int DAILY_ENERGY_CONSUMPTION = 0;
 
+    /**
+     * Constructeur de Motorized
+     * @param owner Le joueur proprietaire de l'unite
+     */
     public Motorized(Player.Type owner) {
-
         super(owner);
-
     }
 
     /**

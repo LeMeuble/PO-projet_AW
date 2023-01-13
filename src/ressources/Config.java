@@ -86,7 +86,6 @@ public final class Config {
      */
     public static final float UNIT_MAX_HEALTH = 10f;
     public static final int UNIT_MAX_HEALTH_RECOVERY = 2; // pv par tour
-    public static final double UNIT_HEALTH_PRICE_RATIO = 0.1d;
     public static final double UNIT_LOW_AMMO_THRESHOLD = 1/2d;
     public static final double UNIT_LOW_FUEL_THRESHOLD = 1/2d;
     public static final int PROPERTY_DEFAULT_DEFENSE = 20;

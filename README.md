@@ -388,7 +388,7 @@ sur le site : [FAQ Copyright Spriters Ressource](https://www.spriters-resource.c
 
 Nous avons ajouté quelques map supplémentaires au jeu. Pour cela, nous avons utilisé un outil de création de map
 ([`Tiled`](https://www.mapeditor.org)) qui permet de créer des maps à partir de tuiles. Il permet d'exporter les maps sous forme d'un fichier CSV, que nous avons
-ensuite converti en fichier `.awcdmap` à l'aide d'un script python.
+ensuite converti en fichier `.awdcmap` à l'aide d'un script python.
 
 Quelques images du logiciel :
 

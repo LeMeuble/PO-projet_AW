@@ -42,9 +42,9 @@ public class Coordinate implements Cloneable {
      *
      * @return La distance entre les deux instances
      */
-    public double distance(Coordinate other) {
+    public int distance(Coordinate other) {
         return Math.abs(this.x - other.x) + Math.abs(this.y - other.y);
-    }//todo: double -> int (manhattan)
+    }
 
     @Override
     public Coordinate clone() {

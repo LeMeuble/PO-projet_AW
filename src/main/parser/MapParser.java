@@ -50,8 +50,6 @@ public class MapParser {
 
         }
 
-        // TODO: "Path not found" exception
-
         return maps;
 
     }
