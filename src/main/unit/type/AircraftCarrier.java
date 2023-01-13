@@ -8,6 +8,12 @@ import main.unit.UnitType;
 import main.weapon.type.HeavyMachineGun;
 import ressources.PathUtil;
 
+/**
+ * Classe representant un porte-avions
+ *
+ * @author Tristan LECONTE--DENIS
+ * @author Lucien GRAVOT
+ */
 public class AircraftCarrier extends NavalTransport {
 
     private static final int DAILY_ENERGY_CONSUMPTION = 6;
@@ -40,6 +46,11 @@ public class AircraftCarrier extends NavalTransport {
         return AircraftCarrier.DAILY_ENERGY_CONSUMPTION;
     }
 
+    /**
+     * Sert a savoir si une unite peut etre transportee par le porte-avions
+     * @param unit Le type de l'unite
+     * @return true si l'unite est une unite volante
+     */
     @Override
     public boolean accept(Unit unit) {
         return unit instanceof Flying;

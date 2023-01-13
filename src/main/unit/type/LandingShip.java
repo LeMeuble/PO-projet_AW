@@ -6,6 +6,12 @@ import main.terrain.type.Beach;
 import main.unit.*;
 import main.weather.Weather;
 
+/**
+ * Une classe representant une barge de debarquement
+ *
+ * @author Tristan LECONTE--DENIS
+ * @author Lucien GRAVOT
+ */
 public class LandingShip extends NavalTransport {
 
     public static final int DAILY_ENERGY_CONSUMPTION = 2;
@@ -31,11 +37,22 @@ public class LandingShip extends NavalTransport {
         return LandingShip.DAILY_ENERGY_CONSUMPTION;
     }
 
+    /**
+     * Sert a verifier si une unite peut etre transportee par la barge
+     * @param unit Une unite
+     * @return true si l'unite est une unite a pied ou motorisee
+     */
     @Override
     public boolean accept(Unit unit) {
         return unit instanceof OnFoot || unit instanceof Motorized;
     }
 
+    /**
+     * Verifie si la barge peut aller sur une case de destination, en fonction de la meteo
+     * @param destination La case de destination
+     * @param weather     La meteo courante
+     * @return true si l'unite peut se deplacer sur la case
+     */
     @Override
     public boolean canMoveTo(Case destination, Weather weather) {
 

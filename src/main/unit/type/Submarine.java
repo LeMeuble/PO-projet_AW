@@ -10,6 +10,12 @@ import main.util.OptionSelector;
 import main.weapon.type.Torpedo;
 import main.weather.Weather;
 
+/**
+ * Une classe representant un sous-marin
+ *
+ * @author Tristan LECONTE--DENIS
+ * @author Lucien GRAVOT
+ */
 public class Submarine extends Naval {
 
     public static final int DAILY_ENERGY_CONSUMPTION = 2;

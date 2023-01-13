@@ -5,6 +5,12 @@ import main.unit.Naval;
 import main.unit.UnitType;
 import main.weapon.type.DreadnoughtBattery;
 
+/**
+ * Une classe representant un cuirrase
+ *
+ * @author Tristan LECONTE--DENIS
+ * @author Lucien GRAVOT
+ */
 public class Dreadnought extends Naval {
 
     public static final int DAILY_ENERGY_CONSUMPTION = 6;

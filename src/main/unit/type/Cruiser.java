@@ -6,6 +6,12 @@ import main.unit.UnitType;
 import main.weapon.type.Canon;
 import main.weapon.type.HeavyMachineGun;
 
+/**
+ * Une classe representant un croiseur
+ *
+ * @author Tristan LECONTE--DENIS
+ * @author Lucien GRAVOT
+ */
 public class Cruiser extends Naval {
 
     public static final int DAILY_ENERGY_CONSUMPTION = 5;

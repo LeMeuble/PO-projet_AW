@@ -12,6 +12,10 @@ import main.weather.Weather;
  */
 public abstract class Flying extends Unit {
 
+    /**
+     * Constructeur de Flying
+     * @param owner Le joueur proprietaire de l'unite
+     */
     public Flying(Player.Type owner) {
 
         super(owner);

@@ -18,25 +18,37 @@ public class Convoy extends MotorizedTransport {
 
     private static final int CARRYING_CAPACITY = 1;
 
+    /**
+     * Constructeur d'une unite.
+     * Initialise toutes les valeurs par defaut,
+     *
+     * @param owner Proprietaire de l'unite
+     */
     public Convoy(Player.Type owner) {
         super(owner, Convoy.CARRYING_CAPACITY);
     }
 
-    /**
-     * Calcule des degats infliges par cette unite
-     *
-     * @return
-     */
     @Override
     public UnitType getType() {
         return UnitType.CONVOY;
     }
 
+    /**
+     * Sert a verifier si une unite peut etre transportee par le convoi
+     * @param unit Une unite
+     * @return true si l'unite est une unite a pied
+     */
     @Override
     public boolean accept(Unit unit) {
         return unit instanceof OnFoot;
     }
 
+    /**
+     * Renvoie les actions possibles pour le convoi, en plus des options de ses classes meres
+     * @param currentCase La case courante
+     * @param contextGrid La grille dans laquelle l'unite peut evoluer
+     * @return
+     */
     @Override
     public OptionSelector<UnitAction> getAvailableActions(Case currentCase, Grid contextGrid) {
 
@@ -46,6 +58,7 @@ public class Convoy extends MotorizedTransport {
 
         boolean troopNearby = false;
 
+        // On recupere les cases adjacentes, sur laquelles il y a des unites alliees qui ne sont pas des convois
         for (Case adjacentCase : adjacentCases) {
             Unit adjacentUnit = adjacentCase.getUnit();
             if (adjacentUnit != null && !(adjacentUnit instanceof Convoy) && adjacentUnit.getOwner() == this.getOwner()) {
@@ -53,6 +66,7 @@ public class Convoy extends MotorizedTransport {
             }
         }
 
+        // Si il y en a, on ajoute l'option "ravitaillement"
         actions.addOption(UnitAction.SUPPLY, troopNearby);
 
         return actions;
