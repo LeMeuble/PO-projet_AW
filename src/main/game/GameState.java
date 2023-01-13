@@ -44,7 +44,6 @@ public enum GameState {
     // Selection d'une zone de depot d'unite
     PLAYING_SELECTING_DROP_ZONE,
     PLAYING_SELECTING_DROPPED_UNIT,
-    PLAYING_ANNOUNCING_WEATHER_CHANGE,
     // Ecran de fin,
     PLAYING_ENDIND_SCREEN;
 

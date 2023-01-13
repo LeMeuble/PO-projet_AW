@@ -5,10 +5,10 @@
 - [X] Icon map selecteur, nombre de joueur
 - [ ] Dernière vérification + rendu
 - [ ] Test grandeur nature
-- [ ] Finir les keyboards tips
+- [?] Finir les keyboards tips
 - [X] Ecran de fin de partie
-- [ ] map preview?????
-- [ ] Patcher les popup
+- [X] Patcher les popup
+- [ ] Attaque a distance cassée?
 
 # Prioritaire :
 - [ ] Les logs en fait
@@ -84,21 +84,21 @@
     - [X] -30% ville
     - [X] -40% montagne/qg
     - [X] aérien : pas de couverture
-- [ ] unite navale 6.9
+- [X] unite navale 6.9
   - [X] Implémenter les dégâts
   - [X] Missiles anti-navire
   - [X] Porte-avions
-  - [ ] Sous-marin
+  - [X] Sous-marin
     - [X] Plongée
       - [X] Consommation de carburant en plongée 
       - [X] Invisible sauf si unité adjacente
-      - [ ] Icône
+      - [X] Icône
     - [X] Surface
     - [X] Si en plongée, ne peut être attaqué que par sous-marin/croiseurs
 
 - [X] brouillard de guerre 6.10
     - [X] choisir si on le veut
-    - [ ] Pause entre les tours 
+    - [X] Pause entre les tours 
     - [X] Tir à distance impossible si case non visible
     - [X] Piège d'une unité 
       - [X] Affichage de l'indicateur (Trapped)

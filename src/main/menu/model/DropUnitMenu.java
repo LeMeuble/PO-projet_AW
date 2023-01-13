@@ -42,6 +42,8 @@ public class DropUnitMenu extends ActionMenu<Unit> {
         StdDraw.setFont(Config.FONT_20);
         Player.Type playerType = MiniWars.getInstance().getCurrentGame().getCurrentPlayer().getType();
 
+        System.out.println(this.getAvailableValues().size());
+
         for (Unit unit : this.getAvailableValues()) {
 
             unit.render(x + 20, y, 0, 38, 38, true);

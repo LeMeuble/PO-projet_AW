@@ -51,23 +51,4 @@ public class Helicopter extends FlyingTransport {
         return Helicopter.DAILY_ENERGY_CONSUMPTION;
     }
 
-    /**
-     * Renvoie les actions possibles pour l'helicoptere, en plus des options de ses classes meres
-     * @param currentCase La case courante
-     * @param contextGrid La grille dans laquelle l'unite peut evoluer
-     * @return
-     */
-    @Override
-    public OptionSelector<UnitAction> getAvailableActions(Case currentCase, Grid contextGrid) {
-
-        final OptionSelector<UnitAction> actions = super.getAvailableActions(currentCase, contextGrid);
-
-        boolean carryingUnit = this.isCarryingUnit();
-
-        // S'il y a une unite dans l'helicoptere, ajoute l'option de deposer l'unite
-        actions.addOption(UnitAction.DROP_UNIT, carryingUnit);
-
-        return actions;
-    }
-
 }

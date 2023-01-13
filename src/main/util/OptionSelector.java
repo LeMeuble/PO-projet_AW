@@ -58,6 +58,8 @@ public class OptionSelector<T> {
 
     public OptionSelector<T> addOption(T value, boolean available) {
 
+        System.out.println("Adding option " + value + " with availability " + available);
+
         this.options.add(new Option(value, available));
 
         if (this.selectedOption == -1 && available) {

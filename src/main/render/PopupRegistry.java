@@ -70,13 +70,14 @@ public class PopupRegistry {
         double aroundMargin = 32;
         double innerMargin = 10;
 
-        double x = (Config.WIDTH - (actualWidth / 10)) - aroundMargin;
+        double x = (Config.WIDTH - (actualWidth / 10)) - aroundMargin + 5;
         double y = Config.HEIGHT - (actualHeight / 10) - aroundMargin;
 
         double widthOffset = 0;
         for (Popup popup : this.getPopups()) {
             widthOffset = Math.max(widthOffset, DisplayUtil.getTextWidth(Config.FONT_20, popup.getTitle()) + 40 - actualWidth / 5);
         }
+        widthOffset += 20;
 
         for (Popup popup : this.getPopups()) {
 
@@ -85,13 +86,13 @@ public class PopupRegistry {
             StdDraw.setFont(Config.FONT_20);
             StdDraw.setPenColor(StdDraw.BLACK);
 
-            StdDraw.textLeft(x - actualWidth / 10 + 8, y + 18, popup.getTitle());
+            StdDraw.textLeft(x - actualWidth / 10 + 6, y + 18, popup.getTitle());
             StdDraw.setFont(Config.FONT_18);
             StdDraw.setPenColor(StdDraw.GRAY);
 
             int i = 0;
             for (String line : popup.getMessage(22)) {
-                StdDraw.textLeft(x - actualWidth / 10 + 8, y - 2 - i * 20, line);
+                StdDraw.textLeft(x - actualWidth / 10 + 6, y - 2 - i * 20, line);
                 i++;
             }
 

@@ -20,29 +20,71 @@ import java.util.stream.Collectors;
  */
 public enum KeyTips {
 
-    MOVE("arrows" , 48d, 32d, "D\u00e9placer",
-            (c, p) -> {
-                final Game game = MiniWars.getInstance().getCurrentGame();
-                return game != null && (game.getOverlayCases().contains(c) || game.getOverlayCases().isEmpty());
-            },//todo pas ici
+
+    MOVE("arrows" , 48d, 32d, "S\u00e9lectionner",
             GameState.PLAYING_SELECTING,
             GameState.PLAYING_MOVING_UNIT,
             GameState.PLAYING_SELECTING_TARGET,
             GameState.PLAYING_SELECTING_TRANSPORT,
             GameState.PLAYING_SELECTING_DROP_ZONE
-            ),
+    ),
+    UP_DOWN_MENU("up_down", 16d, 32d, "S\u00e9lectionner",
+            GameState.PLAYING_SELECTING_SKIP_TURN_ACTION,
+            GameState.PLAYING_SELECTING_FACTORY_UNIT,
+            GameState.PLAYING_SELECTING_UNIT_ACTION,
+            GameState.PLAYING_SELECTING_DROPPED_UNIT
+    ),
+
+    ESCAPE_PAUSE("escape", 16d, 16d, "Pause", GameState.PLAYING_SELECTING),
+    ESCAPE("escape", 16d, 16d, "Annuler",
+            GameState.PLAYING_SELECTING_FACTORY_UNIT,
+            GameState.PLAYING_SELECTING_UNIT_ACTION,
+            GameState.PLAYING_SELECTING_DROPPED_UNIT,
+            GameState.PLAYING_SELECTING_SKIP_TURN_ACTION,
+            GameState.PLAYING_SELECTING_TARGET,
+            GameState.PLAYING_SELECTING_TRANSPORT,
+            GameState.PLAYING_SELECTING_DROP_ZONE,
+            GameState.PLAYING_MOVING_UNIT
+    ),
 
     ENTER_SELECTING("enter", 16d, 16d, "Utiliser", Case::hasAvailableAction, GameState.PLAYING_SELECTING),
-    SPACE_SELECTING("space", 16d, 16d, "Unit\u00e9 disp.", GameState.PLAYING_SELECTING),
-    D_S("d", 16d, 16d, "Passer le tour", GameState.PLAYING_SELECTING),
-    SELECTING_PAUSE_MENU("escape", 16d, 16d, "Pause", GameState.PLAYING_SELECTING),
+    ENTER_VALIDATE_MENU("enter", 16d, 16d, "Valider",
+            GameState.PLAYING_SELECTING_SKIP_TURN_ACTION,
+            GameState.PLAYING_SELECTING_DROPPED_UNIT,
+            GameState.PLAYING_SELECTING_FACTORY_UNIT,
+            GameState.PLAYING_SELECTING_UNIT_ACTION
+    ),
+    ENTER_VALIDATE_DROP("enter", 16d, 16d, "D\u00e9poser",
+            (c, p) -> {
+                final Game game = MiniWars.getInstance().getCurrentGame();
+                return game != null && (game.getOverlayCases().contains(c) || game.getOverlayCases().isEmpty());
+            },
+            GameState.PLAYING_SELECTING_DROP_ZONE
+    ),
+    ENTER_VALIDATE_TARGET("enter", 16d, 16d, "Attaquer",
+            (c, p) -> {
+                final Game game = MiniWars.getInstance().getCurrentGame();
+                return game != null && (game.getOverlayCases().contains(c) || game.getOverlayCases().isEmpty());
+            },
+            GameState.PLAYING_SELECTING_TARGET
+    ),
+    ENTER_VALIDATE_MOVE("enter", 16d, 16d, "Se d\u00e9placer",
+            (c, p) -> {
+                final Game game = MiniWars.getInstance().getCurrentGame();
+                return game != null && (game.getOverlayCases().contains(c) || game.getOverlayCases().isEmpty());
+            },
+            GameState.PLAYING_MOVING_UNIT
+    ),
+    ENTER_VALIDATE_TRANSPORT("enter", 16d, 16d, "Monter",
+            (c, p) -> {
+                final Game game = MiniWars.getInstance().getCurrentGame();
+                return game != null && (game.getOverlayCases().contains(c) || game.getOverlayCases().isEmpty());
+            },
+            GameState.PLAYING_SELECTING_TRANSPORT
+    ),
 
-    ACTION_MENU_VALIDATE("enter", 16d, 16d, "Valider", GameState.PLAYING_SELECTING_FACTORY_UNIT, GameState.PLAYING_SELECTING_UNIT_ACTION, GameState.PLAYING_SELECTING_DROPPED_UNIT),
-    ACTION_MENU_LEAVE("escape", 16d, 16d, "Annuler", GameState.PLAYING_SELECTING_FACTORY_UNIT, GameState.PLAYING_SELECTING_UNIT_ACTION, GameState.PLAYING_SELECTING_DROPPED_UNIT),
-
-    SELECTING_DROP_UNIT_MOVE("arrows", 16d, 32, "S\u00e9l\u00e9ct.", GameState.PLAYING_SELECTING_DROP_ZONE),
-    SELECTING_DROP_UNIT_CANCEL("escape", 16d, 16d, "Annuler", GameState.PLAYING_SELECTING_DROP_ZONE),
-    SELECTING_DROP_UNIT_VALIDATE("enter", 16d, 16d, "D\u00e9poser", (c, p) -> MiniWars.getInstance().getCurrentGame().getSelectedCase().isAdjacent(c), GameState.PLAYING_SELECTING_DROP_ZONE);
+    SPACE_SELECTING("space", 16d, 16d, "Unit\u00e9s disp.", GameState.PLAYING_SELECTING),
+    D_S("d", 16d, 16d, "Passer le tour", GameState.PLAYING_SELECTING);
 
 
 
