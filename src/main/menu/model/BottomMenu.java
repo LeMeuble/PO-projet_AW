@@ -38,6 +38,8 @@ public class BottomMenu extends AnimatedMenu {
         final Case selectedCase = game.getGrid().getCase(cursor);
         final GameState gameState = MiniWars.getInstance().getGameState();
 
+        StdDraw.setFont(Config.FONT_20);
+
         DisplayUtil.drawPicture(Config.WIDTH / 2d, 1.75d * Config.PIXEL_PER_CASE, PathUtil.getBottomGuiPath(game.getCurrentPlayer().getType()), Config.WIDTH, 3 * Config.PIXEL_PER_CASE + 0.5 * Config.PIXEL_PER_CASE);
 
         DisplayUtil.drawIntegerValue(Config.WIDTH - 12, 3 * Config.PIXEL_PER_CASE + 2, String.valueOf(game.getCurrentPlayer().getMoney()), 18, "right");

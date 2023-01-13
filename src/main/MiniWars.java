@@ -10,6 +10,7 @@ import main.menu.MenuManager;
 import main.menu.MenuModel;
 import main.menu.model.MainMenu;
 import main.menu.model.MapSelectionMenu;
+import main.menu.model.NextTurnMenu;
 import main.render.Renderer;
 
 /**
@@ -82,7 +83,15 @@ public class MiniWars {
             final Game game = this.getCurrentGame();
             if(game.getSettings().isAutoEndTurn()) {
                 if(!game.hasRemainingAction()) {
+
+                    NextTurnMenu menu = new NextTurnMenu();
+                    MenuManager.getInstance().addMenu(menu);
+
+                    menu.fadeIn();
                     game.nextTurn();
+
+                    this.setGameState(GameState.PLAYING_SELECTING_NEXT_TURN_APPROVAL);
+
                 }
             }
         }
@@ -103,14 +112,13 @@ public class MiniWars {
         return this.currentGame;
     }
 
-    public void newGame(MapMetadata mapMetadata, Settings settings) {
+    public synchronized void newGame(MapMetadata mapMetadata, Settings settings) {
 
         this.currentGame = new Game(mapMetadata, settings);
         this.currentGame.startGame();
-        this.gameState = GameState.PLAYING_SELECTING;
     }
 
-    public void endGame() {
+    public synchronized void endGame() {
         this.currentGame = null;
     }
 

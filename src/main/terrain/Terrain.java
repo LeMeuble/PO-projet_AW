@@ -1,5 +1,6 @@
 package main.terrain;
 
+import main.MiniWars;
 import main.game.Player;
 import main.weather.Weather;
 import ressources.Config;
@@ -27,6 +28,7 @@ public abstract class Terrain {
 
     /**
      * Constructeur du Terrain avec une variation de texture
+     *
      * @param textureVariation L'entier de la variation de texture
      */
     public Terrain(int textureVariation) {
@@ -89,6 +91,7 @@ public abstract class Terrain {
 
     /**
      * Definit la variation de la texture
+     *
      * @param textureVariation Un entier
      */
     public void setTextureVariation(int textureVariation) {
@@ -99,6 +102,7 @@ public abstract class Terrain {
 
     /**
      * Retourne le chemin vers le fichier associe au terrain
+     *
      * @return Chemin du fichier
      */
     public String getFile(Weather weather, boolean isFoggy) {
@@ -106,6 +110,8 @@ public abstract class Terrain {
     }
 
     public void render(double pixelX, double pixelY, Weather weather, boolean isFoggy, int frame) {
+
+        if (!MiniWars.getInstance().isPlaying()) return;
 
         if (this instanceof AnimatedTerrain) {
             DisplayUtil.drawPicture(pixelX, pixelY, ((AnimatedTerrain) this).getFile(weather, isFoggy, frame), Config.PIXEL_PER_CASE, Config.PIXEL_PER_CASE);
@@ -122,4 +128,5 @@ public abstract class Terrain {
     public abstract TerrainType getType();
 
     public abstract float getTerrainCover();
+
 }

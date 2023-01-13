@@ -41,7 +41,7 @@ public class Dijkstra {
 
         @Override
         public String toString() {
-            return this.c.toString();
+            return "(" + this.c + ", " + this.distance + ")";
         }
 
     }
@@ -106,6 +106,7 @@ public class Dijkstra {
         Vertex neighbour;
         while (!set.isEmpty()) {
 
+
             current = set.pollFirst();
             if (current == null || current.distance == Integer.MAX_VALUE) break;
 
@@ -141,11 +142,8 @@ public class Dijkstra {
                             v.neighbours.put(v2, this.unit.getMovementCostTo(v2.c, this.weather));
                         }
                     }
-
                 }
-
             }
-
         }
 
     }

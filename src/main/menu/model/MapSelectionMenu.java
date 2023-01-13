@@ -1,6 +1,7 @@
 package main.menu.model;
 
 import librairies.StdDraw;
+import main.game.Player;
 import main.game.Settings;
 import main.map.MapMetadata;
 import main.menu.MenuModel;
@@ -15,7 +16,7 @@ import java.awt.*;
 
 public class MapSelectionMenu extends SelectionMenu<MapMetadata> {
 
-    public static final int PRIORITY = 10;
+    public static final int PRIORITY = 9;
     public static final double TOP_MARGIN = 0.05d;
     public enum Field {
 
@@ -41,6 +42,9 @@ public class MapSelectionMenu extends SelectionMenu<MapMetadata> {
     @Override
     public void render() {
 
+        StdDraw.setPenColor(Color.BLACK);
+        StdDraw.filledRectangle(Config.WIDTH / 2d, Config.HEIGHT / 2d, Config.WIDTH / 2d, Config.HEIGHT / 2d);
+
         MapMetadata map = this.getSelectedValue();
 
         double x = Config.WIDTH / 2;
@@ -54,6 +58,17 @@ public class MapSelectionMenu extends SelectionMenu<MapMetadata> {
 
             DisplayUtil.drawPicture(x, y - 12, map.getIcon(), 896 / 2.05d - 46, 1088 / 2.05d - 70);
             StdDraw.text(x - 150, y + 234, map.getSize());
+
+            double playerIconX = x + 180;
+
+            for (int i = map.getPlayerCount(); i >= 1; i--) {
+
+                Player.Type player = Player.Type.fromValue(i);
+
+                DisplayUtil.drawPicture(playerIconX, y + 242, PathUtil.getTeamIcon(player), 32, 48);
+                playerIconX -= 16;
+
+            }
 
             y -= Config.HEIGHT / (1.8d * 2) + 0.05 * Config.HEIGHT + Config.HEIGHT / (1.8d * 4);
 

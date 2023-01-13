@@ -17,7 +17,9 @@ public enum MenuModel {
     BOTTOM_MENU(true),
     PAUSE_MENU(false),
     NEXT_TURN_MENU(false),
-    NEXT_TURN_ASK_MENU(false);
+    NEXT_TURN_ASK_MENU(false),
+    SIMPLE_FADE_IN_OUT_MENU(false),
+    ENDING_MENU(false);
 
     private final boolean isPersistent;
 

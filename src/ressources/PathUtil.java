@@ -36,6 +36,8 @@ public class PathUtil {
     public static final String PICTURE_UI_ICON_FOLDER = PICTURE_UI_FOLDER + SEP + "icons";
     public static final String PICTURE_UI_INDICATOR_FOLDER = PICTURE_UI_FOLDER + SEP + "indicator";
     public static final String PICTURE_UI_KEYTIP_FOLDER = PICTURE_UI_FOLDER + SEP + "keytip";
+    public static final String PICTURE_UI_TEAMS_FOLDER = PICTURE_UI_FOLDER + SEP + "teams";
+    public static final String PICTURE_UI_WEATHER_FOLDER = PICTURE_UI_FOLDER + SEP + "weather";
 
     public static String getDigitPath(String digit) {
 
@@ -48,13 +50,13 @@ public class PathUtil {
         String first = from.compareTo(to) < 0 ? from : to;
         String second = from.compareTo(to) < 0 ? to : from;
 
-        return PICTURE_ARROWS_FOLDER + SEP + player.getName() + SEP + first + "_" + second + ".png";
+        return PICTURE_ARROWS_FOLDER + SEP + player.getTextureName() + SEP + first + "_" + second + ".png";
 
     }
 
     public static String getBuildingPath(Weather weather, Player.Type player, TerrainType terrain, boolean isFoggy) {
 
-        String playerOrFog = isFoggy ? "foggy" : player.getName();
+        String playerOrFog = isFoggy ? "foggy" : player.getTextureName();
 
         return PICTURE_BUILDINGS_FOLDER + SEP + weather.getTextureName() + SEP + playerOrFog + SEP + terrain.getFileName();
     }
@@ -73,7 +75,7 @@ public class PathUtil {
 
     public static String getUnitAnimationPath(UnitType unit, Player.Type player, UnitAnimation unitAnimation, int frame) {
 
-        return PICTURE_TROOPS_FOLDER + SEP + player.getName() + SEP + unit.getTextureName() + SEP + unitAnimation.getName() + SEP + frame + ".png";
+        return PICTURE_TROOPS_FOLDER + SEP + player.getTextureName() + SEP + unit.getTextureName() + SEP + unitAnimation.getName() + SEP + frame + ".png";
 
     }
 
@@ -82,7 +84,7 @@ public class PathUtil {
         String pose = isAvailable ? "idle" : "unavailable";
         String facing = unitFacing.getName();
 
-        return PICTURE_TROOPS_FOLDER + SEP + player.getName() + SEP + unit.getTextureName() + SEP + pose + facing + SEP + frame + ".png";
+        return PICTURE_TROOPS_FOLDER + SEP + player.getTextureName() + SEP + unit.getTextureName() + SEP + pose + facing + SEP + frame + ".png";
 
     }
 
@@ -100,7 +102,7 @@ public class PathUtil {
 
     public static String getBottomGuiPath(Player.Type player) {
 
-        return PICTURE_UI_BOTTOM_GUI_FOLDER + SEP + player.getName() + ".png";
+        return PICTURE_UI_BOTTOM_GUI_FOLDER + SEP + player.getTextureName() + ".png";
 
     }
 
@@ -110,6 +112,25 @@ public class PathUtil {
         return PICTURE_UI_HP_FOLDER + SEP + available + SEP + health + ".png";
 
     }
+
+    public static String getTeamIcon(Player.Type player) {
+
+        return PICTURE_UI_TEAMS_FOLDER + SEP + player.getTextureName() + ".png";
+
+    }
+
+    public static String getTeamWinIcon(Player.Type player) {
+
+        return PICTURE_UI_TEAMS_FOLDER + SEP + "win" + player.getTextureName() + ".png";
+
+    }
+
+    public static String getWeatherOverlayPath(Weather weather, int frame) {
+
+        return PICTURE_UI_WEATHER_FOLDER + SEP + weather.name().toLowerCase() + SEP + frame + ".png";
+
+    }
+
     public static String getIconPath(String icon) {
         return PICTURE_UI_ICON_FOLDER + SEP + icon + ".png";
     }
@@ -117,6 +138,12 @@ public class PathUtil {
     public static String getIndicatorPath(String indicator) {
 
         return PICTURE_UI_INDICATOR_FOLDER + SEP + indicator + ".png";
+
+    }
+
+    public static String getIndicatorPath(boolean available, String indicator) {
+
+        return PICTURE_UI_INDICATOR_FOLDER + SEP + (available ? "available" : "unavailable") + SEP + indicator + ".png";
 
     }
 

@@ -64,6 +64,8 @@ public class ActionHandler {
 
         final GameState gameState = this.instance.getGameState();
 
+        System.out.println("gameState = " + gameState);
+
         switch (code) {
 
             case UP:
@@ -135,6 +137,8 @@ public class ActionHandler {
                 MapSelectionMenu mapSelectionMenu = (MapSelectionMenu) MenuManager.getInstance().getMenu(MenuModel.MAP_SELECTION_MENU);
                 mapSelectionMenu.previousField();
                 mapSelectionMenu.needsRefresh(true);
+
+                return true;
 
             }
 
@@ -212,6 +216,8 @@ public class ActionHandler {
                 MapSelectionMenu mapSelectionMenu = (MapSelectionMenu) MenuManager.getInstance().getMenu(MenuModel.MAP_SELECTION_MENU);
                 mapSelectionMenu.nextField();
                 mapSelectionMenu.needsRefresh(true);
+
+                return true;
 
             }
 
@@ -406,7 +412,18 @@ public class ActionHandler {
 
             switch (gameState) {
 
-                case PLAYING_SELECTING_SKIP_TURN_APPROVAL: {
+                case PLAYING_ENDIND_SCREEN: {
+
+                    this.instance.setGameState(GameState.MENU_MAP_SELECTION);
+                    menuManagerInstance.getMenu(MenuModel.MAP_SELECTION_MENU).setVisible(true);
+                    menuManagerInstance.removeMenu(MenuModel.BOTTOM_MENU);
+                    this.instance.endGame();
+
+                    menuManagerInstance.clearNonPersistent();
+                    return true;
+                }
+
+                case PLAYING_SELECTING_NEXT_TURN_APPROVAL: {
                     
                     NextTurnMenu turnMenu = (NextTurnMenu) menuManagerInstance.getMenu(MenuModel.NEXT_TURN_MENU);
 
@@ -434,7 +451,7 @@ public class ActionHandler {
                         menu.fadeIn();
                         game.nextTurn();
 
-                        this.instance.setGameState(GameState.PLAYING_SELECTING_SKIP_TURN_APPROVAL);
+                        this.instance.setGameState(GameState.PLAYING_SELECTING_NEXT_TURN_APPROVAL);
                         return true;
 
                     }
@@ -473,20 +490,28 @@ public class ActionHandler {
                     // Sinon, si l'action du menu est "quitter"
                     else if (action == PauseMenu.Action.QUIT) {
 
-                        // Le jeu passe en mode "selection d'une carte"
-                        this.instance.setGameState(GameState.MENU_MAP_SELECTION);
+                        final SimpleFadeInOutMenu fadeMenu = new SimpleFadeInOutMenu();
+                        MenuManager.getInstance().addMenu(fadeMenu);
 
                         // On supprime toutes les popups, les menus non persistants
                         PopupRegistry.getInstance().clear();
-                        menuManagerInstance.clearNonPersistent();
+
+                        fadeMenu.fadeIn();
 
                         // On affiche le menu de selection de carte
+                        // Le jeu passe en mode "selection d'une carte"
                         menuManagerInstance.getMenu(MenuModel.MAP_SELECTION_MENU).setVisible(true);
                         menuManagerInstance.removeMenu(MenuModel.BOTTOM_MENU);
+                        menuManagerInstance.removeMenu(MenuModel.PAUSE_MENU);
+                        this.instance.setGameState(GameState.MENU_MAP_SELECTION);
+                        this.instance.endGame();
 
                         // On termine l'instance de la partie precedente
-                        this.instance.endGame();
-                        System.out.println("Quitting game");
+                        fadeMenu.fadeOut();
+                        menuManagerInstance.clearNonPersistent();
+
+                        menuManagerInstance.getMenu(MenuModel.MAP_SELECTION_MENU).needsRefresh(true);
+
                         return true;
                     }
 
@@ -496,6 +521,7 @@ public class ActionHandler {
 
                 // Si le jeu est en mode "ecran d'accueil du jeu"
                 case MENU_TITLE_SCREEN: {
+
                     Logger.getLogger().log("enter@MENU_TITLE_SCREEN");
                     // Le jeu passe en mode "selection d'une carte"
                     this.instance.setGameState(GameState.MENU_MAP_SELECTION);
@@ -514,15 +540,18 @@ public class ActionHandler {
 
                     // On cree un menu de selection de carte
                     MapSelectionMenu mapSelectionMenu = (MapSelectionMenu) MenuManager.getInstance().getMenu(MenuModel.MAP_SELECTION_MENU);
-
                     rendererInstance.clearBuffer();
 
                     // Si une option a ete selectionnee dans le menu
                     if (mapSelectionMenu.getSelectedValue() != null) {
                         // On demarre une nouvelle instance du jeu, sur la carte selectionnee
-                        this.instance.newGame(mapSelectionMenu.getSelectedValue(), mapSelectionMenu.getSettings());
+                        final NextTurnMenu nextTurnMenu = new NextTurnMenu();
+                        MenuManager.getInstance().addMenu(nextTurnMenu);
+                        nextTurnMenu.fadeIn();
                         // On enleve le menu de selection de carte de l'affichage
                         mapSelectionMenu.setVisible(false);
+                        this.instance.setGameState(GameState.PLAYING_SELECTING_NEXT_TURN_APPROVAL);
+                        this.instance.newGame(mapSelectionMenu.getSelectedValue(), mapSelectionMenu.getSettings());
                     }
                     return true;
                 }
@@ -615,15 +644,15 @@ public class ActionHandler {
                         // Si l'action selectionnee est "deplacement"
                         if (action == UnitAction.MOVE) {
 
-                            Logger.getLogger().log("Action = move");
-
                             // On calcule tous les chemins possibles en partant de cette case
                             final Dijkstra dijkstra = new Dijkstra(currentCase, grid, unit, game.getWeather());
                             game.setSelectedCase(currentCase);
+
                             // On cree un nouveau mouvement partant de cette case
                             game.setMovement(new Movement(currentCase));
                             // On enregistre en "cache" l'instance de dijkstra, pour ne pas avoir a tout recalculer
                             game.setDijkstraResult(dijkstra);
+                            System.out.println("init dijkstra result");
 
                             // Le jeu passe en mode "deplacement d'une unite"
                             this.instance.setGameState(GameState.PLAYING_MOVING_UNIT);
@@ -728,14 +757,17 @@ public class ActionHandler {
 
                                         Player p = game.getPlayerFromType(propertyOwner);
                                         // On tue ce joueur
-                                        p.setAlive(false);
                                         game.endPlayer(p);
 
                                         // Si la partie a un gagnant (le dernier joueur avec au moins 1 QG)
                                         if (game.hasWinner()) {
 
-                                            // On termine la partie, et le jeu passe en mode "ecran de fin de partie"
+                                            EndingMenu endingMenu = new EndingMenu(game);
+                                            menuManagerInstance.addMenu(endingMenu);
                                             game.endGame();
+                                            endingMenu.fadeIn();
+
+                                            // On termine la partie, et le jeu passe en mode "ecran de fin de partie"
                                             this.instance.setGameState(GameState.PLAYING_ENDIND_SCREEN);
                                             return true;
 
@@ -1144,6 +1176,8 @@ public class ActionHandler {
 
                 // Si le jeu est en mode "menu principal", ne fait rien
                 case MENU_TITLE_SCREEN:
+                case PLAYING_ENDIND_SCREEN:
+                case PLAYING_SELECTING_NEXT_TURN_APPROVAL:
                     break;
 
                 // Si le jeu est en mode "selection d'une carte"
@@ -1175,7 +1209,8 @@ public class ActionHandler {
 
             }
 
-            game.clearOverlayCases();
+            if(game != null) game.clearOverlayCases();
+
         } catch (Exception e) {
             Logger.getLogger().write(e);
         }

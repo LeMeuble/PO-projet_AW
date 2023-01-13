@@ -2,6 +2,7 @@ package main.render;
 
 import librairies.StdDraw;
 import main.Logger;
+import main.MiniWars;
 import main.animation.AnimationClock;
 import main.animation.MovementAnimation;
 import main.control.Cursor;
@@ -86,16 +87,17 @@ public class Renderer {
 
             try {
 
-                boolean copyBuffer;
+                boolean copyBuffer = false;
                 this.clearBuffer();
 
                 switch (gameState) {
 
                     case MENU_MAP_SELECTION:
+                    case PLAYING_ENDIND_SCREEN:
                     case MENU_TITLE_SCREEN:
                         this.clearBuffer();
                         copyBuffer = MenuManager.getInstance().anyMenuNeedsRefresh();
-                        if(copyBuffer) System.out.println("Rendering menu");
+                        if (copyBuffer) System.out.println("Rendering menu");
                         break;
                     case PLAYING_MOVING_UNIT:
                         copyBuffer = this.renderMap(gameState, game, game.getCursor().needsRefresh() || MenuManager.getInstance().anyMenuNeedsRefresh());
@@ -109,18 +111,16 @@ public class Renderer {
                         copyBuffer |= this.renderMovementAnimation(game, copyBuffer);
 
                         break;
-                    case PLAYING_ENDIND_SCREEN:
-                        this.clearBuffer();
-                        StdDraw.setPenColor(StdDraw.WHITE);
-                        StdDraw.text(150, 150, game.getWinner().getName());
-                        copyBuffer = true;
-                        break;
 
                     default:
-                        copyBuffer = this.renderMap(gameState, game, game.getCursor().needsRefresh() || MenuManager.getInstance().anyMenuNeedsRefresh() || PopupRegistry.getInstance().needsRefresh());
-                        copyBuffer |= this.renderOverlay(game, copyBuffer);
-                        copyBuffer |= this.renderCursor(game, gameState, copyBuffer);
+                        if (MiniWars.getInstance().isPlaying()) {
+
+                            copyBuffer = this.renderMap(gameState, game, game.getCursor().needsRefresh() || MenuManager.getInstance().anyMenuNeedsRefresh() || PopupRegistry.getInstance().needsRefresh());
+                            copyBuffer |= this.renderOverlay(game, copyBuffer);
+                            copyBuffer |= this.renderCursor(game, gameState, copyBuffer);
+                        }
                         break;
+
                 }
 
                 for (Menu menu : MenuManager.getInstance().getMenus()) {
@@ -292,6 +292,12 @@ public class Renderer {
                     }
 
                 }
+            }
+
+            if(weather == Weather.RAINY) {
+
+                DisplayUtil.drawPicture(Config.WIDTH / 2, Config.HEIGHT / 2 + Config.BOTTOM_MENU_MARGIN, PathUtil.getWeatherOverlayPath(weather, this.terrainClockSync.getFrame()), Config.WIDTH, Config.HEIGHT);
+
             }
 
             return true;

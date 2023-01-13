@@ -70,8 +70,10 @@ public class Submarine extends Naval {
     @Override
     public int getMovementCostTo(Case destination, Weather weather) {
 
-        if(this.underwater) return super.getMovementCostTo(destination, weather) * 2;
-        else return super.getMovementCostTo(destination, weather);
+        final int cost = super.getMovementCostTo(destination, weather);
+
+        if(this.underwater) return cost == -1 ? -1 : cost * 2;
+        else return cost;
 
     }
 

@@ -46,8 +46,6 @@ public class PauseMenu extends SelectionMenu<PauseMenu.Action> {
         StdDraw.setFont(Config.FONT_20);
         StdDraw.setPenColor(new Color(150, 150, 150));
 
-        System.out.println(this.getSelectedValue());
-
         y -= Config.HEIGHT / 8;
 
         for (Action action : this.getAvailableValues()) {

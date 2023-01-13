@@ -54,6 +54,8 @@ public class Game {
     private final WeatherManager weatherManager;
     private final Map<Player.Type, Player> players;
     private int day;
+    private long startTime;
+    private long duration;
     private Movement movement;
     private Case selectedCase;
     private Dijkstra dijkstraResult;
@@ -72,6 +74,8 @@ public class Game {
     public Game(MapMetadata mapMetadata, Settings settings) {
 
         this.day = 1;
+        this.duration = 0;
+        this.startTime = System.currentTimeMillis();
         this.settings = settings;
         this.cursor = new Cursor(mapMetadata.getWidth(), mapMetadata.getHeight());
         this.movement = null;
@@ -89,12 +93,17 @@ public class Game {
 
         for (int i = 1; i <= mapMetadata.getPlayerCount(); i++) {
             players.put(Player.Type.fromValue(i), new Player(Player.Type.values()[i]));
+            players.get(Player.Type.fromValue(i)).setMoney(508408);//fixme
         }
 
         MenuManager.getInstance().addMenu(new BottomMenu());
 
     }
 
+
+    public long getDuration() {
+        return this.duration;
+    }
 
     public int getDay() {
 
@@ -170,7 +179,7 @@ public class Game {
     }
 
     public List<Player> getPlayers() {
-        return (List<Player>) this.players.values();
+        return new ArrayList<>(this.players.values());
     }
 
     /**
@@ -263,6 +272,7 @@ public class Game {
      *
      * @return Instance du QG restant. Ou null si le joueur n'a plus de QG.
      */
+    @Nullable
     public Case getRemainingHQ(Player.Type player) {
 
         return this.grid.getCases()
@@ -426,11 +436,31 @@ public class Game {
             this.grid.updateFogOfWar(c, c.getUnit());
         });
 
+
+        this.cursor.setCoordinate(this.getRemainingHQ(this.currentPlayer).getCoordinate());
+        this.view.focus(this.getRemainingHQ(this.currentPlayer));
+
     }
 
     public void endGame() {
 
-        System.out.println("fin de jeu");
+        this.duration = System.currentTimeMillis() - this.startTime;
+
+        int units = 0;
+        int properties = 0;
+
+        for (Case c : this.grid.getCases()) {
+            if (c.getUnit() != null && c.getUnit().getOwner() == this.getWinner()) {
+                units++;
+            }
+
+            if (c.getTerrain() instanceof Property && ((Property) c.getTerrain()).getOwner() == this.getWinner()) {
+                properties++;
+            }
+        }
+
+        this.getPlayerFromType(this.getWinner()).setStatUnitCount(units);
+        this.getPlayerFromType(this.getWinner()).setStatPropertyCount(properties);
 
     }
 
@@ -555,11 +585,15 @@ public class Game {
 
     public void endPlayer(Player player) {
 
+        int units = 0;
+        int properties = 0;
+
         for (Case c : this.grid.getCases()) {
 
             if (c.hasUnit()) {
                 if (c.getUnit().getOwner() == player.getType()) {
                     c.setUnit(null);
+                    units++;
                 }
             }
 
@@ -567,11 +601,16 @@ public class Game {
 
                 if (((Property) c.getTerrain()).getOwner() == player.getType()) {
                     ((Property) c.getTerrain()).setOwner(Player.Type.NEUTRAL);
+                    properties++;
                 }
 
             }
 
         }
+
+        player.setAlive(false);
+        player.setStatUnitCount(units);
+        player.setStatPropertyCount(properties + 1);
 
     }
 

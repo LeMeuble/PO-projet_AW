@@ -730,10 +730,16 @@ public abstract class Unit {
 
     public void render(double pixelX, double pixelY, int frame, double width, double height, boolean displayIndicators) {
 
+        if(!MiniWars.getInstance().isPlaying()) return;
+
+        double offsetDivider = (this instanceof OnFoot) ? 4.0d : 5.0d;
+        double indicatorX = pixelX + Config.PIXEL_PER_CASE / offsetDivider;
+        double indicatorBisX = pixelX - Config.PIXEL_PER_CASE / offsetDivider;
+        double indicatorY = pixelY - Config.PIXEL_PER_CASE / offsetDivider;
+
         if (this.isAlive()) {
 
             final Player player = MiniWars.getInstance().getCurrentGame().getCurrentPlayer();
-
             final Grid grid = MiniWars.getInstance().getCurrentGame().getGrid();
 
             if (this instanceof Submarine && ((Submarine) this).canSurface()) {
@@ -745,11 +751,10 @@ public abstract class Unit {
                         .stream()
                         .anyMatch(c -> c.hasUnit() && c.getUnit().getOwner() == player.getType());
 
-                if (display)
+                if (display) {
                     DisplayUtil.drawPicture(pixelX, pixelY, this.getFile(frame), width, height);
-
-                StdDraw.setPenColor(StdDraw.RED);
-                StdDraw.rectangle(pixelX, pixelY, width / 2, height / 2);
+                    DisplayUtil.drawPicture(indicatorBisX, indicatorY, PathUtil.getIndicatorPath(!this.hasPlayed, "submarine"), width / 3, height / 3);
+                }
 
             }
 
@@ -757,11 +762,16 @@ public abstract class Unit {
                 DisplayUtil.drawPicture(pixelX, pixelY, this.getFile(frame), width, height);
             }
 
-            if (displayIndicators) {
+            if (this instanceof Transport) {
+                Transport transport = (Transport) this;
+                if (transport.isFull()) {
+                    DisplayUtil.drawPicture(indicatorBisX, indicatorY, PathUtil.getIndicatorPath(!this.hasPlayed, "locker"), width / 3, height / 3);
+                } else if(transport.isCarryingUnit()) {
+                    DisplayUtil.drawPicture(indicatorBisX, indicatorY, PathUtil.getIndicatorPath(!this.hasPlayed, "non_full"), width / 3, height / 3);
+                }
+            }
 
-                double offsetDivider = (this instanceof OnFoot) ? 4.0d : 5.0d;
-                double indicatorX = pixelX + Config.PIXEL_PER_CASE / offsetDivider;
-                double indicatorY = pixelY - Config.PIXEL_PER_CASE / offsetDivider;
+            if (displayIndicators) {
 
                 if (this.getHealth() < Unit.MAX_HEALTH) {
 

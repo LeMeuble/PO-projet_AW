@@ -52,4 +52,8 @@ public abstract class AnimatedMenu extends Menu {
         this.animationClock.nextFrame();
     }
 
+    public AnimationClock getAnimationClock() {
+        return this.animationClock;
+    }
+
 }

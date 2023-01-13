@@ -4,7 +4,7 @@ import main.animation.AnimationClock;
 
 public abstract class FadeMenu extends AnimatedMenu {
 
-    private static final int FADE_ALPHA_INCREMENT = 15;
+    private static final int FADE_ALPHA_INCREMENT = 25;
 
     private int alpha;
     private boolean isFadeIn;
@@ -17,6 +17,10 @@ public abstract class FadeMenu extends AnimatedMenu {
         this.isFadeIn = true;
         this.isFinished = true;
 
+    }
+
+    public void setAlpha(int alpha) {
+        this.alpha = alpha;
     }
 
     public void fadeIn() {

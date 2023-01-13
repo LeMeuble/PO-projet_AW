@@ -1,12 +1,14 @@
 # A faire demain
-- [ ] Pluie, vent
+- [X] Pluie, vent
 - [ ] Ajouter unité sur les maps
 - [ ] Icon sous-marin, convoi
-- [ ] Icon map selecteur, nombre de joueur
+- [X] Icon map selecteur, nombre de joueur
 - [ ] Dernière vérification + rendu
 - [ ] Test grandeur nature
-- [ ] Fini les keyboards tips
+- [ ] Finir les keyboards tips
 - [ ] Ecran de fin de partie
+- [ ] map preview?????
+- [ ] Patcher les popup
 
 # Prioritaire :
 - [ ] Les logs en fait

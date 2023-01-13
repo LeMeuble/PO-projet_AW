@@ -1,0 +1,6 @@
+name=Default Map
+description=This is the default map that was given with the project.
+width=15
+height=10
+players=2
+icon=pictures/ui/backgrounds/clear/background_2.png

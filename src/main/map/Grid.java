@@ -235,7 +235,7 @@ public class Grid {
 
         Player.Type p = MiniWars.getInstance().getCurrentGame().getCurrentPlayer().getType();
 
-        if (unit.getOwner() == p) {
+        if (unit.getOwner() == p || (c.getTerrain() instanceof Property && ((Property) c.getTerrain()).getOwner() == p)) {
 
             if (c.getTerrain() instanceof Mountain || unit instanceof Flying) {
 
