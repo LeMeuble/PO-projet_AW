@@ -8,10 +8,19 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Classe permettant de faire des logs de l'etat du jeu
+ *
+ * @author Tristan lECONTE--DENIS
+ * @author Lucien GRAVOT
+ */
 public class Logger {
 
     private static final String LOG_DIR = PathUtil.ROOT_FOLDER + PathUtil.SEP + "logs";
 
+    /**
+     * Enumeration des types de messages (informatif, erreur, plantage...)
+     */
     public enum Level {
         DEBUG,
         INFO,

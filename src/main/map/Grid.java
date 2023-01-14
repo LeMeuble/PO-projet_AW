@@ -209,7 +209,7 @@ public class Grid {
         MiniWars.getInstance().setGameState(GameState.PLAYING_RENDERING_MOVING_UNIT);
         MovementAnimation animation = new MovementAnimation(unit, untrappedPath);
 
-        Renderer.getInstance().addMovementAnimation(animation);
+        Renderer.getInstance().setMovementAnimation(animation);
 
         animation.waitUntilFinished(); // bloque tout
 

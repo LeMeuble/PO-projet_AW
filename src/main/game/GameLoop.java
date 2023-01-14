@@ -1,14 +1,24 @@
 package main.game;
 
 import main.Logger;
+import main.MiniWars;
 import main.render.PopupRegistry;
 
+/**
+ * Classe representant la boucle de jeu
+ *
+ * @author Tristan LECONTE--DENIS
+ * @author Lucien GRAVOT
+ */
 public class GameLoop {
 
     private final Thread thread;
     private Runnable handler;
     private volatile boolean isRunning;
 
+    /**
+     * Constructeur de la GameLoop
+     */
     public GameLoop() {
 
         this.thread = new Thread(this::run);
@@ -17,15 +27,22 @@ public class GameLoop {
         };
         this.isRunning = false;
 
-        Runtime.getRuntime().addShutdownHook(new Thread(Logger::closeAll));
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> MiniWars.getInstance().end()));
 
     }
 
+    /**
+     * Definir la methode a appelle pour actualiser le jeu.
+     *
+     * @param handler Methode a appeller
+     */
     public void setHandler(Runnable handler) {
         this.handler = handler;
     }
 
-
+    /**
+     * Permet le demarrage de la thread interne.
+     */
     public void start() {
 
         if (!this.isRunning) {
@@ -36,6 +53,9 @@ public class GameLoop {
 
     }
 
+    /**
+     * Permet de stopper la thread interne.
+     */
     public void stop() {
         this.isRunning = false;
         try {
@@ -45,6 +65,9 @@ public class GameLoop {
     }
 
     @SuppressWarnings("BusyWait")
+    /**
+     * Runnable de la thread interne.
+     */
     public void run() {
 
         try {

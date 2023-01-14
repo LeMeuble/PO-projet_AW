@@ -711,7 +711,16 @@ public abstract class Unit {
         this.facing = facing;
     }
 
-    // Todo
+    /**
+     * Cette methode s'occupe du rendu le l'unite.
+     *
+     * @param pixelX Position en pixel x de l'unite.
+     * @param pixelY Position en pixel y de l'unite.
+     * @param frame Frame actuelle de l'unite.
+     * @param width Taille (largeur) de l'unite en pixel.
+     * @param height Taille (hauteur) de l'unite en pixel.
+     * @param displayIndicators Indique s'il est necessaire d'afficher les indicateurs de l'unites.
+     */
     public void render(double pixelX, double pixelY, int frame, double width, double height, boolean displayIndicators) {
 
         if(!MiniWars.getInstance().isPlaying()) return;
@@ -726,6 +735,7 @@ public abstract class Unit {
             final Player player = MiniWars.getInstance().getCurrentGame().getCurrentPlayer();
             final Grid grid = MiniWars.getInstance().getCurrentGame().getGrid();
 
+            // Rendu propres aux sous-marins
             if (this instanceof Submarine && ((Submarine) this).canSurface()) {
 
                 final Case center = grid.getCase(this.getCoordinate());
@@ -746,6 +756,7 @@ public abstract class Unit {
                 DisplayUtil.drawPicture(pixelX, pixelY, this.getFile(frame), width, height);
             }
 
+            // Rendu des indicateurs de capacite d'un transport
             if (this instanceof Transport) {
                 Transport transport = (Transport) this;
                 if (transport.isFull()) {
@@ -755,6 +766,7 @@ public abstract class Unit {
                 }
             }
 
+            // Rendu des indicateurs des unites (energie, munition, vie)
             if (displayIndicators) {
 
                 if (this.getHealth() < Unit.MAX_HEALTH) {

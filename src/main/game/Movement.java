@@ -96,12 +96,23 @@ public class Movement {
         }
     }
 
+    /**
+     * Classe representant une fleche.
+     * La fleche est representee en fonction du bord d'entree, et du bord de sortie. Par exemple, en fleche entrant par
+     * le bas et sortant par le haut va representer une fleche dirigee vers le haut
+     */
     public static class Arrow {
 
         private final Case c;
         private final Direction from;
         private final Direction to;
 
+        /**
+         * Constructeur de la fleche
+         * @param c La case sur laquelle elle est positionnee
+         * @param from Le bord d'entree
+         * @param to Le bord de sortie
+         */
         public Arrow(Case c, Direction from, Direction to) {
             this.c = c;
             this.from = from;
@@ -130,6 +141,10 @@ public class Movement {
     private final List<Case> cases;
     private boolean needsRefresh;
 
+    /**
+     * Constructeur du mouvement
+     * @param startingPoint La case de depart du mouvement
+     */
     public Movement(Case startingPoint) {
 
         this.startingPoint = startingPoint;
@@ -137,10 +152,17 @@ public class Movement {
 
     }
 
+    /**
+     * Ajoute une nouvelle case au mouvement
+     * @param newCase La case a jouter
+     */
     public void update(Case newCase) {
 
+        // Si la case existe deja dans le mouvement
         if(this.cases.contains(newCase)) {
 
+            // Cela veut dire que le trajet fait une boucle
+            // On supprime donc tout le chemin apres cette case
             int index = this.cases.indexOf(newCase);
             this.cases.subList(index + 1, this.cases.size()).clear();
 
@@ -152,6 +174,10 @@ public class Movement {
 
     }
 
+    /**
+     * Definit le mouvement a partir d'une liste de cases
+     * @param path Une liste de cases
+     */
     public void setPath(List<Case> path) {
         this.cases.clear();
         this.cases.addAll(path);
@@ -162,6 +188,9 @@ public class Movement {
         return this.cases;
     }
 
+    /**
+     * Supprime la derniere case du mouvement
+     */
     public void goBack() {
         ((LinkedList<Case>) cases).removeLast();
     }
@@ -181,12 +210,21 @@ public class Movement {
 
     }
 
+    /**
+     * Renvoie le cout de mouvement du chemin complet, pour une unite et une meteo donnee
+     * @param unit L'unite
+     * @param weather La meteo
+     * @return Le cout de mouvement (int)
+     *
+     * @see Unit#getMovementCostTo(Case, Weather)
+     */
     public int getCost(Unit unit, Weather weather) {
 
         int cost = 0;
 
         for(Case c : this.cases) {
             int moveCost = unit.getMovementCostTo(c, weather);
+            // Si le cout de mouvement est -1 (impossible d'aller sur la case), renvoie inf
             if(moveCost == -1) return Integer.MAX_VALUE;
             cost += moveCost;
         }
@@ -194,6 +232,12 @@ public class Movement {
         return cost;
     }
 
+    /**
+     * Verifie si le chemin du joueur est piege. Un chemin est piege si une unite adverse se situe sur l'une des cases
+     * du chemin.
+     * @param playerType Le joueur qui initie le chemin
+     * @return true si le chemin est piege
+     */
     public boolean isPathTrappedFor(Player.Type playerType) {
 
         return this.cases
@@ -202,12 +246,17 @@ public class Movement {
 
     }
 
+    /**
+     * Supprime la partie du chemin inaccessible a cause de l'unite ennemie (y compris la case de cette derniere)
+     * @param playerType Le joueur qui initie le chemin
+     * @return
+     */
     public Movement cutTrappedPath(Player.Type playerType) {
 
         final Movement cutPath = new Movement(this.startingPoint);
 
         for(Case c : this.cases) {
-
+            // Sort de la methode quand on rencontre une unite adverse
             if (c.hasUnit() && c.getUnit().getOwner() != playerType) break;
             cutPath.update(c);
 
@@ -217,6 +266,12 @@ public class Movement {
 
     }
 
+    /**
+     * Convertit la liste de cases (le chemin) en une liste de fleches directionnelles
+     * @return Une liste de fleches representant le chemin
+     * @see Movement.Arrow
+     * @see Movement#calculateDirection(Case, Case, Case)
+     */
     public List<Arrow> toDirectionalArrows() {
 
         List<Arrow> directionalArrows = new LinkedList<>();

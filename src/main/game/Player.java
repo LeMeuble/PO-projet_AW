@@ -12,6 +12,11 @@ import java.awt.Color;
  */
 public class Player {
 
+    /**
+     * Enumeration des types de joueurs possibles
+     *
+     * Neutral sert a representer "aucun joueur", utilise pour les cases n'appartenant a personne
+     */
     public enum Type {
 
         NEUTRAL("Neutre", 0),
@@ -85,6 +90,12 @@ public class Player {
     private int statUnitCount;
     private int statPropertyCount;
 
+    /**
+     * Constructeur d'un joueur
+     *
+     * Initialise le joueur comme n'ayant pas d'argent, et etant vivant
+     * @param type Le type du joueur a creer
+     */
     public Player(Player.Type type) {
 
         this.money = 0;

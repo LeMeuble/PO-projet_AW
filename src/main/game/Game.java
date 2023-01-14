@@ -110,6 +110,7 @@ public class Game {
         return this.day;
 
     }
+
     /**
      * Obtenir les metadonnees de la carte.
      *
@@ -442,19 +443,26 @@ public class Game {
 
     }
 
+    /**
+     * Reinitialise le brouillard de guerre pour le prochain joueur et centre l'ecran sur son QG
+     */
     public void startGame() {
 
         this.grid.resetFogOfWar(settings.isFogOfWar());
-        this.grid.getCases().forEach(c -> {
-            this.grid.updateFogOfWar(c, c.getUnit());
-        });
-
+        if(settings.isFogOfWar()) {
+            this.grid.getCases().forEach(c -> {
+                this.grid.updateFogOfWar(c, c.getUnit());
+            });
+        }
 
         this.cursor.setCoordinate(this.getRemainingHQ(this.currentPlayer).getCoordinate());
         this.view.focus(this.getRemainingHQ(this.currentPlayer));
 
     }
 
+    /**
+     * Comptabilise les statistiques des joueurs, pour l'affichage en fin de partie
+     */
     public void endGame() {
 
         this.duration = System.currentTimeMillis() - this.startTime;
@@ -481,11 +489,18 @@ public class Game {
         return this.getAlivePlayerCount() == 1;
     }
 
+    /**
+     * Renvoie le gagnant de la partie. Le gagnant d'une partie est le seul joueur possedant encore des QG.
+     * @return Le joueur gagnant de la partie s'il existe, null sinon
+     */
     @Nullable
     public Player.Type getWinner() {
-        //todo remove this
         Player.Type winner = null;
-        List<HQ> hqs = this.grid.getCases().stream().filter(c -> c.getTerrain().getType() == TerrainType.HQ).map(c -> (HQ) c.getTerrain()).collect(Collectors.toList());
+        List<HQ> hqs = this.grid.getCases()
+                .stream()
+                .filter(c -> c.getTerrain().getType() == TerrainType.HQ)
+                .map(c -> (HQ) c.getTerrain())
+                .collect(Collectors.toList());
 
         for (HQ hq : hqs) {
 
@@ -501,6 +516,9 @@ public class Game {
 
     }
 
+    /**
+     * @return Le prochain joueur vivant
+     */
     public Player nextPlayer() {
 
         if (this.getAlivePlayerCount() != 0) {
@@ -596,6 +614,10 @@ public class Game {
         this.selectedCase = selectedCase;
     }
 
+    /**
+     * Termine l'instance d'un joueur, et recupere ses statistiques
+     * @param player Le joueur a tuer
+     */
     public void endPlayer(Player player) {
 
         int units = 0;
@@ -627,6 +649,11 @@ public class Game {
 
     }
 
+    /**
+     * Verifie si le joueur courant a encore des actions disponibles. Les actions disponibles sont : deplacer une unite
+     * ou produire une unite dans une usine
+     * @return true si le joueur courant a encore des actions disponibles, false sinon
+     */
     public boolean hasRemainingAction() {
 
         for (Case c : this.grid.getCases()) {

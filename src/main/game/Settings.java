@@ -3,8 +3,17 @@ package main.game;
 import main.weather.Weather;
 import main.weather.WeatherManager;
 
+/**
+ * Classe representant les parametres d'une partie
+ *
+ * @author Tristan LECONTE--DENIS
+ * @author Lucien GRAVOT
+ */
 public class Settings {
 
+    /**
+     * Enumeration des modes de meteo possibles pour la partie
+     */
     public enum WeatherMode {
 
         AUTO("Météo Automatique"),
@@ -35,6 +44,12 @@ public class Settings {
     private boolean autoEndTurn;
     private WeatherMode weatherMode;
 
+    /**
+     * Constructeur de Settings
+     * Par defaut, le meteo est en mode "automatique" (change a chaque tour)
+     * Par defaut, le brouillard de guerre est active
+     * Par defaut, le passage de tour automatique est desactive
+     */
     public Settings() {
 
         this.weatherMode = WeatherMode.AUTO;
@@ -59,10 +74,18 @@ public class Settings {
         this.autoEndTurn = !this.autoEndTurn;
     }
 
+    /**
+     * Passe au mode de meteo suivant (ex : passe de CLEAR vers RAINY)
+     * @see Settings.WeatherMode
+     */
     public void nextWeatherMode() {
         this.weatherMode = WeatherMode.values()[(this.weatherMode.ordinal() + 1) % WeatherMode.values().length];
     }
 
+    /**
+     * Passe au mode de meteo precedent (ex : passe de RAINY vers CLEAR)
+     * @see Settings.WeatherMode
+     */
     public void previousWeatherMode() {
         this.weatherMode = WeatherMode.values()[(this.weatherMode.ordinal() - 1 + WeatherMode.values().length) % WeatherMode.values().length];
     }
@@ -71,6 +94,10 @@ public class Settings {
         return this.weatherMode;
     }
 
+    /**
+     * Configure le gestionnaire de meteo du jeu, en fonction du mode de meteo selectionne
+     * @param manager Le gestionnaire de meteo du jeu
+     */
     public void configureWeatherManager(WeatherManager manager) {
         System.out.println("mode" + this.weatherMode);
         if (this.weatherMode == WeatherMode.AUTO) {

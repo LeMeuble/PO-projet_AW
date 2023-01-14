@@ -120,6 +120,9 @@ public class MovementAnimation {
         return this.unit;
     }
 
+    /**
+     * Change la direction d'une unite pour qu'elle soit coherente avec le mouvement
+     */
     public void nextStep() {
 
         if (this.isFinished) return;
@@ -158,6 +161,11 @@ public class MovementAnimation {
 
     }
 
+    /**
+     * Permet de calculer la position en X du sprite a afficher sur l'ecran.
+     *
+     * @return Position en pixel x
+     */
     private double calculatePixelX() {
 
         Game game = MiniWars.getInstance().getCurrentGame();
@@ -169,6 +177,11 @@ public class MovementAnimation {
 
     }
 
+    /**
+     * Permet de calculer la position en Y du sprite a afficher sur l'ecran.
+     *
+     * @return Position en pixel Y
+     */
     private double calculatePixelY() {
 
         Game game = MiniWars.getInstance().getCurrentGame();

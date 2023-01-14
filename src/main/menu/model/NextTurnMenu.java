@@ -15,7 +15,7 @@ import java.awt.*;
 import java.util.Arrays;
 
 /**
- * Classe representant un menu de passage de tour
+ * Classe representant un ecran de passage de tour
  *
  * @author Tristan LECONTE--DENIS
  * @author Lucien GRAVOT
@@ -43,16 +43,26 @@ public class NextTurnMenu extends FadeMenu {
 
     }
 
-     //Todo
+    /**
+     * Cette classe represente le menu de passage de tour (ou continuer)
+     *
+     * @see ActionMenu
+     */
     public static class AskMenu extends ActionMenu<Action> {
 
+         /**
+          * Constructeur de AskMenu
+          */
         public AskMenu() {
 
             super(new OptionSelector<>(Arrays.asList(Action.values())), false);
 
         }
 
-        @Override
+         /**
+          * Gere l'affichage du menu
+          */
+         @Override
         public void render() {
 
             super.render();
@@ -85,6 +95,9 @@ public class NextTurnMenu extends FadeMenu {
         this.textShown = false;
     }
 
+    /**
+     * Gere l'affichage de l'ecran de passage de tour
+     */
     @Override
     public void render() {
 
@@ -112,10 +125,12 @@ public class NextTurnMenu extends FadeMenu {
 
         }
 
+        // Verifie si le jeu est toujours en cours
         if(MiniWars.getInstance().isPlaying()) {
 
             final Player.Type player = MiniWars.getInstance().getCurrentGame().getCurrentPlayer().getType();
 
+            // Affiche un ecran de transition, precisant quel est le joueur qui jouera ensuite
             StdDraw.setFont(Config.FONT_20);
             StdDraw.setPenColor(textColor);
 

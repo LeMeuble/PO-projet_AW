@@ -2,6 +2,8 @@ package main.terrain;
 
 import main.MiniWars;
 import main.game.Player;
+import main.map.MapMetadata;
+import main.unit.UnitType;
 import main.weather.Weather;
 import ressources.Config;
 import ressources.DisplayUtil;
@@ -37,12 +39,22 @@ public abstract class Terrain {
 
     }
 
-    // Todo
-    public static Terrain parse(String t) {
+    /**
+     * Transforme une chaine de caractere en une nouvelle instance de terrain.
+     * Fonction appelee dans {@link main.parser.MapParser#parseMap(MapMetadata)}
+     *
+     * @param string La chaine caractere a parser.
+     *
+     * @return Une nouvelle instance de terrain presente sur la case si il en a un, null sinon.
+     *
+     * @see TerrainType
+     * @see main.parser.MapParser#parseMap(MapMetadata)
+     */
+    public static Terrain parse(String string) {
 
-        if (t == null) return null;
+        if (string == null) return null;
 
-        String format = t.trim();
+        String format = string.trim();
         if (format.startsWith("{") && format.endsWith("}")) {
 
             String[] split = format.substring(1, format.length() - 1).trim().split(";");
@@ -110,7 +122,14 @@ public abstract class Terrain {
         return PathUtil.getTerrainPath(weather, this.getType(), this.getTextureVariation(), isFoggy);
     }
 
-    // Todo
+    /**
+     * Gere l'affichage du terrain
+     * @param pixelX Position en pixel X de l'image du terrain
+     * @param pixelY Position en pixel Y de l'image du terrain
+     * @param weather Indique la meteo actuelle
+     * @param isFoggy Un boolean, si la terrrain est dans le brouillard de guerre ou non
+     * @param frame Frame actuelle de l'animation du terrain si necessaire
+     */
     public void render(double pixelX, double pixelY, Weather weather, boolean isFoggy, int frame) {
 
         if (!MiniWars.getInstance().isPlaying()) return;

@@ -150,15 +150,15 @@ public class MapParser {
         }
 
         return new Grid(grid);
-        //todo: check if map is higher than expected (mapHeight)
+
     }
 
     /**
      * Methode statique
-     * Parse les metadonnees d'un fichier
-     * @param file
-     * @param mapPath
-     * @return
+     * Parse les meta donnees d'un fichier
+     * @param file Le fichier a parser
+     * @param mapPath Le chemin vers la carte
+     * @return Un objet MapMetadata
      */
     public static MapMetadata parseMetadata(File file, String mapPath) {
 
@@ -167,7 +167,7 @@ public class MapParser {
         final Map<String, String> metadataParsing = new HashMap<>();
 
         try (Scanner sc = new Scanner(file)) {
-            // Tant que le fichier n'est pas termine
+            // Tant qu'on n'est pas au bout du fichier
             while (sc.hasNextLine()) {
 
                 // On coupe la ligne au niveau du "="

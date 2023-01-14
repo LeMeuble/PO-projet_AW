@@ -32,7 +32,11 @@ public abstract class FadeMenu extends AnimatedMenu {
 
     }
 
-    // Todo
+    /**
+     * Permet de forcer le changement de l'opacite du menu.
+     *
+     * @param alpha Nouvelle opacite.
+     */
     public void setAlpha(int alpha) {
         this.alpha = alpha;
     }
@@ -92,6 +96,9 @@ public abstract class FadeMenu extends AnimatedMenu {
 
     }
 
+    /**
+     * Permet de calculer l'alpha suivant selon si le menu apparait ou disparait.
+     */
     @Override
     public void nextFrame() {
 

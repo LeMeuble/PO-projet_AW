@@ -655,7 +655,8 @@ public class ActionHandler {
                             // Le jeu passe en mode "deplacement d'une unite"
                             this.instance.setGameState(GameState.PLAYING_MOVING_UNIT);
 
-                            // TODO: jsp
+                            // Permet d'obtenir la valeur minimale entre les points de mouvement de l'unite selon la meteo
+                            // actuelle ou l'energie (essence/ration) de l'unite
                             final int point = Math.min(unit.getEnergy(), unit.getMovementPoint(game.getWeather()));
 
                             // On affiche un overlay sur les cases atteignables par l'unite
@@ -1301,22 +1302,30 @@ public class ActionHandler {
 
         try {
 
+            // Definition de quelques valeurs necessaire
             final Game game = this.instance.getCurrentGame();
             final Movement move = game.getMovement();
             final Dijkstra dijkstraResult = game.getDijkstraResult();
             final Unit unit = game.getSelectedCase().getUnit();
 
+            // Executer le Runnabe qui permet de bouget le curseur
             movement.run();
 
+            // Recuperation de la destination
             final Coordinate destination = game.getCursor().getCoordinate();
             final Case destinationCase = game.getGrid().getCase(destination);
 
+            // Permet d'obtenir la valeur minimale entre les points de mouvement de l'unite selon la meteo
+            // actuelle ou l'energie (essence/ration) de l'unite
             final int point = Math.min(unit.getEnergy(), unit.getMovementPoint(game.getWeather()));
 
+            // Recuperer le chemin le plus court
             List<Case> path = dijkstraResult.getShortestPathTo(destinationCase, point);
 
+            // Si un tel chemin existe on change le mouvement pour suivre ce dernier
             if (path != null) move.setPath(path);
 
+            // Actualiser la vue de l'ecran
             game.getView().adjustOffset();
 
         } catch (Exception e) {

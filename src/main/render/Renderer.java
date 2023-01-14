@@ -25,7 +25,16 @@ import ressources.PathUtil;
 import java.awt.*;
 import java.util.Set;
 
-// Todo
+/**
+ * Classe qui gere tout ce qui est lie au rendu des elements a l'ecran
+ *
+ * @author Tristan LECONTE--DENIS
+ * @author Lucien GRAVOT
+ *
+ * @see Renderable
+ * @see AnimationClock
+ * @see MovementAnimation
+ */
 public class Renderer {
 
     private static Renderer instance;
@@ -36,17 +45,22 @@ public class Renderer {
 
     private MovementAnimation movementAnimation;
 
-    private int frames;
+    private int frames; //fixme: degager
     private long previousFrameUpdate;
 
+    /**
+     * Constructeur du renderer
+     */
     public Renderer() {
 
+        // Les boucles d'animation (synchronisation)
         this.terrainClockSync = new AnimationClock(Config.MAP_ANIMATION_FRAME_COUNT, Config.MAP_ANIMATION_FRAME_DURATION, true);
         this.unitClockSync = new AnimationClock(Config.UNIT_ANIMATION_FRAME_COUNT, Config.UNIT_ANIMATION_FRAME_DURATION, true);
         this.unitMovingClockSync = new AnimationClock(Config.UNIT_ANIMATION_FRAME_COUNT, Config.UNIT_MOVING_FRAME_DURATION, true);
 
         this.movementAnimation = null;
 
+        // Initialisation de la fenetre
         StdDraw.enableDoubleBuffering();
         StdDraw.setCanvasSize((int) Config.WIDTH, (int) Config.HEIGHT);
         StdDraw.setXscale(0, Config.WIDTH);
@@ -59,6 +73,12 @@ public class Renderer {
 
     }
 
+    /**
+     * Obtenir l'instance du {@link Renderer} actuelle ou
+     * en creer une nouvelle si cette derniere n'existe pas.
+     *
+     * @return L'instance commune de {@link Renderer}
+     */
     public static Renderer getInstance() {
 
         if (instance == null) {
@@ -77,11 +97,22 @@ public class Renderer {
 
     }
 
-
+    /**
+     * Effacer l'ecran
+     */
     public void clearBuffer() {
         StdDraw.clear(Color.BLACK);
     }
 
+    /**
+     * Methode appellee par {@link MiniWars#update()} pour mettre a jour l'ecran.
+     * Cette methode est le point d'entree pour tout ce qui est lie au rendu sur l'ecran.
+     *
+     * Cette methode va effectuer different rendu selon l'etat de jeu actuel.
+     *
+     * @param gameState Etat de jeu actuel
+     * @param game Instance de la partie si cette derniere existe
+     */
     public void render(GameState gameState, Game game) {
 
         synchronized (this) {
@@ -91,51 +122,60 @@ public class Renderer {
                 boolean copyBuffer = false;
                 this.clearBuffer();
 
+                // Selon l'etat de jeu, differentes actions sont realises
                 switch (gameState) {
 
                     case MENU_MAP_SELECTION:
                     case PLAYING_ENDIND_SCREEN:
-                    case MENU_TITLE_SCREEN:
+                    case MENU_TITLE_SCREEN: {
                         this.clearBuffer();
                         copyBuffer = MenuManager.getInstance().anyMenuNeedsRefresh();
                         break;
-                    case PLAYING_MOVING_UNIT:
+                    }
+                    case PLAYING_MOVING_UNIT: {
                         copyBuffer = this.renderMap(gameState, game, game.getCursor().needsRefresh() || MenuManager.getInstance().anyMenuNeedsRefresh());
                         copyBuffer |= this.renderOverlay(game, copyBuffer);
                         copyBuffer |= this.renderMovement(game, copyBuffer);
                         copyBuffer |= this.renderCursor(game, gameState, copyBuffer);
                         break;
-                    case PLAYING_RENDERING_MOVING_UNIT:
+                    }
+                    case PLAYING_RENDERING_MOVING_UNIT: {
 
                         copyBuffer = this.renderMap(gameState, game, game.getCursor().needsRefresh() || this.unitMovingClockSync.needsRefresh());
                         copyBuffer |= this.renderMovementAnimation(game, copyBuffer);
 
                         break;
+                    }
 
-                    default:
-                        if (MiniWars.getInstance().isPlaying() && game != null)  {
+                    default: {
+                        if (MiniWars.getInstance().isPlaying() && game != null) {
 
                             copyBuffer = this.renderMap(gameState, game, game.getCursor().needsRefresh() || MenuManager.getInstance().anyMenuNeedsRefresh() || PopupRegistry.getInstance().needsRefresh());
                             copyBuffer |= this.renderOverlay(game, copyBuffer);
                             copyBuffer |= this.renderCursor(game, gameState, copyBuffer);
                         }
                         break;
+                    }
 
                 }
 
+                // Affichage de tous les menus selon leur priorites (calculee dans getMenus())
                 for (Menu menu : MenuManager.getInstance().getMenus()) {
                     copyBuffer |= this.renderMenu(menu, copyBuffer);
                 }
 
+                // Rendu des Popups
                 copyBuffer |= this.renderPopups(copyBuffer);
 
+                // Actualisation de l'ecran seulement si une action a ete effectuee sur le offscreen buffer
                 if (copyBuffer) {
                     StdDraw.show();
                     frames++;
                 }
 
+
                 if (System.currentTimeMillis() - previousFrameUpdate > 1000) {
-//                    System.out.println("FPS: " + frames);
+                    System.out.println("FPS: " + frames);
                     frames = 0;
                     previousFrameUpdate = System.currentTimeMillis();
                 }
@@ -149,10 +189,16 @@ public class Renderer {
 
     }
 
-    public void addMovementAnimation(MovementAnimation movementAnimation) {
+    public void setMovementAnimation(MovementAnimation movementAnimation) {
         this.movementAnimation = movementAnimation;
     }
 
+    /**
+     * Permet de rendre les popups (en haut a droite de l'ecran) sur l'ecran.
+     *
+     * @param forceRender Indiquer si le rendu doit etre force
+     * @return true si au moins une popup a ete actualisee sur l'offscreen
+     */
     private boolean renderPopups(boolean forceRender) {
 
         if (PopupRegistry.getInstance().needsRefresh() || forceRender) {
@@ -165,6 +211,13 @@ public class Renderer {
         return false;
     }
 
+    /**
+     * Permet de rendre une animation de mouvement sur l'ecran.
+     *
+     * @param game L'instance de la partie actuelle.
+     * @param forceRender Indiquer si le rendu doit etre force
+     * @return true si l'animatiion a ete actualisee
+     */
     private boolean renderMovementAnimation(Game game, boolean forceRender) {
 
         if (this.movementAnimation == null) return false;
@@ -202,6 +255,13 @@ public class Renderer {
 
     }
 
+    /**
+     * Permet de rendre les overlays (cases en surbrillances) sur l'ecran.
+     *
+     * @param game L'instance de la partie actuelle.
+     * @param forceRender Indiquer si le rendu doit etre force
+     * @return true si le menu a ete actualisee sur l'offscreen
+     */
     private boolean renderOverlay(Game game, boolean forceRender) {
 
         if (forceRender) {
@@ -233,6 +293,14 @@ public class Renderer {
         return false;
     }
 
+    /**
+     *
+     * Permet de rendre une menu en particulier.
+     *
+     * @param menu L'instance du menu a rendre.
+     * @param forceRender Indiquer si le rendu doit etre force
+     * @return true si le menu a ete actualisee sur l'offscreen
+     */
     private boolean renderMenu(Menu menu, boolean forceRender) {
 
         if (!menu.isVisible()) return false;
@@ -252,12 +320,13 @@ public class Renderer {
     }
 
     /**
-     * Rendre la carte sur l'ecran
      *
-     * @param game        La partie en cours
-     * @param forceRender Forcer le rendu
+     * Permet d'effectuer le rendu de la map selon la {@link GameView}.
      *
-     * @return True s'il est necessaire de mettre a jour l'ecran
+     * @param gameState Etat du jeu actuel
+     * @param game Partie en cours
+     * @param forceRender Indiquer si le rendu doit etre force
+     * @return true si la map a ete actualisee sur l'offscreen
      */
     private boolean renderMap(GameState gameState, Game game, boolean forceRender) {
 
@@ -308,6 +377,15 @@ public class Renderer {
 
     }
 
+    /**
+     *
+     * Permet d'effectuer le rendu du curseur selon la {@link GameView}.
+     *
+     * @param gameState Etat du jeu actuel
+     * @param game Partie en cours
+     * @param forceRender Indiquer si le rendu doit etre force
+     * @return true si le curseur a ete actualisee sur l'offscreen
+     */
     private boolean renderCursor(Game game, GameState gameState, boolean forceRender) {
 
         Cursor cursor = game.getCursor();
@@ -323,6 +401,14 @@ public class Renderer {
         return false;
     }
 
+    /**
+     *
+     * Permet de rendre le mouvement (fleches) sur l'ecran selon le {@link GameView} et le {@link Movement}.
+     *
+     * @param game Partie en cours
+     * @param forceRender Indiquer si le rendu doit etre force
+     * @return true si le mouvement a ete actualisee sur l'offscreen
+     */
     private boolean renderMovement(Game game, boolean forceRender) {
 
         if (game == null) return false;

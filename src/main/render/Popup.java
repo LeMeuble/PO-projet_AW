@@ -34,7 +34,12 @@ public class Popup {
         return this.title;
     }
 
-    // Todo
+    /**
+     * Permet de recuperer le message de la popup sous forme d'une liste de ligne de
+     * maxLineLength characters.
+     * @param maxLineLength Nombre de caracteres maximums par ligne
+     * @return Listes des lines de caracteres
+     */
     public List<String> getMessage(int maxLineLength) {
 
         List<String> lines = new ArrayList<>();

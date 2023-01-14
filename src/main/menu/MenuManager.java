@@ -56,7 +56,10 @@ public class MenuManager {
         }
 
     }
-    // Todo
+
+    /**
+     * @return true si au moins un menu a besoin d'etre actualise, false sinon
+     */
     public synchronized boolean anyMenuNeedsRefresh() {
         return this.menus.values()
                 .stream()

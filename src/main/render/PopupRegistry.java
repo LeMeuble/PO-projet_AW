@@ -8,13 +8,16 @@ import ressources.PathUtil;
 import java.util.*;
 
 /**
- * Classe listant/gerant les popups
+ * Classe listant/gerant les popups.
+ * Il s'agit d'un singleton qui fait office de registre pour les popups.
+ *
+ * @implNote Cette methode est concue pour est Thread-safe.
  *
  * @author Tristan LECONTE--DENIS
  * @author Lucien GRAVOT
  */
-public class PopupRegistry {
-    // Todo
+public class PopupRegistry implements Renderable {
+
     public static final int MAX_POPUPS = 5;
 
     private static final class InstanceHolder {
@@ -25,14 +28,30 @@ public class PopupRegistry {
     public volatile Queue<Popup> popups;
     public volatile boolean needsRefresh;
 
+    /**
+     * Constructeur privee pour le singleton {@link PopupRegistry}
+     */
     private PopupRegistry() {
         this.popups = new PriorityQueue<>(Comparator.comparingLong(Popup::getCreationTime));
     }
 
+    /**
+     * Obtient l'instance du singleton de {@link PopupRegistry} de son
+     * {@link InstanceHolder}
+     *
+     * @return Instance du register
+     */
     public static PopupRegistry getInstance() {
         return InstanceHolder.instance;
     }
 
+    /**
+     * Cette methode permet d'ajouter une popup au registre.
+     * Si la popup provoque un depassement du nombre maximale, la popup la plus "ancienne"
+     * sera supprimee.
+     *
+     * @param popup La popup a ajouter.
+     */
     public synchronized void push(Popup popup) {
         if (this.popups.size() >= MAX_POPUPS) {
             this.popups.poll();
@@ -41,27 +60,53 @@ public class PopupRegistry {
         this.needsRefresh = true;
     }
 
+
+    /**
+     * Obtenir la liste des popups
+     *
+     * @return Liste des popups actives.
+     */
     public synchronized List<Popup> getPopups() {
         return new ArrayList<>(this.popups);
     }
 
+    /**
+     * Permet la suppression automatique des popups expirees.
+     */
     public synchronized void garbageCollect() {
         this.needsRefresh = this.popups.removeIf(Popup::isExpired);
     }
 
+    /**
+     * Supprimer toutes les popups du registre.
+     */
     public synchronized void clear() {
         this.popups.clear();
         this.needsRefresh = true;
     }
 
+    /**
+     * Determiner si il est necessaire d'actualiser l'ecran pour afficher de nouvelles popups ou
+     * bien au contraire en supprimer.
+     *
+     * @return true s'il faut actualiser l'ecran, false sinon
+     */
     public synchronized boolean needsRefresh() {
         return this.needsRefresh;
     }
 
+    /**
+     * Forcer l'etat de rafraichissement de l'objet.
+     *
+     * @param needsRefresh true si l'objet a besoin d'etre rafraichi, false sinon
+     */
     public synchronized void needsRefresh(boolean needsRefresh) {
         this.needsRefresh = needsRefresh;
     }
 
+    /**
+     * Cette methode est appellee par le render pour permettre l'affichage de toutes les popups.
+     */
     public void render() {
 
         double actualWidth = 960 + 32;

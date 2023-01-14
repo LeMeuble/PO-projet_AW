@@ -76,6 +76,10 @@ public class MiniWars {
         return this.gameState == null;
     }
 
+    /**
+     * Gere l'appui sur une touche
+     * @param keycode Le code de la touche qui a ete pressee
+     */
     public void handleKey(KeystrokeListener.KeyCodes keycode) {
         if (this.actionHandler.handle(keycode)) this.update();
 
