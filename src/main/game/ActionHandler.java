@@ -976,7 +976,7 @@ public class ActionHandler {
                     final Case destination = game.getMovement().getMovementTail();
 
                     // Si la destination n'a pas d'unite
-                    if (!destination.hasUnit()) {
+                    if (!destination.hasUnit() || destination.isFoggy()) {
 
                         // On deplace notre unite courante sur cette case
                         grid.moveUnit(game.getMovement());
@@ -1062,6 +1062,7 @@ public class ActionHandler {
                     if (grid == null) break;
                     if (currentPlayer == null) break;
                     if (selectedCase == null) break;
+                    if (selectedUnit == null) break;
 
                     // Si la case courante est adjacente a la case selectionne
                     if (currentCase.isAdjacent(selectedCase)) {
@@ -1079,6 +1080,7 @@ public class ActionHandler {
 
                                     // L'unite rentre dans le transport
                                     transport.addCarriedUnit(selectedUnit);
+                                    selectedUnit.setPlayed(true);
                                     selectedCase.setUnit(null);
                                     game.clearOverlayCases();
                                     this.instance.setGameState(GameState.PLAYING_SELECTING);
