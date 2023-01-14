@@ -10,7 +10,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class GridTest {
 
@@ -18,17 +19,17 @@ public class GridTest {
 
     static {
 
-         grid = new Case[3][3];
+        grid = new Case[3][3];
 
-         for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 3; i++) {
 
-             for (int j = 0; j < 3; j++) {
+            for (int j = 0; j < 3; j++) {
 
-                 grid[i][j] = new Case(new Coordinate(j, i), new Plain());
+                grid[i][j] = new Case(new Coordinate(j, i), new Plain());
 
-             }
+            }
 
-         }
+        }
 
     }
 

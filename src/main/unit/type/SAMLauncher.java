@@ -3,7 +3,6 @@ package main.unit.type;
 import main.game.Player;
 import main.unit.Motorized;
 import main.unit.UnitType;
-import main.weapon.type.AirToGroundMissile;
 import main.weapon.type.GroundToAirMissile;
 
 /**
@@ -26,6 +25,7 @@ public class SAMLauncher extends Motorized {
         this.addWeapon(new GroundToAirMissile());
 
     }
+
     @Override
     public UnitType getType() {
         return UnitType.SAM_LAUNCHER;

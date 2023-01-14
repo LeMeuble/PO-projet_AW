@@ -21,7 +21,7 @@ public class Bomber extends Flying {
      *
      * @param owner Proprietaire de l'unite
      */
-    public Bomber(Player.Type owner){
+    public Bomber(Player.Type owner) {
         super(owner);
         this.addWeapon(new Bombs());
     }

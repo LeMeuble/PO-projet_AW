@@ -24,6 +24,7 @@ public class FactoryActionMenu extends ActionMenu<UnitType> {
 
     /**
      * Constructeur d'un menu d'action d'usine
+     *
      * @param optionSelector Les options disponibles pour cette usine
      */
     public FactoryActionMenu(OptionSelector<UnitType> optionSelector) {

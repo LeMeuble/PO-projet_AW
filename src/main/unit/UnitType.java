@@ -48,7 +48,9 @@ public enum UnitType implements ActionMenu.Text {
 
     /**
      * Renvoie un type d'unite, en fonction d'un caractere
+     *
      * @param character Un caractere
+     *
      * @return Un type d'unite
      */
     public static UnitType fromCharacter(char character) {
@@ -67,8 +69,10 @@ public enum UnitType implements ActionMenu.Text {
     /**
      * Renvoie un selecteur d'options, contenant des unites
      * Les unites doivent etre d'une certaine classe et avoir un prix inferieur a l'argent passe en parametre
-     * @param money Le prix maximum de l'unite
+     *
+     * @param money     Le prix maximum de l'unite
      * @param unitClass La classe de l'unite (ex : Naval.class)
+     *
      * @return Un selecteur d'options
      */
     public static OptionSelector<UnitType> asSelector(int money, Class<? extends Unit> unitClass) {
@@ -105,7 +109,9 @@ public enum UnitType implements ActionMenu.Text {
 
     /**
      * Renvoie uen nouvelle instance d'une unite, appartenant a un joueur proprietaire
+     *
      * @param p Le joueur proprietaire
+     *
      * @return Une instance d'unite
      */
     public Unit newInstance(Player.Type p) {

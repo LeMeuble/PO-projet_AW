@@ -1,8 +1,5 @@
 package main.unit;
 
-import com.beust.jcommander.ParametersDelegate;
-import com.sun.istack.internal.Nullable;
-import librairies.StdDraw;
 import main.MiniWars;
 import main.game.Player;
 import main.map.Case;
@@ -54,7 +51,7 @@ public abstract class Unit {
     private boolean hasPlayed;
     private boolean hasMoved;
 
-    private Coordinate coordinate;
+    private final Coordinate coordinate;
 
     /**
      * Constructeur d'une unite.
@@ -145,6 +142,7 @@ public abstract class Unit {
 
     /**
      * Redefinit les coordonnees de l'unite, a l'aide d'un objet coordonnee
+     *
      * @param coordinate Les nouvelles coordonnees
      */
     public void setCoordinate(Coordinate coordinate) {
@@ -154,6 +152,7 @@ public abstract class Unit {
 
     /**
      * Redefinit les coordonnees de l'unite, a l'aide de deux entiers
+     *
      * @param x La coordonnee X
      * @param y La coordonnee Y
      */
@@ -304,7 +303,9 @@ public abstract class Unit {
 
     /**
      * Verifie si une la distance se situe a portee de l'arme de l'unite
+     *
      * @param distance La distance
+     *
      * @return true si la distance est a portee, false sinon
      */
     public boolean isDistanceReachable(double distance) {
@@ -394,8 +395,10 @@ public abstract class Unit {
     /**
      * Permet a cette unite d'en attaquer une autre.
      * Choisit automatiquement l'arme a distance la plus efficace contre la cible
+     *
      * @param target La cible a attaquer
-     */    @Deprecated
+     */
+    @Deprecated
     public void rangedAttack(Unit target) {
 
         final Weapon bestWeapon = this.bestWeaponAgainst(target);
@@ -428,7 +431,9 @@ public abstract class Unit {
 
     /**
      * Verifie si l'unite
+     *
      * @param target
+     *
      * @return
      */
     public boolean canAttack(Unit target) {
@@ -441,6 +446,7 @@ public abstract class Unit {
         // Si une arme peut toucher la cible
         if (bestWeapon != null) {
             // Si cette arme a des munitions
+            // Si cette arme a des munitions
             if (bestWeapon.hasAmmo()) {
 
                 Grid grid = MiniWars.getInstance().getCurrentGame().getGrid();
@@ -451,16 +457,13 @@ public abstract class Unit {
                     // Si cette unite est un sous-marin en plongee
                     if (target instanceof Submarine && ((Submarine) target).canSurface()) {
                         // Si l'unite courante est un autre sous-marin ou un croiseur, elle peut toucher ce sous-marin
-                        if (this instanceof Submarine || this instanceof Cruiser) {
-                            return true;
-                        }
+                        return this instanceof Submarine || this instanceof Cruiser;
                     }
                     // Sinon, l'unite courante peut toucher la cible
                     else {
                         return true;
                     }
                 }
-
 
             }
         }
@@ -485,7 +488,6 @@ public abstract class Unit {
      *
      * @see Weapon
      */
-    @Nullable
     public Weapon bestWeaponAgainst(Unit unit) {
 
         Weapon bestWeapon = null;
@@ -581,8 +583,10 @@ public abstract class Unit {
 
     /**
      * Renvoie un selecteur d'options, contenant les options disponibles pour l'unite
+     *
      * @param currentCase La case courante
      * @param contextGrid La grille dans laquelle l'unite peut evoluer
+     *
      * @return Un selecteur d'options
      */
     public OptionSelector<UnitAction> getAvailableActions(Case currentCase, Grid contextGrid) {
@@ -605,25 +609,28 @@ public abstract class Unit {
             Unit unit = aCase.getUnit();
             if (unit != null) {
                 if (unit.getOwner() != this.getOwner()) {
-                    int d = aCase.distance(currentCase);
-                    // Si la case n'est qu'a une case de distance
-                    if (d == 1) {
-                        // On verifie si l'unite a une arme de corps a corps
-                        adjacentEnemy = this.hasMeleeWeapon();
-                    }
-                    // Si la case est a portee
-                    else if (d >= minRange && d <= maxRange) {
-                        // On verifie si l'unite a une arme de distance, pouvant toucher l'unite cible
-                        inRangeEnemy = this.hasRangeWeapon() && this.isDistanceReachable(d);
+
+                    if(this.canAttack(unit)) {
+                        int d = aCase.distance(currentCase);
+
+                        // Si la case n'est qu'a une case de distance
+                        if (d == 1) {
+                            // On verifie si l'unite a une arme de corps a corps
+                            adjacentEnemy = this.hasMeleeWeapon();
+                        }
+                        // Si la case est a portee
+                        else if (d >= minRange && d <= maxRange) {
+                            // On verifie si l'unite a une arme de distance, pouvant toucher l'unite cible
+                            inRangeEnemy = this.hasRangeWeapon() && this.isDistanceReachable(d);
+                        }
                     }
                 }
-
             }
         }
 
         // On ajoute les possibilites d'attaque
-        actions.addOption(UnitAction.ATTACK, adjacentEnemy && this.hasMeleeWeapon());
-        actions.addOption(UnitAction.RANGED_ATTACK, inRangeEnemy && !this.hasMoved && this.hasRangeWeapon());
+        actions.addOption(UnitAction.ATTACK, adjacentEnemy);
+        actions.addOption(UnitAction.RANGED_ATTACK, inRangeEnemy && !this.hasMoved);
         //Todo: a revoir (fog, bonne arme) (canAttack)
 
         final List<Case> adjacentCases = contextGrid.getAdjacentCases(currentCase);
@@ -649,8 +656,10 @@ public abstract class Unit {
 
     /**
      * Verifie si l'unite peut se deplacer vers la case, en focntion de la meteo
+     *
      * @param c La case de destination
      * @param w La meteo
+     *
      * @return true si l'unite peut se deplacer, false sinon
      */
     public boolean canMoveTo(Case c, Weather w) {
@@ -678,6 +687,7 @@ public abstract class Unit {
     public void repair(int amount) {
         this.setHealth(this.getHealth() + amount);
     }
+
     /**
      * Retourne le prix de reparation d'un point de vie d'une unite
      *
@@ -706,6 +716,7 @@ public abstract class Unit {
 
     /**
      * Definit la direction dans laquelle l'unite regarde
+     *
      * @param facing Une direction
      */
     public void setFacing(UnitFacing facing) {
@@ -715,16 +726,16 @@ public abstract class Unit {
     /**
      * Cette methode s'occupe du rendu le l'unite.
      *
-     * @param pixelX Position en pixel x de l'unite.
-     * @param pixelY Position en pixel y de l'unite.
-     * @param frame Frame actuelle de l'unite.
-     * @param width Taille (largeur) de l'unite en pixel.
-     * @param height Taille (hauteur) de l'unite en pixel.
+     * @param pixelX            Position en pixel x de l'unite.
+     * @param pixelY            Position en pixel y de l'unite.
+     * @param frame             Frame actuelle de l'unite.
+     * @param width             Taille (largeur) de l'unite en pixel.
+     * @param height            Taille (hauteur) de l'unite en pixel.
      * @param displayIndicators Indique s'il est necessaire d'afficher les indicateurs de l'unites.
      */
     public void render(double pixelX, double pixelY, int frame, double width, double height, boolean displayIndicators) {
 
-        if(!MiniWars.getInstance().isPlaying()) return;
+        if (!MiniWars.getInstance().isPlaying()) return;
 
         double offsetDivider = (this instanceof OnFoot) ? 4.0d : 5.0d;
         double indicatorX = pixelX + Config.PIXEL_PER_CASE / offsetDivider;
@@ -762,7 +773,8 @@ public abstract class Unit {
                 Transport transport = (Transport) this;
                 if (transport.isFull()) {
                     DisplayUtil.drawPicture(indicatorBisX, indicatorY, PathUtil.getIndicatorPath(!this.hasPlayed, "locker"), width / 3, height / 3);
-                } else if(transport.isCarryingUnit()) {
+                }
+                else if (transport.isCarryingUnit()) {
                     DisplayUtil.drawPicture(indicatorBisX, indicatorY, PathUtil.getIndicatorPath(!this.hasPlayed, "non_full"), width / 3, height / 3);
                 }
             }
@@ -776,7 +788,7 @@ public abstract class Unit {
 
                 }
 
-                if(this.getOwner() == player.getType()) {
+                if (this.getOwner() == player.getType()) {
 
                     boolean isLowAmmo = this.getWeapons().stream()
                             .anyMatch(weapon -> weapon.getAmmo() <= weapon.getDefaultAmmo() * Config.UNIT_LOW_AMMO_THRESHOLD);

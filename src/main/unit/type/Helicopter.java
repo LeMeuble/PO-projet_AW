@@ -1,10 +1,10 @@
 package main.unit.type;
 
 import main.game.Player;
-import main.map.Case;
-import main.map.Grid;
-import main.unit.*;
-import main.util.OptionSelector;
+import main.unit.FlyingTransport;
+import main.unit.OnFoot;
+import main.unit.Unit;
+import main.unit.UnitType;
 import main.weapon.type.AirToGroundMissile;
 import main.weapon.type.HeavyMachineGun;
 
@@ -38,7 +38,9 @@ public class Helicopter extends FlyingTransport {
 
     /**
      * Sert a verifier si une unite peut etre transportee par l'helicoptere
+     *
      * @param unit Une unite
+     *
      * @return true si l'unite est une unite a pied
      */
     @Override

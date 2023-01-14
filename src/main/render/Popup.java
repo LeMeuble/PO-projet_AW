@@ -19,6 +19,7 @@ public class Popup {
 
     /**
      * Constructeur de la popup
+     *
      * @param title   Le titre de la popup
      * @param message Le message de la popup
      */
@@ -37,7 +38,9 @@ public class Popup {
     /**
      * Permet de recuperer le message de la popup sous forme d'une liste de ligne de
      * maxLineLength characters.
+     *
      * @param maxLineLength Nombre de caracteres maximums par ligne
+     *
      * @return Listes des lines de caracteres
      */
     public List<String> getMessage(int maxLineLength) {

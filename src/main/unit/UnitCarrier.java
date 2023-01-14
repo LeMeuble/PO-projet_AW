@@ -13,6 +13,7 @@ public class UnitCarrier {
 
     /**
      * Constructeur de UnitCarrier
+     *
      * @param maxCarriedUnits Le nombre maximum d'unites pouvant être transportees dans cette unite
      */
     public UnitCarrier(int maxCarriedUnits) {
@@ -36,6 +37,7 @@ public class UnitCarrier {
 
     /**
      * Ajoute une unite dans l'unite de transport
+     *
      * @param unit L'unite a ajouter
      */
     public void addCarriedUnit(Unit unit) {
@@ -45,6 +47,7 @@ public class UnitCarrier {
 
     /**
      * Supprime une unite du transport
+     *
      * @param unit L'unite a transporter
      */
     public void removeCarriedUnit(Unit unit) {

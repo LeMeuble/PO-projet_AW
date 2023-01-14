@@ -19,6 +19,7 @@ public abstract class Factory extends Property {
 
     /**
      * Constructeur d'une usine
+     *
      * @param owner Le joueur proprietaire
      */
     public Factory(Player.Type owner) {
@@ -27,7 +28,9 @@ public abstract class Factory extends Property {
 
     /**
      * Verifie si la creation d'une unite est possible sur une case
+     *
      * @param c La case a verifier
+     *
      * @return true si la creation est possible, false sinon
      */
     public static boolean canCreateUnit(Case c) {
@@ -63,4 +66,5 @@ public abstract class Factory extends Property {
     }
 
     public abstract OptionSelector<UnitType> getUnitSelector(int money);
+
 }

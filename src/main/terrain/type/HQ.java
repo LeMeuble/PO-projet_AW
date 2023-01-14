@@ -22,6 +22,7 @@ public class HQ extends Property {
 
     /**
      * Constructeur du QG
+     *
      * @param owner Le joueur proprietaire du QG
      */
     public HQ(Player.Type owner) {

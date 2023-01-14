@@ -78,7 +78,9 @@ public class Case {
 
     /**
      * Verifie si cette case a des actions disponible
+     *
      * @param type Le type du joueur courant
+     *
      * @return true si la case a des actions disponibles, false sinon
      */
     public boolean hasAvailableAction(Player.Type type) {

@@ -23,7 +23,9 @@ public final class Config {
                     .deriveFont(18f);
             title = Font.createFont(Font.TRUETYPE_FONT, new File(PathUtil.getUiComponentPath("fixedsys.ttf")))
                     .deriveFont(64f);
-        } catch (Exception ignored) {}
+        }
+        catch (Exception ignored) {
+        }
 
         FONT_64 = title;
         FONT_32 = font1;
@@ -82,8 +84,8 @@ public final class Config {
      */
     public static final float UNIT_MAX_HEALTH = 10f;
     public static final int UNIT_MAX_HEALTH_RECOVERY = 2; // pv par tour
-    public static final double UNIT_LOW_AMMO_THRESHOLD = 1/2d;
-    public static final double UNIT_LOW_FUEL_THRESHOLD = 1/2d;
+    public static final double UNIT_LOW_AMMO_THRESHOLD = 1 / 2d;
+    public static final double UNIT_LOW_FUEL_THRESHOLD = 1 / 2d;
     public static final int PROPERTY_DEFAULT_DEFENSE = 20;
     public static final int PROPERTY_DEFAULT_RECOVERY = 5;
 

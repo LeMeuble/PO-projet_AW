@@ -35,7 +35,9 @@ public class Convoy extends MotorizedTransport {
 
     /**
      * Sert a verifier si une unite peut etre transportee par le convoi
+     *
      * @param unit Une unite
+     *
      * @return true si l'unite est une unite a pied
      */
     @Override
@@ -45,8 +47,10 @@ public class Convoy extends MotorizedTransport {
 
     /**
      * Renvoie les actions possibles pour le convoi, en plus des options de ses classes meres
+     *
      * @param currentCase La case courante
      * @param contextGrid La grille dans laquelle l'unite peut evoluer
+     *
      * @return
      */
     @Override
@@ -63,6 +67,7 @@ public class Convoy extends MotorizedTransport {
             Unit adjacentUnit = adjacentCase.getUnit();
             if (adjacentUnit != null && !(adjacentUnit instanceof Convoy) && adjacentUnit.getOwner() == this.getOwner()) {
                 troopNearby = true;
+                break;
             }
         }
 

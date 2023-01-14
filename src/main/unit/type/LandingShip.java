@@ -39,7 +39,9 @@ public class LandingShip extends NavalTransport {
 
     /**
      * Sert a verifier si une unite peut etre transportee par la barge
+     *
      * @param unit Une unite
+     *
      * @return true si l'unite est une unite a pied ou motorisee
      */
     @Override
@@ -49,8 +51,10 @@ public class LandingShip extends NavalTransport {
 
     /**
      * Verifie si la barge peut aller sur une case de destination, en fonction de la meteo
+     *
      * @param destination La case de destination
      * @param weather     La meteo courante
+     *
      * @return true si l'unite peut se deplacer sur la case
      */
     @Override
@@ -64,6 +68,7 @@ public class LandingShip extends NavalTransport {
     /**
      * Retourne le cout de mouvement pour se deplacer sur une case
      * Prend en compte les plages, normalement non valides pour les unites navales
+     *
      * @param destination La case de destination
      * @param weather     La meteo courante
      *

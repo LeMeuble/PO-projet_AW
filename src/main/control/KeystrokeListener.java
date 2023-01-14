@@ -117,7 +117,8 @@ public class KeystrokeListener {
         try {
             this.thread.join();
         }
-        catch (InterruptedException ignored) {}
+        catch (InterruptedException ignored) {
+        }
 
     }
 
@@ -142,8 +143,9 @@ public class KeystrokeListener {
                         this.keyDowns.add(key);
                         this.handler.accept(key); // On appelle la methode definie
 
-                    // Si la touche est relachee
-                    } else if (!StdDraw.isKeyPressed(key.getCode())) {
+                        // Si la touche est relachee
+                    }
+                    else if (!StdDraw.isKeyPressed(key.getCode())) {
 
                         this.keyDowns.remove(key);
 
@@ -155,7 +157,8 @@ public class KeystrokeListener {
                 Thread.sleep(5);
             }
 
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }
 

@@ -24,7 +24,8 @@ import java.awt.*;
 public class UnitActionMenu extends ActionMenu<UnitAction> {
 
     /**
-     *  Constructeur du menu d'action de l'unite
+     * Constructeur du menu d'action de l'unite
+     *
      * @param optionSelector Les options disponibles pour cette unite
      */
     public UnitActionMenu(OptionSelector<UnitAction> optionSelector) {
@@ -35,6 +36,7 @@ public class UnitActionMenu extends ActionMenu<UnitAction> {
 
     /**
      * Methode gerant l'affichage du menu
+     *
      * @see ActionMenu#render()
      */
     @Override
@@ -57,18 +59,20 @@ public class UnitActionMenu extends ActionMenu<UnitAction> {
 
                 DisplayUtil.drawPicture(x + 20, y, PathUtil.getArrowPath(playerType, "left", "end"), 28, 28);
 
-            } else if (action == UnitAction.DROP_UNIT) {
+            }
+            else if (action == UnitAction.DROP_UNIT) {
 
                 Unit selectedUnit = MiniWars.getInstance().getCurrentGame().getSelectedCase().getUnit();
                 if (selectedUnit instanceof Transport) {
 
                     int carriedUnits = ((Transport) selectedUnit).getCarriedUnits().size();
 
-                    if(carriedUnits > 1) {
+                    if (carriedUnits > 1) {
 
                         DisplayUtil.drawPicture(x + 20, y, PathUtil.getIconPath("drop_unit"), 28, 28);
 
-                    } else {
+                    }
+                    else {
 
                         Unit carriedUnit = ((Transport) selectedUnit).getCarriedUnits().get(0);
                         carriedUnit.render(x + 16, y, 0, 38, 38, true);
@@ -77,7 +81,8 @@ public class UnitActionMenu extends ActionMenu<UnitAction> {
 
                 }
 
-            } else DisplayUtil.drawPicture(x + 16, y, PathUtil.getIconPath(action.name().toLowerCase()), 32, 32);
+            }
+            else DisplayUtil.drawPicture(x + 16, y, PathUtil.getIconPath(action.name().toLowerCase()), 32, 32);
             StdDraw.textLeft(x + 38, y, action.getText());
 
             y -= Config.MENU_ACTION_MIDDLE_HEIGHT;

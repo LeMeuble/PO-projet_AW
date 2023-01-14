@@ -13,7 +13,6 @@ import java.util.List;
  *
  * @author LECONTE--DENIS Tristan
  * @author GRAVOT Lucien
- *
  * @see Menu
  * @see OptionSelector<T>
  */
@@ -24,8 +23,8 @@ public abstract class SelectionMenu<T> extends Menu {
     /**
      * Constructeur d'un menu de selection
      *
-     * @param priority La priorite d'affichage du menu
-     * @param optionSelector  Selectionneur d'option
+     * @param priority       La priorite d'affichage du menu
+     * @param optionSelector Selectionneur d'option
      *
      * @see OptionSelector<T>
      */

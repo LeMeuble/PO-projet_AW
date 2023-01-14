@@ -19,7 +19,8 @@ public abstract class NavalTransport extends Naval implements Transport {
 
     /**
      * Constructeur d'un transport naval
-     * @param owner Le joueur proprietaire
+     *
+     * @param owner           Le joueur proprietaire
      * @param maxCarriedUnits Le nombre maximal d'unites transportables
      */
     public NavalTransport(Player.Type owner, int maxCarriedUnits) {
@@ -53,6 +54,7 @@ public abstract class NavalTransport extends Naval implements Transport {
 
     /**
      * Ajoute une unite dans le transport
+     *
      * @param unit L'unite a ajouter
      */
     @Override
@@ -62,6 +64,7 @@ public abstract class NavalTransport extends Naval implements Transport {
 
     /**
      * Supprime une unite du transport
+     *
      * @param unit L'unite a transporter
      */
     @Override
@@ -71,8 +74,10 @@ public abstract class NavalTransport extends Naval implements Transport {
 
     /**
      * Renvoie les options disponibles pour cette unite de transport, en plus des actions de sa classe mere
+     *
      * @param currentCase La case courante
      * @param contextGrid La grille dans laquelle l'unite peut evoluer
+     *
      * @return Un selecteur d'options
      */
     @Override
@@ -88,6 +93,7 @@ public abstract class NavalTransport extends Naval implements Transport {
             Unit adjacentUnit = adjacentCase.getUnit();
             if (adjacentUnit == null) {
                 availableSpace = true;
+                break;
             }
         }
 

@@ -24,14 +24,16 @@ public class MapSelectionMenu extends SelectionMenu<MapMetadata> {
 
     public static final int PRIORITY = 9;
     public static final double TOP_MARGIN = 0.05d;
+
     public enum Field {
 
         MAP,
         WEATHER,
         FOG,
-        AUTO_SKIP_TURN;
+        AUTO_SKIP_TURN
 
     }
+
     private final Settings settings;
     private Field field;
 
@@ -158,12 +160,13 @@ public class MapSelectionMenu extends SelectionMenu<MapMetadata> {
 
                 StdDraw.textRight(Config.WIDTH - 78, y - 55, "Carte");
 
-            } else {
+            }
+            else {
 
                 double fingerY = y;
 
-                if(this.field == Field.FOG) fingerY = y - 40;
-                if(this.field == Field.AUTO_SKIP_TURN) fingerY = y - 80;
+                if (this.field == Field.FOG) fingerY = y - 40;
+                if (this.field == Field.AUTO_SKIP_TURN) fingerY = y - 80;
 
                 DisplayUtil.drawPicture(x - Config.WIDTH / 3d, fingerY, PathUtil.getGlobalGuiPath("finger"), 48, 48);
 
@@ -178,7 +181,7 @@ public class MapSelectionMenu extends SelectionMenu<MapMetadata> {
             }
             else if (rightLeft) {
                 DisplayUtil.drawPicture(Config.WIDTH - 48, y - 55, PathUtil.getKeytipPath("left_right"), 48, 24);
-                if(this.field != Field.MAP) StdDraw.textRight(Config.WIDTH - 78, y - 55, "S\u00e9l\u00e9ct.");
+                if (this.field != Field.MAP) StdDraw.textRight(Config.WIDTH - 78, y - 55, "S\u00e9l\u00e9ct.");
             }
 
             DisplayUtil.drawPicture(Config.WIDTH - 48, y - 105, PathUtil.getKeytipPath("up_down"), 24, 48);

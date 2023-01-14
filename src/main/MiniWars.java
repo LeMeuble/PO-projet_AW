@@ -58,7 +58,7 @@ public class MiniWars {
 
     /**
      * Permet de lancer le jeu et de retourner son instance.
-     * 
+     *
      * @return Instance du jeu.
      */
     public static MiniWars launch() {
@@ -88,6 +88,7 @@ public class MiniWars {
 
     /**
      * Gere l'appui sur une touche
+     *
      * @param keycode Le code de la touche qui a ete pressee
      */
     public void handleKey(KeystrokeListener.KeyCodes keycode) {
@@ -122,6 +123,7 @@ public class MiniWars {
 
     /**
      * Indique si le jeu est en partie.
+     *
      * @return true si une partie est en cours, false sinon.
      */
     public synchronized boolean isPlaying() {
@@ -137,8 +139,9 @@ public class MiniWars {
 
     /**
      * Lancer une nouvelle partie.
+     *
      * @param mapMetadata Donner la map a lancer.
-     * @param settings Parametre pour la partie.
+     * @param settings    Parametre pour la partie.
      */
     public synchronized void newGame(MapMetadata mapMetadata, Settings settings) {
 
@@ -155,6 +158,7 @@ public class MiniWars {
 
     /**
      * Obtenir l'etat actuel du jeu.
+     *
      * @return Etat actuel du jeu.
      */
     public GameState getGameState() {
@@ -163,6 +167,7 @@ public class MiniWars {
 
     /**
      * Definir l'etat actuel du jeu.
+     *
      * @param gameState Nouvel etat de jeu
      */
     public void setGameState(GameState gameState) {

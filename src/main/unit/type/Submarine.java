@@ -64,8 +64,10 @@ public class Submarine extends Naval {
 
     /**
      * Renvoie les actions possibles pour le sous-marin, en plus des options de ses classes meres
+     *
      * @param currentCase La case courante
      * @param contextGrid La grille dans laquelle l'unite peut evoluer
+     *
      * @return
      */
     @Override
@@ -84,7 +86,7 @@ public class Submarine extends Naval {
 
         final int cost = super.getMovementCostTo(destination, weather);
 
-        if(this.underwater) return cost == -1 ? -1 : cost * 2;
+        if (this.underwater) return cost == -1 ? -1 : cost * 2;
         else return cost;
 
     }

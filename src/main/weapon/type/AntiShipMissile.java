@@ -44,7 +44,9 @@ public class AntiShipMissile extends RangedWeapon {
 
         /**
          * Renvoie le multiplicateur de degats en fonction de l'unite cible
+         *
          * @param unit L'unite cible
+         *
          * @return Le multiplicateur des degats infliges a cette unite
          */
         public static AntiShipMissile.DamageMultiplier fromUnit(UnitType unit) {
@@ -69,7 +71,7 @@ public class AntiShipMissile extends RangedWeapon {
     /**
      * Constructeur de AntiShipMissile
      */
-    public AntiShipMissile()  {
+    public AntiShipMissile() {
         super();
     }
 
@@ -90,7 +92,9 @@ public class AntiShipMissile extends RangedWeapon {
 
     /**
      * Renvoie le multiplicateur de degats infliges a une unite cible
+     *
      * @param unit L'unite cible
+     *
      * @return Un multiplicateur de degats, ou 0 si l'unite n'existe pas dans l'enumeration
      */
     @Override
@@ -98,4 +102,5 @@ public class AntiShipMissile extends RangedWeapon {
         AntiShipMissile.DamageMultiplier damage = AntiShipMissile.DamageMultiplier.fromUnit(unit.getType());
         return damage != null ? damage.getMultiplier() : 0.0f;
     }
+
 }

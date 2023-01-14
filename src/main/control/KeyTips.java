@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 public enum KeyTips {
 
 
-    MOVE("arrows" , 48d, 32d, "S\u00e9lectionner",
+    MOVE("arrows", 48d, 32d, "S\u00e9lectionner",
             GameState.PLAYING_SELECTING,
             GameState.PLAYING_MOVING_UNIT,
             GameState.PLAYING_SELECTING_TARGET,
@@ -87,7 +87,6 @@ public enum KeyTips {
     D_S("d", 16d, 16d, "Passer le tour", GameState.PLAYING_SELECTING);
 
 
-
     private final String texture;
     private final double textureWidth;
     private final double textureHeight;
@@ -140,9 +139,9 @@ public enum KeyTips {
     /**
      * Obtenir la liste des indicateurs associes a un etat de jeu, une case et une joueur.
      *
-     * @param state Etat de jeu actuel.
+     * @param state       Etat de jeu actuel.
      * @param currentCase Case actuelle.
-     * @param player Joueur actuel.
+     * @param player      Joueur actuel.
      *
      * @return Liste des indicateurs associes a un etat de jeu, une case et une joueur.
      *

@@ -45,8 +45,10 @@ public final class UnitMovementCost {
 
         /**
          * Renvoie le cout d'entree sur un terrain, en fonction de la meteo
+         *
          * @param terrainType Le type de terrain
-         * @param weather La meteo
+         * @param weather     La meteo
+         *
          * @return Un objet contenant le type du terrain et le cout pour y entrer
          */
         public static OnFoot fromTerrainAndWeather(TerrainType terrainType, Weather weather) {
@@ -62,8 +64,10 @@ public final class UnitMovementCost {
 
         /**
          * Verifie si une unite peut se deplacer vers le terrain cible
+         *
          * @param terrainType Le type de terrain
-         * @param weather La meteo
+         * @param weather     La meteo
+         *
          * @return true si le couple Type de Terrain/Meteo existe, false sinon
          */
         public static boolean isAccessible(TerrainType terrainType, Weather weather) {
@@ -111,8 +115,10 @@ public final class UnitMovementCost {
 
         /**
          * Renvoie le cout d'entree sur un terrain, en fonction de la meteo
+         *
          * @param terrainType Le type de terrain
-         * @param weather La meteo
+         * @param weather     La meteo
+         *
          * @return Un objet contenant le type du terrain et le cout pour y entrer
          */
         public static Motorized fromTerrainAndWeather(TerrainType terrainType, Weather weather) {
@@ -128,8 +134,10 @@ public final class UnitMovementCost {
 
         /**
          * Verifie si une unite peut se deplacer vers le terrain cible
+         *
          * @param terrainType Le type de terrain
-         * @param weather La meteo
+         * @param weather     La meteo
+         *
          * @return true si le couple Type de Terrain/Meteo existe, false sinon
          */
         public static boolean isAccessible(TerrainType terrainType, Weather weather) {
@@ -176,8 +184,10 @@ public final class UnitMovementCost {
 
         /**
          * Renvoie le cout d'entree sur un terrain, en fonction de la meteo
+         *
          * @param terrainType Le type de terrain
-         * @param weather La meteo
+         * @param weather     La meteo
+         *
          * @return Un objet contenant le type du terrain et le cout pour y entrer
          */
         public static Flying fromTerrainAndWeather(TerrainType terrainType, Weather weather) {
@@ -193,8 +203,10 @@ public final class UnitMovementCost {
 
         /**
          * Verifie si une unite peut se deplacer vers le terrain cible
+         *
          * @param terrainType Le type de terrain
-         * @param weather La meteo
+         * @param weather     La meteo
+         *
          * @return true si le couple Type de Terrain/Meteo existe, false sinon
          */
         public static boolean isAccessible(TerrainType terrainType, Weather weather) {
@@ -231,8 +243,10 @@ public final class UnitMovementCost {
 
         /**
          * Renvoie le cout d'entree sur un terrain, en fonction de la meteo
+         *
          * @param terrainType Le type de terrain
-         * @param weather La meteo
+         * @param weather     La meteo
+         *
          * @return Un objet contenant le type du terrain et le cout pour y entrer
          */
         public static Naval fromTerrainAndWeather(TerrainType terrainType, Weather weather) {
@@ -248,8 +262,10 @@ public final class UnitMovementCost {
 
         /**
          * Verifie si une unite peut se deplacer vers le terrain cible
+         *
          * @param terrainType Le type de terrain
-         * @param weather La meteo
+         * @param weather     La meteo
+         *
          * @return true si le couple Type de Terrain/Meteo existe, false sinon
          */
         public static boolean isAccessible(TerrainType terrainType, Weather weather) {

@@ -20,7 +20,7 @@ public class Tank extends Motorized {
      *
      * @param owner Proprietaire de l'unite
      */
-    public Tank(Player.Type owner){
+    public Tank(Player.Type owner) {
         super(owner);
         this.addWeapon(new Canon());
         this.addWeapon(new LightMachineGun());

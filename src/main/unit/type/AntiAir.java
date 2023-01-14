@@ -19,7 +19,7 @@ public class AntiAir extends Motorized {
      *
      * @param owner Proprietaire de l'unite
      */
-    public AntiAir(Player.Type owner){
+    public AntiAir(Player.Type owner) {
         super(owner);
         this.addWeapon(new HeavyMachineGun());
     }

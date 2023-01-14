@@ -26,11 +26,11 @@ public class DisplayUtil {
 
         double xPixelOffset = 0;
         if (gridWidth < Config.MAP_COLUMN_COUNT)
-            xPixelOffset += (Config.MAP_COLUMN_COUNT - gridWidth) * (double) Config.PIXEL_PER_CASE;
+            xPixelOffset += (Config.MAP_COLUMN_COUNT - gridWidth) * Config.PIXEL_PER_CASE;
 
         double yPixelOffset = 0;
         if (gridHeight < Config.MAP_COLUMN_COUNT)
-            yPixelOffset += (Config.MAP_COLUMN_COUNT - gridHeight) * (double) Config.PIXEL_PER_CASE;
+            yPixelOffset += (Config.MAP_COLUMN_COUNT - gridHeight) * Config.PIXEL_PER_CASE;
 
         return new double[]{xPixelOffset / 2, yPixelOffset / 2};
 
@@ -139,7 +139,7 @@ public class DisplayUtil {
     public static double getCenterY(int gridY, int gridHeight) {
 
         double[] offset = getCenteringOffset(0, gridHeight);
-        return gridY * Config.PIXEL_PER_CASE + (double) Config.PIXEL_PER_CASE / 2 + BOTTOM_MENU_MARGIN + offset[1];
+        return gridY * Config.PIXEL_PER_CASE + Config.PIXEL_PER_CASE / 2 + BOTTOM_MENU_MARGIN + offset[1];
 
     }
 
@@ -193,7 +193,7 @@ public class DisplayUtil {
 
             final String digit = digits[i];
 
-            if(digit.equals("/")) {
+            if (digit.equals("/")) {
                 drawPicture(cx, y, PathUtil.getDigitPath("slash"), digitSize, digitSize);
             }
             else if (digit.equals("%")) {

@@ -1,9 +1,8 @@
 package main.game;
 
-import librairies.StdDraw;
 import ressources.Config;
 
-import java.awt.Color;
+import java.awt.*;
 
 /**
  * Classe representant un joueur
@@ -15,7 +14,7 @@ public class Player {
 
     /**
      * Enumeration des types de joueurs possibles
-     *
+     * <p>
      * Neutral sert a representer "aucun joueur", utilise pour les cases n'appartenant a personne
      */
     public enum Type {
@@ -33,6 +32,20 @@ public class Player {
         Type(String name, int value) {
             this.name = name;
             this.value = value;
+        }
+
+        public static Type fromValue(int value) {
+
+            for (Type p : Type.values()) {
+
+                if (p.value == value) {
+                    return p;
+                }
+
+            }
+
+            return null;
+
         }
 
         public int getValue() {
@@ -68,33 +81,19 @@ public class Player {
             return this.name().toLowerCase();
         }
 
-        public static Type fromValue(int value) {
-
-            for (Type p : Type.values()) {
-
-                if (p.value == value) {
-                    return p;
-                }
-
-            }
-
-            return null;
-
-        }
-
     }
 
+    private final Type type;
     private int money;
     private boolean isAlive;
-    private final Type type;
-
     private int statUnitCount;
     private int statPropertyCount;
 
     /**
      * Constructeur d'un joueur
-     *
+     * <p>
      * Initialise le joueur comme n'ayant pas d'argent, et etant vivant
+     *
      * @param type Le type du joueur a creer
      */
     public Player(Player.Type type) {
@@ -108,20 +107,20 @@ public class Player {
 
     }
 
-    public void setStatUnitCount(int statUnitCount) {
-        this.statUnitCount = statUnitCount;
-    }
-
-    public void setStatPropertyCount(int statPropertyCount) {
-        this.statPropertyCount = statPropertyCount;
-    }
-
     public int getStatUnitCount() {
         return this.statUnitCount;
     }
 
+    public void setStatUnitCount(int statUnitCount) {
+        this.statUnitCount = statUnitCount;
+    }
+
     public int getStatPropertyCount() {
         return this.statPropertyCount;
+    }
+
+    public void setStatPropertyCount(int statPropertyCount) {
+        this.statPropertyCount = statPropertyCount;
     }
 
     public Type getType() {

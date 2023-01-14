@@ -20,7 +20,7 @@ public class Bazooka extends OnFoot {
      *
      * @param owner Proprietaire de l'unite
      */
-    public Bazooka(Player.Type owner){
+    public Bazooka(Player.Type owner) {
         super(owner);
         this.addWeapon(new Canon());
         this.addWeapon(new LightMachineGun());

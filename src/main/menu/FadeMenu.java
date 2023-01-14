@@ -6,9 +6,9 @@ import main.animation.AnimationClock;
  * Classe abstraite representant un menu qui disparait
  * Classe fille de AnimatedMenu
  *
- * @see AnimatedMenu
  * @author Tristan LECONTE--DENIS
  * @author Lucien GRAVOT
+ * @see AnimatedMenu
  */
 public abstract class FadeMenu extends AnimatedMenu {
 
@@ -20,7 +20,8 @@ public abstract class FadeMenu extends AnimatedMenu {
 
     /**
      * Constructeur du menu
-     * @param priority La priorite du menu, par rapport aux autres
+     *
+     * @param priority      La priorite du menu, par rapport aux autres
      * @param frameDuration La duree de chaque frame du menu
      */
     public FadeMenu(int priority, int frameDuration) {
@@ -85,7 +86,9 @@ public abstract class FadeMenu extends AnimatedMenu {
 
             }
 
-        } catch(Exception ignored) {}
+        }
+        catch (Exception ignored) {
+        }
 
     }
 
@@ -104,16 +107,16 @@ public abstract class FadeMenu extends AnimatedMenu {
 
         super.nextFrame();
 
-        if(!this.isFinished) {
+        if (!this.isFinished) {
 
             this.alpha += this.isFadeIn ? FADE_ALPHA_INCREMENT : -FADE_ALPHA_INCREMENT;
 
-            if(this.isFadeIn && this.alpha >= 255) {
+            if (this.isFadeIn && this.alpha >= 255) {
                 this.alpha = 255;
                 this.isFinished = true;
             }
 
-            if(!this.isFadeIn && this.alpha <= 0) {
+            if (!this.isFadeIn && this.alpha <= 0) {
                 this.alpha = 0;
                 this.isFinished = true;
             }
@@ -121,4 +124,5 @@ public abstract class FadeMenu extends AnimatedMenu {
         }
 
     }
+
 }

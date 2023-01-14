@@ -16,6 +16,7 @@ public abstract class Motorized extends Unit {
 
     /**
      * Constructeur de Motorized
+     *
      * @param owner Le joueur proprietaire de l'unite
      */
     public Motorized(Player.Type owner) {

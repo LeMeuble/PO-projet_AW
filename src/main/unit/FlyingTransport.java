@@ -19,7 +19,8 @@ public abstract class FlyingTransport extends Flying implements Transport {
 
     /**
      * Constructeur de FlyingTrnasport
-     * @param owner Le joueur proprietaire de l'unite
+     *
+     * @param owner           Le joueur proprietaire de l'unite
      * @param maxCarriedUnits Le nombre maximum d'unites transportables
      */
     public FlyingTransport(Player.Type owner, int maxCarriedUnits) {
@@ -53,6 +54,7 @@ public abstract class FlyingTransport extends Flying implements Transport {
 
     /**
      * Ajoute une unite dans le transport
+     *
      * @param unit L'unite a ajouter
      */
     @Override
@@ -62,6 +64,7 @@ public abstract class FlyingTransport extends Flying implements Transport {
 
     /**
      * Supprime une unite du transport
+     *
      * @param unit L'unite a supprimer
      */
     @Override
@@ -74,8 +77,10 @@ public abstract class FlyingTransport extends Flying implements Transport {
 
     /**
      * Renvoie les options disponibles pour cette unite de transport, en plus des actions de sa classe mere
+     *
      * @param currentCase La case courante
      * @param contextGrid La grille dans laquelle l'unite peut evoluer
+     *
      * @return Un selecteur d'options
      */
     @Override
@@ -91,6 +96,7 @@ public abstract class FlyingTransport extends Flying implements Transport {
             Unit adjacentUnit = adjacentCase.getUnit();
             if (adjacentUnit == null) {
                 availableSpace = true;
+                break;
             }
         }
         // Ajoute l'option "deposer l'unite", si la verification plus haut est vrai

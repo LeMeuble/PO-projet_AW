@@ -20,6 +20,7 @@ public class Coordinate implements Cloneable {
 
     /**
      * Constructeur d'une coordonnee, initialisee a x:y
+     *
      * @param x
      * @param y
      */
@@ -64,7 +65,8 @@ public class Coordinate implements Cloneable {
     public Coordinate clone() {
         try {
             return (Coordinate) super.clone();
-        } catch (CloneNotSupportedException e) {
+        }
+        catch (CloneNotSupportedException e) {
             e.printStackTrace();
             return null;
         }
@@ -72,9 +74,9 @@ public class Coordinate implements Cloneable {
 
     @Override
     public boolean equals(Object obj) {
-        if(obj == null) return false;
-        if(obj == this) return true;
-        if(!(obj instanceof Coordinate)) return false;
+        if (obj == null) return false;
+        if (obj == this) return true;
+        if (!(obj instanceof Coordinate)) return false;
         Coordinate other = (Coordinate) obj;
         return this.x == other.x && this.y == other.y;
     }

@@ -125,7 +125,7 @@ public class MenuManager {
         List<MenuModel> toRemove = new LinkedList<>();
 
         this.menus.keySet().iterator().forEachRemaining(menuModel -> {
-            if(!menuModel.isPersistent()) {
+            if (!menuModel.isPersistent()) {
                 toRemove.add(menuModel);
             }
         });

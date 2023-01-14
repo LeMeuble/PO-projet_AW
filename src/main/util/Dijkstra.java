@@ -1,6 +1,5 @@
 package main.util;
 
-import com.sun.istack.internal.Nullable;
 import main.map.Case;
 import main.map.Grid;
 import main.unit.Unit;
@@ -128,7 +127,6 @@ public class Dijkstra {
      *
      * @see Case
      */
-    @Nullable
     public List<Case> getShortestPathTo(Case target, int point) {
 
         Vertex vertex = this.graph.get(target);

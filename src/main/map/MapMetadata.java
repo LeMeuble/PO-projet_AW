@@ -22,6 +22,7 @@ public class MapMetadata {
 
     /**
      * Constructeur d'une metadonnee
+     *
      * @param name        Le nom de la carte
      * @param description La description de la carte
      * @param playerCount Le nombre de joueurs presents sur la carte
@@ -45,13 +46,15 @@ public class MapMetadata {
     /**
      * Methode statique
      * Genere un nouvel objet Metadata, a partir d'une Map representant des metadonnes
+     *
      * @param metadata Une map representant une metadonnee
-     * @param mapPath Le chemin d'une carte
+     * @param mapPath  Le chemin d'une carte
+     *
      * @return Un nouvel objet Metadata
      */
     public static MapMetadata fromMap(Map<String, String> metadata, String mapPath) {
 
-        if(!validateMetadata(metadata)) return null;
+        if (!validateMetadata(metadata)) return null;
 
         final String name = metadata.get("name");
         final String description = metadata.get("description");
@@ -67,7 +70,9 @@ public class MapMetadata {
     /**
      * Methode statique
      * Verifie si une Map representant une metadonnee est valide
+     *
      * @param metadata La map a tester
+     *
      * @return true si metadata est valide, false sinon
      */
     private static boolean validateMetadata(Map<String, String> metadata) {
@@ -88,7 +93,8 @@ public class MapMetadata {
             Integer.parseInt(metadata.get("players"));
             Integer.parseInt(metadata.get("width"));
             Integer.parseInt(metadata.get("height"));
-        } catch (NumberFormatException e) {
+        }
+        catch (NumberFormatException e) {
             return false;
         }
 

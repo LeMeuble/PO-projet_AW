@@ -19,7 +19,8 @@ public abstract class MotorizedTransport extends Motorized implements Transport 
 
     /**
      * Constructeur de MotorizedTransport
-     * @param owner Le joueur proprietaire de l'unite
+     *
+     * @param owner           Le joueur proprietaire de l'unite
      * @param maxCarriedUnits Le nombre maximum d'unites transportables
      */
     public MotorizedTransport(Player.Type owner, int maxCarriedUnits) {
@@ -53,6 +54,7 @@ public abstract class MotorizedTransport extends Motorized implements Transport 
 
     /**
      * Ajoute une unite dans le transport
+     *
      * @param unit L'unite a ajouter
      */
     @Override
@@ -62,6 +64,7 @@ public abstract class MotorizedTransport extends Motorized implements Transport 
 
     /**
      * Supprime une unite du transport
+     *
      * @param unit L'unite a supprimer
      */
     @Override
@@ -74,8 +77,10 @@ public abstract class MotorizedTransport extends Motorized implements Transport 
 
     /**
      * Renvoie les options disponibles pour cette unite de transport, en plus des actions de sa classe mere
+     *
      * @param currentCase La case courante
      * @param contextGrid La grille dans laquelle l'unite peut evoluer
+     *
      * @return Un selecteur d'options
      */
     @Override
@@ -89,7 +94,10 @@ public abstract class MotorizedTransport extends Motorized implements Transport 
         // Recherche s'il y a au moins une case vide autour de l'unite
         for (Case adjacentCase : adjacentCases) {
             Unit adjacentUnit = adjacentCase.getUnit();
-            if (adjacentUnit == null) availableSpace = true;
+            if (adjacentUnit == null) {
+                availableSpace = true;
+                break;
+            }
         }
 
         // Ajoute l'option "deposer l'unite", si la verification plus haut est vrai

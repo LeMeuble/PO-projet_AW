@@ -17,7 +17,6 @@ import java.util.ListIterator;
  *
  * @author GRAVOT Lucien
  * @author LECONTE--DENIS Tristan
- *
  * @see Renderable
  */
 public class Movement {
@@ -48,6 +47,7 @@ public class Movement {
          *
          * @param dx Delta x
          * @param dy Delta y
+         *
          * @return Direction correspondante
          */
         public static Direction fromDelta(int dx, int dy) {
@@ -73,6 +73,7 @@ public class Movement {
 
         /**
          * Opposite direction
+         *
          * @return Opposite direction
          */
         public Direction opposite() {
@@ -109,9 +110,10 @@ public class Movement {
 
         /**
          * Constructeur de la fleche
-         * @param c La case sur laquelle elle est positionnee
+         *
+         * @param c    La case sur laquelle elle est positionnee
          * @param from Le bord d'entree
-         * @param to Le bord de sortie
+         * @param to   Le bord de sortie
          */
         public Arrow(Case c, Direction from, Direction to) {
             this.c = c;
@@ -143,6 +145,7 @@ public class Movement {
 
     /**
      * Constructeur du mouvement
+     *
      * @param startingPoint La case de depart du mouvement
      */
     public Movement(Case startingPoint) {
@@ -154,12 +157,13 @@ public class Movement {
 
     /**
      * Ajoute une nouvelle case au mouvement
+     *
      * @param newCase La case a jouter
      */
     public void update(Case newCase) {
 
         // Si la case existe deja dans le mouvement
-        if(this.cases.contains(newCase)) {
+        if (this.cases.contains(newCase)) {
 
             // Cela veut dire que le trajet fait une boucle
             // On supprime donc tout le chemin apres cette case
@@ -167,7 +171,7 @@ public class Movement {
             this.cases.subList(index + 1, this.cases.size()).clear();
 
         }
-        else if(newCase.equals(startingPoint)) this.cases.clear();
+        else if (newCase.equals(startingPoint)) this.cases.clear();
         else this.cases.add(newCase);
 
         this.needsRefresh = true;
@@ -176,6 +180,7 @@ public class Movement {
 
     /**
      * Definit le mouvement a partir d'une liste de cases
+     *
      * @param path Une liste de cases
      */
     public void setPath(List<Case> path) {
@@ -212,8 +217,10 @@ public class Movement {
 
     /**
      * Renvoie le cout de mouvement du chemin complet, pour une unite et une meteo donnee
-     * @param unit L'unite
+     *
+     * @param unit    L'unite
      * @param weather La meteo
+     *
      * @return Le cout de mouvement (int)
      *
      * @see Unit#getMovementCostTo(Case, Weather)
@@ -222,10 +229,10 @@ public class Movement {
 
         int cost = 0;
 
-        for(Case c : this.cases) {
+        for (Case c : this.cases) {
             int moveCost = unit.getMovementCostTo(c, weather);
             // Si le cout de mouvement est -1 (impossible d'aller sur la case), renvoie inf
-            if(moveCost == -1) return Integer.MAX_VALUE;
+            if (moveCost == -1) return Integer.MAX_VALUE;
             cost += moveCost;
         }
 
@@ -235,7 +242,9 @@ public class Movement {
     /**
      * Verifie si le chemin du joueur est piege. Un chemin est piege si une unite adverse se situe sur l'une des cases
      * du chemin.
+     *
      * @param playerType Le joueur qui initie le chemin
+     *
      * @return true si le chemin est piege
      */
     public boolean isPathTrappedFor(Player.Type playerType) {
@@ -248,14 +257,16 @@ public class Movement {
 
     /**
      * Supprime la partie du chemin inaccessible a cause de l'unite ennemie (y compris la case de cette derniere)
+     *
      * @param playerType Le joueur qui initie le chemin
+     *
      * @return
      */
     public Movement cutTrappedPath(Player.Type playerType) {
 
         final Movement cutPath = new Movement(this.startingPoint);
 
-        for(Case c : this.cases) {
+        for (Case c : this.cases) {
             // Sort de la methode quand on rencontre une unite adverse
             if (c.hasUnit() && c.getUnit().getOwner() != playerType) break;
             cutPath.update(c);
@@ -268,7 +279,9 @@ public class Movement {
 
     /**
      * Convertit la liste de cases (le chemin) en une liste de fleches directionnelles
+     *
      * @return Une liste de fleches representant le chemin
+     *
      * @see Movement.Arrow
      * @see Movement#calculateDirection(Case, Case, Case)
      */
@@ -298,33 +311,34 @@ public class Movement {
         }
 
 
-
         return directionalArrows;
 
     }
 
     /**
      * Calculer la direction de la fleche a afficher selon les cases precedente et suivante
+     *
      * @param previous Case precedente
-     * @param current Case actuelle
-     * @param next Case suivante
+     * @param current  Case actuelle
+     * @param next     Case suivante
+     *
      * @return Retourne une direction selon les cases adjacentes
      */
     public Arrow calculateDirection(Case previous, Case current, Case next) {
 
-        if(current == null) return null;
+        if (current == null) return null;
 
         Direction from;
         Direction to;
 
-        if(previous == null) from = Direction.BEGIN;
+        if (previous == null) from = Direction.BEGIN;
         else {
             final int dx = current.getCoordinate().getX() - previous.getCoordinate().getX();
             final int dy = current.getCoordinate().getY() - previous.getCoordinate().getY();
             from = Direction.fromDelta(dx, dy).opposite();
         }
 
-        if(next == null) to = Direction.END;
+        if (next == null) to = Direction.END;
         else {
             final int dx = next.getCoordinate().getX() - current.getCoordinate().getX();
             final int dy = next.getCoordinate().getY() - current.getCoordinate().getY();

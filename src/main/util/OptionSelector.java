@@ -24,7 +24,8 @@ public class OptionSelector<T> {
 
         /**
          * Constructeur d'une option
-         * @param value La valeur que doit avoir l'option, et son type (par extension)
+         *
+         * @param value     La valeur que doit avoir l'option, et son type (par extension)
          * @param available La disponibilite de l'option
          */
         private Option(T value, boolean available) {
@@ -90,7 +91,7 @@ public class OptionSelector<T> {
     /**
      * Ajoute une option (disponible ou non) dans le selecteur
      *
-     * @param value La valeur a ajouter
+     * @param value     La valeur a ajouter
      * @param available Indique si l'option est disponible ou non.
      *
      * @return La meme instance pour permettre la concatenation des appels.
@@ -116,7 +117,9 @@ public class OptionSelector<T> {
      */
     public boolean contains(T value) {
 
-        return this.options.stream().anyMatch(o -> o.getValue().equals(value));
+        return this.options
+                .stream()
+                .anyMatch(o -> o.getValue().equals(value));
 
     }
 
@@ -129,6 +132,7 @@ public class OptionSelector<T> {
 
     /**
      * Retourne la liste des options uniquement disponibles.
+     *
      * @return Liste des options disponibles.
      */
     public List<Option> getAvailableOptions() {
@@ -152,6 +156,7 @@ public class OptionSelector<T> {
 
     /**
      * Retourne uniquement les valeurs des options.
+     *
      * @return Liste des valeurs.
      */
     public List<T> getValues() {
@@ -162,6 +167,7 @@ public class OptionSelector<T> {
 
     /**
      * Retourne les valeurs qui sont disponibles
+     *
      * @return Une liste de valeurs
      */
     public List<T> getAvailableValues() {
@@ -173,6 +179,7 @@ public class OptionSelector<T> {
 
     /**
      * Retourne la valeur de l'option actuellement selectionnee.
+     *
      * @return Valeur selectionner.
      */
     public T getSelectedValue() {

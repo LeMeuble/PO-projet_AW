@@ -19,6 +19,7 @@ public class FactoryTerrain extends Factory {
 
     /**
      * Constructeur de l'usine
+     *
      * @param owner Le joueur proprietaire
      */
     public FactoryTerrain(Player.Type owner) {
@@ -28,7 +29,8 @@ public class FactoryTerrain extends Factory {
     /**
      * Verifie si la case passee en parametre peut faire apparaitre une unite
      *
-     * @param currentCase   La case sur laquelle on veut faire apparaitre l'unite
+     * @param currentCase La case sur laquelle on veut faire apparaitre l'unite
+     *
      * @return true si l'unite peut apparaitre, false sinon
      */
     public static boolean canCreateUnit(Case currentCase) {
@@ -40,7 +42,9 @@ public class FactoryTerrain extends Factory {
 
     /**
      * Renvoie les options disponibles pour cette case, en fonction d'une quantite d'argent
+     *
      * @param money L'argent
+     *
      * @return Un selecteur d'option
      */
     @Override

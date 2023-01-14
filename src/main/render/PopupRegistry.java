@@ -11,10 +11,9 @@ import java.util.*;
  * Classe listant/gerant les popups.
  * Il s'agit d'un singleton qui fait office de registre pour les popups.
  *
- * @implNote Cette methode est concue pour est Thread-safe.
- *
  * @author Tristan LECONTE--DENIS
  * @author Lucien GRAVOT
+ * @implNote Cette methode est concue pour est Thread-safe.
  */
 public class PopupRegistry implements Renderable {
 
@@ -25,6 +24,7 @@ public class PopupRegistry implements Renderable {
         static final PopupRegistry instance = new PopupRegistry();
 
     }
+
     public volatile Queue<Popup> popups;
     public volatile boolean needsRefresh;
 

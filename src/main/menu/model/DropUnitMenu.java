@@ -21,6 +21,7 @@ public class DropUnitMenu extends ActionMenu<Unit> {
 
     /**
      * Constructeur du menu de depot d'unite
+     *
      * @param optionSelector Un selecteur d'options, contenant les unites qu'il est possible de deposer
      */
     public DropUnitMenu(OptionSelector<Unit> optionSelector) {

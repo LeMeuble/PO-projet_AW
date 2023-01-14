@@ -69,7 +69,7 @@ public class PauseMenu extends SelectionMenu<PauseMenu.Action> {
          */
         for (Action action : this.getAvailableValues()) {
 
-            if(action == this.getSelectedValue()) {
+            if (action == this.getSelectedValue()) {
 
                 DisplayUtil.drawPicture(Config.WIDTH / 2 - 150, y, PathUtil.getGlobalGuiPath("finger"), 48, 48);
 

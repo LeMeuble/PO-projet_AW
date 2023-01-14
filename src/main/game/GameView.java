@@ -59,6 +59,7 @@ public class GameView {
      *
      * @param x La coordonnee x de la case sur la grille affichee
      * @param y La coordonnee y de la case sur la grille affichee
+     *
      * @return La case reelle correspondante
      *
      * @see Case
@@ -71,7 +72,9 @@ public class GameView {
      * Obtenir la valeur x sur l'ecran a partir de la coordonnee x reelle.
      *
      * @param x La coordonnee x reelle (0 <= x < width)
+     *
      * @return La coordonnee x sur l'ecran (0 <= x <= Config.MAP_COLUMN_COUNT)
+     *
      * @see Config
      */
     public int offsetX(int x) {
@@ -82,7 +85,9 @@ public class GameView {
      * Obtenir la valeur y sur l'ecran a partir de la coordonnee y reelle.
      *
      * @param y La coordonnee y reelle (0 <= y < height)
+     *
      * @return La coordonnee y sur l'ecran (0 <= y <= Config.MAP_ROW_COUNT)
+     *
      * @see Config
      */
     public int offsetY(int y) {
@@ -111,7 +116,8 @@ public class GameView {
      * Connaitre le decalage en x de la grille reelle par rapport a la grille affichee.
      *
      * @return Le decalage en x (0 <= x <= width - Config.MAP_COLUMN_COUNT)
-     *         si width > Config.MAP_COLUMN_COUNT et 0 sinon.
+     * si width > Config.MAP_COLUMN_COUNT et 0 sinon.
+     *
      * @see Config
      */
     public int getOffsetX() {
@@ -131,7 +137,8 @@ public class GameView {
      * Connaitre le decalage en y de la grille reelle par rapport a la grille affichee.
      *
      * @return Le decalage en y (0 <= y <= height - Config.MAP_ROW_COUNT)
-     *         si height > Config.MAP_ROW_COUNT et 0 sinon.
+     * si height > Config.MAP_ROW_COUNT et 0 sinon.
+     *
      * @see Config
      */
     public int getOffsetY() {
@@ -144,13 +151,14 @@ public class GameView {
      * @param offsetY Le nouveau decalage x (0 <= x <= width - Config.MAP_COLUMN_COUNT)
      */
     public void setOffsetY(int offsetY) {
-        this.offsetY = Math.max(0, Math.min(offsetY, this.height - Config.MAP_ROW_COUNT));;
+        this.offsetY = Math.max(0, Math.min(offsetY, this.height - Config.MAP_ROW_COUNT));
     }
 
     /**
      * Determiner si une case est visible a l'ecran
      *
      * @param c La case a tester
+     *
      * @return true si la case est visible a l'ecran, false sinon
      */
     public boolean isVisible(Case c) {
@@ -163,7 +171,8 @@ public class GameView {
         if (this.getCursorX() < 0) {
             this.offsetX += this.getCursorX();
             return true;
-        } else if (this.getCursorX() >= Config.MAP_COLUMN_COUNT) {
+        }
+        else if (this.getCursorX() >= Config.MAP_COLUMN_COUNT) {
             this.offsetX += this.getCursorX() - Config.MAP_COLUMN_COUNT + 1;
             return true;
         }
@@ -171,7 +180,8 @@ public class GameView {
         if (this.getCursorY() < 0) {
             this.offsetY += this.getCursorY();
             return true;
-        } else if (this.getCursorY() >= Config.MAP_ROW_COUNT) {
+        }
+        else if (this.getCursorY() >= Config.MAP_ROW_COUNT) {
             this.offsetY += this.getCursorY() - Config.MAP_ROW_COUNT + 1;
             return true;
         }

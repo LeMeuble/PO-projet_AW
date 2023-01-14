@@ -22,6 +22,7 @@ public abstract class OnFoot extends Unit {
 
     /**
      * Constructeur de OnFoot
+     *
      * @param owner Le joueur proprietaire de l'unite
      */
     public OnFoot(Player.Type owner) {
@@ -70,8 +71,10 @@ public abstract class OnFoot extends Unit {
 
     /**
      * Renvoie un selecteur des actions possibles par l'unite
+     *
      * @param currentCase La case courante
      * @param contextGrid La grille dans laquelle l'unite peut evoluer
+     *
      * @return Un selecteur contenant les actions possibles de la classe mere, plus celle d'une unite a pied
      */
     @Override

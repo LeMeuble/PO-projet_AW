@@ -16,9 +16,9 @@ import ressources.PathUtil;
  */
 public class MainMenu extends AnimatedMenu {
 
-    private static final int PRIORITY = 10;
     public static final double WIDTH = Config.WIDTH;
     public static final double HEIGHT = Config.HEIGHT;
+    private static final int PRIORITY = 10;
     private static final double CENTER_X = Config.WIDTH / 2;
     private static final double CENTER_Y = Config.HEIGHT / 2;
 

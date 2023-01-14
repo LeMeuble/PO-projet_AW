@@ -7,7 +7,10 @@ import main.control.KeystrokeListener;
 import main.map.Case;
 import main.map.Coordinate;
 import main.map.Grid;
-import main.menu.*;
+import main.menu.Menu;
+import main.menu.MenuManager;
+import main.menu.MenuModel;
+import main.menu.SelectionMenu;
 import main.menu.model.*;
 import main.render.OverlayType;
 import main.render.Popup;
@@ -31,6 +34,7 @@ import main.weapon.Weapon;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -58,6 +62,7 @@ public class ActionHandler {
      * Gere les touches appuyees et indique si le jeu actualiser l'ecran
      *
      * @param code la touche appuyee
+     *
      * @return true si le jeu doit actualiser l'ecran
      */
     public boolean handle(KeystrokeListener.KeyCodes code) {
@@ -93,19 +98,16 @@ public class ActionHandler {
      * Gere l'appui sur la touche D
      *
      * @param gameState L'etat actuel dans lequel est le jeu
+     *
      * @return true si le jeu doit actualiser l'ecran
      */
     public boolean keyD(GameState gameState) {
 
-        switch (gameState) {
-
-            // Si le jeu est en mode "selection"
-            case PLAYING_SELECTING:
-                // Passe le tour
-                MenuManager.getInstance().addMenu(new NextTurnMenu.AskMenu());
-                this.instance.setGameState(GameState.PLAYING_SELECTING_SKIP_TURN_ACTION);
-                return true;
-
+        // Si le jeu est en mode "selection"
+        if (Objects.requireNonNull(gameState) == GameState.PLAYING_SELECTING) {// Passe le tour
+            MenuManager.getInstance().addMenu(new NextTurnMenu.AskMenu());
+            this.instance.setGameState(GameState.PLAYING_SELECTING_SKIP_TURN_ACTION);
+            return true;
         }
 
         return false;
@@ -117,6 +119,7 @@ public class ActionHandler {
      * Gere la touche haut
      *
      * @param gameState l'etat du jeu
+     *
      * @return true si le jeu doit actualiser l'ecran
      */
     public boolean up(GameState gameState) {
@@ -193,6 +196,7 @@ public class ActionHandler {
      * Gere la touche bas
      *
      * @param gameState l'etat du jeu
+     *
      * @return true si le jeu doit actualiser l'ecran
      */
     private boolean down(GameState gameState) {
@@ -270,6 +274,7 @@ public class ActionHandler {
      * Gere la touche gauche
      *
      * @param gameState l'etat du jeu
+     *
      * @return true si le jeu doit actualiser l'ecran
      */
     private boolean left(GameState gameState) {
@@ -325,6 +330,7 @@ public class ActionHandler {
      * Gere la touche droite
      *
      * @param gameState l'etat du jeu
+     *
      * @return true si le jeu doit actualiser l'ecran
      */
     private boolean right(GameState gameState) {
@@ -379,6 +385,7 @@ public class ActionHandler {
      * Gere la touche entree
      *
      * @param gameState l'etat du jeu
+     *
      * @return true si le jeu doit actualiser l'ecran
      */
     private boolean enter(GameState gameState) {
@@ -419,7 +426,7 @@ public class ActionHandler {
                 }
 
                 case PLAYING_SELECTING_NEXT_TURN_APPROVAL: {
-                    
+
                     NextTurnMenu turnMenu = (NextTurnMenu) menuManagerInstance.getMenu(MenuModel.NEXT_TURN_MENU);
 
                     turnMenu.fadeOut();
@@ -601,7 +608,8 @@ public class ActionHandler {
                                 this.instance.setGameState(GameState.PLAYING_SELECTING_FACTORY_UNIT);
 
                             }
-                            else PopupRegistry.getInstance().push(new Popup("Avertissement!", "Impossible d'utiliser cette usine!"));
+                            else
+                                PopupRegistry.getInstance().push(new Popup("Avertissement!", "Impossible d'utiliser cette usine!"));
 
                         }
 
@@ -674,7 +682,6 @@ public class ActionHandler {
                                 }).collect(Collectors.toList());
 
                                 final int minRange = weapons.stream().mapToInt(Weapon::getMinReach).min().orElse(0);
-
                                 final int maxRange = weapons.stream().mapToInt(Weapon::getMaxReach).max().orElse(0);
 
                                 List<Case> casesAround = grid.getCasesAround(currentCase.getCoordinate(), minRange, maxRange);
@@ -1029,8 +1036,8 @@ public class ActionHandler {
                     final DropUnitMenu menu = (DropUnitMenu) menuManagerInstance.getMenu(MenuModel.DROP_UNIT_MENU);
 
                     // L'unite a deposer est :
-                        // Si un menu de depot existe, l'unite selectionne
-                        // Sinon, l'unique unite du transport
+                    // Si un menu de depot existe, l'unite selectionne
+                    // Sinon, l'unique unite du transport
                     final Unit dropUnit = menu != null ? menu.getSelectedValue() : ((Transport) selectedUnit).getCarriedUnits().get(0);
 
                     // Si la case courante n'a pas d'unite, qu'elle est adjacente a la case selectionne, et que l'unite a deposer peut se deplacer sur celle ci
@@ -1139,7 +1146,8 @@ public class ActionHandler {
                 }
 
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             Logger.getLogger().write(e);
             e.printStackTrace();
         }
@@ -1152,6 +1160,7 @@ public class ActionHandler {
      * Gere la touche echap
      *
      * @param gameState l'etat du jeu
+     *
      * @return true si le jeu doit actualiser l'ecran
      */
     private boolean escape(GameState gameState) {
@@ -1178,7 +1187,7 @@ public class ActionHandler {
                     MenuManager.getInstance().getMenu(MenuModel.MAIN_MENU).setVisible(true);
                     MenuManager.getInstance().getMenu(MenuModel.MAP_SELECTION_MENU).setVisible(false);
                     break;
-                    
+
                 // Si le jeu est en mode "selection"
                 case PLAYING_SELECTING:
                     Logger.getLogger().log("escape@PLAYING_SELECTING");
@@ -1199,9 +1208,10 @@ public class ActionHandler {
 
             }
 
-            if(game != null) game.clearOverlayCases();
+            if (game != null) game.clearOverlayCases();
 
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             Logger.getLogger().write(e);
         }
         return true;
@@ -1212,6 +1222,7 @@ public class ActionHandler {
      * Gere la touche espace
      *
      * @param gameState l'etat du jeu
+     *
      * @return true si le jeu doit actualiser l'ecran
      */
     private boolean space(GameState gameState) {
@@ -1271,7 +1282,8 @@ public class ActionHandler {
 
             }
 
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             Logger.getLogger().write(e);
         }
 
@@ -1316,7 +1328,8 @@ public class ActionHandler {
             // Actualiser la vue de l'ecran
             game.getView().adjustOffset();
 
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             Logger.getLogger().write(e);
         }
     }

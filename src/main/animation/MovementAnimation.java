@@ -19,7 +19,6 @@ import java.util.LinkedList;
  *
  * @author LECONTE--DENIS Tristan
  * @author GRAVOT Lucien
- *
  * @see Movement
  * @see UnitAnimation
  * @see Unit
@@ -44,7 +43,7 @@ public class MovementAnimation {
     /**
      * Creer une nouvelle animation de deplacement pour une unite
      *
-     * @param unit L'unite concernee par l'animation
+     * @param unit     L'unite concernee par l'animation
      * @param movement Le mouvement a effectuer
      */
     public MovementAnimation(Unit unit, Movement movement) {
@@ -144,9 +143,10 @@ public class MovementAnimation {
             this.direction = this.currentArrow.getTo();
             this.step = 0;
 
-            if(this.direction == Movement.Direction.LEFT) {
+            if (this.direction == Movement.Direction.LEFT) {
                 unit.setFacing(UnitFacing.LEFT);
-            } else if(this.direction == Movement.Direction.RIGHT) {
+            }
+            else if (this.direction == Movement.Direction.RIGHT) {
                 unit.setFacing(UnitFacing.RIGHT);
             }
 

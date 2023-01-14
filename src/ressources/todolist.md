@@ -1,4 +1,5 @@
 # A faire demain
+
 - [X] Pluie, vent
 - [ ] Ajouter unité sur les maps
 - [X] Icon sous-marin, convoi
@@ -11,6 +12,7 @@
 - [ ] Attaque a distance cassée?
 
 # Prioritaire :
+
 - [ ] Les logs en fait
 - [X] Riposte quand attaque de case adjacente
 - [X] Capture possible seulement pour les unités à pied
@@ -45,6 +47,7 @@
 - [ ] Désengorger ActionHandler#enter (c pas beau)
 
 # Bonus
+
 - [ ] Animation de pluie
 - [ ] Animation de vent
 - [X] Animation de mouvement des unites
@@ -52,23 +55,23 @@
 - [X] Cases de déplacement/d'attaques possibles 6.2 (Verifier si c'est mis partout)
 - [X] Armes multiples 6.3
 - [X] Attaques à distance (lance-missiles sol-air) 6.4
-  - [X] Faire un mortier
-  - [X] Faire un missile sol-air
-  - [X] Faire un lance-missiles sol-air
-  - [X] Implémenter les dégâts infligés sur une artillerie
-  - [X] Si unite ne s'est pas déplacé lors de ce tour
+    - [X] Faire un mortier
+    - [X] Faire un missile sol-air
+    - [X] Faire un lance-missiles sol-air
+    - [X] Implémenter les dégâts infligés sur une artillerie
+    - [X] Si unite ne s'est pas déplacé lors de ce tour
 
 - [X] Ravitaillement et réparations 6.5
-  - [X] Munitions
-    - [X] Utilisation en attaque ou en riposte
-    - [X] Mitrailleuse infinie ??? (9-10)
-  - [X] Carburant
-    - [X] pt de carburant = pt de déplacement
-    - [X] aérienne (cout de déplacement + fixe par tour):
-    - [X] hélico = 2 pt de carburant/tour
-    - [X] bombardier = 5 pt de carburant/tour
-    - [X] si aérien sans fuel, détruit
-    - [X] indicateur low ammo/low fuel
+    - [X] Munitions
+        - [X] Utilisation en attaque ou en riposte
+        - [X] Mitrailleuse infinie ??? (9-10)
+    - [X] Carburant
+        - [X] pt de carburant = pt de déplacement
+        - [X] aérienne (cout de déplacement + fixe par tour):
+        - [X] hélico = 2 pt de carburant/tour
+        - [X] bombardier = 5 pt de carburant/tour
+        - [X] si aérien sans fuel, détruit
+        - [X] indicateur low ammo/low fuel
 - [X] Classe coordonnée
 
 - [X] Transport d'unité 6.6
@@ -85,24 +88,24 @@
     - [X] -40% montagne/qg
     - [X] aérien : pas de couverture
 - [X] unite navale 6.9
-  - [X] Implémenter les dégâts
-  - [X] Missiles anti-navire
-  - [X] Porte-avions
-  - [X] Sous-marin
-    - [X] Plongée
-      - [X] Consommation de carburant en plongée 
-      - [X] Invisible sauf si unité adjacente
-      - [X] Icône
-    - [X] Surface
-    - [X] Si en plongée, ne peut être attaqué que par sous-marin/croiseurs
+    - [X] Implémenter les dégâts
+    - [X] Missiles anti-navire
+    - [X] Porte-avions
+    - [X] Sous-marin
+        - [X] Plongée
+            - [X] Consommation de carburant en plongée
+            - [X] Invisible sauf si unité adjacente
+            - [X] Icône
+        - [X] Surface
+        - [X] Si en plongée, ne peut être attaqué que par sous-marin/croiseurs
 
 - [X] brouillard de guerre 6.10
     - [X] choisir si on le veut
-    - [X] Pause entre les tours 
+    - [X] Pause entre les tours
     - [X] Tir à distance impossible si case non visible
-    - [X] Piège d'une unité 
-      - [X] Affichage de l'indicateur (Trapped)
-      
+    - [X] Piège d'une unité
+        - [X] Affichage de l'indicateur (Trapped)
+
 - [X] Météo
     - [X] Pluie = -1 case de vision pour unités au sol, -2 cases de vision pour unités volantes/en montagne
     - [X] Neige = Vitesse des unités
@@ -117,7 +120,10 @@
     - [ ] Si unité détruite, commandant bat en retraite
 
 # Niveau pas de vie
+
 - [X] Dijkstra
 - [ ] Bot
+
 # Readme :
+
 - [ ] UML

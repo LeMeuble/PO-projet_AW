@@ -30,7 +30,6 @@ import java.util.Set;
  *
  * @author Tristan LECONTE--DENIS
  * @author Lucien GRAVOT
- *
  * @see Renderable
  * @see AnimationClock
  * @see MovementAnimation
@@ -44,6 +43,7 @@ public class Renderer {
     private final AnimationClock unitMovingClockSync;
 
     private MovementAnimation movementAnimation;
+
     /**
      * Constructeur du renderer
      */
@@ -100,11 +100,11 @@ public class Renderer {
     /**
      * Methode appellee par {@link MiniWars#update()} pour mettre a jour l'ecran.
      * Cette methode est le point d'entree pour tout ce qui est lie au rendu sur l'ecran.
-     *
+     * <p>
      * Cette methode va effectuer different rendu selon l'etat de jeu actuel.
      *
      * @param gameState Etat de jeu actuel
-     * @param game Instance de la partie si cette derniere existe
+     * @param game      Instance de la partie si cette derniere existe
      */
     public void render(GameState gameState, Game game) {
 
@@ -183,6 +183,7 @@ public class Renderer {
      * Permet de rendre les popups (en haut a droite de l'ecran) sur l'ecran.
      *
      * @param forceRender Indiquer si le rendu doit etre force
+     *
      * @return true si au moins une popup a ete actualisee sur l'offscreen
      */
     private boolean renderPopups(boolean forceRender) {
@@ -200,8 +201,9 @@ public class Renderer {
     /**
      * Permet de rendre une animation de mouvement sur l'ecran.
      *
-     * @param game L'instance de la partie actuelle.
+     * @param game        L'instance de la partie actuelle.
      * @param forceRender Indiquer si le rendu doit etre force
+     *
      * @return true si l'animatiion a ete actualisee
      */
     private boolean renderMovementAnimation(Game game, boolean forceRender) {
@@ -244,8 +246,9 @@ public class Renderer {
     /**
      * Permet de rendre les overlays (cases en surbrillances) sur l'ecran.
      *
-     * @param game L'instance de la partie actuelle.
+     * @param game        L'instance de la partie actuelle.
      * @param forceRender Indiquer si le rendu doit etre force
+     *
      * @return true si le menu a ete actualisee sur l'offscreen
      */
     private boolean renderOverlay(Game game, boolean forceRender) {
@@ -280,11 +283,11 @@ public class Renderer {
     }
 
     /**
-     *
      * Permet de rendre une menu en particulier.
      *
-     * @param menu L'instance du menu a rendre.
+     * @param menu        L'instance du menu a rendre.
      * @param forceRender Indiquer si le rendu doit etre force
+     *
      * @return true si le menu a ete actualisee sur l'offscreen
      */
     private boolean renderMenu(Menu menu, boolean forceRender) {
@@ -306,12 +309,12 @@ public class Renderer {
     }
 
     /**
-     *
      * Permet d'effectuer le rendu de la map selon la {@link GameView}.
      *
-     * @param gameState Etat du jeu actuel
-     * @param game Partie en cours
+     * @param gameState   Etat du jeu actuel
+     * @param game        Partie en cours
      * @param forceRender Indiquer si le rendu doit etre force
+     *
      * @return true si la map a ete actualisee sur l'offscreen
      */
     private boolean renderMap(GameState gameState, Game game, boolean forceRender) {
@@ -349,7 +352,7 @@ public class Renderer {
                 }
             }
 
-            if(weather == Weather.RAINY) {
+            if (weather == Weather.RAINY) {
 
                 DisplayUtil.drawPicture(Config.WIDTH / 2, Config.HEIGHT / 2 + Config.BOTTOM_MENU_MARGIN, PathUtil.getWeatherOverlayPath(weather, this.terrainClockSync.getFrame()), Config.WIDTH, Config.HEIGHT);
 
@@ -364,12 +367,12 @@ public class Renderer {
     }
 
     /**
-     *
      * Permet d'effectuer le rendu du curseur selon la {@link GameView}.
      *
-     * @param gameState Etat du jeu actuel
-     * @param game Partie en cours
+     * @param gameState   Etat du jeu actuel
+     * @param game        Partie en cours
      * @param forceRender Indiquer si le rendu doit etre force
+     *
      * @return true si le curseur a ete actualisee sur l'offscreen
      */
     private boolean renderCursor(Game game, GameState gameState, boolean forceRender) {
@@ -388,11 +391,11 @@ public class Renderer {
     }
 
     /**
-     *
      * Permet de rendre le mouvement (fleches) sur l'ecran selon le {@link GameView} et le {@link Movement}.
      *
-     * @param game Partie en cours
+     * @param game        Partie en cours
      * @param forceRender Indiquer si le rendu doit etre force
+     *
      * @return true si le mouvement a ete actualisee sur l'offscreen
      */
     private boolean renderMovement(Game game, boolean forceRender) {

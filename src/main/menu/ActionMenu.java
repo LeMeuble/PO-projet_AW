@@ -22,11 +22,13 @@ import java.util.List;
  */
 public abstract class ActionMenu<T> extends SelectionMenu<T> {
 
-    public interface Text {
-        String getText();
-    }
-
     public static final int PRIORITY = 1;
+
+    public interface Text {
+
+        String getText();
+
+    }
 
     private final boolean showUnavailable;
 
@@ -59,12 +61,12 @@ public abstract class ActionMenu<T> extends SelectionMenu<T> {
         List<T> values = this.showUnavailable ? this.getValues() : this.getAvailableValues();
         boolean isText = values.size() > 0 && values.get(0) instanceof Text;
 
-        if(isText) {
+        if (isText) {
 
             int maxWidth = 0;
-            for(T value : values) {
+            for (T value : values) {
                 int textWidth = DisplayUtil.getTextWidth(Config.FONT_20, ((Text) value).getText());
-                if(textWidth > maxWidth) {
+                if (textWidth > maxWidth) {
                     maxWidth = textWidth;
                 }
             }
@@ -80,7 +82,7 @@ public abstract class ActionMenu<T> extends SelectionMenu<T> {
         for (T value : values) {
 
             DisplayUtil.drawPicture(x, y, PathUtil.getActionGuiPath("middle"), width, Config.MENU_ACTION_MIDDLE_HEIGHT);
-            if(value== this.getSelectedValue()) {
+            if (value == this.getSelectedValue()) {
                 DisplayUtil.drawPicture(x - width / 2, y + 2, PathUtil.getUiComponentPath("selector.png"), 32, 32);
             }
             y -= Config.MENU_ACTION_MIDDLE_HEIGHT;

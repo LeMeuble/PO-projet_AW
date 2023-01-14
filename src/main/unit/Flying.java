@@ -14,6 +14,7 @@ public abstract class Flying extends Unit {
 
     /**
      * Constructeur de Flying
+     *
      * @param owner Le joueur proprietaire de l'unite
      */
     public Flying(Player.Type owner) {
@@ -48,7 +49,7 @@ public abstract class Flying extends Unit {
      */
     public int getMovementCostTo(Case destination, Weather weather) {
 
-        UnitMovementCost.Flying cost =  UnitMovementCost.Flying.fromTerrainAndWeather(destination.getTerrain().getType(), weather);
+        UnitMovementCost.Flying cost = UnitMovementCost.Flying.fromTerrainAndWeather(destination.getTerrain().getType(), weather);
         return cost == null ? -1 : cost.getCost();
 
     }

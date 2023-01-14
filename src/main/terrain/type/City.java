@@ -22,6 +22,7 @@ public class City extends Property {
 
     /**
      * Constructeur de la ville
+     *
      * @param owner Le joueur proprietaire de la ville
      */
     public City(Player.Type owner) {

@@ -3,18 +3,14 @@ package main.menu.model;
 import librairies.StdDraw;
 import main.game.Game;
 import main.game.Player;
-import main.map.Case;
 import main.menu.FadeMenu;
 import main.menu.MenuModel;
-import main.terrain.Property;
 import main.util.HelperMethod;
 import ressources.Config;
 import ressources.DisplayUtil;
 import ressources.PathUtil;
 
 import java.awt.*;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Classe representant un ecran de fin de partie

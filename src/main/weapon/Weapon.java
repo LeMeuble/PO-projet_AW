@@ -56,7 +56,9 @@ public abstract class Weapon {
 
     /**
      * Verifie si l'arme peut etre utilisee sur l'unite cible
+     *
      * @param unit L'unite cible
+     *
      * @return true si l'arme va infliger des degats a cette unite
      */
     public boolean canBeUsedOn(Unit unit) {

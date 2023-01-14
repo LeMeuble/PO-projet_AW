@@ -1,6 +1,5 @@
 package main.game;
 
-import main.Logger;
 import main.MiniWars;
 import main.render.PopupRegistry;
 
@@ -61,7 +60,8 @@ public class GameLoop {
         try {
             this.thread.join();
         }
-        catch (InterruptedException ignored) {}
+        catch (InterruptedException ignored) {
+        }
     }
 
     @SuppressWarnings("BusyWait")

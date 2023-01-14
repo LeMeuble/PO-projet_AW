@@ -112,7 +112,7 @@ public class BottomMenu extends AnimatedMenu {
         final int currentPage = (int) Math.ceil((double) (offsetI + 1) / (double) tipsPerPage);
         final int nbPages = (int) Math.ceil((double) keyTips.size() / (double) tipsPerPage);
 
-        if(nbPages > 0)
+        if (nbPages > 0)
             DisplayUtil.drawIntegerValue(528, 110, currentPage + "/" + nbPages, 12, "left");
 
     }

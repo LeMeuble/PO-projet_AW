@@ -45,7 +45,7 @@ public enum GameState {
     PLAYING_SELECTING_DROP_ZONE,
     PLAYING_SELECTING_DROPPED_UNIT,
     // Ecran de fin,
-    PLAYING_ENDIND_SCREEN;
+    PLAYING_ENDIND_SCREEN
 
 
 }

@@ -5,7 +5,6 @@ package main.menu;
  *
  * @author LECONTE--DENIS Tristan
  * @author GRAVOT Lucien
- *
  * @see Menu
  */
 public enum MenuModel {

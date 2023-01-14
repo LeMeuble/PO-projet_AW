@@ -72,7 +72,9 @@ public class MapParser {
     /**
      * Methode statique
      * Parse une carte. Cree la grille de jeu, y ajoute toutes les cases, ainsi que les unites qu'elles contiennent
+     *
      * @param mapMetadata La map a construire
+     *
      * @return une grille de jeu
      */
     public static Grid parseMap(MapMetadata mapMetadata) {
@@ -156,8 +158,10 @@ public class MapParser {
     /**
      * Methode statique
      * Parse les meta donnees d'un fichier
-     * @param file Le fichier a parser
+     *
+     * @param file    Le fichier a parser
      * @param mapPath Le chemin vers la carte
+     *
      * @return Un objet MapMetadata
      */
     public static MapMetadata parseMetadata(File file, String mapPath) {

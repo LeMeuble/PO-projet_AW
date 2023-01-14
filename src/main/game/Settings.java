@@ -40,6 +40,7 @@ public class Settings {
         }
 
     }
+
     private boolean fogOfWar;
     private boolean autoEndTurn;
     private WeatherMode weatherMode;
@@ -76,6 +77,7 @@ public class Settings {
 
     /**
      * Passe au mode de meteo suivant (ex : passe de CLEAR vers RAINY)
+     *
      * @see Settings.WeatherMode
      */
     public void nextWeatherMode() {
@@ -84,6 +86,7 @@ public class Settings {
 
     /**
      * Passe au mode de meteo precedent (ex : passe de RAINY vers CLEAR)
+     *
      * @see Settings.WeatherMode
      */
     public void previousWeatherMode() {
@@ -96,6 +99,7 @@ public class Settings {
 
     /**
      * Configure le gestionnaire de meteo du jeu, en fonction du mode de meteo selectionne
+     *
      * @param manager Le gestionnaire de meteo du jeu
      */
     public void configureWeatherManager(WeatherManager manager) {

@@ -16,7 +16,7 @@ public class OptionSelectorTest {
         OptionSelector<Integer> test = new OptionSelector<>();
         test.addOption(1);
 
-        assertEquals( 1, test.getOptionsCount());
+        assertEquals(1, test.getOptionsCount());
         assertEquals(1, test.getAvailableOptionsCount());
 
         assertTrue(test.getValues().contains(1));

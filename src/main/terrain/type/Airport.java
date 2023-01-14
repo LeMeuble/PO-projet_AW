@@ -18,6 +18,7 @@ public class Airport extends Factory {
 
     /**
      * Constructeur d'un aeroport
+     *
      * @param owner Le joueur proprietaire
      */
     public Airport(Player.Type owner) {
@@ -26,7 +27,9 @@ public class Airport extends Factory {
 
     /**
      * Renvoie les unites volantes qu'il est possible de creer avec une certaine somme d'argent
+     *
      * @param money L'argent
+     *
      * @return Un selecteur d'options contenant (ou non) des unites volantes
      */
     @Override
@@ -41,7 +44,9 @@ public class Airport extends Factory {
 
     /**
      * Verifie si la case peut produire une unite
+     *
      * @param currentCase La case a tester
+     *
      * @return true si une unite peut etre produite
      */
     public static boolean canCreateUnit(Case currentCase) {

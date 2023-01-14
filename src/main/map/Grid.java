@@ -105,7 +105,9 @@ public class Grid {
     /**
      * Renvoie une liste des cases adjacentes a une case passee en parametre
      * La liste ne contient pas la case passee en parametre
+     *
      * @param c Un case
+     *
      * @return Une liste de Case
      */
     public List<Case> getAdjacentCases(Case c) {
@@ -169,7 +171,9 @@ public class Grid {
 
     /**
      * A partir d'une liste de cases, renvoie une liste des unites contenues dans ces cases
+     *
      * @param casesAround Une liste de case
+     *
      * @return Une liste d'unites
      */
     public List<Unit> getUnitsAround(List<Case> casesAround) {
@@ -188,6 +192,7 @@ public class Grid {
 
     /**
      * Deplace une unite, en suivant un chemin
+     *
      * @param path Le chemin a suivre
      */
     public void moveUnit(Movement path) {
@@ -234,6 +239,7 @@ public class Grid {
 
     /**
      * Redefinit toutes les cases comme etant dans un certain etat de brouillard de guerre
+     *
      * @param foggy L'etat de brouillard de guerre a definir
      */
     public void resetFogOfWar(boolean foggy) {
@@ -242,6 +248,7 @@ public class Grid {
 
     /**
      * Actualise le brouillard de guerre pour les batiments, a partir d'une case
+     *
      * @param c La case
      */
     public void updateFogOfWarBuilding(Case c) {
@@ -260,7 +267,8 @@ public class Grid {
 
     /**
      * Actualise le brouillard de guerre pour une unite
-     * @param c La case a actualiser
+     *
+     * @param c    La case a actualiser
      * @param unit L'unite
      */
     public void updateFogOfWarUnit(Case c, Unit unit) {
@@ -297,6 +305,7 @@ public class Grid {
 
     /**
      * Actualise le brouillard de guerre en fonction d'une case et d'une unite
+     *
      * @param c Une case
      * @param u Une unite
      */
@@ -318,7 +327,8 @@ public class Grid {
 
     /**
      * Actualise le brouillard de guerre
-     * @param c Une case
+     *
+     * @param c    Une case
      * @param unit Une unite
      */
     public void updateFogOfWar(Case c, Unit unit) {

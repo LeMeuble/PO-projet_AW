@@ -25,6 +25,7 @@ public class Artillery extends Motorized {
         this.addWeapon(new Mortar());
 
     }
+
     @Override
     public UnitType getType() {
         return UnitType.ARTILLERY;

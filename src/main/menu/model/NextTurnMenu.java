@@ -8,8 +8,6 @@ import main.menu.FadeMenu;
 import main.menu.MenuModel;
 import main.util.OptionSelector;
 import ressources.Config;
-import ressources.DisplayUtil;
-import ressources.PathUtil;
 
 import java.awt.*;
 import java.util.Arrays;
@@ -50,19 +48,19 @@ public class NextTurnMenu extends FadeMenu {
      */
     public static class AskMenu extends ActionMenu<Action> {
 
-         /**
-          * Constructeur de AskMenu
-          */
+        /**
+         * Constructeur de AskMenu
+         */
         public AskMenu() {
 
             super(new OptionSelector<>(Arrays.asList(Action.values())), false);
 
         }
 
-         /**
-          * Gere l'affichage du menu
-          */
-         @Override
+        /**
+         * Gere l'affichage du menu
+         */
+        @Override
         public void render() {
 
             super.render();
@@ -126,7 +124,7 @@ public class NextTurnMenu extends FadeMenu {
         }
 
         // Verifie si le jeu est toujours en cours
-        if(MiniWars.getInstance().isPlaying()) {
+        if (MiniWars.getInstance().isPlaying()) {
 
             final Player.Type player = MiniWars.getInstance().getCurrentGame().getCurrentPlayer().getType();
 

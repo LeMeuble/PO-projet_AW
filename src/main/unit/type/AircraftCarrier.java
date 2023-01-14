@@ -41,6 +41,7 @@ public class AircraftCarrier extends NavalTransport {
         return PathUtil.getUnitIdleFacingPath(this.getType(), this.getOwner(), this.getFacing(), !this.hasPlayed(), frame);
 
     }
+
     @Override
     public int getDailyEnergyConsumption() {
         return AircraftCarrier.DAILY_ENERGY_CONSUMPTION;
@@ -48,7 +49,9 @@ public class AircraftCarrier extends NavalTransport {
 
     /**
      * Sert a savoir si une unite peut etre transportee par le porte-avions
+     *
      * @param unit Le type de l'unite
+     *
      * @return true si l'unite est une unite volante
      */
     @Override

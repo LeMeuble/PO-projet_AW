@@ -41,8 +41,10 @@ public enum UnitMovementPoint {
 
     /**
      * Renvoie les points de mouvement d'une unite, en fonction de la meteo
+     *
      * @param unitType Le type de l'unite
-     * @param weather La meteo
+     * @param weather  La meteo
+     *
      * @return Un object UnitMovementPoint
      */
     public static UnitMovementPoint fromUnitAndWeather(UnitType unitType, Weather weather) {

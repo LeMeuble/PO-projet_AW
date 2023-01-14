@@ -31,7 +31,9 @@ public class Corvette extends NavalTransport {
 
     /**
      * Sert a verifier si une unite peut etre transportee par la corvette
+     *
      * @param unit Une unite
+     *
      * @return true si l'unite est une unite a pied
      */
     @Override

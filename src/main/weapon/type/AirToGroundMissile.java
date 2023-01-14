@@ -48,7 +48,9 @@ public class AirToGroundMissile extends MeleeWeapon {
 
         /**
          * Renvoie le multiplicateur de degats en fonction de l'unite cible
+         *
          * @param unit L'unite cible
+         *
          * @return Le multiplicateur des degats infliges a cette unite
          */
         public static DamageMultiplier fromUnit(UnitType unit) {
@@ -84,7 +86,9 @@ public class AirToGroundMissile extends MeleeWeapon {
 
     /**
      * Renvoie le multiplicateur de degats infliges a une unite cible
+     *
      * @param unit L'unite cible
+     *
      * @return Un multiplicateur de degats, ou 0 si l'unite n'existe pas dans l'enumeration
      */
     @Override

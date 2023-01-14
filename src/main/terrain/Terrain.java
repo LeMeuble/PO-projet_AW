@@ -3,7 +3,6 @@ package main.terrain;
 import main.MiniWars;
 import main.game.Player;
 import main.map.MapMetadata;
-import main.unit.UnitType;
 import main.weather.Weather;
 import ressources.Config;
 import ressources.DisplayUtil;
@@ -124,11 +123,12 @@ public abstract class Terrain {
 
     /**
      * Gere l'affichage du terrain
-     * @param pixelX Position en pixel X de l'image du terrain
-     * @param pixelY Position en pixel Y de l'image du terrain
+     *
+     * @param pixelX  Position en pixel X de l'image du terrain
+     * @param pixelY  Position en pixel Y de l'image du terrain
      * @param weather Indique la meteo actuelle
      * @param isFoggy Un boolean, si la terrrain est dans le brouillard de guerre ou non
-     * @param frame Frame actuelle de l'animation du terrain si necessaire
+     * @param frame   Frame actuelle de l'animation du terrain si necessaire
      */
     public void render(double pixelX, double pixelY, Weather weather, boolean isFoggy, int frame) {
 

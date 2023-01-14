@@ -18,6 +18,7 @@ public class Plain extends Terrain {
         return DEFENSE_MULTIPLIER;
 
     }
+
     @Override
     public TerrainType getType() {
         return TerrainType.PLAIN;

@@ -14,6 +14,7 @@ public enum UnitFacing {
 
     /**
      * @return Une direction aleatoire
+     *
      * @see Unit constructor (used when creating a new map)
      */
     public static UnitFacing random() {

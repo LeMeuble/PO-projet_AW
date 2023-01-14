@@ -12,9 +12,11 @@ import main.weather.Weather;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class MovementAndDijkstraTest {
 
@@ -42,7 +44,7 @@ public class MovementAndDijkstraTest {
         final Grid grid = new Grid(MovementAndDijkstraTest.grid);
         final Dijkstra dijkstra = new Dijkstra(grid.getCase(new Coordinate(0, 0)), grid, new Infantry(Player.Type.RED), Weather.CLEAR);
 
-        final List<Coordinate> expected1 = Arrays.asList(new Coordinate(1, 0));
+        final List<Coordinate> expected1 = Collections.singletonList(new Coordinate(1, 0));
         final List<Coordinate> expected2 = Arrays.asList(new Coordinate(1, 0), new Coordinate(2, 0), new Coordinate(2, 1), new Coordinate(2, 2));
 
         final List<Case> path1 = dijkstra.getShortestPathTo(grid.getCase(new Coordinate(2, 2)), 1);

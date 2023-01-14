@@ -1,6 +1,5 @@
 package main.game;
 
-import com.sun.istack.internal.Nullable;
 import main.MiniWars;
 import main.control.Cursor;
 import main.map.Case;
@@ -52,7 +51,7 @@ public class Game {
     private final WeatherManager weatherManager;
     private final Map<Player.Type, Player> players;
     private int day;
-    private long startTime;
+    private final long startTime;
     private long duration;
     private Movement movement;
     private Case selectedCase;
@@ -84,7 +83,7 @@ public class Game {
         this.players = new HashMap<>();
         this.weatherManager = new WeatherManager();
         this.selectedCase = null;
-        this.overlayCases = new HashSet<>();
+        this.overlayCases = Collections.synchronizedSet(new HashSet<>());
         this.overlayType = OverlayType.MISC;
 
         settings.configureWeatherManager(weatherManager);
@@ -148,7 +147,6 @@ public class Game {
      *
      * @see Dijkstra
      */
-    @Nullable
     public Dijkstra getDijkstraResult() {
         return this.dijkstraResult;
     }
@@ -239,11 +237,11 @@ public class Game {
 
     /**
      * Obtenir l'instance du joueur a partir de son type.
+     *
      * @param playerType Type du joueur a obtenir.
      *
      * @return Instance du joueur. Ou null si le joueur n'existe pas.
      */
-    @Nullable
     public Player getPlayerFromType(Player.Type playerType) {
 
         return this.players.get(playerType);
@@ -270,7 +268,6 @@ public class Game {
      *
      * @return Instance du QG restant. Ou null si le joueur n'a plus de QG.
      */
-    @Nullable
     public Case getRemainingHQ(Player.Type player) {
 
         return this.grid.getCases()
@@ -333,7 +330,6 @@ public class Game {
     }
 
     /**
-     *
      * @return
      */
     public boolean isSoftLocked() {
@@ -351,7 +347,6 @@ public class Game {
      * Cette methode passe la partie au tour suivant.
      * Plusieurs elements sont modifies lors de ce changement de tour :
      * - Le joueur courant est change.
-     *
      */
     public void nextTurn() {
 
@@ -359,7 +354,7 @@ public class Game {
         final Player.Type previousPlayer = this.currentPlayer;
         final Player.Type nextPlayer = this.nextPlayer().getType();
 
-        if(this.isSoftLocked()) {
+        if (this.isSoftLocked()) {
 
             PopupRegistry.getInstance()
                     .push(new Popup("Avertissement!", "La partie est bloqu\u00e9! (Softlock)"));
@@ -369,7 +364,7 @@ public class Game {
         // Il s'agit d'un nouveau jour, si l'on a fait une "rotation" complete des joueurs.
         final boolean newDay = previousPlayer.ordinal() > nextPlayer.ordinal();
 
-        if(newDay) {
+        if (newDay) {
             this.weatherManager.clock(this.getAlivePlayerCount());
             this.day++;
         }
@@ -421,9 +416,9 @@ public class Game {
 
                                     for (int i = 0; i < 2; i++) {
 
-                                        if(u.getHealth() < Config.UNIT_MAX_HEALTH) {
+                                        if (u.getHealth() < Config.UNIT_MAX_HEALTH) {
 
-                                            if(currentPlayer.getMoney() >= u.getRepairCost()) {
+                                            if (currentPlayer.getMoney() >= u.getRepairCost()) {
 
                                                 u.repair(1);
                                                 currentPlayer.setMoney(currentPlayer.getMoney() - u.getRepairCost());
@@ -471,7 +466,7 @@ public class Game {
     public void startGame() {
 
         this.grid.resetFogOfWar(settings.isFogOfWar());
-        if(settings.isFogOfWar()) {
+        if (settings.isFogOfWar()) {
             this.grid.getCases().forEach(c -> {
                 this.grid.updateFogOfWar(c, c.getUnit());
             });
@@ -513,9 +508,9 @@ public class Game {
 
     /**
      * Renvoie le gagnant de la partie. Le gagnant d'une partie est le seul joueur possedant encore des QG.
+     *
      * @return Le joueur gagnant de la partie s'il existe, null sinon
      */
-    @Nullable
     public Player.Type getWinner() {
         Player.Type winner = null;
         List<HQ> hqs = this.grid.getCases()
@@ -638,6 +633,7 @@ public class Game {
 
     /**
      * Termine l'instance d'un joueur, et recupere ses statistiques
+     *
      * @param player Le joueur a tuer
      */
     public void endPlayer(Player player) {
@@ -674,6 +670,7 @@ public class Game {
     /**
      * Verifie si le joueur courant a encore des actions disponibles. Les actions disponibles sont : deplacer une unite
      * ou produire une unite dans une usine
+     *
      * @return true si le joueur courant a encore des actions disponibles, false sinon
      */
     public boolean hasRemainingAction() {

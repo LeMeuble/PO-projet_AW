@@ -18,8 +18,9 @@ public enum Weather {
 
     /**
      * Constructeur de Weather
-     * @param name Le nom de la meteo
-     * @param textureName Le nom de la texture
+     *
+     * @param name          Le nom de la meteo
+     * @param textureName   Le nom de la texture
      * @param probabilities Les probabilites des changements de meteo
      */
     Weather(String name, String textureName, double... probabilities) {
@@ -39,11 +40,12 @@ public enum Weather {
 
     /**
      * Calcule la prochaine meteo en fonction de la meteo precedente
+     *
      * @return La prochaine meteo (peut etre la meteo courante)
      */
     public Weather next() {
 
-        if(probabilities.length != Weather.values().length) {
+        if (probabilities.length != Weather.values().length) {
             throw new IllegalArgumentException("Probabilities must have " + Weather.values().length + " values");
         }
 
@@ -52,7 +54,7 @@ public enum Weather {
 
         // Verifie entre quel intervalle se situe le nombre aleatoire
         for (int i = 0; i < probabilities.length; i++) {
-            if(random >= previous && random < previous + probabilities[i]) {
+            if (random >= previous && random < previous + probabilities[i]) {
                 return Weather.values()[i];
             }
             previous += probabilities[i];
