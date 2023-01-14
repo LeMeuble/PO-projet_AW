@@ -335,10 +335,10 @@ public class Renderer {
             final GameView gameView = game.getView();
 
             final int maxIterationX = Math.min(mapWidth, Config.MAP_COLUMN_COUNT);
-            final int maxIterationY = Math.min(mapHeight, Config.MAP_ROW_COUNT) - 1;
+            final int maxIterationY = Math.min(mapHeight, Config.MAP_ROW_COUNT);
 
             for (int i = 0; i < maxIterationX; i++) {
-                for (int j = maxIterationY; j >= 0; j--) {
+                for (int j = maxIterationY - 1; j >= 0; j--) {
 
                     final double x = DisplayUtil.getCenterX(i, mapWidth);
                     final double y = DisplayUtil.getCenterY(j, mapHeight);
@@ -356,6 +356,26 @@ public class Renderer {
 
                 DisplayUtil.drawPicture(Config.WIDTH / 2, Config.HEIGHT / 2 + Config.BOTTOM_MENU_MARGIN, PathUtil.getWeatherOverlayPath(weather, this.terrainClockSync.getFrame()), Config.WIDTH, Config.HEIGHT);
 
+            }
+
+            final double midX = DisplayUtil.getCenterX(maxIterationX / 2, mapWidth) - (maxIterationX % 2 == 0 ? Config.PIXEL_PER_CASE / 2d : 0);
+            final double midY = DisplayUtil.getCenterY(maxIterationY / 2, mapHeight) - (maxIterationY % 2 == 0 ? Config.PIXEL_PER_CASE / 2d : 0);
+
+
+            if(gameView.canMoveDown()) {
+                DisplayUtil.drawPicture(midX, DisplayUtil.getCenterY(0, mapHeight), PathUtil.getGlobalGuiPath("down_arrow"), 32, 32);
+            }
+
+            if(gameView.canMoveUp()) {
+                DisplayUtil.drawPicture(midX, DisplayUtil.getCenterY(maxIterationY - 1, mapHeight), PathUtil.getGlobalGuiPath("up_arrow"), 32, 32);
+            }
+
+            if(gameView.canMoveLeft()) {
+                DisplayUtil.drawPicture(DisplayUtil.getCenterX(0, mapWidth), midY, PathUtil.getGlobalGuiPath("left_arrow"), 32, 32);
+            }
+
+            if(gameView.canMoveRight()) {
+                DisplayUtil.drawPicture(DisplayUtil.getCenterX(maxIterationX - 1, mapWidth), midY, PathUtil.getGlobalGuiPath("right_arrow"), 32, 32);
             }
 
             return true;

@@ -133,6 +133,22 @@ public class GameView {
         this.offsetX = Math.max(0, Math.min(offsetX, this.width - Config.MAP_COLUMN_COUNT));
     }
 
+    public boolean canMoveLeft() {
+        return this.offsetX > 0;
+    }
+
+    public boolean canMoveRight() {
+        return this.offsetX < this.width - Config.MAP_COLUMN_COUNT;
+    }
+
+    public boolean canMoveUp() {
+        return this.offsetY < this.height - Config.MAP_ROW_COUNT;
+    }
+
+    public boolean canMoveDown() {
+        return this.offsetY > 0;
+    }
+
     /**
      * Connaitre le decalage en y de la grille reelle par rapport a la grille affichee.
      *
