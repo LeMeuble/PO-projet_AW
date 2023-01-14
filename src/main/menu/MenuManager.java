@@ -126,7 +126,6 @@ public class MenuManager {
 
         this.menus.keySet().iterator().forEachRemaining(menuModel -> {
             if(!menuModel.isPersistent()) {
-                System.out.println("Removing menu " + menuModel);
                 toRemove.add(menuModel);
             }
         });

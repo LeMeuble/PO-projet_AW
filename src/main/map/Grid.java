@@ -212,9 +212,9 @@ public class Grid {
         Renderer.getInstance().setMovementAnimation(animation);
 
         animation.waitUntilFinished(); // bloque tout
-
         destination.setUnit(unit);
         game.setSelectedCase(destination);
+        game.getCursor().setCoordinate(destination.getCoordinate());
 
         if (trapped) {
             PopupRegistry.getInstance().push(new Popup("Trapped !", "Your unit was trapped during their movement."));

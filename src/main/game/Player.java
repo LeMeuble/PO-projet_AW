@@ -1,6 +1,7 @@
 package main.game;
 
 import librairies.StdDraw;
+import ressources.Config;
 
 import java.awt.Color;
 
@@ -98,7 +99,7 @@ public class Player {
      */
     public Player(Player.Type type) {
 
-        this.money = 0;
+        this.money = Config.STARTING_MONEY;
         this.isAlive = true;
         this.type = type;
 

@@ -173,15 +173,12 @@ public class ActionHandler {
             case PLAYING_SELECTING_FACTORY_UNIT:
             case PLAYING_SELECTING_UNIT_ACTION: {
 
-                System.out.println("up@PLAYING_SELECTING_UNIT_ACTION");
-
                 Logger.getLogger().log("down@PLAYING_SELECTING_UNIT_ACTION");
 
                 // Creation d'un menu contenant uniquement les actions possibles
                 MenuManager.getInstance().getMenus().stream().filter(m -> m instanceof SelectionMenu).filter(Menu::isVisible).forEach(m -> {
                     ((SelectionMenu<?>) m).previous();
                     m.needsRefresh(true);
-                    System.out.println(m);
                 });
                 return true;
             }
@@ -581,9 +578,7 @@ public class ActionHandler {
                                 this.instance.setGameState(GameState.PLAYING_SELECTING_UNIT_ACTION);
 
                             }
-                            else System.out.println("Warn: Unit has already played");
                         }
-                        else System.out.println("Warn: Unit not owned by current player");
                     }
 
                     // Sinon, si la case courante est une usine (de n'importe quel type)
@@ -599,7 +594,6 @@ public class ActionHandler {
 
                                 // On cree un menu contenant toutes les unitees que l'usine peut produire, en fonction de l'argent du joueur courant
                                 final OptionSelector<UnitType> unitSelector = factory.getUnitSelector(currentPlayer.getMoney());
-                                System.out.println(unitSelector.getValues());
                                 menuManagerInstance.addMenu(new FactoryActionMenu(unitSelector));
                                 game.setSelectedCase(currentCase);
 
@@ -607,13 +601,11 @@ public class ActionHandler {
                                 this.instance.setGameState(GameState.PLAYING_SELECTING_FACTORY_UNIT);
 
                             }
-                            else System.out.println("Warn: There is already a unit here / u can't!");
+                            else PopupRegistry.getInstance().push(new Popup("Avertissement!", "Impossible d'utiliser cette usine!"));
 
                         }
-                        else System.out.println("Warn: Factory not owned by current player");
 
                     }
-                    else System.out.println("Warn: There is nothing to do here");
 
                     return true;
 
@@ -650,7 +642,6 @@ public class ActionHandler {
                             game.setMovement(new Movement(currentCase));
                             // On enregistre en "cache" l'instance de dijkstra, pour ne pas avoir a tout recalculer
                             game.setDijkstraResult(dijkstra);
-                            System.out.println("init dijkstra result");
 
                             // Le jeu passe en mode "deplacement d'une unite"
                             this.instance.setGameState(GameState.PLAYING_MOVING_UNIT);
@@ -717,7 +708,6 @@ public class ActionHandler {
                                 // Sinon, si il y a plus d'une unite attaquable
                                 else if (unitsAround.size() >= 2) {
                                     Logger.getLogger().log("Case : more than one unit around");
-                                    System.out.println("OK: There are multiple units in range");
                                     // On affiche un overlay au dessus des cases avec une unite attaquable
                                     game.setOverlayCases(new HashSet<>(casesAround));
                                     game.setOverlayType(OverlayType.WEAPON);
@@ -727,7 +717,6 @@ public class ActionHandler {
 
                                 }
                                 else {
-                                    System.out.println("Warn: Not unit in range");
                                     Logger.getLogger().log("No unit in range");
                                 }
 
@@ -934,7 +923,6 @@ public class ActionHandler {
                         }
                         // Sinon, l'action est inconnue
                         else {
-                            System.out.println("Warn: Unknown action");
                             Logger.getLogger().log("Warn: Unknown action");
                         }
                     }

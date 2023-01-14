@@ -56,6 +56,11 @@ public class MiniWars {
 
     }
 
+    /**
+     * Permet de lancer le jeu et de retourner son instance.
+     * 
+     * @return Instance du jeu.
+     */
     public static MiniWars launch() {
 
         instance = new MiniWars();
@@ -63,6 +68,11 @@ public class MiniWars {
 
     }
 
+    /**
+     * Obtenir l'instance actuelle du jeu.
+     *
+     * @return Instance du jeu.
+     */
     public static MiniWars getInstance() {
 
         return MiniWars.instance;
@@ -102,10 +112,18 @@ public class MiniWars {
         }
     }
 
+    /**
+     * Methode appellee pour permettre d'indiquer au {@link Renderer} qu'il est necessaire de rendre le jeu.
+     * Cette methode est appellee uniquement apres une touche ou par la {@link GameLoop}
+     */
     public void update() {
         Renderer.getInstance().render(this.gameState, this.currentGame);
     }
 
+    /**
+     * Indique si le jeu est en partie.
+     * @return true si une partie est en cours, false sinon.
+     */
     public synchronized boolean isPlaying() {
         return this.currentGame != null;
     }
@@ -117,30 +135,52 @@ public class MiniWars {
         return this.currentGame;
     }
 
+    /**
+     * Lancer une nouvelle partie.
+     * @param mapMetadata Donner la map a lancer.
+     * @param settings Parametre pour la partie.
+     */
     public synchronized void newGame(MapMetadata mapMetadata, Settings settings) {
 
         this.currentGame = new Game(mapMetadata, settings);
         this.currentGame.startGame();
     }
 
+    /**
+     * Metre fin a une partie.
+     */
     public synchronized void endGame() {
         this.currentGame = null;
     }
 
+    /**
+     * Obtenir l'etat actuel du jeu.
+     * @return Etat actuel du jeu.
+     */
     public GameState getGameState() {
         return gameState;
     }
 
+    /**
+     * Definir l'etat actuel du jeu.
+     * @param gameState Nouvel etat de jeu
+     */
     public void setGameState(GameState gameState) {
         this.gameState = gameState;
     }
 
+    /**
+     * Mettre fin au programme de facon 'popre' en arretant les threads.
+     */
     public void end() {
         this.keystrokeListener.stop();
         this.gameLoop.stop();
         Logger.closeAll();
     }
 
+    /**
+     * Enregistrer les menus par default persistents
+     */
     private void registerDefaultMenus() {
 
         MenuManager.getInstance().addMenu(new MainMenu());

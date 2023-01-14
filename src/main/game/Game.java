@@ -16,12 +16,10 @@ import main.terrain.Factory;
 import main.terrain.Property;
 import main.terrain.Terrain;
 import main.terrain.TerrainType;
+import main.terrain.type.FactoryTerrain;
 import main.terrain.type.HQ;
 import main.terrain.type.Port;
-import main.unit.Flying;
-import main.unit.Naval;
-import main.unit.Transport;
-import main.unit.Unit;
+import main.unit.*;
 import main.util.Dijkstra;
 import main.weather.Weather;
 import main.weather.WeatherManager;
@@ -45,7 +43,6 @@ import java.util.stream.Collectors;
  * @author GRAVOT Lucien
  */
 public class Game {
-
 
     private final Grid grid;
     private final GameView view;
@@ -336,6 +333,21 @@ public class Game {
     }
 
     /**
+     *
+     * @return
+     */
+    public boolean isSoftLocked() {
+
+        return this.grid
+                .getCases()
+                .stream()
+                .noneMatch(c -> c.getUnit() instanceof OnFoot ||
+                        (c.getTerrain() instanceof FactoryTerrain && ((Property) c.getTerrain()).getOwner() != Player.Type.NEUTRAL)
+                );
+
+    }
+
+    /**
      * Cette methode passe la partie au tour suivant.
      * Plusieurs elements sont modifies lors de ce changement de tour :
      * - Le joueur courant est change.
@@ -343,19 +355,29 @@ public class Game {
      */
     public void nextTurn() {
 
-        this.weatherManager.clock();
-        if (this.weatherManager.willChange())
-            PopupRegistry.getInstance()
-                    .push(new Popup("Changement m\u00e9t\u00e9o!", "La m\u00e9t\u00e9o va changer ! (" + this.weatherManager.getNextWeather().getName() + ")"));
-
         final Player currentPlayer = MiniWars.getInstance().getCurrentGame().getCurrentPlayer();
         final Player.Type previousPlayer = this.currentPlayer;
         final Player.Type nextPlayer = this.nextPlayer().getType();
 
+        if(this.isSoftLocked()) {
+
+            PopupRegistry.getInstance()
+                    .push(new Popup("Avertissement!", "La partie est bloqu\u00e9! (Softlock)"));
+
+        }
+
         // Il s'agit d'un nouveau jour, si l'on a fait une "rotation" complete des joueurs.
         final boolean newDay = previousPlayer.ordinal() > nextPlayer.ordinal();
 
-        if(newDay) this.day++;
+        if(newDay) {
+            this.weatherManager.clock(this.getAlivePlayerCount());
+            this.day++;
+        }
+
+        if (this.weatherManager.willChange())
+            PopupRegistry.getInstance()
+                    .push(new Popup("Changement m\u00e9t\u00e9o!", "La m\u00e9t\u00e9o va changer ! (" + this.weatherManager.getNextWeather().getName() + ")"));
+
 
         this.grid.resetFogOfWar(this.settings.isFogOfWar());
 

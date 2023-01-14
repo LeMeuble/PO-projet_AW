@@ -99,7 +99,6 @@ public class Settings {
      * @param manager Le gestionnaire de meteo du jeu
      */
     public void configureWeatherManager(WeatherManager manager) {
-        System.out.println("mode" + this.weatherMode);
         if (this.weatherMode == WeatherMode.AUTO) {
             manager.setRandomMode(true);
         }

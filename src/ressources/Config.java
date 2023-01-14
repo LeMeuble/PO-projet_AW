@@ -77,10 +77,6 @@ public final class Config {
     public static final int MENU_ACTION_MIDDLE_HEIGHT = 44;
     public static final int MENU_ACTION_BOTTOM_HEIGHT = 24;
 
-    /*
-    Config lie aux tailles des textures
-     */
-
     /**
      * Config lie au jeu
      */
@@ -94,7 +90,11 @@ public final class Config {
     /*
     Config lie a la meteo
      */
-    public static final double CHANGING_WEATHER = 0.3d;
+    public static final double CHANGING_WEATHER = 0.1d;
+    public static final double CHANGING_WEATHER_EXTRA_PER_PLAYER = 0.1d;
+
+
+    public static final int STARTING_MONEY = 5000;
 
 
 }

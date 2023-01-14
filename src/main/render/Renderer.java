@@ -44,10 +44,6 @@ public class Renderer {
     private final AnimationClock unitMovingClockSync;
 
     private MovementAnimation movementAnimation;
-
-    private int frames; //fixme: degager
-    private long previousFrameUpdate;
-
     /**
      * Constructeur du renderer
      */
@@ -67,9 +63,6 @@ public class Renderer {
         StdDraw.setYscale(0, Config.HEIGHT);
         StdDraw.setTitle(Config.TITLE);
         StdDraw.setIcon(Config.ICON_PATH);
-
-        this.frames = 0;
-        this.previousFrameUpdate = System.currentTimeMillis();
 
     }
 
@@ -170,15 +163,8 @@ public class Renderer {
                 // Actualisation de l'ecran seulement si une action a ete effectuee sur le offscreen buffer
                 if (copyBuffer) {
                     StdDraw.show();
-                    frames++;
                 }
 
-
-                if (System.currentTimeMillis() - previousFrameUpdate > 1000) {
-                    System.out.println("FPS: " + frames);
-                    frames = 0;
-                    previousFrameUpdate = System.currentTimeMillis();
-                }
             }
             catch (Exception e) {
                 e.printStackTrace();

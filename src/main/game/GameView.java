@@ -158,15 +158,6 @@ public class GameView {
         return coordinate.getX() >= this.offsetX && coordinate.getX() < this.offsetX + Config.MAP_COLUMN_COUNT && coordinate.getY() >= this.offsetY && coordinate.getY() < this.offsetY + Config.MAP_ROW_COUNT;
     }
 
-    /**
-     * Permet d'ajuster/recalculer le decalage
-     * Cette methode permet de faire en sorte que le
-     * curseur soit sur l'ecran. Le decalage est caracterise
-     * par le plus petit decalage possible pour que le curseur soit visible.
-     * Pour un decalage centre voir {@link #focus(Case)}
-     *
-     * @return true is le decalage a change false sinon
-     */
     public boolean adjustOffset() {
 
         if (this.getCursorX() < 0) {

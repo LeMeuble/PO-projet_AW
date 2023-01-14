@@ -304,6 +304,18 @@ contenant le coût de mouvement pour les unités navales.
 Nous avons décidé d'ajouter des menus au jeu pour le rendre plus intuitif et interactif. Pour cela nous avons une classe abstraite [`Menu`](./src/main/menu/Menu.java) 
 qui donne les directives d'implémentation des menus.
 
+Un menu en bas de l'écran permet également de donner des indications sur le gameplay.
+
+<img src="https://imgur.com/b0P96Rb">
+
+1. Vie de l'unité
+2. Energie de l'unité
+3. Munitions arme secondaire
+4. Munitions arme principale
+5. Couverture du terrain
+6. Argent du joueur courant
+7. Icone du joueur courant
+
 #### Animations
 
 ---

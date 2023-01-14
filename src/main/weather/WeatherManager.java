@@ -18,6 +18,7 @@ import ressources.Config;
 public class WeatherManager {
 
     private static final double WEATHER_CHANGE_CHANCE = Config.CHANGING_WEATHER;
+    private static final double WEATHER_CHANGE_EXTRA_CHANCE = Config.CHANGING_WEATHER_EXTRA_PER_PLAYER;
 
     private Weather currentWeather;
     private Weather nextWeather;
@@ -78,9 +79,12 @@ public class WeatherManager {
 
     /**
      * Methode appelle a chaque changement de tour.
-     * Met a jour la meteo si le mode est dynamique.
+     * Met a jour la meteo si le mode est dynamique avec une probabilite dependante du
+     * nombre de joueur dans la partie.
+     *
+     * @param playerCount Le nombre de joueurs dans la partie
      */
-    public void clock() {
+    public void clock(int playerCount) {
 
         if (this.randomMode) {
             if (this.willChange) {
@@ -91,7 +95,7 @@ public class WeatherManager {
             else if (this.hasChanged) {
                 this.hasChanged = false;
             }
-            else if (Math.random() < WEATHER_CHANGE_CHANCE) {
+            else if (Math.random() < WEATHER_CHANGE_CHANCE + WEATHER_CHANGE_EXTRA_CHANCE * playerCount) {
 
                 final Weather nextWeather = this.currentWeather.next();
                 this.willChange = nextWeather != this.currentWeather;

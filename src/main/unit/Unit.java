@@ -1,5 +1,6 @@
 package main.unit;
 
+import com.beust.jcommander.ParametersDelegate;
 import com.sun.istack.internal.Nullable;
 import librairies.StdDraw;
 import main.MiniWars;
@@ -394,7 +395,7 @@ public abstract class Unit {
      * Permet a cette unite d'en attaquer une autre.
      * Choisit automatiquement l'arme a distance la plus efficace contre la cible
      * @param target La cible a attaquer
-     */
+     */    @Deprecated
     public void rangedAttack(Unit target) {
 
         final Weapon bestWeapon = this.bestWeaponAgainst(target);
