@@ -794,12 +794,11 @@ public class ActionHandler {
                             final List<Case> adjacentCase = grid.getAdjacentCases(game.getSelectedCase());
 
                             // On en extrait tous les transports ayant au moins une place de libre, appartenant au joueur courant
-                            final List<Transport> adjacentTransport = adjacentCase
+                            final List<Case> adjacentTransport = adjacentCase
                                     .stream()
                                     .filter(c -> c.getUnit() instanceof Transport)
                                     .filter(c -> c.hasUnit() && c.getUnit().getOwner() == currentPlayer.getType())
-                                    .map(u -> (Transport) u.getUnit())
-                                    .filter(t -> !t.isFull())
+                                    .filter(c -> !((Transport) c.getUnit()).isFull())
                                     .collect(Collectors.toList());
 
                             // Si il n'y a qu'un seul transport autour
@@ -807,7 +806,7 @@ public class ActionHandler {
 
                                 // On ajoute l'unite courante a l'interieur du transport, cela compte comme une action pour elle
                                 unit.setPlayed(true);
-                                adjacentTransport.get(0).addCarriedUnit(unit);
+                                ((Transport) adjacentTransport.get(0).getUnit()).addCarriedUnit(unit);
                                 selectedCase.setUnit(null);
                                 this.instance.setGameState(GameState.PLAYING_SELECTING);
                                 menuManagerInstance.clearNonPersistent();
@@ -818,7 +817,7 @@ public class ActionHandler {
 
                                 // Le jeu passe en mode "selection de transport"
                                 game.setSelectedCase(currentCase);
-                                game.setOverlayCases(new HashSet<>(adjacentCase));
+                                game.setOverlayCases(new HashSet<>(adjacentTransport));
                                 game.setOverlayType(OverlayType.MISC);
                                 this.instance.setGameState(GameState.PLAYING_SELECTING_TRANSPORT);
                                 menuManagerInstance.clearNonPersistent();
