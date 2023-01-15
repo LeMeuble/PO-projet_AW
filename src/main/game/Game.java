@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
  * - Le joueur courant
  * - Les joueurs
  * - Le curseur de selection
- * - Le temps (météo)
+ * - Le temps (meteo)
  * - etc (autres donnees utilitaires, ex: resultat des calculs de Dijkstra)
  *
  * @author LECONTE--DENIS Tristan

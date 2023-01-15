@@ -558,7 +558,7 @@ public class ActionHandler {
                     return true;
                 }
 
-                // Si le jeu est en mode "sélection"
+                // Si le jeu est en mode "selection"
                 case PLAYING_SELECTING: {
 
                     if (cursor == null) break;
@@ -1293,7 +1293,7 @@ public class ActionHandler {
     }
 
     /**
-     * Ajoute un mouvement (si ce dernier est possible) a la flèche de deplacement
+     * Ajoute un mouvement (si ce dernier est possible) a la fleche de deplacement
      *
      * @param movement Le mouvement a ajouter
      */

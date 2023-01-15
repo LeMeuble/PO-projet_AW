@@ -21,7 +21,6 @@
 5. [Texture du jeu](#change-texture)
 6. [Création de map](#map-creation)
 7. [Tests unitaires](#tests)
-8. [Crédits](#credits)
 
 Pour la lecture de ce rapport, il est préférable de le lire sur Github afin d'avoir les accès rapides aux classes et
 méthodes.
@@ -387,10 +386,7 @@ Concernant les textures, nous avons décidé de changer les textures fournies av
 préférions les graphismes
 du jeu Advance Wars II : Black Hole Rising.
 Nous avons donc réorganisé les textures dans le dossier *textures*. Les textures sont tirées du
-site [Spriters Resource](https://www.spriters-resource.com/game_boy_advance/advancewars2blackholerising/). La partie
-texture du projet étant secondaire,
-nous avons fait appel à une aide extérieure (voir [Crédits](#credits)) qui nous a permis d'extraire l'ensemble des
-textures et de les organiser.
+site [Spriters Resource](https://www.spriters-resource.com/game_boy_advance/advancewars2blackholerising/).
 L'ensemble des textures utilisées sont libres de droit pour tout projet à but non lucratif. Pour plus d'informations, voir directement
 sur le site : [FAQ Copyright Spriters Ressource](https://www.spriters-resource.com/page/faq/)
 
@@ -414,12 +410,5 @@ Quelques images du logiciel :
 --- 
 
 Il s'agit ici d'un projet qui est difficile à tester. La plupart des méthodes étant lié plus ou moins à l'affichage, il nous est difficile
-de les tester. Cependant certaines classes/méthodes ont le droit à quelques tests unitaires. Les tests sont disponibles dans le dossier
+de les tester. Cependant, certaines classes/méthodes ont le droit à quelques tests unitaires. Les tests sont disponibles dans le dossier
 [`src/test`](./src/test) du projet.
-
-<a name="credits"></a>
-## VIII. Crédits
-
-- [Yohann COURTAND](https://github.com/maYayoh) : Extraction complète des textures
-  de [Spriters Resource](https://www.spriters-resource.com/game_boy_advance/advancewars2blackholerising/) et création de
-  quelques textures supplémentaires et l'apport de maps supplémentaires.

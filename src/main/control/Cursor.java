@@ -142,7 +142,7 @@ public class Cursor {
      * Stipule qu'on n'a plus besoin de rafraichir l'ecran.
      *
      * @param needsRefresh true si on a besoin de rafraichir le curseur
-     *                     à l'ecran, false sinon.
+     *                     a l'ecran, false sinon.
      *
      * @see Renderable#needsRefresh(boolean)
      */

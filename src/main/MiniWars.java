@@ -14,7 +14,7 @@ import main.menu.model.NextTurnMenu;
 import main.render.Renderer;
 
 /**
- * Classe principale du jeu Cette classe est le point d'entrée du programme Elle initialise les composants du jeu et
+ * Classe principale du jeu Cette classe est le point d'entree du programme Elle initialise les composants du jeu et
  * lance la boucle principale
  *
  * @author LECONTE--DENIS Tristan

@@ -13,7 +13,7 @@ import ressources.Config;
  * Elle permet ainsi l'adaptation de la grille "reelle" avec la grille de la
  * fenetre de jeu.
  * <p>
- * Les méthodes d'adaptations de cette classe se basent sur les configurations
+ * Les methodes d'adaptations de cette classe se basent sur les configurations
  * de la classe {@link Config} qui determinent la taille de la grille affichee
  * sur l'ecran.
  * - Config.MAP_ROW_COUNT

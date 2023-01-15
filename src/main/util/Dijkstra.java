@@ -69,8 +69,8 @@ public class Dijkstra {
      *
      * @param source  La case de depart
      * @param grid    La grille de jeu
-     * @param unit    L'unité qui se déplace
-     * @param weather La météo actuelle
+     * @param unit    L'unite qui se deplace
+     * @param weather La meteo actuelle
      *
      * @see Case
      * @see Grid
@@ -86,8 +86,8 @@ public class Dijkstra {
      *
      * @param source  La case de depart
      * @param cases   La liste des cases de la grille de jeu
-     * @param unit    L'unité qui se déplace
-     * @param weather La météo actuelle
+     * @param unit    L'unite qui se deplace
+     * @param weather La meteo actuelle
      *
      * @see Case
      * @see Grid
@@ -227,7 +227,7 @@ public class Dijkstra {
     }
 
     /**
-     * Permet d'ajouter/créer les noeuds du graphe a partir d'une liste de cases.
+     * Permet d'ajouter/creer les noeuds du graphe a partir d'une liste de cases.
      *
      * @param cases La liste des cases
      */

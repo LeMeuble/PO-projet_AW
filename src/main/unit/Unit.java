@@ -184,7 +184,7 @@ public abstract class Unit {
     }
 
     /**
-     * Obtenir le nombre de points de vie de l'unite arrondi à l'entier superieur.
+     * Obtenir le nombre de points de vie de l'unite arrondi a l'entier superieur.
      *
      * @return La vie de l'unite.
      */
@@ -320,7 +320,7 @@ public abstract class Unit {
     }
 
     /**
-     * Inflige des degats à l'unite.
+     * Inflige des degats a l'unite.
      * La vie de l'unite est reduite de la valeur passee en parametre.
      * Cette methode peut indiquer une unite comme etant morte.
      *

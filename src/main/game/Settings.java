@@ -16,7 +16,7 @@ public class Settings {
      */
     public enum WeatherMode {
 
-        AUTO("Météo Automatique"),
+        AUTO("Meteo Automatique"),
         CLEAR(Weather.CLEAR),
         RAINY(Weather.RAINY),
         SNOWY(Weather.SNOWY),

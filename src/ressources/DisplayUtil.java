@@ -54,12 +54,12 @@ public class DisplayUtil {
         double[] offset = getCenteringOffset(gridWidth, gridHeight);
 
         double centerX = gridX * Config.PIXEL_PER_CASE; // Position de la case en pixel
-        centerX += (Config.PIXEL_PER_CASE * factorX) / 2 + offset[0]; // Position du centre de l'image en pixel (case + milieu de la case + décalage)
+        centerX += (Config.PIXEL_PER_CASE * factorX) / 2 + offset[0]; // Position du centre de l'image en pixel (case + milieu de la case + decalage)
 
         double centerY = gridY * Config.PIXEL_PER_CASE;
         centerY += (Config.PIXEL_PER_CASE * factorY) / 2 + BOTTOM_MENU_MARGIN + offset[1]; // Position de la case en pixel
 
-        StdDraw.picture(centerX, centerY, path, Config.PIXEL_PER_CASE * factorX, Config.PIXEL_PER_CASE * factorY); // Position du centre de l'image en pixel (case + milieu de la case + décalage + marge du bas)
+        StdDraw.picture(centerX, centerY, path, Config.PIXEL_PER_CASE * factorX, Config.PIXEL_PER_CASE * factorY); // Position du centre de l'image en pixel (case + milieu de la case + decalage + marge du bas)
 
     }
 

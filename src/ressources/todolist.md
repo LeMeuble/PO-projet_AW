@@ -1,19 +1,19 @@
 # A faire demain
 
 - [X] Pluie, vent
-- [ ] Ajouter unité sur les maps
+- [x] Ajouter unité sur les maps
 - [X] Icon sous-marin, convoi
 - [X] Icon map selecteur, nombre de joueur
-- [ ] Dernière vérification + rendu
-- [ ] Test grandeur nature
-- [?] Finir les keyboards tips
+- [X] Dernière vérification + rendu
+- [X] Test grandeur nature
+- [X] Finir les keyboards tips
 - [X] Ecran de fin de partie
 - [X] Patcher les popup
-- [ ] Attaque a distance cassée?
+- [X] Attaque a distance cassée?
 
 # Prioritaire :
 
-- [ ] Les logs en fait
+- [ ] Systeme de logs pour les testeurs
 - [X] Riposte quand attaque de case adjacente
 - [X] Capture possible seulement pour les unités à pied
     - [X] Resistance = Res - pv attaquant (arrondi sup)
@@ -23,7 +23,7 @@
 
 - [X] Fin de jeu
     - [X] S'il ne reste qu'un playertype de type
-    - [ ] Beautify (bonus)
+    - [X] Beautify (bonus)
 
 - [X] Réorganiser le bordel du déplacement (OK ?)
     - [X] Lors du déplacement
@@ -43,13 +43,13 @@
 - [X] Arrondi des PV lors des attaques ?
 - [X] Animation de direction d'unité
 - [X] Portée de tir dans l'arme et pas dans l'unité ?
-- [ ] Une quantité effarante de commentaires / javadoc
-- [ ] Désengorger ActionHandler#enter (c pas beau)
+- [X] Une quantité effarante de commentaires / javadoc
+- [X] Désengorger ActionHandler#enter
 
 # Bonus
 
-- [ ] Animation de pluie
-- [ ] Animation de vent
+- [X] Animation de pluie
+- [ ] Animation de vent (annulé)
 - [X] Animation de mouvement des unites
 - [X] Touche pour lister les unités encore utilisables (espace) 6.1
 - [X] Cases de déplacement/d'attaques possibles 6.2 (Verifier si c'est mis partout)
@@ -77,7 +77,7 @@
 - [X] Transport d'unité 6.6
     - [X] Une seule unite
     - [X] Monter à bord (case adjacente)
-    - [X] Dépoter (//)
+    - [X] Déposer (//)
     - [X] Pour l'instant seulement pour le Convoi, trouver le moyen de fix
 - [X] Fin de tour automatique 6.7
     - [X] Activable/désactivable (dans Player)
@@ -113,17 +113,17 @@
     - [X] Météo aléatoire, soit en début de game, soit dynamique (% de changement chaque tour, +% par type de météo)
     - [X] Avertissement pour les joueurs
 
-- [ ] Commandants
+- [ ] Commandants (annulé: deadline)
     - [ ] Option prendre le commandement
     - [ ] Différents bonus en fonction des commandants
     - [ ] Portée des bonus allant de 1 à 5 cases
     - [ ] Si unité détruite, commandant bat en retraite
 
-# Niveau pas de vie
+# Améliorations supplémentaires
 
 - [X] Dijkstra
 - [ ] Bot
 
 # Readme :
 
-- [ ] UML
+- [X] UML
