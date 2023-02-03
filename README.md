@@ -15,12 +15,13 @@
 2. [Github](#github)
 3. [UML](#uml)
 4. [Rapport](#rapport)
-   1. [Base du jeu](#report-base)
-   2. [Bonus | Choix d'ajouts](#report-bonus)
-   2. [Liste des bonus réalises](#report-bonus-list)
+    1. [Base du jeu](#report-base)
+    2. [Bonus | Choix d'ajouts](#report-bonus)
+    2. [Liste des bonus réalises](#report-bonus-list)
 5. [Texture du jeu](#change-texture)
 6. [Création de map](#map-creation)
 7. [Tests unitaires](#tests)
+8. [Crédits](#credits)
 
 Pour la lecture de ce rapport, il est préférable de le lire sur Github afin d'avoir les accès rapides aux classes et
 méthodes.
@@ -80,11 +81,14 @@ Pour un diagramme plus détaillé, il est possible de le trouver à l'adresse su
 
 ---
 
-Le plateau de jeu est représenté par une matrice à deux dimensions encapsulée dans la classe [`Grid`](./src/main/map/Grid.java). Cette dernière
+Le plateau de jeu est représenté par une matrice à deux dimensions encapsulée dans la
+classe [`Grid`](./src/main/map/Grid.java). Cette dernière
 permet
-une utilisation simple de la liste à deux dimensions interne de [`Case`](./src/main/map/Case.java). Chaque case contient nécessairement un [`Terrain`](./src/main/terrain/Terrain.java)
+une utilisation simple de la liste à deux dimensions interne de [`Case`](./src/main/map/Case.java). Chaque case contient
+nécessairement un [`Terrain`](./src/main/terrain/Terrain.java)
 et
-une potentielle [`Unit`](./src/main/unit/Unit.java). Une instance de [`Grid`](./src/main/map/Grid.java) est créée en début de chaque partie selon la map sélectionnée. Le tableau
+une potentielle [`Unit`](./src/main/unit/Unit.java). Une instance de [`Grid`](./src/main/map/Grid.java) est créée en
+début de chaque partie selon la map sélectionnée. Le tableau
 à
 deux dimensions est rempli grâce au parseur qui permet la conversion d'un fichier texte (au format ASCII) en une matrice
 de [`Case`](./src/main/map/Case.java).
@@ -96,10 +100,12 @@ L'implémentation du parseur a été changé pour les besoins du projet : [Bonus
 
 ---
 
-Les [`Terrain`](./src/main/terrain/Terrain.java) sont contenus dans une [`Case`](./src/main/map/Case.java) de la [`Grid`](./src/main/map/Grid.java). Pour cette
+Les [`Terrain`](./src/main/terrain/Terrain.java) sont contenus dans une [`Case`](./src/main/map/Case.java) de
+la [`Grid`](./src/main/map/Grid.java). Pour cette
 implémentation, nous avons décidé de créer une
 classe abstraite
-[`Terrain`](./src/main/terrain/Terrain.java) qui est étendues par toutes les sous-classes. Certains particuliers ont une classe mère abstraite
+[`Terrain`](./src/main/terrain/Terrain.java) qui est étendues par toutes les sous-classes. Certains particuliers ont une
+classe mère abstraite
 intermédiaire : la classe [`Property`](./src/main/terrain/Property.java)
 Voici la liste des terrains implémentés dans le jeu :
 
@@ -154,9 +160,11 @@ voir [Bonus | Choix d'ajouts](#2-bonus--choix-dajouts))
 
 Pour les transports, il s'agit d'un cas particulier. En effet, les transports ont une classe abstraite intermédiaire par
 type de d'unité.
-Par exemple, les transports à chenille ont une classe abstraite [`MotorizedTransport`](./src/main/unit/MotorizedTransport.java). Chacune des classes abstraites
+Par exemple, les transports à chenille ont une classe
+abstraite [`MotorizedTransport`](./src/main/unit/MotorizedTransport.java). Chacune des classes abstraites
 intermédiaires de transport implémentent
-l'interface [`Transport`](./src/main/unit/Transport.java) qui permet de définir les méthodes communes à tous les transports.
+l'interface [`Transport`](./src/main/unit/Transport.java) qui permet de définir les méthodes communes à tous les
+transports.
 
 <a name="report-base-move"></a>
 
@@ -224,11 +232,13 @@ avoir des terrains qui sont des usines (peuvent produire des unités) mais égal
 possédées par
 un joueur).
 
-Puis, nous avons créé le type de terrain [`FactoryTerrain`](./src/main/terrain/type/FactoryTerrain.java), représentant une
+Puis, nous avons créé le type de terrain [`FactoryTerrain`](./src/main/terrain/type/FactoryTerrain.java), représentant
+une
 usine terrestre. (En anticipation des ports
 et des aéroports, voir [Bonus | Choix d'ajouts](#report-bonus).)
 
-Pour les crédits, nous avons ajouté 1000 crédits à chaque joueur pour chaque propriété qu'il possède, à chaque fois que tous
+Pour les crédits, nous avons ajouté 1000 crédits à chaque joueur pour chaque propriété qu'il possède, à chaque fois que
+tous
 les joueurs de la partie ont joué leur tour (passage au jour suivant).
 
 <a name="report-bonus"></a>
@@ -291,7 +301,8 @@ probabilités variables.
 
 ---
 
-Pour l'implémentation des unités navales, nous avons créé une nouvelle classe abstraite [`Naval`](./src/main/unit/Naval.java), qui étend [`Unit`](./src/main/unit/Unit.java).
+Pour l'implémentation des unités navales, nous avons créé une nouvelle classe
+abstraite [`Naval`](./src/main/unit/Naval.java), qui étend [`Unit`](./src/main/unit/Unit.java).
 Pour gérer les déplacements de ces nouvelles unités, nous avons simplement ajouté
 l'énumération [`UnitMovementCost.Naval`](./src/main/unit/UnitMovementCost.java),
 contenant le coût de mouvement pour les unités navales.
@@ -300,7 +311,8 @@ contenant le coût de mouvement pour les unités navales.
 
 ---
 
-Nous avons décidé d'ajouter des menus au jeu pour le rendre plus intuitif et interactif. Pour cela nous avons une classe abstraite [`Menu`](./src/main/menu/Menu.java) 
+Nous avons décidé d'ajouter des menus au jeu pour le rendre plus intuitif et interactif. Pour cela nous avons une classe
+abstraite [`Menu`](./src/main/menu/Menu.java)
 qui donne les directives d'implémentation des menus.
 
 Un menu en bas de l'écran permet également de donner des indications sur le gameplay.
@@ -319,10 +331,12 @@ Un menu en bas de l'écran permet également de donner des indications sur le ga
 
 ---
 
-Afin d'animer les textures du jeu, il a été nécessaire de paralléliser le jeu en deux parties : la boucle d'écoute des touches et 
+Afin d'animer les textures du jeu, il a été nécessaire de paralléliser le jeu en deux parties : la boucle d'écoute des
+touches et
 la boucle d'affichage.
 
-La première thread permet l'écoute asynchrone des touches tout en passant les frappes de clavier à la méthode [`ActionHandler#handle`](src/main/game/ActionHandler.java)
+La première thread permet l'écoute asynchrone des touches tout en passant les frappes de clavier à la
+méthode [`ActionHandler#handle`](src/main/game/ActionHandler.java)
 La deuxième thread ([`GameLoop`](src/main/game/GameLoop.java)) s'occupe de l'affichage du jeu.
 
 <a name="report-bonus-list"></a>
@@ -375,7 +389,6 @@ La deuxième thread ([`GameLoop`](src/main/game/GameLoop.java)) s'occupe de l'af
 - [X] Le chemin le plus court vers une destination est maintenant automatiquement calculé à l'aide d'un algorithme
   de pathfinding de type Dijkstra
 
-
 <a name="change-texture"></a>
 
 ## V. Textures du jeu
@@ -387,16 +400,22 @@ préférions les graphismes
 du jeu Advance Wars II : Black Hole Rising.
 Nous avons donc réorganisé les textures dans le dossier *textures*. Les textures sont tirées du
 site [Spriters Resource](https://www.spriters-resource.com/game_boy_advance/advancewars2blackholerising/).
-L'ensemble des textures utilisées sont libres de droit pour tout projet à but non lucratif. Pour plus d'informations, voir directement
+La partie texture du projet étant secondaire, nous avons fait appel à une aide extérieure (voir [Crédits](#credits)) qui
+nous a permis d'extraire l'ensemble des
+textures et de les organiser.
+L'ensemble des textures utilisées sont libres de droit pour tout projet à but non lucratif. Pour plus d'informations,
+voir directement
 sur le site : [FAQ Copyright Spriters Ressource](https://www.spriters-resource.com/page/faq/)
 
 <a name="map-creation"></a>
+
 ## VI. Création de maps
 
 --- 
 
 Nous avons ajouté quelques map supplémentaires au jeu. Pour cela, nous avons utilisé un outil de création de map
-([`Tiled`](https://www.mapeditor.org)) qui permet de créer des maps à partir de tuiles. Il permet d'exporter les maps sous forme d'un fichier CSV, que nous avons
+([`Tiled`](https://www.mapeditor.org)) qui permet de créer des maps à partir de tuiles. Il permet d'exporter les maps
+sous forme d'un fichier CSV, que nous avons
 ensuite converti en fichier `.awdcmap` à l'aide d'un script python.
 
 Quelques images du logiciel :
@@ -405,10 +424,20 @@ Quelques images du logiciel :
 
 
 <a name="tests"></a>
+
 ## VII. Tests unitaires
 
 --- 
 
-Il s'agit ici d'un projet qui est difficile à tester. La plupart des méthodes étant lié plus ou moins à l'affichage, il nous est difficile
-de les tester. Cependant, certaines classes/méthodes ont le droit à quelques tests unitaires. Les tests sont disponibles dans le dossier
+Il s'agit ici d'un projet qui est difficile à tester. La plupart des méthodes étant lié plus ou moins à l'affichage, il
+nous est difficile
+de les tester. Cependant, certaines classes/méthodes ont le droit à quelques tests unitaires. Les tests sont disponibles
+dans le dossier
 [`src/test`](./src/test) du projet.
+
+<a name="credits"></a>
+## VIII. Crédits
+
+- [maYayoh@github](https://github.com/maYayoh) / [maYayoh@gitea](https://git.tristanld.fr/maYayoh/): Extraction complète des textures
+  de [Spriters Resource](https://www.spriters-resource.com/game_boy_advance/advancewars2blackholerising/) et création de
+  quelques textures supplémentaires et l'apport de maps supplémentaires.

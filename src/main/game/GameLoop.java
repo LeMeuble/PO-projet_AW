@@ -75,7 +75,7 @@ public class GameLoop {
             while (this.isRunning) {
                 PopupRegistry.getInstance().garbageCollect();
                 this.handler.run();
-                Thread.sleep(25);
+                Thread.sleep(50);
             }
 
         }
