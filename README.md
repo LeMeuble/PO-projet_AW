@@ -109,19 +109,19 @@ classe mère abstraite
 intermédiaire : la classe [`Property`](./src/main/terrain/Property.java)
 Voici la liste des terrains implémentés dans le jeu :
 
-| Terrain  | Classe mère | Particularité                                       | Texture                                                             |
-|----------|-------------|-----------------------------------------------------|---------------------------------------------------------------------|
-| Aéroport | Factory     | Produit des unités aériennes. Peut être capturé.    | ![airport](./pictures/buildings/clear/red/airport.png)              |
-| Port     | Factory     | Produit des unités navales. Peut être capturé.      | ![port](./pictures/buildings/clear/red/port.png)                    |
-| Usine    | Factory     | Produit des unités terrestres. Peut être capturé.   | ![factory](./pictures/buildings/clear/red/factory.png)              |
-| Ville    | Property    | Donne de l'argent à chaque tour. Peut être capturé. | ![city](./pictures/buildings/clear/red/city.png)                    |
-| QG       | Property    | Propriété la plus importante! A défendre!           | ![hq](./pictures/buildings/clear/red/hq.png)                        |
-| Plage    | Terrain     | Permet aux barges d'accoster.                       | ![beach](./pictures/terrains/clear/normal/beach/frame0/1.png)       |
-| Forêt    | Terrain     |                                                     | ![forest](./pictures/terrains/clear/normal/forest/0.png)            |
-| Montagne | Terrain     |                                                     | ![mountain](./pictures/terrains/clear/normal/mountain/0.png)        |
-| Obstacle | Terrain     | Infranchissable mais survolable.                    | ![obstacle](./pictures/terrains/clear/normal/obstacle/frame0/1.png) |
-| Plaine   | Terrain     |                                                     | ![plain](./pictures/terrains/clear/normal/plain/0.png)              |
-| Eau      | Terrain     |                                                     | ![water](./pictures/terrains/clear/normal/water/frame0/1.png)       |
+| Terrain  | Classe mère | Particularité                                        | Texture                                                             |
+|----------|-------------|------------------------------------------------------|---------------------------------------------------------------------|
+| Aéroport | Factory     | Produit des unités aériennes. Peut être capturé.     | ![airport](./pictures/buildings/clear/red/airport.png)              |
+| Port     | Factory     | Produit des unités navales. Peut être capturé.       | ![port](./pictures/buildings/clear/red/port.png)                    |
+| Usine    | Factory     | Produit des unités terrestres. Peut être capturé.    | ![factory](./pictures/buildings/clear/red/factory.png)              |
+| Ville    | Property    | Donne de l'argent à chaque tour. Peut être capturé.  | ![city](./pictures/buildings/clear/red/city.png)                    |
+| QG       | Property    | Propriété la plus importante! A défendre!            | ![hq](./pictures/buildings/clear/red/hq.png)                        |
+| Plage    | Terrain     | Permet aux barges d'accoster.                        | ![beach](./pictures/terrains/clear/normal/beach/frame0/1.png)       |
+| Forêt    | Terrain     |                                                      | ![forest](./pictures/terrains/clear/normal/forest/0.png)            |
+| Montagne | Terrain     |                                                      | ![mountain](./pictures/terrains/clear/normal/mountain/0.png)        |
+| Obstacle | Terrain     | Infranchissable mais survolable.                     | ![obstacle](./pictures/terrains/clear/normal/obstacle/frame0/3.png) |
+| Plaine   | Terrain     |                                                      | ![plain](./pictures/terrains/clear/normal/plain/0.png)              |
+| Eau      | Terrain     |                                                      | ![water](./pictures/terrains/clear/normal/water/frame0/1.png)       |
 
 <a name="report-base-unit"></a>
 
