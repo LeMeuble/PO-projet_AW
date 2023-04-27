@@ -3,7 +3,7 @@
 - [X] Pluie, vent
 - [x] Ajouter unité sur les maps
 - [X] Icon sous-marin, convoi
-- [X] Icon map selecteur, nombre de joueur
+- [X] Icon fr.istic.map selecteur, nombre de joueur
 - [X] Dernière vérification + rendu
 - [X] Test grandeur nature
 - [X] Finir les keyboards tips
@@ -82,7 +82,7 @@
 - [X] Fin de tour automatique 6.7
     - [X] Activable/désactivable (dans Player)
     - [X] Si plus d'action possible (tt unite en hasPlayed = true && factory occupés)
-- [X] Couverture de terrain 6.8
+- [X] Couverture de fr.istic.terrain 6.8
     - [X] -20% foret/usine
     - [X] -30% ville
     - [X] -40% montagne/qg
@@ -110,7 +110,7 @@
     - [X] Pluie = -1 case de vision pour unités au sol, -2 cases de vision pour unités volantes/en montagne
     - [X] Neige = Vitesse des unités
     - [X] Vents violents = portée des attaques à distance -1 case, -20% de dégâts
-    - [X] Météo aléatoire, soit en début de game, soit dynamique (% de changement chaque tour, +% par type de météo)
+    - [X] Météo aléatoire, soit en début de fr.istic.game, soit dynamique (% de changement chaque tour, +% par type de météo)
     - [X] Avertissement pour les joueurs
 
 - [ ] Commandants (annulé: deadline)

@@ -1,0 +1,48 @@
+plugins {
+    id "jacoco"
+    id 'java'
+    id "org.sonarqube" version "4.0.0.2929"
+}
+
+group 'fr.istic'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+jacocoTestReport {
+    dependsOn(test)
+    reports {
+        xml.required = true
+        html.required = false
+    }
+}
+
+
+dependencies {
+    implementation 'org.jetbrains:annotations:24.0.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+}
+
+sonar {
+
+    properties {
+        property("sonar.projectKey", "${project.property('sonarqube.projectKey')}")
+        property("sonar.projectName", "${project.property('sonarqube.projectName')}")
+        property("sonar.host.url", "${project.property('sonarqube.host.url')}")
+        property("sonar.token", "${project.property('sonarqube.token')}")
+        property("sonar.coverage.exclusions", "**/NaiveAssemblerGraph.java,**/PerformanceTest.java")
+        property("sonar.exclusions", "**/PerformanceTest.java")
+        property("sonar.test.exclusions", "**/test/**")
+    }
+}
+
+tasks.named("sonar") {
+    dependsOn jacocoTestReport
+}
+
+test {
+    useJUnitPlatform()
+}

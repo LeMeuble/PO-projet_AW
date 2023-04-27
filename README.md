@@ -19,7 +19,7 @@
     2. [Bonus | Choix d'ajouts](#report-bonus)
     2. [Liste des bonus réalises](#report-bonus-list)
 5. [Texture du jeu](#change-texture)
-6. [Création de map](#map-creation)
+6. [Création de fr.istic.map](#fr.istic.map-creation)
 7. [Tests unitaires](#tests)
 8. [Crédits](#credits)
 
@@ -82,31 +82,31 @@ Pour un diagramme plus détaillé, il est possible de le trouver à l'adresse su
 ---
 
 Le plateau de jeu est représenté par une matrice à deux dimensions encapsulée dans la
-classe [`Grid`](./src/main/map/Grid.java). Cette dernière
+classe [`Grid`](./src/main/fr.istic.map/Grid.java). Cette dernière
 permet
-une utilisation simple de la liste à deux dimensions interne de [`Case`](./src/main/map/Case.java). Chaque case contient
-nécessairement un [`Terrain`](./src/main/terrain/Terrain.java)
+une utilisation simple de la liste à deux dimensions interne de [`Case`](./src/main/fr.istic.map/Case.java). Chaque case contient
+nécessairement un [`Terrain`](./src/main/fr.istic.terrain/Terrain.java)
 et
-une potentielle [`Unit`](./src/main/unit/Unit.java). Une instance de [`Grid`](./src/main/map/Grid.java) est créée en
-début de chaque partie selon la map sélectionnée. Le tableau
+une potentielle [`Unit`](./src/main/fr.istic.unit/Unit.java). Une instance de [`Grid`](./src/main/fr.istic.map/Grid.java) est créée en
+début de chaque partie selon la fr.istic.map sélectionnée. Le tableau
 à
 deux dimensions est rempli grâce au parseur qui permet la conversion d'un fichier texte (au format ASCII) en une matrice
-de [`Case`](./src/main/map/Case.java).
-L'implémentation du parseur a été changé pour les besoins du projet : [Bonus | Parseur de carte](#report-bonus-parser).
+de [`Case`](./src/main/fr.istic.map/Case.java).
+L'implémentation du parseur a été changé pour les besoins du projet : [Bonus | Parseur de carte](#report-bonus-fr.istic.parser).
 
-<a name="report-base-terrain"></a>
+<a name="report-base-fr.istic.terrain"></a>
 
 #### Terrains
 
 ---
 
-Les [`Terrain`](./src/main/terrain/Terrain.java) sont contenus dans une [`Case`](./src/main/map/Case.java) de
-la [`Grid`](./src/main/map/Grid.java). Pour cette
+Les [`Terrain`](./src/main/fr.istic.terrain/Terrain.java) sont contenus dans une [`Case`](./src/main/fr.istic.map/Case.java) de
+la [`Grid`](./src/main/fr.istic.map/Grid.java). Pour cette
 implémentation, nous avons décidé de créer une
 classe abstraite
-[`Terrain`](./src/main/terrain/Terrain.java) qui est étendues par toutes les sous-classes. Certains particuliers ont une
+[`Terrain`](./src/main/fr.istic.terrain/Terrain.java) qui est étendues par toutes les sous-classes. Certains particuliers ont une
 classe mère abstraite
-intermédiaire : la classe [`Property`](./src/main/terrain/Property.java)
+intermédiaire : la classe [`Property`](./src/main/fr.istic.terrain/Property.java)
 Voici la liste des terrains implémentés dans le jeu :
 
 | Terrain  | Classe mère | Particularité                                        | Texture                                                             |
@@ -123,16 +123,16 @@ Voici la liste des terrains implémentés dans le jeu :
 | Plaine   | Terrain     |                                                      | ![plain](./pictures/terrains/clear/normal/plain/0.png)              |
 | Eau      | Terrain     |                                                      | ![water](./pictures/terrains/clear/normal/water/frame0/1.png)       |
 
-<a name="report-base-unit"></a>
+<a name="report-base-fr.istic.unit"></a>
 
 #### Unités
 
 ---
 
 Concernant les unités, nous avons dû faire une structure avec plusieurs classes abstraites. Ainsi, nous avons une classe
-mère abstraite [`Unit`](./src/main/unit/Unit.java) qui est étendue par les
-classes [`Naval`](./src/main/unit/Naval.java), [`OnFoot`](./src/main/unit/OnFoot.java), [`Flying`](./src/main/unit/Flying.java)
-et [`Motorized`](./src/main/unit/Motorized.java). Ces dernières sont
+mère abstraite [`Unit`](./src/main/fr.istic.unit/Unit.java) qui est étendue par les
+classes [`Naval`](./src/main/fr.istic.unit/Naval.java), [`OnFoot`](./src/main/fr.istic.unit/OnFoot.java), [`Flying`](./src/main/fr.istic.unit/Flying.java)
+et [`Motorized`](./src/main/fr.istic.unit/Motorized.java). Ces dernières sont
 elles-mêmes
 étendues par des classes les classes propres à chaque type d'unité.
 Voici la liste des unités implémentées dans le jeu :
@@ -161,9 +161,9 @@ voir [Bonus | Choix d'ajouts](#2-bonus--choix-dajouts))
 Pour les transports, il s'agit d'un cas particulier. En effet, les transports ont une classe abstraite intermédiaire par
 type de d'unité.
 Par exemple, les transports à chenille ont une classe
-abstraite [`MotorizedTransport`](./src/main/unit/MotorizedTransport.java). Chacune des classes abstraites
+abstraite [`MotorizedTransport`](./src/main/fr.istic.unit/MotorizedTransport.java). Chacune des classes abstraites
 intermédiaires de transport implémentent
-l'interface [`Transport`](./src/main/unit/Transport.java) qui permet de définir les méthodes communes à tous les
+l'interface [`Transport`](./src/main/fr.istic.unit/Transport.java) qui permet de définir les méthodes communes à tous les
 transports.
 
 <a name="report-base-move"></a>
@@ -172,25 +172,25 @@ transports.
 
 ---
 
-Nous avons créé une classe [`Movement`](./src/main/game/Movement.java), qui contient 2 classes
-internes : [`Weapon.Direction`](./src/main/game/Movement.java) (énumération des directions
-possibles : up, left, begin, etc...) et [`Movement.Arrow`](./src/main/game/Movement.java). Cette dernière
+Nous avons créé une classe [`Movement`](./src/main/fr.istic.game/Movement.java), qui contient 2 classes
+internes : [`Weapon.Direction`](./src/main/fr.istic.game/Movement.java) (énumération des directions
+possibles : up, left, begin, etc...) et [`Movement.Arrow`](./src/main/fr.istic.game/Movement.java). Cette dernière
 représente une flèche dans une case, par son bord d'entrée et son bord de sortie. Le système de flèche est complètement
 différent de celui demandé dans le sujet. (voir [Bonus | Choix d'ajouts](#2-bonus--choix-dajouts))
 
-<a name="report-base-weapon"></a>
+<a name="report-base-fr.istic.weapon"></a>
 
 #### Armes
 
 ---
 
-Pour les armes, nous avons créé une classe abstraite [`Weapon`](./src/main/weapon/Weapon.java), et nous avons distingué
+Pour les armes, nous avons créé une classe abstraite [`Weapon`](./src/main/fr.istic.weapon/Weapon.java), et nous avons distingué
 les armes ayant une portée d'une
-case (classe abstraite [`Weapon`](./src/main/weapon/MeleeWeapon.java),
-étendant [`Weapon`](./src/main/weapon/Weapon.java)) et celles ayant plus d'une case de portée (classe abstraite
-[`Weapon`](./src/main/weapon/RangedWeapon.java), étendant aussi [`Weapon`](./src/main/weapon/Weapon.java)). Enfin, nous
+case (classe abstraite [`Weapon`](./src/main/fr.istic.weapon/MeleeWeapon.java),
+étendant [`Weapon`](./src/main/fr.istic.weapon/Weapon.java)) et celles ayant plus d'une case de portée (classe abstraite
+[`Weapon`](./src/main/fr.istic.weapon/RangedWeapon.java), étendant aussi [`Weapon`](./src/main/fr.istic.weapon/Weapon.java)). Enfin, nous
 avons fait une classe par arme devant être implémentée
-(ex : [`Weapon`](./src/main/weapon/type/HeavyMachineGun.java))
+(ex : [`Weapon`](./src/main/fr.istic.weapon/type/HeavyMachineGun.java))
 
 Dans chacune de ces classes, nous avons ajouté une énumération du multiplicateur de dégâts en fonction du type
 d'unité cible.
@@ -201,8 +201,8 @@ d'unité cible.
 
 ---
 
-La capture d'une propriété est implémentée dans la classe abstraite [`Unit`](./src/main/unit/Unit.java). La
-méthode [`Unit#attack`](./src/main/unit/Unit.java) permet de faire
+La capture d'une propriété est implémentée dans la classe abstraite [`Unit`](./src/main/fr.istic.unit/Unit.java). La
+méthode [`Unit#attack`](./src/main/fr.istic.unit/Unit.java) permet de faire
 baisser la défense d'une propriété ennemie, et de changer son propriétaire vers le joueur courant si sa vie descend en
 dessous de 0.
 Nous avons cependant choisi de permettre à la capture d'être effectuée par plusieurs unités différentes, ainsi que de
@@ -214,7 +214,7 @@ faire regagner 5 points de santé par tour à la propriété, plutôt que 20 d'u
 
 ---
 
-Les propriétés sont représentées par la classe abstraite [`Property`](./src/main/terrain/Property.java). Cependant, il
+Les propriétés sont représentées par la classe abstraite [`Property`](./src/main/fr.istic.terrain/Property.java). Cependant, il
 peut y avoir plus de 2 QG, pour
 faire des parties jusqu'à 5 joueurs, voir [Bonus | Choix d'ajouts](#2-bonus--choix-dajouts). Un joueur qui capture
 un QG en devient ainsi le
@@ -226,13 +226,13 @@ propriétaire. De ce fait, un joueur est considéré comme éliminé s'il n'a pl
 
 ---
 
-Pour implémenter les usines, nous avons créé une classe abstraite [`Factory`](./src/main/terrain/Factory.java), qui
-étend [`Property`](./src/main/terrain/Property.java). Ainsi, nous pouvons
+Pour implémenter les usines, nous avons créé une classe abstraite [`Factory`](./src/main/fr.istic.terrain/Factory.java), qui
+étend [`Property`](./src/main/fr.istic.terrain/Property.java). Ainsi, nous pouvons
 avoir des terrains qui sont des usines (peuvent produire des unités) mais également des propriétés (peuvent être
 possédées par
 un joueur).
 
-Puis, nous avons créé le type de terrain [`FactoryTerrain`](./src/main/terrain/type/FactoryTerrain.java), représentant
+Puis, nous avons créé le type de fr.istic.terrain [`FactoryTerrain`](./src/main/fr.istic.terrain/type/FactoryTerrain.java), représentant
 une
 usine terrestre. (En anticipation des ports
 et des aéroports, voir [Bonus | Choix d'ajouts](#report-bonus).)
@@ -247,7 +247,7 @@ les joueurs de la partie ont joué leur tour (passage au jour suivant).
 
 ---
 
-<a name="report-bonus-parser"></a>
+<a name="report-bonus-fr.istic.parser"></a>
 
 #### Plateau de jeu | Parseur
 
@@ -257,14 +257,14 @@ Pour le parseur de carte, nous avons décidé d'apporter quelques modifications 
 modifié dans un premier temps la syntaxe ASCII pour inclure la possibilité d'ajouter des variations de textures.
 La création de la carte se fait à partir de deux fichiers textes, un fichier de carte `carte.adwcmap` qui contient les
 données du plateau de jeu (de la grille)
-au format ASCII et un fichier de métadonnées `carte.meta` qui contient les données concernant la map (taille, nom,
+au format ASCII et un fichier de métadonnées `carte.meta` qui contient les données concernant la fr.istic.map (taille, nom,
 nombre de joueurs, etc...).
 Afin d'implémentation des variations de textures [Changement | Texture](#change-texture), il a fallu créer un nouveau
-parseur pour la map [`MapParser`](./src/main/parser/MapParser.java) qui s'occupe de transformer le fichier de la map,
-en [`MapParser`](./src/main/map/Grid.java). Ainsi, nous avons dans le fichier de carte :
+parseur pour la fr.istic.map [`MapParser`](./src/main/fr.istic.parser/MapParser.java) qui s'occupe de transformer le fichier de la fr.istic.map,
+en [`MapParser`](./src/main/fr.istic.map/Grid.java). Ainsi, nous avons dans le fichier de carte :
 
 - Ligne impaire : information de l'unité sur la case (format: `[caractère unité;propriétaire]`)
-- Ligne paire : information du terrain (format: `{caractère terrain;variation texture;propriétaire}`)
+- Ligne paire : information du fr.istic.terrain (format: `{caractère fr.istic.terrain;variation texture;propriétaire}`)
 
 #### Déplacements
 
@@ -275,7 +275,7 @@ système complet indiqué
 dans le sujet. Par la suite, voyant le projet évoluer, nous avons décidé d'opter pour un nouveau système de déplacement
 qui ne permettrait plus les nœuds,
 et qui choisirait (comme dans la version officielle du jeu) automatiquement le chemin le plus court selon les coûts de
-déplacement de chaque terrain, les cases
+déplacement de chaque fr.istic.terrain, les cases
 inaccessibles, etc. Pour ce faire, nous avons utilisé l'algorithme Dijkstra pour trouver le chemin le plus court entre
 deux cases. Pour cet algorithme, nous nous sommes basés
 sur l'implémentation connue du site [Rosetta Code](http://rosettacode.org/wiki/Dijkstra%27s_algorithm#Java). En se
@@ -287,13 +287,13 @@ adaptée au projet.
 --- 
 
 Nous avons réalisé le bonus de la météo. Pour cela, nous avons créé dans un premier temps une énumération des météos
-possibles [`Weather`](./src/main/weather/Weather.java).
-La classe [`WeatherManager`](./src/main/weather/WeatherManager.java) permet les transitions entre les météos de manière
+possibles [`Weather`](./src/main/fr.istic.weather/Weather.java).
+La classe [`WeatherManager`](./src/main/fr.istic.weather/WeatherManager.java) permet les transitions entre les météos de manière
 fluide. Les changements de météo peuvent être aléatoires ou statiques
 selon les paramètres sélectionnés en début de partie. En mode aléatoire, la météo peut changer à chaque tour avec une
 probabilité de 30%, tout en ayant prévenu le joueur
 un tour en avance. Pour éviter les transitions trop brutales,
-le [`WeatherManager`](./src/main/weather/WeatherManager.java) détermine la météo suivante en fonction de la météo
+le [`WeatherManager`](./src/main/fr.istic.weather/WeatherManager.java) détermine la météo suivante en fonction de la météo
 actuelle avec des
 probabilités variables.
 
@@ -302,9 +302,9 @@ probabilités variables.
 ---
 
 Pour l'implémentation des unités navales, nous avons créé une nouvelle classe
-abstraite [`Naval`](./src/main/unit/Naval.java), qui étend [`Unit`](./src/main/unit/Unit.java).
+abstraite [`Naval`](./src/main/fr.istic.unit/Naval.java), qui étend [`Unit`](./src/main/fr.istic.unit/Unit.java).
 Pour gérer les déplacements de ces nouvelles unités, nous avons simplement ajouté
-l'énumération [`UnitMovementCost.Naval`](./src/main/unit/UnitMovementCost.java),
+l'énumération [`UnitMovementCost.Naval`](./src/main/fr.istic.unit/UnitMovementCost.java),
 contenant le coût de mouvement pour les unités navales.
 
 #### Menus
@@ -312,10 +312,10 @@ contenant le coût de mouvement pour les unités navales.
 ---
 
 Nous avons décidé d'ajouter des menus au jeu pour le rendre plus intuitif et interactif. Pour cela nous avons une classe
-abstraite [`Menu`](./src/main/menu/Menu.java)
+abstraite [`Menu`](./src/main/fr.istic.menu/Menu.java)
 qui donne les directives d'implémentation des menus.
 
-Un menu en bas de l'écran permet également de donner des indications sur le gameplay.
+Un fr.istic.menu en bas de l'écran permet également de donner des indications sur le gameplay.
 
 <img src="https://imgur.com/b0P96Rb">
 
@@ -323,7 +323,7 @@ Un menu en bas de l'écran permet également de donner des indications sur le ga
 2. Energie de l'unité
 3. Munitions arme secondaire
 4. Munitions arme principale
-5. Couverture du terrain
+5. Couverture du fr.istic.terrain
 6. Argent du joueur courant
 7. Icone du joueur courant
 
@@ -336,8 +336,8 @@ touches et
 la boucle d'affichage.
 
 La première thread permet l'écoute asynchrone des touches tout en passant les frappes de clavier à la
-méthode [`ActionHandler#handle`](src/main/game/ActionHandler.java)
-La deuxième thread ([`GameLoop`](src/main/game/GameLoop.java)) s'occupe de l'affichage du jeu.
+méthode [`ActionHandler#handle`](src/main/fr.istic.game/ActionHandler.java)
+La deuxième thread ([`GameLoop`](src/main/fr.istic.game/GameLoop.java)) s'occupe de l'affichage du jeu.
 
 <a name="report-bonus-list"></a>
 
@@ -359,7 +359,7 @@ La deuxième thread ([`GameLoop`](src/main/game/GameLoop.java)) s'occupe de l'af
 - [X] Ravitaillement et réparations
 - [X] Transport d'unités à pied
 - [X] Fin de tour automatique
-- [X] Couverture de terrain
+- [X] Couverture de fr.istic.terrain
 - [X] Unités navales
     - [X] Croiseur
     - [X] Corvette
@@ -379,11 +379,11 @@ La deuxième thread ([`GameLoop`](src/main/game/GameLoop.java)) s'occupe de l'af
 - [X] Refonte complète des textures du jeu
     - [X] Textures des unités
     - [X] Textures des bâtiments
-    - [X] Textures du terrain
-- [X] Changement des textures du terrain en fonction de la météo/du brouillard de guerre
+    - [X] Textures du fr.istic.terrain
+- [X] Changement des textures du fr.istic.terrain en fonction de la météo/du brouillard de guerre
 - [X] Animation des éléments du jeu
 - [X] Redesign des popups
-- [X] Ajouts de menus en tous genres (écran d'accueil, sélection de cartes, menu pause...)
+- [X] Ajouts de menus en tous genres (écran d'accueil, sélection de cartes, fr.istic.menu pause...)
 - [X] Ajout d'une nouvelle arme : le missile anti-navire. Utilisé par les croiseurs, il permet d'infliger énormément
   de dégâts aux autres navires.
 - [X] Le chemin le plus court vers une destination est maintenant automatiquement calculé à l'aide d'un algorithme
@@ -407,13 +407,13 @@ L'ensemble des textures utilisées sont libres de droit pour tout projet à but 
 voir directement
 sur le site : [FAQ Copyright Spriters Ressource](https://www.spriters-resource.com/page/faq/)
 
-<a name="map-creation"></a>
+<a name="fr.istic.map-creation"></a>
 
 ## VI. Création de maps
 
 --- 
 
-Nous avons ajouté quelques map supplémentaires au jeu. Pour cela, nous avons utilisé un outil de création de map
+Nous avons ajouté quelques fr.istic.map supplémentaires au jeu. Pour cela, nous avons utilisé un outil de création de fr.istic.map
 ([`Tiled`](https://www.mapeditor.org)) qui permet de créer des maps à partir de tuiles. Il permet d'exporter les maps
 sous forme d'un fichier CSV, que nous avons
 ensuite converti en fichier `.awdcmap` à l'aide d'un script python.
