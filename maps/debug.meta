@@ -1,0 +1,6 @@
+name=Debug Map
+description=This is a debug map with its only purpose being to test units' textures.
+width=20
+height=6
+players=5
+icon=pictures/ui/backgrounds/clear/background_10.png
